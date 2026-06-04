@@ -1,0 +1,1 @@
+['UEFA 1', 'UEFA 2', 'UEFA 3', 'EURO 2', 'EURO 3', 'GER 1', 'GER 2', 'GER 3', 'SCO 1', 'SCO 2', 'HUN 1', 'SUI 1', 'LEG 1', 'LEG 2']
