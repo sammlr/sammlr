@@ -4,7 +4,7 @@ import json
 from em24_data import build_em24
 from wm26_data import build_wm26
 from Database.database import current_user_id, get_db
-
+from services.notifications import create_notification, unread_notifications
 from urllib.parse import quote
 
 app = Flask(__name__)
@@ -566,74 +566,19 @@ def startseite():
         """
     ).fetchall()
 
-    notifications = con.execute(
-        """
-        SELECT * FROM notifications
-        WHERE user_id=? AND is_read=0
-        ORDER BY created_at DESC
-        LIMIT 5
-        """,
-        (current_user_id(),)
-    ).fetchall()
+    notifications = unread_notifications(con, current_user_id())
     con.close()
 
-    infos = []
-    
-    doppelte_gesamt = 0
-    komplett = 0
-    prozent_summe = 0
-
-    for a in alben:
-        album, by_code, gesammelt, doppelte, prozent, total = lade_album(a["id"])
-        infos.append((album, gesammelt, doppelte, prozent, total))
- 
-        doppelte_gesamt += doppelte
-        prozent_summe += prozent
-        if prozent == 100:
-            komplett += 1
-
-    schnitt = round(prozent_summe / len(infos)) if infos else 0
+    infos = [
+        (album, gesammelt, doppelte, prozent, total)
+        for album, _, gesammelt, doppelte, prozent, total in (
+            lade_album(album["id"]) for album in alben
+        )
+    ]
 
     html = f"""
     <html><head>{style()}</head><body><div class="container">
-
-    <div class="card">
-        👤 Eingeloggt als: {session.get("username", "Unbekannt")}
-    </div>
-    <div class="hero-header">
-    <div class="hero-brand">
-        <img src="/static/collectr_logo.png" class="hero-logo">
-    </div>
-
-    <div class="hero-actions">
-    <span class="beta-pill">BETA</span>
-
-    <a class="hero-link" href="/statistik">
-        📊 Statistik
-    </a>
-
-    <a class="hero-link" href="/trophaeen">
-        🏆 Trophäen
-    </a>
-
-    <a class="hero-link" href="/trades">
-        🤝 Trades
-    </a>
-
-    <a class="hero-link" href="#">
-        👤 Profil
-    </a>
-
-    <a class="hero-link hero-add-link" href="/alben/hinzufuegen">
-        + Album
-    </a>
-    <a class="hero-link" href="/logout">
-    🚪 Logout
-</a>
-
-</div>
-</div>
-"""
+    """
     # Add transfer ticker block after hero-header
     ticker_items = []
     for transfer in latest_transfers:
