@@ -581,7 +581,7 @@ def startseite():
         <a class="hero-link" href="/statistik">📊 Statistik</a>
         <a class="hero-link" href="/trophaeen">🏆 Trophäen</a>
         <a class="hero-link" href="/trades">🤝 Trades</a>
-        <a class="hero-link" href="#">👤 Profil</a>
+        <a class="hero-link" href="/profil">👤 Profil</a>        
         <a class="hero-link hero-add-link" href="/alben/hinzufuegen">+ Album</a>
         <a class="hero-link" href="/logout">🚪 Logout</a>
     </div>
@@ -2222,5 +2222,28 @@ def statistik():
 
     return html
 init_db()
+@app.route("/profil")
+def profil():
+    return f"""
+    <html>
+    <head>
+        {style()}
+    </head>
+    <body>
+        <div class="container">
+
+            <a class="btn" href="/">← Zurück</a>
+
+            <div class="card">
+                <h1>👤 Profil</h1>
+                <p>Profilseite kommt bald.</p>
+
+                <p><strong>Benutzer:</strong> {session.get("username", "Unbekannt")}</p>
+            </div>
+
+        </div>
+    </body>
+    </html>
+    """
 
 app.run(debug=True)
