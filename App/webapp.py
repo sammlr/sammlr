@@ -105,19 +105,6 @@ def init_db():
     con.commit()
     con.close()
 
-   
-
-# --- Notification helper ---
-def create_notification(con, user_id, title, body):
-    con.execute(
-        """
-        INSERT INTO notifications (user_id, title, body, is_read)
-        VALUES (?, ?, ?, 0)
-        """,
-        (user_id, title, body)
-    )
-
-
 
 def style():
     return '<link rel="stylesheet" href="/static/style.css">'
@@ -577,7 +564,28 @@ def startseite():
     ]
 
     html = f"""
-    <html><head>{style()}</head><body><div class="container">
+<html><head>{style()}</head><body><div class="container">
+
+<div class="card">
+    👤 Eingeloggt als: {session.get("username", "Unbekannt")}
+</div>
+
+<div class="hero-header">
+    <div class="hero-brand">
+        <img src="/static/collectr_logo.png" class="hero-logo">
+    </div>
+
+    <div class="hero-actions">
+        <span class="beta-pill">BETA</span>
+
+        <a class="hero-link" href="/statistik">📊 Statistik</a>
+        <a class="hero-link" href="/trophaeen">🏆 Trophäen</a>
+        <a class="hero-link" href="/trades">🤝 Trades</a>
+        <a class="hero-link" href="#">👤 Profil</a>
+        <a class="hero-link hero-add-link" href="/alben/hinzufuegen">+ Album</a>
+        <a class="hero-link" href="/logout">🚪 Logout</a>
+    </div>
+</div>
     """
     # Add transfer ticker block after hero-header
     ticker_items = []
