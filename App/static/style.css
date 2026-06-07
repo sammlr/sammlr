@@ -623,3 +623,352 @@
 .trophy.blue{border-left:8px solid #5ea8ff;}
 .trophy.orange{border-left:8px solid #ffb454;}
 .trophy.purple{border-left:8px solid #c084fc;}
+/* Rescue: Bottom Navigation */
+.bottom-nav{
+    position:fixed;
+    left:16px;
+    right:16px;
+    bottom:16px;
+    z-index:9999;
+    background:rgba(18,5,31,.96);
+    border:1px solid rgba(255,255,255,.14);
+    border-radius:28px;
+    padding:10px;
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+    gap:8px;
+    box-shadow:0 18px 40px rgba(0,0,0,.22);
+    backdrop-filter:blur(14px);
+}
+
+.bottom-nav-link{
+    color:white;
+    text-decoration:none;
+    text-align:center;
+    font-weight:800;
+    font-size:12px;
+    padding:12px 6px;
+    border-radius:18px;
+    display:block;
+}
+
+.bottom-nav-link.active{
+    background:rgba(255,255,255,.14);
+}
+
+@media (min-width:900px){
+    .bottom-nav{
+        max-width:520px;
+        left:50%;
+        right:auto;
+        transform:translateX(-50%);
+    }
+}
+
+/* Rescue: WM26 Kapitel */
+.album-chapter-title{
+    margin:28px 0 12px;
+    padding:16px 18px;
+    border-radius:22px;
+    background:linear-gradient(135deg,#12051f,#2b0f46);
+    color:white;
+}
+
+.team-title{
+    margin:18px 0 10px;
+    color:#2b0f46;
+    font-size:18px;
+    font-weight:900;
+}
+
+/* Rescue: Stickerwall stabil */
+.wall{
+    display:grid;
+    grid-template-columns:repeat(4, minmax(0,1fr));
+    gap:8px;
+}
+
+.slot{
+    min-height:52px;
+    padding:10px 4px;
+    border-radius:14px;
+    font-size:11px;
+    line-height:1.1;
+    box-sizing:border-box;
+}
+
+.container{
+    padding-bottom:120px;
+}
+/* SmartAdd + Suche */
+.sticker-wall-headline{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:14px;
+    margin-bottom:14px;
+}
+
+.sticker-wall-headline h2{
+    margin:0;
+}
+
+.sticker-search{
+    width:100%;
+    margin:0 0 12px 0;
+    padding:15px 16px;
+    border-radius:18px;
+    border:1px solid rgba(93,47,134,.14);
+    background:#faf8fc;
+    font-size:16px;
+    font-weight:800;
+    color:#1b1620;
+    box-sizing:border-box;
+}
+
+.smart-add-toggle{
+    width:44px;
+    height:44px;
+    border:none;
+    border-radius:14px;
+    background:#7C3AED;
+    color:white;
+    font-size:26px;
+    font-weight:900;
+    cursor:pointer;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+}
+
+.slot.smart-selected{
+    outline:4px solid #7C3AED;
+    box-shadow:0 0 0 4px rgba(124,58,237,.16);
+    transform:scale(1.04);
+    z-index:5;
+}
+
+.smart-add-bar{
+    position:fixed;
+    left:16px;
+    right:16px;
+    bottom:86px;
+    z-index:1200;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:12px;
+    background:white;
+    border:2px solid #7C3AED;
+    border-radius:22px;
+    padding:12px;
+    box-shadow:0 20px 44px rgba(0,0,0,.18);
+}
+
+.smart-add-count{
+    font-weight:900;
+    color:#2b0f46;
+    white-space:nowrap;
+}
+
+.smart-add-actions{
+    display:flex;
+    gap:8px;
+}
+
+.smart-add-primary,
+.smart-add-secondary{
+    border:none;
+    border-radius:16px;
+    padding:12px 14px;
+    font-weight:900;
+    cursor:pointer;
+}
+
+.smart-add-primary{
+    background:#7C3AED;
+    color:white;
+}
+
+.smart-add-secondary{
+    background:#d9d5dc;
+    color:#4b4650;
+}
+/* Teams klein, Gruppen dick */
+.team-title{
+    background:transparent !important;
+    color:#2b0f46 !important;
+    box-shadow:none !important;
+    border-radius:0 !important;
+    padding:0 !important;
+    margin:18px 0 10px !important;
+    font-size:18px !important;
+    font-weight:900 !important;
+}
+
+.album-chapter-title{
+    position:sticky;
+    top:8px;
+    z-index:80;
+    margin:28px 0 12px;
+    padding:16px 18px;
+    border-radius:22px;
+    background:linear-gradient(135deg,#12051f,#2b0f46);
+    color:white;
+    box-shadow:0 14px 30px rgba(43,15,70,.16);
+}
+
+.team-title{
+    background:transparent !important;
+    color:#2b0f46 !important;
+    box-shadow:none !important;
+    border-radius:0 !important;
+    padding:0 !important;
+    margin:18px 0 10px !important;
+    font-size:18px !important;
+    font-weight:900 !important;
+}
+.album-chapter-title{
+    position:sticky !important;
+    top:8px !important;
+    z-index:80 !important;
+}
+
+.team-title{
+    position:static !important;
+    background:transparent !important;
+    color:#2b0f46 !important;
+    box-shadow:none !important;
+    border-radius:0 !important;
+    padding:0 !important;
+    margin:14px 0 8px !important;
+    font-size:15px !important;
+    font-weight:900 !important;
+}
+
+.sticker-filter-row{
+    display:grid;
+    grid-template-columns:repeat(4, minmax(0,1fr));
+    gap:8px;
+    margin:0 0 12px;
+}
+
+.sticker-filter-pill{
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    min-height:42px;
+    border-radius:16px;
+    background:#f1edf5;
+    color:#4b4650;
+    text-decoration:none;
+    font-size:12px;
+    font-weight:900;
+    text-align:center;
+    padding:8px 4px;
+}
+
+.sticker-filter-pill.active{
+    background:#7C3AED;
+    color:white;
+}
+
+.sticker-filter-pill.missing.active{
+    background:#6b6570;
+}
+
+.sticker-filter-pill.owned.active{
+    background:#15803d;
+}
+
+.sticker-filter-pill.duplicate.active{
+    background:#9333ea;
+}
+.progress{
+    position:relative !important;
+    overflow:hidden !important;
+    height:22px !important;
+    border-radius:20px !important;
+    background:#ece5f3 !important;
+}
+
+.progress-bar{
+    display:block !important;
+    height:100% !important;
+    min-width:0 !important;
+    background:linear-gradient(90deg,#5d2f86,#b07ae0) !important;
+    color:transparent !important;
+    font-size:0 !important;
+    text-indent:-9999px !important;
+}
+
+.progress::after{
+    content:attr(data-progress);
+    position:absolute;
+    inset:0;
+    z-index:3;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    color:#1b1620;
+    font-size:12px;
+    font-weight:900;
+    text-align:center;
+    text-shadow:0 1px 0 rgba(255,255,255,.70);
+    pointer-events:none;
+}
+.trophy.trophy-gold{
+    background:linear-gradient(135deg,#fff8d6,#f6d365) !important;
+    border-left:8px solid #d4a017 !important;
+    color:#2b1742 !important;
+    box-shadow:0 16px 34px rgba(212,160,23,.22) !important;
+}
+
+.trophy.trophy-gold-muted{
+    background:linear-gradient(135deg,#ffffff,#fbf7e8) !important;
+    border-left:8px solid rgba(212,160,23,.35) !important;
+    color:#2b1742 !important;
+}
+
+.trophy-gold .trophy-pill.gold{
+    background:#7a5a00 !important;
+    color:white !important;
+}
+
+.trophy-gold-muted .trophy-pill.gray{
+    background:#efe7c7 !important;
+    color:#6b560d !important;
+}
+
+.trophy-gold .progress-bar,
+.trophy-gold-muted .progress-bar{
+    background:linear-gradient(90deg,#d4a017,#f6d365) !important;
+}
+
+.trophy-locked .trophy-blurred-title{
+    filter:blur(5px);
+    user-select:none;
+}
+
+.album-chapter-title,
+.team-title{
+    display:flex !important;
+    align-items:center !important;
+    justify-content:space-between !important;
+    gap:12px !important;
+}
+
+.album-chapter-title span:last-child{
+    font-size:13px !important;
+    font-weight:900 !important;
+    opacity:.9 !important;
+    white-space:nowrap !important;
+}
+
+.team-title span:last-child{
+    font-size:12px !important;
+    font-weight:900 !important;
+    color:#6b6570 !important;
+    white-space:nowrap !important;
+}
+

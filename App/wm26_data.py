@@ -13,6 +13,7 @@ WM26_TEAMS = [
     "ENG", "CRO", "GHA", "PAN",
 ]
 
+
 def build_wm26():
     stickers = []
 
