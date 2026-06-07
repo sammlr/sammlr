@@ -1026,8 +1026,8 @@ def albumseite(album_id):
     <div class="card sticker-wall-card">
     <div class="sticker-wall-headline">
         <h2>Stickerwand</h2>
-        <button type="button" class="smart-add-toggle" onclick="toggleSmartAdd()">+</button>
-    </div>
+        <button type="button" class="smart-add-toggle" onclick="openQuickActions()">+</button>
+            </div>
         <div class="sticker-filter-row">
         <a class="sticker-filter-pill {'active' if filter_name == 'all' else ''}" href="/album/{album_id}">Alle</a>
         <a class="sticker-filter-pill missing {'active' if filter_name == 'missing' else ''}" href="/album/{album_id}?filter=missing">Fehlende</a>
@@ -1142,19 +1142,35 @@ def albumseite(album_id):
             html += f'<a class="slot {klasse}" data-code="{code}" data-search="{search_text}" href="/sticker/{album_id}/{code}">{text}</a>'
         html += "</div>"
     html += f'''
+<div class="quick-action-modal" id="quickActionModal" style="display:none;">
+    <div class="quick-action-card">
+        <h3>Sticker verwalten</h3>
+
+        <button type="button" class="btn green" onclick="chooseAction('add')">➕ Hinzufügen</button>
+        <button type="button" class="btn gray" onclick="chooseAction('remove')">➖ Entfernen</button>
+
+        <div id="quickActionStep2" style="display:none;margin-top:12px;">
+            <button type="button" class="btn" onclick="chooseMode('select')">Sticker auswählen</button>
+            <button type="button" class="btn" onclick="chooseMode('input')">Sticker eintragen</button>
+        </div>
+
+        <button type="button" class="btn gray" onclick="closeQuickActions()">Abbrechen</button>
+    </div>
+</div>
 <div class="smart-add-bar" id="smartAddBar" style="display:none;">
     <div class="smart-add-count">
-        <strong id="smartAddCount">0</strong> ausgewählt
+        <strong id="smartAddCount">0</strong> <span id="smartAddLabel">ausgewählt</span>
     </div>
     <div class="smart-add-actions">
         <button type="button" class="smart-add-secondary" onclick="cancelSmartAdd()">Abbrechen</button>
-        <button type="button" class="smart-add-primary" onclick="submitSmartAdd()">Hinzufügen</button>
+        <button type="button" class="smart-add-primary" id="smartAddPrimary" onclick="submitSmartAdd()">Hinzufügen</button>
     </div>
 </div>
 
 <script>
 let smartAddMode = false;
 let selectedStickers = [];
+let smartActionMode = "add";
 
 const stickerSearchInput = document.getElementById('stickerSearch');
 
@@ -1208,9 +1224,12 @@ function updateVisibleStickerSections(){{
     }});
 }}
 
+
 if(stickerSearchInput){{
     stickerSearchInput.addEventListener('input', function(){{
         const term = this.value.trim().toLowerCase();
+
+        if(keyboardInputMode) return;
 
         document.querySelectorAll('.slot').forEach(function(slot){{
             const haystack = slot.dataset.search || slot.textContent.toLowerCase();
@@ -1219,25 +1238,135 @@ if(stickerSearchInput){{
 
         updateVisibleStickerSections();
     }});
+
+    stickerSearchInput.addEventListener('keydown', function(event){{
+        if(!document.body.classList.contains('keyboard-input-active')) return;
+
+        if(event.key === 'Enter'){{
+            event.preventDefault();
+
+            const code = stickerSearchInput.value.trim();
+            if(!code) return;
+
+            if(smartActionMode === "remove"){{
+                window.location = "/remove/{album_id}/" + encodeURIComponent(code);
+            }}else{{
+                window.location = "/add/{album_id}/" + encodeURIComponent(code);
+            }}
+        }}
+
+        if(event.key === 'Escape'){{
+            keyboardInputMode = false;
+            document.body.classList.remove('keyboard-input-active');
+            stickerSearchInput.value = '';
+            stickerSearchInput.placeholder = 'Sticker oder Team suchen...';
+        }}
+    }});
+}}
+
+function openQuickActions(){{
+    const modal = document.getElementById('quickActionModal');
+    const step2 = document.getElementById('quickActionStep2');
+
+    if(!modal) return;
+
+    modal.style.display = 'flex';
+    if(step2) step2.style.display = 'none';
+    window.selectedQuickAction = null;
+}}
+
+function closeQuickActions(){{
+    document.getElementById('quickActionModal').style.display = 'none';
+}}
+
+function chooseAction(action){{
+    window.selectedQuickAction = action;
+    document.getElementById('quickActionStep2').style.display = 'block';
+}}
+
+function chooseMode(mode){{
+    closeQuickActions();
+
+    if(mode === 'select'){{
+        if(window.selectedQuickAction === 'remove'){{
+            toggleSmartRemove();
+        }}else{{
+            toggleSmartAdd();
+        }}
+        return;
+    }}
+
+    if(window.selectedQuickAction === 'remove'){{
+        showKeyboardInput('remove');
+    }}else{{
+        showKeyboardInput('add');
+    }}
+}}
+
+function showKeyboardInput(mode){{
+    smartActionMode = mode;
+    smartAddMode = false;
+    selectedStickers = [];
+    document.body.classList.remove('smart-add-active');
+    document.body.classList.add('keyboard-input-active');
+
+    const input = document.getElementById('stickerSearch');
+    if(input){{
+        input.value = '';
+        input.placeholder = mode === "remove" ? "Sticker-Code entfernen… Enter drücken" : "Sticker-Code hinzufügen… Enter drücken";
+        input.focus();
+    }}
+
+    updateSmartAddBar();
+}}
+
+function toggleSmartRemove(){{
+    smartActionMode = "remove";
+    smartAddMode = true;
+    selectedStickers = [];
+    document.body.classList.add('smart-add-active');
+
+    document.querySelectorAll('.slot.smart-selected').forEach(function(slot){{
+        slot.classList.remove('smart-selected');
+    }});
+
+    updateSmartAddBar();
 }}
 
 function toggleSmartAdd(){{
-    smartAddMode = !smartAddMode;
-    document.body.classList.toggle('smart-add-active', smartAddMode);
+    smartActionMode = "add";
+    smartAddMode = true;
+    selectedStickers = [];
+    document.body.classList.add('smart-add-active');
 
-    if(!smartAddMode){{
-        cancelSmartAdd();
-    }}else{{
-        updateSmartAddBar();
-    }}
+    document.querySelectorAll('.slot.smart-selected').forEach(function(slot){{
+        slot.classList.remove('smart-selected');
+    }});
+
+    updateSmartAddBar();
 }}
+
 
 function updateSmartAddBar(){{
     const bar = document.getElementById('smartAddBar');
     const count = document.getElementById('smartAddCount');
-    if(!bar || !count) return;
+    const label = document.getElementById('smartAddLabel');
+    const primary = document.getElementById('smartAddPrimary');
+
+    if(!bar || !count || !label || !primary) return;
 
     count.textContent = selectedStickers.length;
+
+    if(smartActionMode === 'remove'){{
+        label.textContent = 'zum Entfernen ausgewählt';
+        primary.textContent = 'Entfernen';
+        bar.classList.add('remove-mode');
+    }}else{{
+        label.textContent = 'ausgewählt';
+        primary.textContent = 'Hinzufügen';
+        bar.classList.remove('remove-mode');
+    }}
+
     bar.style.display = smartAddMode ? 'flex' : 'none';
 }}
 
@@ -1256,13 +1385,13 @@ function cancelSmartAdd(){{
 function submitSmartAdd(){{
     if(selectedStickers.length === 0) return;
 
-    const ok = confirm('Willst du ' + selectedStickers.length + ' Sticker hinzufügen?');
+    const verb = smartActionMode === 'remove' ? 'entfernen' : 'hinzufügen';
+    const ok = confirm('Willst du ' + selectedStickers.length + ' Sticker ' + verb + '?');
     if(!ok) return;
 
     const form = document.createElement('form');
     form.method = 'POST';
-    form.action = '/bulk_add/{album_id}';
-
+    form.action = smartActionMode === "remove" ? '/bulk_remove/{album_id}' : '/bulk_add/{album_id}';
     selectedStickers.forEach(function(code){{
         const input = document.createElement('input');
         input.type = 'hidden';
@@ -1362,6 +1491,57 @@ def bulk_add(album_id):
         url += f"&trophy={quote(trophy_text)}&count={len(neue_trophies)}"
 
     return redirect(url)
+
+
+@app.route("/bulk_remove/<album_id>", methods=["POST"])
+def bulk_remove(album_id):
+    codes = request.form.getlist("codes")
+    unique_codes = []
+
+    for raw_code in codes:
+        code = resolve_code(album_id, raw_code)
+        if code and code not in unique_codes:
+            unique_codes.append(code)
+
+    if not unique_codes:
+        return redirect(f"/album/{album_id}?message=Keine%20Sticker%20ausgewählt.&focus=remove")
+
+    con = get_db()
+    cur = con.cursor()
+
+    for code in unique_codes:
+        row = con.execute(
+            "SELECT * FROM stickers WHERE user_id=? AND album_id=? AND sticker_code=?",
+            (current_user_id(), album_id, code)
+        ).fetchone()
+
+        if not row:
+            continue
+
+        neue_quantity = max(row["quantity"] - 1, 0)
+        neue_duplicates = max(neue_quantity - 1, 0)
+
+        if neue_quantity == 0:
+            cur.execute("DELETE FROM stickers WHERE id=?", (row["id"],))
+        else:
+            cur.execute(
+                "UPDATE stickers SET quantity=?, duplicates=? WHERE id=?",
+                (neue_quantity, neue_duplicates, row["id"])
+            )
+
+    con.commit()
+    con.close()
+
+    session["last_action"] = {
+        "action": "bulk_remove",
+        "album_id": album_id,
+        "codes": unique_codes,
+        "filter": "all"
+    }
+
+    msg = f"{len(unique_codes)} Sticker entfernt."
+    return redirect(f"/album/{album_id}?message={quote(msg)}&focus=remove")
+
 
 @app.route("/sticker/<album_id>/<path:code>")
 def sticker_detail(album_id, code):
@@ -1489,27 +1669,30 @@ def undo_last_action():
                         (neue_quantity, neue_duplicates, row["id"])
                     )
 
-    elif action == "remove":
-        row = con.execute(
-            "SELECT * FROM stickers WHERE user_id=? AND album_id=? AND sticker_code=?",
-            (current_user_id(), album_id, code)
-        ).fetchone()
+    elif action in ("remove", "bulk_remove"):
+        undo_codes = codes if action == "bulk_remove" else [code]
 
-        if row:
-            neue_quantity = row["quantity"] + 1
-            neue_duplicates = max(neue_quantity - 1, 0)
-            cur.execute(
-                "UPDATE stickers SET quantity=?, duplicates=? WHERE id=?",
-                (neue_quantity, neue_duplicates, row["id"])
-            )
-        else:
-            cur.execute(
-                """
-                INSERT INTO stickers (user_id, album_id, sticker_code, status, duplicates, quantity)
-                VALUES (?, ?, ?, "owned", 0, 1)
-                """,
-                (current_user_id(), album_id, code)
-            )
+        for undo_code in undo_codes:
+            row = con.execute(
+                "SELECT * FROM stickers WHERE user_id=? AND album_id=? AND sticker_code=?",
+                (current_user_id(), album_id, undo_code)
+            ).fetchone()
+
+            if row:
+                neue_quantity = row["quantity"] + 1
+                neue_duplicates = max(neue_quantity - 1, 0)
+                cur.execute(
+                    "UPDATE stickers SET quantity=?, duplicates=? WHERE id=?",
+                    (neue_quantity, neue_duplicates, row["id"])
+                )
+            else:
+                cur.execute(
+                    """
+                    INSERT INTO stickers (user_id, album_id, sticker_code, status, duplicates, quantity)
+                    VALUES (?, ?, ?, "owned", 0, 1)
+                    """,
+                    (current_user_id(), album_id, undo_code)
+                )
 
     con.commit()
     con.close()
@@ -1518,6 +1701,8 @@ def undo_last_action():
 
     if action == "bulk_add":
         msg = f"{len(codes)} hinzugefügte Sticker rückgängig gemacht."
+    elif action == "bulk_remove":
+        msg = f"{len(codes)} entfernte Sticker rückgängig gemacht."
     else:
         msg = f"Aktion für Sticker {display_code(code)} rückgängig gemacht."
     return redirect(f"/album/{album_id}?filter={current_filter}&message={quote(msg)}&focus=add")
