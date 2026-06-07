@@ -748,6 +748,37 @@
     z-index:5;
 }
 
+.smart-add-active .slot{
+    padding-top:28px;
+}
+
+.smart-add-active .slot::before{
+    content:"";
+    position:absolute;
+    top:7px;
+    right:7px;
+    width:18px;
+    height:18px;
+    border-radius:999px;
+    border:2px solid rgba(43,15,70,.42);
+    background:white;
+    box-sizing:border-box;
+    z-index:18;
+}
+
+.smart-add-active .slot.smart-selected::before{
+    content:"✓";
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    border-color:#7C3AED;
+    background:#7C3AED;
+    color:white;
+    font-size:13px;
+    font-weight:900;
+    line-height:1;
+}
+
 .smart-add-bar{
     position:fixed;
     left:16px;
@@ -788,6 +819,11 @@
 .smart-add-primary{
     background:#7C3AED;
     color:white;
+}
+
+.smart-add-primary:disabled{
+    opacity:.55;
+    cursor:not-allowed;
 }
 
 .smart-add-secondary{
@@ -1014,8 +1050,7 @@
 }
 
 #quickActionStep2{
-    border-top:1px solid #eee7f5 !important;
-    padding-top:12px !important;
+    padding-top:0 !important;
 }
 .sticker-search{
     position:sticky !important;
@@ -1028,4 +1063,59 @@
 .keyboard-input-active .sticker-search{
     border:2px solid #7c3aed !important;
     box-shadow:0 0 0 5px rgba(124,58,237,.12), 0 10px 26px rgba(18,5,31,.12) !important;
+}
+
+.keyboard-input-active .slot{
+    pointer-events:none;
+}
+
+/* Final quick-action modal placement and copy */
+.quick-action-modal{
+    position:fixed !important;
+    inset:0 !important;
+    align-items:center !important;
+    justify-content:center !important;
+    z-index:9999 !important;
+    padding:18px !important;
+}
+
+.quick-action-card{
+    margin:0 auto !important;
+}
+
+#quickActionStep1 h3::after,
+#quickActionStep2 h3::after{
+    display:block;
+    margin-top:8px;
+    color:#72697c;
+    font-size:15px;
+    font-weight:700;
+    line-height:1.35;
+}
+
+#quickActionStep1 h3::after{
+    content:"Was möchtest du machen?";
+}
+
+#quickActionStep2 h3::after{
+    content:"Wie möchtest du fortfahren?";
+}
+
+/* Final sticky hierarchy for the sticker wall */
+.sticker-search{
+    position:sticky !important;
+    top:8px !important;
+    z-index:220 !important;
+    background:white !important;
+}
+
+.album-chapter-title{
+    position:sticky !important;
+    top:72px !important;
+    z-index:180 !important;
+}
+
+.team-title{
+    position:static !important;
+    z-index:auto !important;
 }

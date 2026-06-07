@@ -1144,22 +1144,24 @@ def albumseite(album_id):
     html += f'''
 <div class="quick-action-modal" id="quickActionModal" style="display:none;">
     <div class="quick-action-card">
-        <h3>Sticker verwalten</h3>
-
-        <button type="button" class="btn green" onclick="chooseAction('add')">➕ Hinzufügen</button>
-        <button type="button" class="btn gray" onclick="chooseAction('remove')">➖ Entfernen</button>
-
-        <div id="quickActionStep2" style="display:none;margin-top:12px;">
-            <button type="button" class="btn" onclick="chooseMode('select')">Sticker auswählen</button>
-            <button type="button" class="btn" onclick="chooseMode('input')">Sticker eintragen</button>
+        <div id="quickActionStep1">
+            <h3>Sticker verwalten</h3>
+            <button type="button" class="btn green" onclick="chooseAction('add')">Sticker hinzufügen</button>
+            <button type="button" class="btn gray" onclick="chooseAction('remove')">Sticker entfernen</button>
+            <button type="button" class="btn gray" onclick="closeQuickActions()">Abbrechen</button>
         </div>
 
-        <button type="button" class="btn gray" onclick="closeQuickActions()">Abbrechen</button>
+        <div id="quickActionStep2" style="display:none;">
+            <h3 id="quickActionTitle">Sticker hinzufügen</h3>
+            <button type="button" class="btn" onclick="chooseMode('input')">Sticker eintragen</button>
+            <button type="button" class="btn" onclick="chooseMode('select')">Sticker auswählen</button>
+            <button type="button" class="btn gray" onclick="closeQuickActions()">Abbrechen</button>
+        </div>
     </div>
 </div>
 <div class="smart-add-bar" id="smartAddBar" style="display:none;">
     <div class="smart-add-count">
-        <strong id="smartAddCount">0</strong> <span id="smartAddLabel">ausgewählt</span>
+        <strong id="smartAddCount">0</strong> <span id="smartAddLabel">Sticker hinzufügen</span>
     </div>
     <div class="smart-add-actions">
         <button type="button" class="smart-add-secondary" onclick="cancelSmartAdd()">Abbrechen</button>
@@ -1171,8 +1173,23 @@ def albumseite(album_id):
 let smartAddMode = false;
 let selectedStickers = [];
 let smartActionMode = "add";
+let keyboardInputMode = false;
 
 const stickerSearchInput = document.getElementById('stickerSearch');
+
+function resetStickerSearch(){{
+    if(!stickerSearchInput) return;
+
+    stickerSearchInput.value = '';
+    stickerSearchInput.placeholder = 'Sticker oder Team suchen...';
+    stickerSearchInput.type = 'search';
+
+    document.querySelectorAll('.slot').forEach(function(slot){{
+        slot.style.display = '';
+    }});
+
+    updateVisibleStickerSections();
+}}
 
 function updateVisibleStickerSections(){{
     document.querySelectorAll('.team-title').forEach(function(teamTitle){{
@@ -1240,7 +1257,7 @@ if(stickerSearchInput){{
     }});
 
     stickerSearchInput.addEventListener('keydown', function(event){{
-        if(!document.body.classList.contains('keyboard-input-active')) return;
+        if(!keyboardInputMode) return;
 
         if(event.key === 'Enter'){{
             event.preventDefault();
@@ -1248,29 +1265,29 @@ if(stickerSearchInput){{
             const code = stickerSearchInput.value.trim();
             if(!code) return;
 
-            if(smartActionMode === "remove"){{
-                window.location = "/remove/{album_id}/" + encodeURIComponent(code);
-            }}else{{
-                window.location = "/add/{album_id}/" + encodeURIComponent(code);
+            if(!selectedStickers.includes(code)){{
+                selectedStickers.push(code);
             }}
+
+            stickerSearchInput.value = '';
+            updateSmartAddBar();
         }}
 
         if(event.key === 'Escape'){{
-            keyboardInputMode = false;
-            document.body.classList.remove('keyboard-input-active');
-            stickerSearchInput.value = '';
-            stickerSearchInput.placeholder = 'Sticker oder Team suchen...';
+            cancelSmartAdd();
         }}
     }});
 }}
 
 function openQuickActions(){{
     const modal = document.getElementById('quickActionModal');
+    const step1 = document.getElementById('quickActionStep1');
     const step2 = document.getElementById('quickActionStep2');
 
     if(!modal) return;
 
     modal.style.display = 'flex';
+    if(step1) step1.style.display = 'block';
     if(step2) step2.style.display = 'none';
     window.selectedQuickAction = null;
 }}
@@ -1280,8 +1297,14 @@ function closeQuickActions(){{
 }}
 
 function chooseAction(action){{
+    const step1 = document.getElementById('quickActionStep1');
+    const step2 = document.getElementById('quickActionStep2');
+    const title = document.getElementById('quickActionTitle');
+
     window.selectedQuickAction = action;
-    document.getElementById('quickActionStep2').style.display = 'block';
+    if(step1) step1.style.display = 'none';
+    if(step2) step2.style.display = 'block';
+    if(title) title.textContent = action === 'remove' ? 'Sticker entfernen' : 'Sticker hinzufügen';
 }}
 
 function chooseMode(mode){{
@@ -1305,7 +1328,8 @@ function chooseMode(mode){{
 
 function showKeyboardInput(mode){{
     smartActionMode = mode;
-    smartAddMode = false;
+    smartAddMode = true;
+    keyboardInputMode = true;
     selectedStickers = [];
     document.body.classList.remove('smart-add-active');
     document.body.classList.add('keyboard-input-active');
@@ -1313,7 +1337,8 @@ function showKeyboardInput(mode){{
     const input = document.getElementById('stickerSearch');
     if(input){{
         input.value = '';
-        input.placeholder = mode === "remove" ? "Sticker-Code entfernen… Enter drücken" : "Sticker-Code hinzufügen… Enter drücken";
+        input.type = 'text';
+        input.placeholder = mode === "remove" ? "Sticker-Code eintragen und Enter drücken" : "Sticker-Code eintragen und Enter drücken";
         input.focus();
     }}
 
@@ -1323,8 +1348,11 @@ function showKeyboardInput(mode){{
 function toggleSmartRemove(){{
     smartActionMode = "remove";
     smartAddMode = true;
+    keyboardInputMode = false;
     selectedStickers = [];
     document.body.classList.add('smart-add-active');
+    document.body.classList.remove('keyboard-input-active');
+    resetStickerSearch();
 
     document.querySelectorAll('.slot.smart-selected').forEach(function(slot){{
         slot.classList.remove('smart-selected');
@@ -1336,8 +1364,11 @@ function toggleSmartRemove(){{
 function toggleSmartAdd(){{
     smartActionMode = "add";
     smartAddMode = true;
+    keyboardInputMode = false;
     selectedStickers = [];
     document.body.classList.add('smart-add-active');
+    document.body.classList.remove('keyboard-input-active');
+    resetStickerSearch();
 
     document.querySelectorAll('.slot.smart-selected').forEach(function(slot){{
         slot.classList.remove('smart-selected');
@@ -1356,14 +1387,15 @@ function updateSmartAddBar(){{
     if(!bar || !count || !label || !primary) return;
 
     count.textContent = selectedStickers.length;
+    primary.disabled = selectedStickers.length === 0;
 
     if(smartActionMode === 'remove'){{
-        label.textContent = 'zum Entfernen ausgewählt';
-        primary.textContent = 'Entfernen';
+        label.textContent = 'Sticker entfernen';
+        primary.textContent = selectedStickers.length + ' Sticker entfernen';
         bar.classList.add('remove-mode');
     }}else{{
-        label.textContent = 'ausgewählt';
-        primary.textContent = 'Hinzufügen';
+        label.textContent = 'Sticker hinzufügen';
+        primary.textContent = selectedStickers.length + ' Sticker hinzufügen';
         bar.classList.remove('remove-mode');
     }}
 
@@ -1372,22 +1404,21 @@ function updateSmartAddBar(){{
 
 function cancelSmartAdd(){{
     smartAddMode = false;
+    keyboardInputMode = false;
     selectedStickers = [];
     document.body.classList.remove('smart-add-active');
+    document.body.classList.remove('keyboard-input-active');
 
     document.querySelectorAll('.slot.smart-selected').forEach(function(slot){{
         slot.classList.remove('smart-selected');
     }});
 
+    resetStickerSearch();
     updateSmartAddBar();
 }}
 
 function submitSmartAdd(){{
     if(selectedStickers.length === 0) return;
-
-    const verb = smartActionMode === 'remove' ? 'entfernen' : 'hinzufügen';
-    const ok = confirm('Willst du ' + selectedStickers.length + ' Sticker ' + verb + '?');
-    if(!ok) return;
 
     const form = document.createElement('form');
     form.method = 'POST';
