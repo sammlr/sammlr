@@ -1394,6 +1394,8 @@ if(stickerSearchInput){{
             const canonicalCode = canonicalCodeFromInput(code);
             if(!canonicalCode){{
                 showPendingInputError('Sticker nicht gefunden: ' + code);
+                stickerSearchInput.value = '';
+                stickerSearchInput.focus();
                 return;
             }}
 
