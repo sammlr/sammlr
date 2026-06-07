@@ -1035,6 +1035,7 @@ def albumseite(album_id):
         <a class="sticker-filter-pill duplicate {'active' if filter_name == 'duplicate' else ''}" href="/album/{album_id}?filter=duplicate">Doppelte</a>
     </div>
     <input id="stickerSearch" class="sticker-search" type="search" placeholder="Sticker oder Team suchen..." autocomplete="off">
+    <div id="pendingInputError" class="pending-input-error" style="display:none;"></div>
 
     <p>
         
@@ -1067,7 +1068,7 @@ def albumseite(album_id):
             if trigger and compact(code) == compact(trigger):
                 klasse += " trigger-slot"
             search_text = f"{code} {text} {current_section}".lower()
-            html += f'<a class="slot {klasse}" data-code="{code}" data-search="{search_text}" href="/sticker/{album_id}/{code}">{text}</a>'
+            html += f'<a class="slot {klasse}" data-code="{code}" data-display="{display_code(code)}" data-search="{search_text}" href="/sticker/{album_id}/{code}">{text}</a>'
         if open_wall:
             html += "</div>"
 
@@ -1125,7 +1126,7 @@ def albumseite(album_id):
             if trigger and compact(code) == compact(trigger):
                 klasse += " trigger-slot"
             search_text = f"{code} {text} {current_chapter} {current_team}".lower()
-            html += f'<a class="slot {klasse}" data-code="{code}" data-search="{search_text}" href="/sticker/{album_id}/{code}">{text}</a>'
+            html += f'<a class="slot {klasse}" data-code="{code}" data-display="{display_code(code)}" data-search="{search_text}" href="/sticker/{album_id}/{code}">{text}</a>'
 
         if open_wall:
             html += "</div>"
@@ -1139,7 +1140,7 @@ def albumseite(album_id):
             if trigger and compact(code) == compact(trigger):
                 klasse += " trigger-slot"
             search_text = f"{code} {text}".lower()
-            html += f'<a class="slot {klasse}" data-code="{code}" data-search="{search_text}" href="/sticker/{album_id}/{code}">{text}</a>'
+            html += f'<a class="slot {klasse}" data-code="{code}" data-display="{display_code(code)}" data-search="{search_text}" href="/sticker/{album_id}/{code}">{text}</a>'
         html += "</div>"
     html += f'''
 <div class="quick-action-modal" id="quickActionModal" style="display:none;">
@@ -1168,6 +1169,16 @@ def albumseite(album_id):
         <button type="button" class="smart-add-primary" id="smartAddPrimary" onclick="submitSmartAdd()">Hinzufügen</button>
     </div>
 </div>
+<div class="quick-action-modal review-modal" id="pendingReviewModal" style="display:none;">
+    <div class="quick-action-card review-card">
+        <h3 id="pendingReviewTitle">Sticker hinzufügen</h3>
+        <div class="pending-review-list" id="pendingReviewList"></div>
+        <div class="pending-review-actions">
+            <button type="button" class="btn gray" onclick="closePendingReview()">Bearbeiten</button>
+            <button type="button" class="btn" onclick="confirmSmartAdd()">Bestätigen</button>
+        </div>
+    </div>
+</div>
 
 <script>
 let smartAddMode = false;
@@ -1189,6 +1200,121 @@ function resetStickerSearch(){{
     }});
 
     updateVisibleStickerSections();
+}}
+
+function getPendingCounts(){{
+    const counts = {{}};
+
+    selectedStickers.forEach(function(code){{
+        counts[code] = (counts[code] || 0) + 1;
+    }});
+
+    return counts;
+}}
+
+function normalizeStickerToken(value){{
+    return String(value || '').toLowerCase().replace(/[^a-z0-9]/g, '');
+}}
+
+function findSlotByCode(code){{
+    let foundSlot = null;
+    const needle = normalizeStickerToken(code);
+    if(!needle) return null;
+
+    document.querySelectorAll('.slot').forEach(function(slot){{
+        const codeKey = normalizeStickerToken(slot.dataset.code || '');
+        const displayKey = normalizeStickerToken(slot.dataset.display || '');
+
+        if(!foundSlot && (codeKey === needle || displayKey === needle)){{
+            foundSlot = slot;
+        }}
+    }});
+
+    return foundSlot;
+}}
+
+function canonicalCodeFromInput(rawCode){{
+    const slot = findSlotByCode(rawCode);
+    return slot ? (slot.dataset.code || rawCode) : null;
+}}
+
+function displayCodeForPending(code){{
+    const slot = findSlotByCode(code);
+    return slot ? (slot.dataset.display || code) : code;
+}}
+
+function updatePendingSlotBadges(){{
+    const counts = getPendingCounts();
+
+    document.querySelectorAll('.slot').forEach(function(slot){{
+        const code = slot.dataset.code || '';
+        const count = counts[code] || 0;
+
+        slot.dataset.pendingCount = count > 0 ? count : '';
+        if(count > 0){{
+            slot.classList.add('smart-selected');
+        }}else{{
+            slot.classList.remove('smart-selected');
+        }}
+    }});
+}}
+
+function syncPendingUi(){{
+    updatePendingSlotBadges();
+    updateSmartAddBar();
+    renderPendingReview();
+}}
+
+function setPendingCount(code, amount){{
+    const nextAmount = Math.max(parseInt(amount, 10) || 0, 0);
+    const remaining = selectedStickers.filter(function(item){{
+        return item !== code;
+    }});
+
+    for(let i = 0; i < nextAmount; i += 1){{
+        remaining.push(code);
+    }}
+
+    selectedStickers = remaining;
+    syncPendingUi();
+}}
+
+function incrementPendingCode(code){{
+    selectedStickers.push(code);
+    syncPendingUi();
+}}
+
+function decrementPendingCode(code){{
+    const index = selectedStickers.indexOf(code);
+    if(index >= 0){{
+        selectedStickers.splice(index, 1);
+    }}
+
+    syncPendingUi();
+}}
+
+function removePendingCode(code){{
+    selectedStickers = selectedStickers.filter(function(item){{
+        return item !== code;
+    }});
+
+    syncPendingUi();
+}}
+
+function showPendingInputError(message){{
+    const error = document.getElementById('pendingInputError');
+    if(!error) return;
+
+    error.textContent = message;
+    error.style.display = 'block';
+}}
+
+function clearPendingInputError(){{
+    const error = document.getElementById('pendingInputError');
+    if(!error) return;
+
+    error.textContent = '';
+    error.style.display = 'none';
 }}
 
 function updateVisibleStickerSections(){{
@@ -1265,12 +1391,15 @@ if(stickerSearchInput){{
             const code = stickerSearchInput.value.trim();
             if(!code) return;
 
-            if(!selectedStickers.includes(code)){{
-                selectedStickers.push(code);
+            const canonicalCode = canonicalCodeFromInput(code);
+            if(!canonicalCode){{
+                showPendingInputError('Sticker nicht gefunden: ' + code);
+                return;
             }}
 
+            incrementPendingCode(canonicalCode);
             stickerSearchInput.value = '';
-            updateSmartAddBar();
+            clearPendingInputError();
         }}
 
         if(event.key === 'Escape'){{
@@ -1332,6 +1461,7 @@ function showKeyboardInput(mode){{
     keyboardInputMode = true;
     selectedStickers = [];
     document.body.classList.remove('smart-add-active');
+    document.body.classList.add('pending-active');
     document.body.classList.add('keyboard-input-active');
 
     const input = document.getElementById('stickerSearch');
@@ -1342,6 +1472,7 @@ function showKeyboardInput(mode){{
         input.focus();
     }}
 
+    clearPendingInputError();
     updateSmartAddBar();
 }}
 
@@ -1351,13 +1482,12 @@ function toggleSmartRemove(){{
     keyboardInputMode = false;
     selectedStickers = [];
     document.body.classList.add('smart-add-active');
+    document.body.classList.add('pending-active');
     document.body.classList.remove('keyboard-input-active');
     resetStickerSearch();
+    clearPendingInputError();
 
-    document.querySelectorAll('.slot.smart-selected').forEach(function(slot){{
-        slot.classList.remove('smart-selected');
-    }});
-
+    updatePendingSlotBadges();
     updateSmartAddBar();
 }}
 
@@ -1367,13 +1497,12 @@ function toggleSmartAdd(){{
     keyboardInputMode = false;
     selectedStickers = [];
     document.body.classList.add('smart-add-active');
+    document.body.classList.add('pending-active');
     document.body.classList.remove('keyboard-input-active');
     resetStickerSearch();
+    clearPendingInputError();
 
-    document.querySelectorAll('.slot.smart-selected').forEach(function(slot){{
-        slot.classList.remove('smart-selected');
-    }});
-
+    updatePendingSlotBadges();
     updateSmartAddBar();
 }}
 
@@ -1400,6 +1529,7 @@ function updateSmartAddBar(){{
     }}
 
     bar.style.display = smartAddMode ? 'flex' : 'none';
+    updatePendingSlotBadges();
 }}
 
 function cancelSmartAdd(){{
@@ -1407,17 +1537,108 @@ function cancelSmartAdd(){{
     keyboardInputMode = false;
     selectedStickers = [];
     document.body.classList.remove('smart-add-active');
+    document.body.classList.remove('pending-active');
     document.body.classList.remove('keyboard-input-active');
+    closePendingReview();
+    clearPendingInputError();
 
-    document.querySelectorAll('.slot.smart-selected').forEach(function(slot){{
-        slot.classList.remove('smart-selected');
-    }});
-
+    updatePendingSlotBadges();
     resetStickerSearch();
     updateSmartAddBar();
 }}
 
 function submitSmartAdd(){{
+    if(selectedStickers.length === 0) return;
+
+    openPendingReview();
+}}
+
+function renderPendingReview(){{
+    const list = document.getElementById('pendingReviewList');
+    const title = document.getElementById('pendingReviewTitle');
+    if(!list || !title) return;
+
+    const counts = getPendingCounts();
+    const codes = Object.keys(counts);
+
+    title.textContent = smartActionMode === 'remove' ? 'Sticker entfernen' : 'Sticker hinzufügen';
+    list.innerHTML = '';
+
+    if(codes.length === 0){{
+        list.innerHTML = '<p class="pending-review-empty">Keine Sticker vorgemerkt.</p>';
+        return;
+    }}
+
+    codes.forEach(function(code){{
+        const row = document.createElement('div');
+        row.className = 'pending-review-row';
+
+        const codeText = document.createElement('strong');
+        codeText.textContent = displayCodeForPending(code);
+
+        const controls = document.createElement('div');
+        controls.className = 'pending-review-controls';
+
+        const minusButton = document.createElement('button');
+        minusButton.type = 'button';
+        minusButton.textContent = '-';
+        minusButton.setAttribute('aria-label', displayCodeForPending(code) + ' reduzieren');
+        minusButton.addEventListener('click', function(){{
+            decrementPendingCode(code);
+        }});
+
+        const amount = document.createElement('input');
+        amount.type = 'number';
+        amount.min = '0';
+        amount.step = '1';
+        amount.value = counts[code];
+        amount.setAttribute('aria-label', 'Menge fuer ' + displayCodeForPending(code));
+        amount.addEventListener('change', function(){{
+            setPendingCount(code, amount.value);
+        }});
+
+        const plusButton = document.createElement('button');
+        plusButton.type = 'button';
+        plusButton.textContent = '+';
+        plusButton.setAttribute('aria-label', displayCodeForPending(code) + ' erhoehen');
+        plusButton.addEventListener('click', function(){{
+            incrementPendingCode(code);
+        }});
+
+        controls.appendChild(minusButton);
+        controls.appendChild(amount);
+        controls.appendChild(plusButton);
+
+        const removeButton = document.createElement('button');
+        removeButton.type = 'button';
+        removeButton.className = 'pending-review-remove';
+        removeButton.textContent = '×';
+        removeButton.setAttribute('aria-label', displayCodeForPending(code) + ' entfernen');
+        removeButton.addEventListener('click', function(){{
+            removePendingCode(code);
+        }});
+
+        row.appendChild(codeText);
+        row.appendChild(controls);
+        row.appendChild(removeButton);
+        list.appendChild(row);
+    }});
+}}
+
+function openPendingReview(){{
+    const modal = document.getElementById('pendingReviewModal');
+    if(!modal) return;
+
+    renderPendingReview();
+    modal.style.display = 'flex';
+}}
+
+function closePendingReview(){{
+    const modal = document.getElementById('pendingReviewModal');
+    if(modal) modal.style.display = 'none';
+}}
+
+function confirmSmartAdd(){{
     if(selectedStickers.length === 0) return;
 
     const form = document.createElement('form');
@@ -1443,17 +1664,7 @@ document.addEventListener('click', function(event){{
 
     const code = slot.dataset.code || decodeURIComponent(slot.getAttribute('href').split('/').pop());
 
-    if(slot.classList.contains('smart-selected')){{
-        slot.classList.remove('smart-selected');
-        selectedStickers = selectedStickers.filter(function(item){{
-            return item !== code;
-        }});
-    }}else{{
-        slot.classList.add('smart-selected');
-        selectedStickers.push(code);
-    }}
-
-    updateSmartAddBar();
+    incrementPendingCode(code);
 }});
 </script>
 '''
@@ -1464,14 +1675,14 @@ document.addEventListener('click', function(event){{
 @app.route("/bulk_add/<album_id>", methods=["POST"])
 def bulk_add(album_id):
     codes = request.form.getlist("codes")
-    unique_codes = []
+    resolved_codes = []
 
     for raw_code in codes:
         code = resolve_code(album_id, raw_code)
-        if code and code not in unique_codes:
-            unique_codes.append(code)
+        if code:
+            resolved_codes.append(code)
 
-    if not unique_codes:
+    if not resolved_codes:
         return redirect(f"/album/{album_id}?message=Keine%20Sticker%20ausgewählt.&focus=add")
 
     vorher_erreicht = erreichte_trophaeen(album_id)
@@ -1479,7 +1690,7 @@ def bulk_add(album_id):
     con = get_db()
     cur = con.cursor()
 
-    for code in unique_codes:
+    for code in resolved_codes:
         row = con.execute(
             "SELECT * FROM stickers WHERE user_id=? AND album_id=? AND sticker_code=?",
             (current_user_id(), album_id, code)
@@ -1510,11 +1721,11 @@ def bulk_add(album_id):
     session["last_action"] = {
         "action": "bulk_add",
         "album_id": album_id,
-        "codes": unique_codes,
+        "codes": resolved_codes,
         "filter": "all"
     }
 
-    msg = f"{len(unique_codes)} Sticker hinzugefügt."
+    msg = f"{len(resolved_codes)} Sticker hinzugefügt."
     url = f"/album/{album_id}?message={quote(msg)}&focus=add"
 
     if neue_trophies:
@@ -1527,20 +1738,20 @@ def bulk_add(album_id):
 @app.route("/bulk_remove/<album_id>", methods=["POST"])
 def bulk_remove(album_id):
     codes = request.form.getlist("codes")
-    unique_codes = []
+    resolved_codes = []
 
     for raw_code in codes:
         code = resolve_code(album_id, raw_code)
-        if code and code not in unique_codes:
-            unique_codes.append(code)
+        if code:
+            resolved_codes.append(code)
 
-    if not unique_codes:
+    if not resolved_codes:
         return redirect(f"/album/{album_id}?message=Keine%20Sticker%20ausgewählt.&focus=remove")
 
     con = get_db()
     cur = con.cursor()
 
-    for code in unique_codes:
+    for code in resolved_codes:
         row = con.execute(
             "SELECT * FROM stickers WHERE user_id=? AND album_id=? AND sticker_code=?",
             (current_user_id(), album_id, code)
@@ -1566,11 +1777,11 @@ def bulk_remove(album_id):
     session["last_action"] = {
         "action": "bulk_remove",
         "album_id": album_id,
-        "codes": unique_codes,
+        "codes": resolved_codes,
         "filter": "all"
     }
 
-    msg = f"{len(unique_codes)} Sticker entfernt."
+    msg = f"{len(resolved_codes)} Sticker entfernt."
     return redirect(f"/album/{album_id}?message={quote(msg)}&focus=remove")
 
 

@@ -742,21 +742,21 @@
 }
 
 .slot.smart-selected{
-    outline:4px solid #7C3AED;
+    outline:2px solid #7C3AED;
     box-shadow:0 0 0 4px rgba(124,58,237,.16);
-    transform:scale(1.04);
+    transform:scale(1.02);
     z-index:5;
 }
 
-.smart-add-active .slot{
+.pending-active .slot{
     padding-top:28px;
 }
 
-.smart-add-active .slot::before{
+.pending-active .slot::before{
     content:"";
     position:absolute;
     top:7px;
-    right:7px;
+    left:7px;
     width:18px;
     height:18px;
     border-radius:999px;
@@ -766,17 +766,25 @@
     z-index:18;
 }
 
-.smart-add-active .slot.smart-selected::before{
-    content:"✓";
+.pending-active .slot.smart-selected::before{
+    content:attr(data-pending-count);
     display:flex;
     align-items:center;
     justify-content:center;
-    border-color:#7C3AED;
-    background:#7C3AED;
+    position:absolute;
+    top:7px;
+    left:7px;
+    width:20px;
+    height:20px;
+    border-radius:999px;
+    border:2px solid #2b0f46;
+    background:#2b0f46;
     color:white;
-    font-size:13px;
+    box-sizing:border-box;
+    font-size:12px;
     font-weight:900;
     line-height:1;
+    z-index:19;
 }
 
 .smart-add-bar{
@@ -829,6 +837,98 @@
 .smart-add-secondary{
     background:#d9d5dc;
     color:#4b4650;
+}
+
+.review-modal{
+    z-index:10000 !important;
+}
+
+.review-card{
+    max-height:82vh !important;
+    overflow:auto !important;
+}
+
+.pending-review-list{
+    display:flex;
+    flex-direction:column;
+    gap:8px;
+    margin:14px 0 18px;
+}
+
+.pending-review-row{
+    display:grid;
+    grid-template-columns:minmax(0,1fr) auto 38px;
+    align-items:center;
+    gap:10px;
+    padding:10px 12px;
+    border-radius:14px;
+    background:#faf8fc;
+    border:1px solid rgba(93,47,134,.10);
+}
+
+.pending-review-controls{
+    display:grid;
+    grid-template-columns:34px 58px 34px;
+    align-items:center;
+    gap:6px;
+}
+
+.pending-review-controls button,
+.pending-review-remove{
+    width:34px;
+    height:34px;
+    border:none;
+    border-radius:12px;
+    font-weight:900;
+    cursor:pointer;
+}
+
+.pending-review-controls button{
+    background:#2b0f46;
+    color:white;
+    font-size:18px;
+}
+
+.pending-review-controls input{
+    width:58px;
+    height:34px;
+    padding:0;
+    border-radius:12px;
+    font-size:15px;
+    font-weight:900;
+    text-align:center;
+    border:1px solid rgba(93,47,134,.18);
+    background:white;
+    color:#2b0f46;
+}
+
+.pending-review-remove{
+    background:#d9d5dc;
+    color:#4b4650;
+    font-size:16px;
+}
+
+.pending-review-actions{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:8px;
+}
+
+.pending-review-empty{
+    margin:0;
+    color:#72697c;
+    font-weight:800;
+}
+
+.pending-input-error{
+    margin:-4px 0 12px;
+    padding:10px 12px;
+    border-radius:14px;
+    border:1px solid rgba(185,28,28,.22);
+    background:#fff1f2;
+    color:#9f1239;
+    font-size:14px;
+    font-weight:900;
 }
 /* Teams klein, Gruppen dick */
 .team-title{
