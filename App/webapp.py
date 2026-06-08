@@ -11,6 +11,19 @@ app = Flask(__name__)
 app.secret_key = "sammlr_dev_secret"
 
 
+@app.before_request
+def require_login():
+    public_endpoints = {"login", "register", "static"}
+
+    if request.endpoint in public_endpoints:
+        return None
+
+    if "user_id" not in session:
+        return redirect("/login")
+
+    return None
+
+
 
 
 
@@ -21,10 +34,16 @@ def init_db():
     cur.execute("""
     CREATE TABLE IF NOT EXISTS users (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
+        name TEXT,
         username TEXT UNIQUE,
         password TEXT
     )
     """)
+
+    try:
+        cur.execute("ALTER TABLE users ADD COLUMN name TEXT")
+    except sqlite3.OperationalError:
+        pass
 
     cur.execute("""
     CREATE TABLE IF NOT EXISTS unlocked_trophies (
@@ -108,6 +127,22 @@ def init_db():
 
 def style():
     return '<meta name="viewport" content="width=device-width, initial-scale=1.0"><link rel="stylesheet" href="/static/style.css">'
+
+
+def app_header(active_title=None, subtitle=None):
+    title_html = f"<h1>{active_title}</h1>" if active_title else ""
+    subtitle_html = f'<p>{subtitle}</p>' if subtitle else ""
+
+    return f"""
+    <header class="app-header">
+        <a class="app-header-brand" href="/">
+            <span class="app-header-mark">S</span>
+            <span>Sammlr</span>
+        </a>
+        {title_html}
+        {subtitle_html}
+    </header>
+    """
 
 
 from services.albums import (
@@ -542,6 +577,11 @@ def trophy_status(album_id, gesammelt, total):
 
 @app.route("/login", methods=["GET", "POST"])
 def login():
+    if request.method == "GET" and "user_id" in session:
+        return redirect("/")
+
+    error = ""
+
     if request.method == "POST":
         username = request.form.get("username")
         password = request.form.get("password")
@@ -558,59 +598,88 @@ def login():
             session["username"] = user["username"]
             return redirect("/")
 
-        return "Login fehlgeschlagen"
+        error = "Login fehlgeschlagen. Bitte prüfe Benutzername und Passwort."
 
-    return """
-    <html>
-    <body style="font-family:sans-serif;padding:40px;">
-        <h1>Sammlr Login</h1>
+    error_html = f'<div class="auth-error">{error}</div>' if error else ""
 
-        <form method="POST">
-            <input name="username" placeholder="Benutzername"><br><br>
-            <input name="password" type="password" placeholder="Passwort"><br><br>
-            <button type="submit">Login</button>
-        </form>
-<br><br>
-<a href="/register">Noch kein Konto? Jetzt registrieren</a>
-    </body>
-    </html>
+    return f"""
+    <html><head>{style()}</head><body class="auth-page"><div class="auth-shell">
+        {app_header("Einloggen", "Willkommen zurück bei Sammlr.")}
+
+        <div class="auth-card">
+            {error_html}
+            <form method="POST" class="auth-form">
+                <label>Benutzername</label>
+                <input name="username" placeholder="Benutzername" autocomplete="username">
+
+                <label>Passwort</label>
+                <input name="password" type="password" placeholder="Passwort" autocomplete="current-password">
+
+                <button type="submit" class="auth-submit">Einloggen</button>
+            </form>
+
+            <a class="auth-switch" href="/register">Noch kein Konto? Jetzt registrieren</a>
+        </div>
+        <div class="auth-watermark" aria-hidden="true">S</div>
+    </div></body></html>
     """
 @app.route("/register", methods=["GET", "POST"])
 def register():
+    error = ""
 
     if request.method == "POST":
+        name = request.form.get("name", "").strip()
         username = request.form.get("username")
         password = request.form.get("password")
+        password_repeat = request.form.get("password_repeat")
 
-        con = get_db()
+        if password != password_repeat:
+            error = "Passwörter stimmen nicht überein."
+        else:
+            con = get_db()
 
-        try:
-            con.execute(
-                "INSERT INTO users (username, password) VALUES (?, ?)",
-                (username, password)
-            )
-            con.commit()
-            con.close()
+            try:
+                con.execute(
+                    "INSERT INTO users (name, username, password) VALUES (?, ?, ?)",
+                    (name, username, password)
+                )
+                con.commit()
+                con.close()
 
-            return redirect("/login")
+                return redirect("/login")
 
-        except:
-            con.close()
-            return "Benutzer existiert bereits"
+            except sqlite3.IntegrityError:
+                con.close()
+                error = "Benutzername ist bereits vergeben."
 
-    return """
-    <html>
-    <body style="font-family:sans-serif;padding:40px;">
-        <h1>Sammlr Registrierung</h1>
+    error_html = f'<div class="auth-error">{error}</div>' if error else ""
 
-        <form method="POST">
-            <input name="username" placeholder="Benutzername"><br><br>
-            <input name="password" type="password" placeholder="Passwort"><br><br>
-            <button type="submit">Registrieren</button>
-        </form>
+    return f"""
+    <html><head>{style()}</head><body class="auth-page"><div class="auth-shell">
+        {app_header("Registrieren", "Starte deine Sammlung mit einem Sammlr-Konto.")}
 
-    </body>
-    </html>
+        <div class="auth-card">
+            {error_html}
+            <form method="POST" class="auth-form">
+                <label>Name</label>
+                <input name="name" placeholder="Name" autocomplete="name">
+
+                <label>Benutzername</label>
+                <input name="username" placeholder="Benutzername" autocomplete="username">
+
+                <label>Passwort</label>
+                <input name="password" type="password" placeholder="Passwort" autocomplete="new-password">
+
+                <label>Passwort wiederholen</label>
+                <input name="password_repeat" type="password" placeholder="Passwort wiederholen" autocomplete="new-password">
+
+                <button type="submit" class="auth-submit">Registrieren</button>
+            </form>
+
+            <a class="auth-switch" href="/login">Schon registriert? Jetzt einloggen</a>
+        </div>
+        <div class="auth-watermark" aria-hidden="true">S</div>
+    </div></body></html>
     """
 
 @app.route("/logout")
@@ -633,76 +702,105 @@ def startseite():
     ).fetchall()
     con.close()
 
-    infos = [
-        (album, gesammelt, doppelte, prozent, total)
-        for album, _, gesammelt, doppelte, prozent, total in (
-            lade_album(album["id"]) for album in alben
-        )
-    ]
+    infos = []
+    for album in alben:
+        _, _, gesammelt, doppelte, prozent, total = lade_album(album["id"])
+        tauschbare_luecken = tauschbare_luecken_count(album["id"])
+        infos.append((album, gesammelt, doppelte, prozent, total, tauschbare_luecken))
 
     html = f"""
     <html><head>{style()}</head><body><div class="container">
 
-    <div class="home-hero">
-        <img src="/static/logo_sammlr_white.png" class="home-logo">
-    </div>
+    {app_header("Sammlr Zentrale", "Deine Alben, Fortschritte und nächsten Sammelziele.")}
 
-    <div class="home-intro">
-        <div class="section-headline-row">
-            <h1>Meine Sammlung</h1>
-            <a class="add-album-button" href="/alben/hinzufuegen">+</a>
-        </div>
+    <div class="home-section-toolbar">
+        <h2 class="home-section-title">Aktive Alben</h2>
+        <a class="add-album-button" href="/alben/hinzufuegen"><span>+</span> Album hinzufügen</a>
     </div>
-
-    <h2 class="home-section-title">Aktive Alben</h2>
     """
 
-    for album, gesammelt, doppelte, prozent, total in infos:
+    for album, gesammelt, doppelte, prozent, total, tauschbare_luecken in infos:
         if prozent < 100:
-            html += album_card(album, gesammelt, prozent, total)
+            html += album_card(album, gesammelt, doppelte, prozent, total, tauschbare_luecken)
 
     html += """
     <h2 class="home-section-title">Vitrine</h2>
     """
 
-    for album, gesammelt, doppelte, prozent, total in infos:
+    for album, gesammelt, doppelte, prozent, total, tauschbare_luecken in infos:
         if prozent == 100:
-            html += album_card(album, gesammelt, prozent, total)
+            html += album_card(album, gesammelt, doppelte, prozent, total, tauschbare_luecken)
 
-    html += bottom_nav("alben")
+    html += bottom_nav("sammlr")
     html += "</div></body></html>"
     return html
     
 
 
-def album_card(album, gesammelt, prozent, total):
+def tauschbare_luecken_count(album_id):
+    con = get_db()
+    meine_sticker = con.execute(
+        "SELECT sticker_code, quantity FROM stickers WHERE user_id=? AND album_id=?",
+        (current_user_id(), album_id)
+    ).fetchall()
+    andere_user = con.execute(
+        """
+        SELECT users.id
+        FROM users
+        JOIN user_albums ON user_albums.user_id = users.id
+        WHERE users.id != ? AND user_albums.album_id = ?
+        """,
+        (current_user_id(), album_id)
+    ).fetchall()
+
+    meine_mengen = {s["sticker_code"]: s["quantity"] for s in meine_sticker}
+    meine_fehlenden = {code for code in all_codes(album_id) if meine_mengen.get(code, 0) == 0}
+    tauschbar = set()
+
+    for user in andere_user:
+        andere_sticker = con.execute(
+            "SELECT sticker_code, quantity FROM stickers WHERE user_id=? AND album_id=?",
+            (user["id"], album_id)
+        ).fetchall()
+        andere_doppelte = {s["sticker_code"] for s in andere_sticker if s["quantity"] >= 2}
+        tauschbar.update(meine_fehlenden.intersection(andere_doppelte))
+
+    con.close()
+    return len(tauschbar)
+
+
+def album_card(album, gesammelt, doppelte, prozent, total, tauschbare_luecken):
+    if tauschbare_luecken > 0:
+        dritte_text = f"<strong>{tauschbare_luecken}</strong><span>fehlende erhältlich</span>"
+    else:
+        dritte_text = "<strong>Keine</strong><span>fehlenden erhältlich</span>"
+
     return f"""
-    <div class="card">
-        <a class="album-card" href="/album/{album['id']}">
+        <a class="album-card home-album-card" href="/album/{album['id']}">
+            <span class="album-favorite-slot" aria-hidden="true"></span>
             <div class="album-cover">{album['cover']}</div>
-            <div>
+            <div class="home-album-main">
                 <h2>{album['name']}</h2>
-                <p>{album['season']}</p>
-                <div class="progress" data-progress="{prozent}%"><div class="progress-bar" style="width:{prozent}%;"></div></div>
-                <p>{gesammelt} / {total} Sticker</p>
+                <p class="album-season">{album['season']}</p>
+                <div class="progress home-album-progress" data-progress="{prozent}%"><div class="progress-bar" style="width:{prozent}%;"></div></div>
+                <div class="home-album-stats">
+                    <div><strong>{gesammelt}/{total}</strong><span>Sticker</span></div>
+                    <div><strong>{doppelte}</strong><span>Doppelte</span></div>
+                    <div>{dritte_text}</div>
+                </div>
             </div>
-            <div class="album-percent">
-    <div class="album-percent-circle">
-        {prozent}%
-    </div>
-</div>
         </a>
-    </div>
     """
 
 
 # --- Bottom Navigation ---
-def bottom_nav(active="alben"):
+def bottom_nav(active="sammlr"):
     items = [
         ("profil", "/profil", "Profil"),
-        ("alben", "/", "Alben"),
-        ("statistik", "/statistik", "Statistik"),
+        ("favorit", "/favorit", "Favorit"),
+        ("sammlr", "/", "Sammlr"),
         ("trophaeen", "/trophaeen", "Trophäen"),
+        ("statistik", "/statistik", "Statistik"),
     ]
 
     links = ""
@@ -711,6 +809,21 @@ def bottom_nav(active="alben"):
         links += f'<a class="bottom-nav-link{active_class}" href="{href}">{label}</a>'
 
     return f'<nav class="bottom-nav">{links}</nav>'
+
+
+@app.route("/favorit")
+def favorit():
+    return f"""
+    <html><head>{style()}</head><body><div class="container">
+    {app_header("Favorit", "Dein schneller Zugang zu einem Album.")}
+    <div class="card favorite-placeholder">
+        <h2>Noch kein Favoritenalbum ausgewählt.</h2>
+        <p>Später kannst du hier ein Album auswählen.</p>
+        <a class="btn" href="/">Zurück zu Alben</a>
+    </div>
+    {bottom_nav("favorit")}
+    </div></body></html>
+    """
 
 
 def album_bottom_nav(album_id, active="uebersicht"):
@@ -770,7 +883,7 @@ def alben_hinzufuegen():
         </div>
         """
 
-    html += bottom_nav("alben")
+    html += bottom_nav("sammlr")
     html += "</div></body></html>"
     return html
 
@@ -1007,21 +1120,26 @@ def albumseite(album_id):
             return redirect(f"/add/{album_id}/{code}?filter={current_filter}")
 
     album, by_code, gesammelt, doppelte, prozent, total = lade_album(album_id)
-    last_trophy, next_trophy, trophies = trophy_status(album_id, gesammelt, total)
-    nearest_trophy = nearest_album_trophy(album_id)
 
     html = f"""
     <html><head>{style()}</head><body><div class="container">
-    <a class="btn" href="/">← Hauptmenü</a>
-    <h1>{album['name']}</h1>
-    <p class="subline">{album['season']}</p>
+    {app_header(album['name'], album['season'])}
 
     {f'<div class="notice {"notice-error" if "nicht vorhanden" in message else "notice-duplicate" if "doppelt" in message else "notice-success"}"><h2>{message}</h2><p>Vertippt?</p><a class="btn gray" href="/undo">↩ Rückgängig machen</a></div>' if message and ("hinzugefügt" in message or "doppelt" in message or "entfernt" in message) else f'<div class="notice {"notice-error" if "nicht vorhanden" in message else "notice-duplicate" if "doppelt" in message else "notice-success"}"><h2>{message}</h2></div>' if message else ''}
-    <div class="album-summary-card card">
-        <h2>Albumfortschritt</h2>
-        <p>{gesammelt} / {total} Sticker gesammelt</p>
-        <p>{doppelte} doppelte Sticker</p>
-        <div class="progress" data-progress="{prozent}%"><div class="progress-bar" style="width:{prozent}%;"></div></div>    </div>
+    <div class="album-collection-head">
+        <div class="album-collection-progress">
+            <div>
+                <span>{gesammelt} / {total}</span>
+                <strong>{prozent}%</strong>
+            </div>
+            <div class="progress" data-progress="{prozent}%"><div class="progress-bar" style="width:{prozent}%;"></div></div>
+        </div>
+
+        <div class="album-primary-actions">
+            <button type="button" class="album-primary-action main" onclick="openQuickActions()">Sticker hinzufügen</button>
+            <a class="album-primary-action" href="/album/{album_id}/trades">Tauschen</a>
+        </div>
+    </div>
 
     <div class="card sticker-wall-card">
     <div class="sticker-wall-headline">
@@ -1162,20 +1280,21 @@ def albumseite(album_id):
 </div>
 <div class="smart-add-bar" id="smartAddBar" style="display:none;">
     <div class="smart-add-count">
-        <strong id="smartAddCount">0</strong> <span id="smartAddLabel">Sticker hinzufügen</span>
+        <strong id="smartAddCount">0</strong> <span id="smartAddLabel">Sticker ausgewählt</span>
     </div>
     <div class="smart-add-actions">
         <button type="button" class="smart-add-secondary" onclick="cancelSmartAdd()">Abbrechen</button>
-        <button type="button" class="smart-add-primary" id="smartAddPrimary" onclick="submitSmartAdd()">Hinzufügen</button>
+        <button type="button" class="smart-add-primary" id="smartAddPrimary" onclick="submitSmartAdd()">Auswahl prüfen</button>
     </div>
 </div>
 <div class="quick-action-modal review-modal" id="pendingReviewModal" style="display:none;">
     <div class="quick-action-card review-card">
-        <h3 id="pendingReviewTitle">Sticker hinzufügen</h3>
+        <h3 id="pendingReviewTitle">Auswahl prüfen</h3>
         <div class="pending-review-list" id="pendingReviewList"></div>
         <div class="pending-review-actions">
             <button type="button" class="btn gray" onclick="closePendingReview()">Bearbeiten</button>
-            <button type="button" class="btn" onclick="confirmSmartAdd()">Bestätigen</button>
+            <button type="button" class="btn" onclick="confirmSmartAdd('add')">Hinzufügen</button>
+            <button type="button" class="btn gray" onclick="confirmSmartAdd('remove')">Entfernen</button>
         </div>
     </div>
 </div>
@@ -1183,7 +1302,7 @@ def albumseite(album_id):
 <script>
 let smartAddMode = false;
 let selectedStickers = [];
-let smartActionMode = "add";
+let smartActionMode = null;
 let keyboardInputMode = false;
 
 const stickerSearchInput = document.getElementById('stickerSearch');
@@ -1195,6 +1314,14 @@ function resetStickerSearch(){{
     stickerSearchInput.placeholder = 'Sticker oder Team suchen...';
     stickerSearchInput.type = 'search';
 
+    document.querySelectorAll('.slot').forEach(function(slot){{
+        slot.style.display = '';
+    }});
+
+    updateVisibleStickerSections();
+}}
+
+function clearStickerFilter(){{
     document.querySelectorAll('.slot').forEach(function(slot){{
         slot.style.display = '';
     }});
@@ -1214,6 +1341,39 @@ function getPendingCounts(){{
 
 function normalizeStickerToken(value){{
     return String(value || '').toLowerCase().replace(/[^a-z0-9]/g, '');
+}}
+
+function stickerNumberFromSlot(slot){{
+    const candidates = [
+        normalizeStickerToken(slot.dataset.display || ''),
+        normalizeStickerToken(slot.dataset.code || '')
+    ];
+
+    for(const candidate of candidates){{
+        const match = candidate.match(/(\\d+)$/);
+        if(match) return match[1];
+    }}
+
+    return '';
+}}
+
+function slotMatchesSearch(slot, term, exactCodeMode){{
+    if(!term) return true;
+
+    const normalizedTerm = normalizeStickerToken(term);
+    const codeKey = normalizeStickerToken(slot.dataset.code || '');
+    const displayKey = normalizeStickerToken(slot.dataset.display || '');
+
+    if(exactCodeMode){{
+        return codeKey === normalizedTerm || displayKey === normalizedTerm;
+    }}
+
+    if(/^\\d+$/.test(term)){{
+        return stickerNumberFromSlot(slot) === term;
+    }}
+
+    const haystack = slot.dataset.search || slot.textContent.toLowerCase();
+    return haystack.includes(term);
 }}
 
 function findSlotByCode(code){{
@@ -1371,19 +1531,23 @@ function updateVisibleStickerSections(){{
 if(stickerSearchInput){{
     stickerSearchInput.addEventListener('input', function(){{
         const term = this.value.trim().toLowerCase();
+        const normalizedTerm = normalizeStickerToken(term);
+        const slots = Array.from(document.querySelectorAll('.slot'));
+        const exactCodeMode = normalizedTerm && slots.some(function(slot){{
+            const codeKey = normalizeStickerToken(slot.dataset.code || '');
+            const displayKey = normalizeStickerToken(slot.dataset.display || '');
+            return codeKey === normalizedTerm || displayKey === normalizedTerm;
+        }});
 
-        if(keyboardInputMode) return;
-
-        document.querySelectorAll('.slot').forEach(function(slot){{
-            const haystack = slot.dataset.search || slot.textContent.toLowerCase();
-            slot.style.display = haystack.includes(term) ? '' : 'none';
+        slots.forEach(function(slot){{
+            slot.style.display = slotMatchesSearch(slot, term, exactCodeMode) ? '' : 'none';
         }});
 
         updateVisibleStickerSections();
     }});
 
     stickerSearchInput.addEventListener('keydown', function(event){{
-        if(!keyboardInputMode) return;
+        if(!smartAddMode) return;
 
         if(event.key === 'Enter'){{
             event.preventDefault();
@@ -1395,12 +1559,14 @@ if(stickerSearchInput){{
             if(!canonicalCode){{
                 showPendingInputError('Sticker nicht gefunden: ' + code);
                 stickerSearchInput.value = '';
+                clearStickerFilter();
                 stickerSearchInput.focus();
                 return;
             }}
 
             incrementPendingCode(canonicalCode);
             stickerSearchInput.value = '';
+            clearStickerFilter();
             clearPendingInputError();
         }}
 
@@ -1411,20 +1577,12 @@ if(stickerSearchInput){{
 }}
 
 function openQuickActions(){{
-    const modal = document.getElementById('quickActionModal');
-    const step1 = document.getElementById('quickActionStep1');
-    const step2 = document.getElementById('quickActionStep2');
-
-    if(!modal) return;
-
-    modal.style.display = 'flex';
-    if(step1) step1.style.display = 'block';
-    if(step2) step2.style.display = 'none';
-    window.selectedQuickAction = null;
+    startNeutralPendingMode();
 }}
 
 function closeQuickActions(){{
-    document.getElementById('quickActionModal').style.display = 'none';
+    const modal = document.getElementById('quickActionModal');
+    if(modal) modal.style.display = 'none';
 }}
 
 function chooseAction(action){{
@@ -1458,7 +1616,7 @@ function chooseMode(mode){{
 }}
 
 function showKeyboardInput(mode){{
-    smartActionMode = mode;
+    smartActionMode = null;
     smartAddMode = true;
     keyboardInputMode = true;
     selectedStickers = [];
@@ -1479,30 +1637,30 @@ function showKeyboardInput(mode){{
 }}
 
 function toggleSmartRemove(){{
-    smartActionMode = "remove";
-    smartAddMode = true;
-    keyboardInputMode = false;
-    selectedStickers = [];
-    document.body.classList.add('smart-add-active');
-    document.body.classList.add('pending-active');
-    document.body.classList.remove('keyboard-input-active');
-    resetStickerSearch();
-    clearPendingInputError();
-
-    updatePendingSlotBadges();
-    updateSmartAddBar();
+    startNeutralPendingMode();
 }}
 
 function toggleSmartAdd(){{
-    smartActionMode = "add";
+    startNeutralPendingMode();
+}}
+
+function startNeutralPendingMode(){{
+    smartActionMode = null;
     smartAddMode = true;
-    keyboardInputMode = false;
+    keyboardInputMode = true;
     selectedStickers = [];
     document.body.classList.add('smart-add-active');
     document.body.classList.add('pending-active');
-    document.body.classList.remove('keyboard-input-active');
+    document.body.classList.add('keyboard-input-active');
     resetStickerSearch();
     clearPendingInputError();
+
+    const input = document.getElementById('stickerSearch');
+    if(input){{
+        input.type = 'text';
+        input.placeholder = 'Sticker suchen oder Code eingeben...';
+        input.focus();
+    }}
 
     updatePendingSlotBadges();
     updateSmartAddBar();
@@ -1519,16 +1677,9 @@ function updateSmartAddBar(){{
 
     count.textContent = selectedStickers.length;
     primary.disabled = selectedStickers.length === 0;
-
-    if(smartActionMode === 'remove'){{
-        label.textContent = 'Sticker entfernen';
-        primary.textContent = selectedStickers.length + ' Sticker entfernen';
-        bar.classList.add('remove-mode');
-    }}else{{
-        label.textContent = 'Sticker hinzufügen';
-        primary.textContent = selectedStickers.length + ' Sticker hinzufügen';
-        bar.classList.remove('remove-mode');
-    }}
+    label.textContent = 'Sticker ausgewählt';
+    primary.textContent = 'Auswahl prüfen';
+    bar.classList.remove('remove-mode');
 
     bar.style.display = smartAddMode ? 'flex' : 'none';
     updatePendingSlotBadges();
@@ -1563,7 +1714,7 @@ function renderPendingReview(){{
     const counts = getPendingCounts();
     const codes = Object.keys(counts);
 
-    title.textContent = smartActionMode === 'remove' ? 'Sticker entfernen' : 'Sticker hinzufügen';
+    title.textContent = 'Auswahl prüfen';
     list.innerHTML = '';
 
     if(codes.length === 0){{
@@ -1640,8 +1791,10 @@ function closePendingReview(){{
     if(modal) modal.style.display = 'none';
 }}
 
-function confirmSmartAdd(){{
+function confirmSmartAdd(action){{
     if(selectedStickers.length === 0) return;
+
+    smartActionMode = action === 'remove' ? 'remove' : 'add';
 
     const form = document.createElement('form');
     form.method = 'POST';
@@ -1671,7 +1824,7 @@ document.addEventListener('click', function(event){{
 </script>
 '''
     html += trophy_popup
-    html += album_bottom_nav(album_id, "uebersicht")
+    html += bottom_nav("sammlr")
     html += "</div></div></body></html>"
     return html
 @app.route("/bulk_add/<album_id>", methods=["POST"])
@@ -1787,8 +1940,53 @@ def bulk_remove(album_id):
     return redirect(f"/album/{album_id}?message={quote(msg)}&focus=remove")
 
 
-@app.route("/sticker/<album_id>/<path:code>")
+@app.route("/sticker/<album_id>/<path:code>", methods=["GET", "POST"])
 def sticker_detail(album_id, code):
+    current_filter = request.args.get("filter", "all")
+
+    if request.method == "POST":
+        raw_quantity = request.form.get("quantity", "0").strip()
+
+        try:
+            quantity = max(int(raw_quantity), 0)
+        except ValueError:
+            quantity = 0
+
+        duplicates = max(quantity - 1, 0)
+        con = get_db()
+        cur = con.cursor()
+
+        daten = con.execute(
+            "SELECT * FROM stickers WHERE user_id=? AND album_id=? AND sticker_code=?",
+            (current_user_id(), album_id, code)
+        ).fetchone()
+
+        if quantity == 0:
+            if daten:
+                cur.execute("DELETE FROM stickers WHERE id=?", (daten["id"],))
+        elif daten:
+            cur.execute(
+                "UPDATE stickers SET quantity=?, duplicates=? WHERE id=?",
+                (quantity, duplicates, daten["id"])
+            )
+        else:
+            cur.execute(
+                """
+                INSERT INTO stickers (user_id, album_id, sticker_code, status, duplicates, quantity)
+                VALUES (?, ?, ?, "owned", ?, ?)
+                """,
+                (current_user_id(), album_id, code, duplicates, quantity)
+            )
+
+        con.commit()
+        con.close()
+
+        msg = f"Anzahl für Sticker {display_code(code)} auf {quantity} gesetzt."
+        if quantity == 0:
+            msg = f"Sticker {display_code(code)} aus deiner Sammlung entfernt."
+
+        return redirect(f"/album/{album_id}?filter={current_filter}&message={quote(msg)}&focus=add&trigger={quote(code)}")
+
     album, by_code, gesammelt, doppelte, prozent, total = lade_album(album_id)
     q = by_code[code]["quantity"] if code in by_code else 0
 
@@ -1802,13 +2000,50 @@ def sticker_detail(album_id, code):
     return f"""
     <html><head>{style()}</head><body><div class="container">
     <a class="btn" href="/album/{album_id}">← Zurück</a>
-    <div class="card">
-        <h1>Sticker {display_code(code)}</h1>
-        <div class="slot {farbe}" style="width:130px;font-size:22px;margin-bottom:20px;">{display_code(code)}</div>
-        <h2>{status}</h2>
-        <p>Anzahl: {q}</p>
-        <a class="btn" href="/add/{album_id}/{code}">+ Hinzufügen</a>
-        <a class="btn" href="/remove/{album_id}/{code}">- Entfernen</a>
+    <div class="card sticker-detail-card">
+        <div class="sticker-detail-layout">
+            <div class="sticker-detail-preview">
+                <div class="sticker-detail-image-placeholder">
+                    <div class="slot {farbe} sticker-detail-tile">{display_code(code)}</div>
+                </div>
+                <p>Stickerbild / Foto</p>
+            </div>
+
+            <div class="sticker-detail-content">
+                <p class="sticker-detail-eyebrow">Sticker</p>
+                <h1>{display_code(code)}</h1>
+                <div class="sticker-detail-status {farbe}">{status}</div>
+
+                <div class="sticker-detail-meta">
+                    <div>
+                        <span>Anzahl</span>
+                        <strong>{q}</strong>
+                    </div>
+                    <div>
+                        <span>Doppelte</span>
+                        <strong>{max(q - 1, 0)}</strong>
+                    </div>
+                </div>
+
+                <form class="quantity-edit-form" method="POST" action="/sticker/{album_id}/{code}?filter={current_filter}">
+                    <label for="stickerQuantity">Anzahl</label>
+                    <div class="quantity-edit-row">
+                        <input id="stickerQuantity" name="quantity" type="number" min="0" step="1" value="{q}">
+                        <button type="submit" class="btn">Speichern</button>
+                    </div>
+                </form>
+
+                <div class="sticker-detail-notes">
+                    <h2>Notizen / Metadaten</h2>
+                    <p>Platzhalter für Stickername, Varianten, Zustand oder persönliche Notizen.</p>
+                </div>
+
+                <div class="sticker-detail-actions">
+                    <a class="btn" href="/add/{album_id}/{code}">+ Hinzufügen</a>
+                    <a class="btn gray" href="/remove/{album_id}/{code}">- Entfernen</a>
+                </div>
+            </div>
+        </div>
     </div>
     </div></body></html>
     """
@@ -2125,7 +2360,7 @@ def album_trades(album_id):
         </div>
         """
 
-    html += album_bottom_nav(album_id, "tauschen")
+    html += bottom_nav("sammlr")
     html += "</div></body></html>"
     con.close()
     return html
@@ -2169,7 +2404,7 @@ def album_statistik(album_id):
         </div>
     </div>
 
-    {album_bottom_nav(album_id, "statistik")}
+    {bottom_nav("statistik")}
     </div></body></html>
     """
     return html
@@ -2452,7 +2687,7 @@ def trades_overview():
         </div>
         """
 
-    html += bottom_nav("alben")
+    html += bottom_nav("sammlr")
     html += "</div></body></html>"
     con.close()
     return html
@@ -2632,7 +2867,7 @@ def album_trophaeen(album_id):
         """
 
         html += render_wm26_trophy_items(trophy_items)
-        html += album_bottom_nav(album_id, "trophaeen")
+        html += bottom_nav("trophaeen")
         html += "</div></body></html>"
         return html
 
@@ -2650,7 +2885,7 @@ def album_trophaeen(album_id):
 
     html += render_trophy_steps(trophies, gesammelt, "blue", "Sticker gesammelt")
 
-    html += album_bottom_nav(album_id, "trophaeen")
+    html += bottom_nav("trophaeen")
     html += "</div></body></html>"
     return html
 
@@ -2754,8 +2989,7 @@ def globale_trophaeen():
 
     html = f"""
     <html><head>{style()}</head><body><div class="container">
-    <a class="btn" href="/">← Zurück</a>
-    <h1>Globaler Trophäenschrank</h1>
+    {app_header("Trophäen", "Globale Ziele und Auszeichnungen.")}
 
     <div class="card">
         <h2>{unlocked_total} Trophäen abgestaubt</h2>
@@ -2839,7 +3073,7 @@ def globale_trophaeen():
 def statistik():
     return f"""
     <html><head>{style()}</head><body><div class="container">
-    <h1>Statistikbüro</h1>
+    {app_header("Statistik", "Zahlen, Fortschritt und Sammlungsauswertung.")}
 
     <div class="card">
         <h2>Kommt zurück</h2>
@@ -2854,7 +3088,7 @@ def statistik():
 def profil():
     return f"""
     <html><head>{style()}</head><body><div class="container">
-    <h1>Profil</h1>
+    {app_header("Profil", "Konto und Sitzung.")}
     <div class="card">
         <p><strong>Benutzer:</strong> {session.get("username", "Unbekannt")}</p>
         <a class="btn gray" href="/logout">Abmelden</a>
