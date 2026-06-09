@@ -1,14 +1,27 @@
 import sqlite3
+import os
 from flask import Flask, request, redirect, session
 import json
 from em24_data import build_em24
 from wm26_data import build_wm26
-from Database.database import current_user_id, get_db
 from services.notifications import create_notification, unread_notifications
 from urllib.parse import quote
 
 app = Flask(__name__)
 app.secret_key = "sammlr_dev_secret"
+
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+DB = os.path.join(BASE_DIR, "Database", "collectr.db")
+
+
+def current_user_id():
+    return session.get("user_id", 1)
+
+
+def get_db():
+    con = sqlite3.connect(DB)
+    con.row_factory = sqlite3.Row
+    return con
 
 
 @app.before_request
@@ -35,6 +48,7 @@ def init_db():
     CREATE TABLE IF NOT EXISTS users (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         name TEXT,
+        favorite_album_id TEXT,
         username TEXT UNIQUE,
         password TEXT
     )
@@ -42,6 +56,11 @@ def init_db():
 
     try:
         cur.execute("ALTER TABLE users ADD COLUMN name TEXT")
+    except sqlite3.OperationalError:
+        pass
+
+    try:
+        cur.execute("ALTER TABLE users ADD COLUMN favorite_album_id TEXT")
     except sqlite3.OperationalError:
         pass
 
@@ -690,6 +709,7 @@ def logout():
 
 @app.route("/")
 def startseite():
+    favorite_album_id = current_favorite_album_id()
     con = get_db()
     alben = con.execute(
         """
@@ -721,7 +741,7 @@ def startseite():
 
     for album, gesammelt, doppelte, prozent, total, tauschbare_luecken in infos:
         if prozent < 100:
-            html += album_card(album, gesammelt, doppelte, prozent, total, tauschbare_luecken)
+            html += album_card(album, gesammelt, doppelte, prozent, total, tauschbare_luecken, is_favorite=(album["id"] == favorite_album_id))
 
     html += """
     <h2 class="home-section-title">Vitrine</h2>
@@ -729,12 +749,67 @@ def startseite():
 
     for album, gesammelt, doppelte, prozent, total, tauschbare_luecken in infos:
         if prozent == 100:
-            html += album_card(album, gesammelt, doppelte, prozent, total, tauschbare_luecken)
+            html += album_card(album, gesammelt, doppelte, prozent, total, tauschbare_luecken, is_favorite=(album["id"] == favorite_album_id))
 
     html += bottom_nav("sammlr")
     html += "</div></body></html>"
     return html
     
+
+
+def current_favorite_album_id():
+    con = get_db()
+    row = con.execute(
+        """
+        SELECT users.favorite_album_id
+        FROM users
+        JOIN user_albums ON user_albums.album_id = users.favorite_album_id
+        WHERE users.id=? AND user_albums.user_id=?
+        """,
+        (current_user_id(), current_user_id())
+    ).fetchone()
+
+    if not row:
+        row = con.execute(
+            "SELECT favorite_album_id FROM users WHERE id=?",
+            (current_user_id(),)
+        ).fetchone()
+
+        if row and row["favorite_album_id"]:
+            con.execute("UPDATE users SET favorite_album_id=NULL WHERE id=?", (current_user_id(),))
+            con.commit()
+            row = None
+
+    con.close()
+
+    return row["favorite_album_id"] if row and row["favorite_album_id"] else None
+
+
+def raw_favorite_album_id():
+    con = get_db()
+    row = con.execute(
+        "SELECT favorite_album_id FROM users WHERE id=?",
+        (current_user_id(),)
+    ).fetchone()
+    con.close()
+
+    return row["favorite_album_id"] if row and row["favorite_album_id"] else None
+
+
+def user_album_rows():
+    con = get_db()
+    rows = con.execute(
+        """
+        SELECT albums.*
+        FROM albums
+        JOIN user_albums ON user_albums.album_id = albums.id
+        WHERE user_albums.user_id=?
+        ORDER BY albums.season DESC, albums.name ASC
+        """,
+        (current_user_id(),)
+    ).fetchall()
+    con.close()
+    return rows
 
 
 def tauschbare_luecken_count(album_id):
@@ -769,15 +844,63 @@ def tauschbare_luecken_count(album_id):
     return len(tauschbar)
 
 
-def album_card(album, gesammelt, doppelte, prozent, total, tauschbare_luecken):
+def album_trade_preview_counts(album_id):
+    con = get_db()
+    meine_sticker = con.execute(
+        "SELECT sticker_code, quantity FROM stickers WHERE user_id=? AND album_id=?",
+        (current_user_id(), album_id)
+    ).fetchall()
+    andere_user = con.execute(
+        """
+        SELECT users.id
+        FROM users
+        JOIN user_albums ON user_albums.user_id = users.id
+        WHERE users.id != ? AND user_albums.album_id = ?
+        """,
+        (current_user_id(), album_id)
+    ).fetchall()
+
+    meine_mengen = {s["sticker_code"]: s["quantity"] for s in meine_sticker}
+    alle_codes = all_codes(album_id)
+    meine_fehlenden = {code for code in alle_codes if meine_mengen.get(code, 0) == 0}
+    meine_doppelten = {code for code in alle_codes if meine_mengen.get(code, 0) >= 2}
+
+    market_codes = set()
+    direct_partner_count = 0
+
+    for user in andere_user:
+        andere_sticker = con.execute(
+            "SELECT sticker_code, quantity FROM stickers WHERE user_id=? AND album_id=?",
+            (user["id"], album_id)
+        ).fetchall()
+
+        andere_mengen = {s["sticker_code"]: s["quantity"] for s in andere_sticker}
+        andere_fehlenden = {code for code in alle_codes if andere_mengen.get(code, 0) == 0}
+        andere_doppelten = {code for code in alle_codes if andere_mengen.get(code, 0) >= 2}
+
+        du_bekommst = meine_fehlenden.intersection(andere_doppelten)
+        du_gibst = meine_doppelten.intersection(andere_fehlenden)
+
+        market_codes.update(du_bekommst)
+        if du_bekommst and du_gibst:
+            direct_partner_count += 1
+
+    con.close()
+    return len(market_codes), direct_partner_count
+
+
+def album_card(album, gesammelt, doppelte, prozent, total, tauschbare_luecken, is_favorite=False):
     if tauschbare_luecken > 0:
         dritte_text = f"<strong>{tauschbare_luecken}</strong><span>fehlende erhältlich</span>"
     else:
         dritte_text = "<strong>Keine</strong><span>fehlenden erhältlich</span>"
 
+    favorite_class = " is-favorite" if is_favorite else ""
+    favorite_badge = '<span class="album-favorite-slot" aria-label="Favoritenalbum"></span>' if is_favorite else ""
+
     return f"""
-        <a class="album-card home-album-card" href="/album/{album['id']}">
-            <span class="album-favorite-slot" aria-hidden="true"></span>
+        <a class="album-card home-album-card{favorite_class}" href="/album/{album['id']}">
+            {favorite_badge}
             <div class="album-cover">{album['cover']}</div>
             <div class="home-album-main">
                 <h2>{album['name']}</h2>
@@ -790,6 +913,41 @@ def album_card(album, gesammelt, doppelte, prozent, total, tauschbare_luecken):
                 </div>
             </div>
         </a>
+    """
+
+
+def favorite_album_choice_card(album, is_favorite=False):
+    _, _, gesammelt, doppelte, prozent, total = lade_album(album["id"])
+    tauschbare_luecken = tauschbare_luecken_count(album["id"])
+    if tauschbare_luecken > 0:
+        dritte_text = f"<strong>{tauschbare_luecken}</strong><span>fehlende erhältlich</span>"
+    else:
+        dritte_text = "<strong>Keine</strong><span>fehlenden erhältlich</span>"
+
+    favorite_class = " is-favorite" if is_favorite else ""
+    button_text = "Favorit entfernen" if is_favorite else "Als Favorit setzen"
+    favorite_badge = '<span class="album-favorite-slot" aria-hidden="true"></span>' if is_favorite else ""
+
+    return f"""
+        <div class="album-card home-album-card favorite-choice-card{favorite_class}">
+            <a class="favorite-choice-link" href="/favorit/toggle/{album['id']}">
+                {favorite_badge}
+                <div class="album-cover">{album['cover']}</div>
+                <div class="home-album-main">
+                    <h2>{album['name']}</h2>
+                    <p class="album-season">{album['season']}</p>
+                    <div class="progress home-album-progress" data-progress="{prozent}%"><div class="progress-bar" style="width:{prozent}%;"></div></div>
+                    <div class="home-album-stats">
+                        <div><strong>{gesammelt}/{total}</strong><span>Sticker</span></div>
+                        <div><strong>{doppelte}</strong><span>Doppelte</span></div>
+                        <div>{dritte_text}</div>
+                    </div>
+                </div>
+            </a>
+            <form class="favorite-choice-form" method="POST" action="/favorit/toggle/{album['id']}">
+                <button type="submit" class="favorite-set-button">{button_text}</button>
+            </form>
+        </div>
     """
 
 
@@ -813,17 +971,108 @@ def bottom_nav(active="sammlr"):
 
 @app.route("/favorit")
 def favorit():
-    return f"""
+    favorite_album_id = current_favorite_album_id()
+    show_selection = request.args.get("auswahl") == "1"
+    alben = user_album_rows()
+    favorite_alben = [album for album in alben if album["id"] == favorite_album_id]
+
+    html = f"""
     <html><head>{style()}</head><body><div class="container">
-    {app_header("Favorit", "Dein schneller Zugang zu einem Album.")}
-    <div class="card favorite-placeholder">
-        <h2>Noch kein Favoritenalbum ausgewählt.</h2>
-        <p>Später kannst du hier ein Album auswählen.</p>
-        <a class="btn" href="/">Zurück zu Alben</a>
-    </div>
-    {bottom_nav("favorit")}
-    </div></body></html>
+    {app_header("Favoritenalbum", "Dein schneller Zugriff auf ein Album.")}
     """
+
+    if favorite_alben:
+        html += """
+        <div class="home-section-toolbar favorite-toolbar">
+            <h2 class="home-section-title">Favoritenalbum</h2>
+            <a class="favorite-change-button" href="/favorit?auswahl=1">+ Favorit ändern</a>
+        </div>
+        """
+        album = favorite_alben[0]
+        _, _, gesammelt, doppelte, prozent, total = lade_album(album["id"])
+        html += album_card(album, gesammelt, doppelte, prozent, total, tauschbare_luecken_count(album["id"]), is_favorite=True)
+    else:
+        html += """
+        <div class="home-section-toolbar favorite-toolbar">
+            <h2 class="home-section-title">Kein Favoritenalbum ausgewählt</h2>
+            <a class="favorite-change-button" href="/favorit?auswahl=1">+</a>
+        </div>
+        <div class="card favorite-placeholder">
+            <p>Wähle ein Album aus, das du besonders schnell erreichen möchtest.</p>
+        </div>
+        """
+
+    if show_selection and alben:
+        html += '<h2 class="home-section-title">Favoritenalbum auswählen</h2>'
+        html += '<div class="favorite-choice-grid">'
+        for album in alben:
+            html += favorite_album_choice_card(album, is_favorite=(album["id"] == favorite_album_id))
+        html += '</div>'
+    elif show_selection:
+        html += """
+        <div class="card favorite-placeholder">
+            <h2>Noch keine Alben</h2>
+            <p>Füge zuerst ein Album hinzu, bevor du ein Favoritenalbum setzt.</p>
+            <a class="btn" href="/">Zurück zu Alben</a>
+        </div>
+        """
+
+    html += bottom_nav("favorit")
+    html += "</div></body></html>"
+    return html
+
+
+@app.route("/favorit/toggle/<album_id>", methods=["POST", "GET"])
+def favorit_toggle(album_id):
+    con = get_db()
+    album = con.execute(
+        """
+        SELECT albums.id
+        FROM albums
+        JOIN user_albums ON user_albums.album_id = albums.id
+        WHERE albums.id=? AND user_albums.user_id=?
+        """,
+        (album_id, current_user_id())
+    ).fetchone()
+    current = con.execute(
+        "SELECT favorite_album_id FROM users WHERE id=?",
+        (current_user_id(),)
+    ).fetchone()
+
+    if album:
+        next_value = None if current and current["favorite_album_id"] == album_id else album_id
+        con.execute(
+            "UPDATE users SET favorite_album_id=? WHERE id=?",
+            (next_value, current_user_id())
+        )
+        con.commit()
+
+    con.close()
+    return redirect("/favorit")
+
+
+@app.route("/favorit/setzen/<album_id>", methods=["POST", "GET"])
+def favorit_setzen(album_id):
+    con = get_db()
+    album = con.execute(
+        """
+        SELECT albums.id
+        FROM albums
+        JOIN user_albums ON user_albums.album_id = albums.id
+        WHERE albums.id=? AND user_albums.user_id=?
+        """,
+        (album_id, current_user_id())
+    ).fetchone()
+
+    if album:
+        con.execute(
+            "UPDATE users SET favorite_album_id=? WHERE id=?",
+            (album_id, current_user_id())
+        )
+        con.commit()
+
+    con.close()
+    return redirect("/favorit")
 
 
 def album_bottom_nav(album_id, active="uebersicht"):
@@ -1120,6 +1369,12 @@ def albumseite(album_id):
             return redirect(f"/add/{album_id}/{code}?filter={current_filter}")
 
     album, by_code, gesammelt, doppelte, prozent, total = lade_album(album_id)
+    market_missing_count, direct_partner_count = album_trade_preview_counts(album_id)
+    trade_preview_line = (
+        f"{direct_partner_count} direkte Tauschpartner"
+        if direct_partner_count > 0
+        else "Noch keine direkten Tauschpartner"
+    )
 
     html = f"""
     <html><head>{style()}</head><body><div class="container">
@@ -1140,6 +1395,18 @@ def albumseite(album_id):
             <a class="album-primary-action" href="/album/{album_id}/trades">Tauschen</a>
         </div>
     </div>
+
+    <a class="trade-preview-card" href="/album/{album_id}/trades">
+        <div class="trade-preview-main">
+            <div>
+                <span class="trade-preview-title">Tauschbörse</span>
+                <strong>{market_missing_count}</strong>
+                <p>deiner fehlenden Sticker auf dem Markt</p>
+            </div>
+            <span class="trade-preview-cta">Öffnen</span>
+        </div>
+        <div class="trade-preview-subline">{trade_preview_line}</div>
+    </a>
 
     <div class="card sticker-wall-card">
     <div class="sticker-wall-headline">
@@ -1339,41 +1606,54 @@ function getPendingCounts(){{
     return counts;
 }}
 
+function normalize(value){{
+    return String(value || '').toUpperCase().replace(/[^A-Z0-9]/g, '');
+}}
+
 function normalizeStickerToken(value){{
-    return String(value || '').toLowerCase().replace(/[^a-z0-9]/g, '');
+    return normalize(value).toLowerCase();
 }}
 
-function stickerNumberFromSlot(slot){{
-    const candidates = [
-        normalizeStickerToken(slot.dataset.display || ''),
-        normalizeStickerToken(slot.dataset.code || '')
-    ];
-
-    for(const candidate of candidates){{
-        const match = candidate.match(/(\\d+)$/);
-        if(match) return match[1];
-    }}
-
-    return '';
+function getCodeNumber(code){{
+    const match = normalize(code).match(/(\\d+)$/);
+    return match ? match[1] : '';
 }}
 
-function slotMatchesSearch(slot, term, exactCodeMode){{
-    if(!term) return true;
+function isOnlyNumber(term){{
+    return /^\\d+$/.test(term);
+}}
 
-    const normalizedTerm = normalizeStickerToken(term);
-    const codeKey = normalizeStickerToken(slot.dataset.code || '');
-    const displayKey = normalizeStickerToken(slot.dataset.display || '');
+function hasLettersAndNumbers(term){{
+    return /[A-Z]/.test(term) && /\\d/.test(term);
+}}
 
-    if(exactCodeMode){{
-        return codeKey === normalizedTerm || displayKey === normalizedTerm;
+function slotMatchesSearch(slot, term){{
+    const rawTerm = String(term || '').trim();
+    if(!rawTerm) return true;
+
+    const code = slot.dataset.code || '';
+    const display = slot.dataset.display || '';
+    const search = slot.dataset.search || slot.textContent || '';
+
+    const normalizedTerm = normalize(rawTerm);
+    const normalizedCode = normalize(code);
+    const normalizedDisplay = normalize(display);
+
+    const queryIsOnlyNumber = /^\d+$/.test(normalizedTerm);
+    const queryHasLetters = /[A-Z]/.test(normalizedTerm);
+    const queryHasNumbers = /\d/.test(normalizedTerm);
+
+    // Exact code/number checks must run before fuzzy data-search,
+    // otherwise terms like "mex2" also match the MEX team text.
+    if(queryIsOnlyNumber){{
+        return getCodeNumber(code) === normalizedTerm || getCodeNumber(display) === normalizedTerm;
     }}
 
-    if(/^\\d+$/.test(term)){{
-        return stickerNumberFromSlot(slot) === term;
+    if(queryHasLetters && queryHasNumbers){{
+        return normalizedCode === normalizedTerm || normalizedDisplay === normalizedTerm;
     }}
 
-    const haystack = slot.dataset.search || slot.textContent.toLowerCase();
-    return haystack.includes(term);
+    return search.toLowerCase().includes(rawTerm.toLowerCase());
 }}
 
 function findSlotByCode(code){{
@@ -1530,17 +1810,12 @@ function updateVisibleStickerSections(){{
 
 if(stickerSearchInput){{
     stickerSearchInput.addEventListener('input', function(){{
-        const term = this.value.trim().toLowerCase();
-        const normalizedTerm = normalizeStickerToken(term);
+        const term = this.value.trim();
         const slots = Array.from(document.querySelectorAll('.slot'));
-        const exactCodeMode = normalizedTerm && slots.some(function(slot){{
-            const codeKey = normalizeStickerToken(slot.dataset.code || '');
-            const displayKey = normalizeStickerToken(slot.dataset.display || '');
-            return codeKey === normalizedTerm || displayKey === normalizedTerm;
-        }});
 
         slots.forEach(function(slot){{
-            slot.style.display = slotMatchesSearch(slot, term, exactCodeMode) ? '' : 'none';
+            const isMatch = slotMatchesSearch(slot, term);
+            slot.style.display = isMatch ? '' : 'none';
         }});
 
         updateVisibleStickerSections();
@@ -2293,13 +2568,13 @@ def album_trades(album_id):
     <html><head>{style()}</head><body><div class="container">
     <a class="btn" href="/album/{album_id}">← Zurück</a>
     <h1>Tauschbörse</h1>
-    <p class="subline">Andere Sammler mit möglichen Tauschaktionen in diesem Album.</p>
+    <p class="subline">Finde Sammler, mit denen du Lücken schließen kannst.</p>
     """
 
     if not andere_user:
         html += """
-        <div class="card">
-            <h2>Noch keine weiteren Sammler für dieses Album</h2>
+        <div class="card trade-empty-card">
+            <h2>Noch keine Tauschpartner für dieses Album.</h2>
             <p>Sobald andere Nutzer dieses Album hinzufügen, erscheinen sie hier.</p>
         </div>
         """
@@ -2324,39 +2599,28 @@ def album_trades(album_id):
         )
         match_count = min(len(du_bekommst), len(du_gibst))
 
-        bekommst_liste = ", ".join(display_code(code) for code in du_bekommst[:12]) or "Noch nichts Passendes"
-        gibst_liste = ", ".join(display_code(code) for code in du_gibst[:12]) or "Noch nichts Passendes"
-
-        if len(du_bekommst) > 12:
-            bekommst_liste += f" … +{len(du_bekommst) - 12} weitere"
-
-        if len(du_gibst) > 12:
-            gibst_liste += f" … +{len(du_gibst) - 12} weitere"
-
-        badge = f"🤝 {match_count} mögliche Trades" if match_count > 0 else "Noch kein direkter Match"
+        badge = "Direkter Tausch möglich" if match_count > 0 else "Noch kein direkter Tausch möglich"
+        badge_class = "ready" if match_count > 0 else "muted"
 
         html += f"""
-        <div class="card">
-            <h2>{user['username']}</h2>
-            <p><strong>{badge}</strong></p>
+        <div class="trade-partner-card">
+            <div class="trade-partner-head">
+                <h2>{user['username']}</h2>
+                <span class="trade-partner-status {badge_class}">{badge}</span>
+            </div>
 
-            <div class="stat-grid-mini">
-                <div class="mini-box">
-                    <div class="mini-big">{len(du_bekommst)}</div>
-                    <p>kannst du bekommen</p>
+            <div class="trade-partner-stats">
+                <div>
+                    <strong>{len(du_bekommst)}</strong>
+                    <span>Du bekommst</span>
                 </div>
-                <div class="mini-box">
-                    <div class="mini-big">{len(du_gibst)}</div>
-                    <p>kannst du geben</p>
+                <div>
+                    <strong>{len(du_gibst)}</strong>
+                    <span>Du gibst</span>
                 </div>
             </div>
 
-            <h3>Du bekommst</h3>
-            <p>{bekommst_liste}</p>
-
-            <h3>Du gibst</h3>
-            <p>{gibst_liste}</p>
-            <a class="btn" href="/album/{album_id}/trades/{user['id']}">Tradecenter öffnen</a>
+            <a class="trade-partner-button" href="/album/{album_id}/trades/{user['id']}">Tradecenter öffnen</a>
         </div>
         """
 
