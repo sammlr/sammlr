@@ -1,14 +1,18 @@
-from flask import session
 import sqlite3
-from pathlib import Path
+from flask import Flask, render_template, request, redirect, url_for, session, flash
+from App.Database import database
 
-BASE_DIR = Path(__file__).resolve().parent
-DB = BASE_DIR / "collectr.db"
+app = Flask(__name__)
+app.secret_key = 'your_secret_key'
 
-def current_user_id():
-    return session.get("user_id", 1)
+def init_db():
+    con = database.get_db()
+    cur = con.cursor()
+    try:
+        cur.execute("ALTER TABLE trade_requests ADD COLUMN from_confirmed INTEGER DEFAULT 0")
+    except sqlite3.OperationalError:
+        pass
+    con.commit()
+    con.close()
 
-def get_db():
-    con = sqlite3.connect(DB)
-    con.row_factory = sqlite3.Row
-    return con
+# rest of your webapp.py code follows...
