@@ -296,34 +296,80 @@
 .album-collection-head{
     background:white;
     border:1px solid rgba(18,5,31,.07);
-    border-radius:24px;
-    padding:18px;
-    margin:0 0 18px;
-    box-shadow:0 12px 30px rgba(18,5,31,.06);
+    border-radius:28px;
+    padding:22px;
+    margin:0 0 20px;
+    box-shadow:0 16px 38px rgba(18,5,31,.065);
 }
 
 .album-collection-progress{
-    margin-bottom:14px;
-}
-
-.album-collection-progress > div:first-child{
     display:flex;
-    align-items:flex-end;
-    justify-content:space-between;
+    flex-direction:column;
     gap:14px;
-    margin-bottom:10px;
 }
 
-.album-collection-progress span{
-    color:#1b1620;
-    font-size:18px;
+.album-progress-label{
+    margin:0;
+    color:#72697c;
+    font-size:13px;
+    font-weight:950;
+    letter-spacing:.04em;
+    text-transform:uppercase;
+}
+
+.album-progress-stats{
+    display:grid;
+    grid-template-columns:repeat(2, minmax(0, 1fr));
+    gap:12px;
+}
+
+.album-progress-stats div{
+    min-height:72px;
+    padding:14px;
+    border-radius:20px;
+    background:#faf8fc;
+    border:1px solid rgba(18,5,31,.06);
+}
+
+.album-progress-stats span,
+.album-progress-stats strong{
+    display:block;
+}
+
+.album-progress-stats span{
+    color:#72697c;
+    font-size:12px;
     font-weight:900;
+    line-height:1.2;
 }
 
-.album-collection-progress strong{
-    color:#5d2f86;
-    font-size:28px;
+.album-progress-stats strong{
+    margin-top:7px;
+    color:#2b0f46;
+    font-size:22px;
     line-height:1;
+    font-weight:950;
+}
+
+.album-main-progress{
+    height:28px !important;
+    border-radius:999px !important;
+    background:#ece5f3 !important;
+    box-shadow:inset 0 1px 2px rgba(18,5,31,.08) !important;
+}
+
+.album-main-progress .progress-bar{
+    border-radius:999px !important;
+    background:linear-gradient(90deg,#5d2f86,#7b3bdb) !important;
+    box-shadow:0 6px 16px rgba(93,47,134,.24) !important;
+}
+
+.album-main-progress::after{
+    content:attr(data-progress) !important;
+    color:#1b1620 !important;
+    font-size:13px !important;
+    font-weight:950 !important;
+    text-shadow:0 1px 0 rgba(255,255,255,.72) !important;
 }
 
 .album-primary-actions{
@@ -359,21 +405,32 @@
 .album-quick-links{
     display:grid;
     grid-template-columns:repeat(2, minmax(0,1fr));
-    gap:10px;
-    margin:0 0 16px;
+    gap:12px;
+    margin:0 0 18px;
+    align-items:stretch;
 }
 
 .album-quick-card{
-    display:block;
+    display:flex;
+    flex-direction:column;
+    justify-content:flex-start;
+    gap:8px;
     position:relative;
-    min-height:74px;
-    padding:14px;
-    border-radius:18px;
+    min-height:112px;
+    padding:18px;
+    border-radius:24px;
     background:white;
-    border:1px solid rgba(93,47,134,.12);
+    border:1px solid rgba(18,5,31,.07);
     color:#17121c;
     text-decoration:none;
-    box-shadow:0 12px 28px rgba(18,5,31,.06);
+    box-shadow:0 14px 32px rgba(18,5,31,.055);
+    transition:transform .16s ease, box-shadow .16s ease, border-color .16s ease;
+}
+
+.album-quick-card:hover{
+    transform:translateY(-2px);
+    border-color:rgba(93,47,134,.18);
+    box-shadow:0 18px 40px rgba(18,5,31,.075);
 }
 
 .album-quick-card strong,
@@ -383,15 +440,17 @@
 
 .album-quick-card strong{
     color:#2b0f46;
-    font-size:15px;
+    font-size:17px;
+    line-height:1.1;
+    padding-right:32px;
 }
 
 .album-quick-card span{
-    margin-top:6px;
+    margin-top:0;
     color:#72697c;
-    font-size:12px;
+    font-size:13px;
     font-weight:900;
-    line-height:1.25;
+    line-height:1.32;
 }
 
 .album-quick-card.has-badge{
@@ -415,8 +474,11 @@
 
 .album-quick-badge{
     position:absolute;
-    top:10px;
-    right:10px;
+    top:12px;
+    right:12px;
+    min-width:26px;
+    height:26px;
+    box-shadow:0 8px 18px rgba(220,38,38,.22);
 }
 
 .trade-preview-card{
@@ -505,13 +567,16 @@
     display:flex;
     align-items:center;
     justify-content:center;
-    z-index:9999;
+    z-index:50000;
+    padding:18px;
     animation:fadeIn .25s ease;
 }
 
 .trophy-popup{
     width:420px;
-    max-width:90%;
+    max-width:100%;
+    max-height:calc(100vh - 36px);
+    overflow:auto;
     background:linear-gradient(145deg,#1a1024,#2b1742);
     border:1px solid rgba(176,122,224,.18);
     border-radius:34px;
@@ -617,6 +682,11 @@
 
 .popup-button:hover{
     transform:translateY(-3px) scale(1.02);
+}
+
+.popup-secondary{
+    background:#efe7f7;
+    color:#2b1742;
 }
         .stat{background:#faf8fc;border-radius:20px;padding:20px;}
         .big{font-size:36px;font-weight:800;color:#5d2f86;}
@@ -1135,6 +1205,24 @@
     margin-bottom:18px;
 }
 
+.trophy-link{
+    display:block;
+    color:inherit;
+    text-decoration:none;
+}
+
+.trophy-nav-links{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    flex-wrap:wrap;
+    margin:0 0 16px;
+}
+
+.trophy-nav-links .sammlr-back-link{
+    margin:0;
+}
+
 @media (min-width:720px){
     .trophy-grid{
         grid-template-columns:repeat(2, minmax(0,1fr));
@@ -1578,40 +1666,47 @@
 .sticker-filter-row{
     display:grid;
     grid-template-columns:repeat(4, minmax(0,1fr));
-    gap:8px;
-    margin:0 0 12px;
+    gap:7px;
+    margin:0 0 14px;
 }
 
 .sticker-filter-pill{
     display:flex;
     align-items:center;
     justify-content:center;
-    min-height:42px;
-    border-radius:16px;
-    background:#f1edf5;
-    color:#4b4650;
+    min-height:36px;
+    border-radius:999px;
+    background:#ffffff;
+    border:1px solid rgba(18,5,31,.08);
+    color:#5f5866;
     text-decoration:none;
-    font-size:12px;
+    font-size:12.5px;
     font-weight:900;
     text-align:center;
-    padding:8px 4px;
+    padding:7px 10px;
+    box-shadow:0 6px 14px rgba(18,5,31,.035);
+    transition:background .16s ease, color .16s ease, border-color .16s ease, box-shadow .16s ease, transform .16s ease;
+}
+
+.sticker-filter-pill:hover{
+    border-color:rgba(93,47,134,.18);
+    background:#faf8fc;
+    color:#2b0f46;
 }
 
 .sticker-filter-pill.active{
-    background:#7C3AED;
+    background:#5d2f86;
+    border-color:#5d2f86;
     color:white;
+    box-shadow:0 10px 22px rgba(93,47,134,.18);
 }
 
-.sticker-filter-pill.missing.active{
-    background:#6b6570;
-}
-
-.sticker-filter-pill.owned.active{
-    background:#15803d;
-}
-
+.sticker-filter-pill.missing.active,
+.sticker-filter-pill.owned.active,
 .sticker-filter-pill.duplicate.active{
-    background:#9333ea;
+    background:#5d2f86;
+    border-color:#5d2f86;
+    color:white;
 }
 .progress{
     position:relative !important;
@@ -2067,51 +2162,84 @@
 
 /* App header and Sammlr Zentrale */
 .app-header{
-    margin:0 0 22px;
-    padding:4px 0 0;
+    margin:0 0 12px;
+    min-height:92px;
+    padding:18px 24px;
+    border-radius:28px;
+    background:linear-gradient(135deg,#2b0f46,#5d2f86);
+    color:white;
+    box-shadow:0 18px 44px rgba(43,15,70,.20);
+    display:flex;
+    align-items:center;
+    justify-content:flex-start;
+    gap:16px;
 }
 
 .app-header-brand{
     display:inline-flex;
     align-items:center;
-    gap:10px;
-    color:#1b1620;
-    text-decoration:none;
-    font-size:18px;
-    font-weight:900;
-    letter-spacing:0;
-    margin-bottom:18px;
-}
-
-.app-header-mark{
-    width:34px;
-    height:34px;
-    border-radius:12px;
-    display:flex;
-    align-items:center;
     justify-content:center;
-    background:#2b0f46;
     color:white;
-    font-size:17px;
-    box-shadow:0 10px 22px rgba(43,15,70,.18);
+    text-decoration:none;
+    flex:0 0 auto;
+    line-height:0;
 }
 
-.app-header h1{
+.app-header-brand img{
+    width:min(260px, 68vw);
+    height:auto;
+    max-height:82px;
+    display:block;
+    object-fit:contain;
+}
+
+.page-title{
+    margin:0 0 22px;
+    padding:20px;
+    border-radius:24px;
+    background:#ffffff;
+    border:1px solid rgba(18,5,31,.06);
+    box-shadow:0 12px 30px rgba(18,5,31,.045);
+    text-align:left;
+}
+
+.page-title h1{
     margin:0;
-    color:#1b1620;
-    font-size:34px;
+    color:#17121c;
+    font-size:32px;
     line-height:1.04;
-    font-weight:900;
+    font-weight:950;
     letter-spacing:0;
 }
 
-.app-header p{
-    max-width:640px;
-    margin:10px 0 0;
+.page-title p{
+    max-width:680px;
+    margin:9px 0 0;
     color:#72697c;
     font-size:16px;
     line-height:1.45;
-    font-weight:700;
+    font-weight:800;
+}
+
+.sammlr-back-link{
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    width:auto;
+    margin:12px 0 4px;
+    padding:9px 13px;
+    border-radius:999px;
+    background:#f4eff8;
+    color:#2b0f46;
+    text-decoration:none;
+    font-size:14px;
+    font-weight:900;
+    box-shadow:0 8px 18px rgba(18,5,31,.06);
+}
+
+.sammlr-back-link:hover{
+    background:#ece1f4;
+    transform:translateY(-1px);
 }
 
 .home-section-toolbar{
@@ -2354,8 +2482,8 @@
 }
 
 @media (min-width:760px){
-    .app-header h1{
-        font-size:42px;
+    .page-title h1{
+        font-size:38px;
     }
 
     .home-album-card{
@@ -2575,10 +2703,6 @@
     margin-bottom:20px;
 }
 
-.auth-shell .app-header-brand{
-    pointer-events:none;
-}
-
 .auth-card{
     position:relative;
     z-index:2;
@@ -2656,12 +2780,21 @@
 }
 
 /* Profile */
+.profile-topbar{
+    position:relative;
+}
+
+.profile-topbar .app-header{
+    padding-right:72px;
+}
+
 .profile-header{
     display:flex;
     align-items:center;
     justify-content:space-between;
     gap:16px;
     margin-bottom:18px;
+    position:relative;
 }
 
 .profile-header h1{
@@ -2742,23 +2875,82 @@
     font-weight:900;
 }
 
-.profile-logout{
+.profile-account-toggle{
+    position:absolute;
+    top:18px;
+    right:18px;
     display:inline-flex;
     align-items:center;
     justify-content:center;
-    min-height:36px;
-    padding:0 12px;
+    width:40px;
+    height:40px;
+    border:0;
     border-radius:12px;
     background:#f4eff8;
     color:#2b0f46;
-    font-size:12px;
+    font-size:18px;
     font-weight:900;
-    text-decoration:none;
-    white-space:nowrap;
+    font-family:inherit;
+    cursor:pointer;
 }
 
-.profile-logout:hover{
+.profile-account-toggle:hover{
     background:#ece1f4;
+}
+
+.profile-account-menu{
+    display:none;
+    position:absolute;
+    right:18px;
+    top:78px;
+    z-index:20;
+    width:min(320px, calc(100% - 36px));
+    padding:14px;
+    border-radius:22px;
+    background:white;
+    border:1px solid rgba(18,5,31,.08);
+    box-shadow:0 22px 58px rgba(18,5,31,.16);
+}
+
+.profile-account-menu.active{
+    display:block;
+}
+
+.profile-account-menu h2{
+    margin:0 0 10px;
+    color:#17121c;
+    font-size:18px;
+}
+
+.profile-account-menu a,
+.profile-account-menu button{
+    width:100%;
+    min-height:42px;
+    display:flex;
+    align-items:center;
+    justify-content:flex-start;
+    padding:0 12px;
+    border:0;
+    border-radius:14px;
+    background:transparent;
+    color:#2b0f46;
+    font-size:14px;
+    font-weight:900;
+    font-family:inherit;
+    text-align:left;
+    text-decoration:none;
+    cursor:pointer;
+}
+
+.profile-account-menu a:hover,
+.profile-account-menu button:hover{
+    background:#f4eff8;
+}
+
+.profile-account-divider{
+    height:1px;
+    margin:8px 0;
+    background:rgba(18,5,31,.1);
 }
 
 .profile-stats-grid{
@@ -2805,7 +2997,7 @@
     display:flex;
     flex-direction:column;
     gap:10px;
-    margin-bottom:16px;
+    margin-bottom:96px;
 }
 
 .profile-link-card{
@@ -2887,17 +3079,6 @@
     margin-bottom:96px;
 }
 
-.profile-account-button.danger,
-.btn.danger{
-    background:#fee2e2;
-    color:#991b1b;
-}
-
-.profile-account-button.danger:hover,
-.btn.danger:hover{
-    background:#fecaca;
-}
-
 .account-delete-backdrop{
     position:fixed;
     inset:0;
@@ -2931,6 +3112,15 @@
     color:#5b5363;
     font-weight:900;
     line-height:1.55;
+}
+
+.account-delete-confirm{
+    background:#2b0f46;
+    color:white;
+}
+
+.account-delete-confirm:hover{
+    background:#3b145d;
 }
 
 .account-delete-actions{
@@ -3386,4 +3576,378 @@ body .container{
     font-weight:800;
     line-height:1.35;
     word-break:break-word;
+}
+/* Stickerwand: ruhiger Sammelalbum-Look */
+.sticker-wall-card{
+    background:#fbfafc !important;
+    border:1px solid rgba(18,5,31,.07) !important;
+    box-shadow:0 18px 46px rgba(18,5,31,.06) !important;
+}
+
+.wall{
+    grid-template-columns:repeat(auto-fill, minmax(92px, 1fr)) !important;
+    gap:14px !important;
+    align-items:stretch !important;
+}
+
+.slot{
+    min-height:68px !important;
+    padding:14px 8px 18px !important;
+    border-radius:16px !important;
+    background:#ffffff !important;
+    border:1px solid rgba(18,5,31,.08) !important;
+    color:#211827 !important;
+    box-shadow:0 10px 24px rgba(18,5,31,.055) !important;
+    font-size:14px !important;
+    font-weight:900 !important;
+    letter-spacing:0 !important;
+    overflow:hidden !important;
+}
+
+.slot::after{
+    content:"";
+    position:absolute;
+    left:0;
+    right:0;
+    bottom:0;
+    height:14px;
+    background:#d9d5dc;
+}
+
+.slot.missing::after{
+    background:#d9d5dc;
+}
+
+.slot.owned::after{
+    background:#55D66B;
+}
+
+.slot.duplicate::after{
+    background:#6f35a5;
+}
+
+.slot:hover{
+    transform:translateY(-3px) scale(1.02) !important;
+    box-shadow:0 16px 30px rgba(18,5,31,.10) !important;
+}
+
+.pending-active .slot{
+    padding-top:32px !important;
+}
+
+.slot.smart-selected{
+    outline:2px solid #5d2f86 !important;
+    box-shadow:0 0 0 4px rgba(93,47,134,.14), 0 16px 30px rgba(18,5,31,.10) !important;
+}
+
+.trigger-slot{
+    border-color:rgba(93,47,134,.35) !important;
+    box-shadow:0 0 0 4px rgba(93,47,134,.12), 0 16px 30px rgba(18,5,31,.12) !important;
+}
+
+.album-chapter-title{
+    background:linear-gradient(135deg,#2b0f46,#5d2f86) !important;
+    color:white !important;
+    border:1px solid rgba(255,255,255,.12) !important;
+    box-shadow:0 14px 30px rgba(43,15,70,.16) !important;
+}
+
+.album-chapter-title span:first-child{
+    display:flex;
+    align-items:center;
+    gap:8px;
+}
+
+.album-chapter-title span:first-child::before{
+    display:none;
+}
+
+.album-chapter-title span:last-child{
+    background:rgba(255,255,255,.12);
+    border-radius:999px;
+    padding:5px 9px;
+    font-variant-numeric:tabular-nums;
+}
+
+.album-chapter-title span:first-child{
+    min-width:0;
+}
+
+.album-chapter-title.chapter-complete{
+    background:linear-gradient(135deg,#230b3b,#4f2678) !important;
+}
+
+.album-chapter-title.chapter-complete span:first-child::before{
+    content:"✓";
+    width:18px;
+    height:18px;
+    border-radius:999px;
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    flex:0 0 auto;
+    background:rgba(255,255,255,.16);
+    color:white;
+    font-size:12px;
+    font-weight:900;
+    line-height:1;
+}
+
+@media (max-width:520px){
+    .wall{
+        grid-template-columns:repeat(auto-fill, minmax(78px, 1fr)) !important;
+        gap:12px !important;
+    }
+
+    .slot{
+        min-height:62px !important;
+        font-size:13px !important;
+    }
+}
+
+/* Stickerwand Identität: Sammelalbum statt Inventarliste */
+.collapse-section-hidden{
+    display:none !important;
+}
+
+.wall{
+    grid-template-columns:repeat(auto-fill, minmax(96px, 1fr)) !important;
+    gap:16px !important;
+}
+
+.slot{
+    min-height:92px !important;
+    padding:14px 10px !important;
+    border-radius:18px !important;
+    display:flex !important;
+    flex-direction:column !important;
+    align-items:center !important;
+    justify-content:center !important;
+    gap:4px !important;
+    background:#ffffff !important;
+    border:0 !important;
+    color:#141019 !important;
+    box-shadow:0 12px 26px rgba(18,5,31,.08) !important;
+    font-family:Arial, sans-serif !important;
+    overflow:hidden !important;
+}
+
+.slot::after{
+    display:none !important;
+}
+
+.sticker-team{
+    min-height:15px;
+    color:#5d2f86;
+    font-size:12px;
+    font-weight:950;
+    letter-spacing:.08em;
+    line-height:1;
+}
+
+.sticker-team.empty{
+    display:none;
+}
+
+.sticker-number{
+    color:#17121c;
+    font-size:30px;
+    font-weight:950;
+    line-height:.95;
+    letter-spacing:0;
+}
+
+.slot.missing{
+    background:#f2f1f4 !important;
+    box-shadow:0 8px 18px rgba(18,5,31,.045) !important;
+}
+
+.slot.missing .sticker-team,
+.slot.missing .sticker-number{
+    color:#8b8490 !important;
+    opacity:.72;
+}
+
+.slot.owned{
+    background:#ffffff !important;
+}
+
+.slot.owned .sticker-number{
+    color:#111111 !important;
+}
+
+.slot.duplicate,
+.trade-slot.duplicate{
+    background:linear-gradient(145deg,#5d2f86,#2b0f46) !important;
+    color:white !important;
+    box-shadow:0 16px 34px rgba(93,47,134,.24) !important;
+}
+
+.slot.duplicate .sticker-team,
+.slot.duplicate .sticker-number,
+.trade-slot.duplicate .sticker-team,
+.trade-slot.duplicate .sticker-number{
+    color:white !important;
+}
+
+.slot.duplicate .sticker-number,
+.trade-slot.duplicate .sticker-number{
+    font-size:32px;
+}
+
+.pending-active .slot{
+    padding-top:30px !important;
+}
+
+.album-chapter-title{
+    cursor:pointer;
+    user-select:none;
+}
+
+.album-chapter-title span:first-child::before{
+    content:"▼" !important;
+    width:auto !important;
+    height:auto !important;
+    border:0 !important;
+    background:transparent !important;
+    display:inline-flex !important;
+    color:white !important;
+    font-size:13px !important;
+    font-weight:950 !important;
+    line-height:1 !important;
+}
+
+.album-chapter-title.chapter-collapsed span:first-child::before{
+    content:"▶" !important;
+}
+
+.album-chapter-title.chapter-complete span:last-child::after{
+    content:" ✓";
+    font-weight:950;
+}
+
+@media (max-width:520px){
+    .wall{
+        grid-template-columns:repeat(auto-fill, minmax(82px, 1fr)) !important;
+        gap:12px !important;
+    }
+
+    .slot{
+        min-height:82px !important;
+    }
+
+    .sticker-number{
+        font-size:26px;
+    }
+}
+
+/* Stickerwand Feinschliff: 90er-Trikot-Rhythmus */
+.slot{
+    aspect-ratio:1 / 1.14 !important;
+    min-height:104px !important;
+    padding:16px 10px !important;
+}
+
+.sticker-number{
+    font-size:36px !important;
+    font-weight:1000 !important;
+    line-height:.86 !important;
+    letter-spacing:-.02em !important;
+    text-shadow:
+        0 1px 0 rgba(255,255,255,.85),
+        0 0 1px rgba(18,5,31,.28) !important;
+}
+
+.sticker-team{
+    font-size:11px !important;
+    font-weight:950 !important;
+    letter-spacing:.12em !important;
+}
+
+.slot.owned .sticker-number{
+    color:#08070a !important;
+}
+
+.slot.duplicate,
+.trade-slot.duplicate{
+    box-shadow:
+        0 18px 38px rgba(93,47,134,.30),
+        inset 0 1px 0 rgba(255,255,255,.16) !important;
+}
+
+.slot.duplicate .sticker-number,
+.trade-slot.duplicate .sticker-number{
+    font-size:39px !important;
+    color:#ffffff !important;
+    text-shadow:
+        0 2px 0 rgba(0,0,0,.18),
+        0 0 14px rgba(255,255,255,.18) !important;
+}
+
+.slot.duplicate .sticker-team,
+.trade-slot.duplicate .sticker-team{
+    color:#ffffff !important;
+    opacity:.95;
+}
+
+.slot.missing{
+    background:#f4f3f5 !important;
+    box-shadow:0 5px 12px rgba(18,5,31,.032) !important;
+    animation:none !important;
+}
+
+.slot.missing:hover{
+    transform:none !important;
+    box-shadow:0 5px 12px rgba(18,5,31,.032) !important;
+}
+
+.slot.missing .sticker-team,
+.slot.missing .sticker-number{
+    color:#aaa4ae !important;
+    opacity:.58 !important;
+    text-shadow:none !important;
+}
+
+.album-chapter-title{
+    border-radius:24px !important;
+    padding:14px 16px !important;
+    box-shadow:
+        0 10px 24px rgba(43,15,70,.15),
+        inset 0 1px 0 rgba(255,255,255,.10) !important;
+}
+
+.album-chapter-title span:last-child{
+    background:rgba(255,255,255,.13) !important;
+    box-shadow:inset 0 0 0 1px rgba(255,255,255,.08);
+}
+
+.album-chapter-title.chapter-complete{
+    background:linear-gradient(135deg,#2b0f46,#5d2f86) !important;
+}
+
+.album-chapter-title.chapter-complete span:last-child{
+    background:#fff0a8 !important;
+    color:#7a5a00 !important;
+    box-shadow:none !important;
+}
+
+.album-chapter-title.chapter-complete span:first-child::before{
+    background:rgba(255,255,255,.16) !important;
+    color:white !important;
+}
+
+@media (max-width:520px){
+    .slot{
+        min-height:94px !important;
+        aspect-ratio:1 / 1.12 !important;
+    }
+
+    .sticker-number{
+        font-size:31px !important;
+    }
+
+    .slot.duplicate .sticker-number,
+    .trade-slot.duplicate .sticker-number{
+        font-size:34px !important;
+    }
 }

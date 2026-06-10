@@ -34,6 +34,9 @@ def resolve_code(album_id, raw):
     if album_id == "wm26":
         cleaned = compact(value)
         wm_codes = {compact(s["id"]): s["id"] for s in build_wm26()}
+        wm_codes["0"] = "00"
+        wm_codes["STICKER00"] = "00"
+        wm_codes["STICKER0"] = "00"
 
         if cleaned not in wm_codes:
             return None

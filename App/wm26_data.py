@@ -17,6 +17,11 @@ WM26_TEAMS = [
 def build_wm26():
     stickers = []
 
+    stickers.append({
+        "id": "00",
+        "section": "FIFA World Cup 2026"
+    })
+
     for i in range(1, 20):
         stickers.append({
             "id": f"FWC{i}",
