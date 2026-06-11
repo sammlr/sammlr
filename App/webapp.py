@@ -3645,18 +3645,6 @@ def trade_center(album_id, other_user_id):
             {get_wall}
         </section>
 
-        <section class="trade-step" id="tradeStepGetReview" data-step="getReview">
-            <div class="quick-action-card trade-inline-review">
-                <h2>Du suchst</h2>
-                <p class="trade-review-subline" id="tradeGetStepReviewCount">0 Sticker ausgewählt</p>
-                <div class="pending-review-list" id="tradeGetStepReview"></div>
-                <div class="pending-review-actions">
-                    <button type="button" class="btn gray" data-next-step="get">Bearbeiten</button>
-                    <button type="button" class="btn" data-confirm-step="get">Weiter zu deinen Doppelten</button>
-                </div>
-            </div>
-        </section>
-
         <section class="trade-step trade-selection-step" id="tradeStepGive" data-step="give" data-mode="give">
             <div class="trade-step-head">
                 <div>
@@ -3671,18 +3659,6 @@ def trade_center(album_id, other_user_id):
             </div>
             <div class="search-debug-box trade-search-feedback" data-trade-feedback="give" style="display:none;"></div>
             {give_wall}
-        </section>
-
-        <section class="trade-step" id="tradeStepGiveReview" data-step="giveReview">
-            <div class="quick-action-card trade-inline-review">
-                <h2>Du bietest an</h2>
-                <p class="trade-review-subline" id="tradeGiveStepReviewCount">0 Sticker ausgewählt</p>
-                <div class="pending-review-list" id="tradeGiveStepReview"></div>
-                <div class="pending-review-actions">
-                    <button type="button" class="btn gray" data-next-step="give">Bearbeiten</button>
-                    <button type="button" class="btn" data-confirm-step="give">Tauschanfrage prüfen</button>
-                </div>
-            </div>
         </section>
 
         <section class="trade-step" id="tradeStepFinal" data-step="final">
@@ -4065,8 +4041,6 @@ function expandTradeCodes(mode){{
 }}
 
 function renderTradeReview(){{
-    renderTradeReviewList('get', 'tradeGetStepReview');
-    renderTradeReviewList('give', 'tradeGiveStepReview');
     renderTradeReviewList('get', 'tradeGetReview');
     renderTradeReviewList('give', 'tradeGiveReview');
 
@@ -4091,14 +4065,9 @@ function renderTradeReview(){{
 
     const error = document.getElementById('tradeRuleError');
     const submit = document.getElementById('tradeSubmitButton');
-    const getStepCount = document.getElementById('tradeGetStepReviewCount');
-    const giveStepCount = document.getElementById('tradeGiveStepReviewCount');
     const getTotal = tradeTotal('get');
     const giveTotal = tradeTotal('give');
     const invalid = getTotal === 0 || giveTotal === 0 || giveTotal < getTotal;
-
-    if(getStepCount) getStepCount.textContent = getTotal + ' Sticker ausgewählt';
-    if(giveStepCount) giveStepCount.textContent = giveTotal + ' Sticker ausgewählt';
 
     if(error){{
         error.style.display = giveTotal < getTotal ? 'block' : 'none';
@@ -4112,8 +4081,7 @@ function showTradeStep(step){{
         panel.classList.toggle('active', panel.dataset.step === step);
     }});
     document.querySelectorAll('.trade-step-pill').forEach(function(pill){{
-        const label = step === 'getReview' ? 'get' : step === 'giveReview' ? 'give' : step;
-        pill.classList.toggle('active', pill.dataset.stepLabel === label);
+        pill.classList.toggle('active', pill.dataset.stepLabel === step);
     }});
     if(step === 'get' || step === 'give'){{
         activeTradeMode = step;
@@ -4121,7 +4089,7 @@ function showTradeStep(step){{
     document.body.classList.toggle('pending-active', step === 'get' || step === 'give');
     document.body.classList.toggle('trade-pending-active', step === 'get' || step === 'give');
     updateTradeSelectionBar();
-    if(step === 'getReview' || step === 'giveReview' || step === 'final'){{
+    if(step === 'final'){{
         renderTradeReview();
     }}
 }}
@@ -4139,6 +4107,7 @@ function updateTradeSelectionBar(){{
     const total = tradeTotal(activeTradeMode);
     count.textContent = total;
     label.textContent = 'Sticker ausgewählt';
+    primary.textContent = activeTradeMode === 'get' ? 'Weiter zu deinen Doppelten' : 'Tauschanfrage prüfen';
     primary.disabled = total === 0;
     bar.style.display = isSelectionStep ? 'flex' : 'none';
 }}
@@ -4146,16 +4115,6 @@ function updateTradeSelectionBar(){{
 document.querySelectorAll('[data-next-step]').forEach(function(button){{
     button.addEventListener('click', function(){{
         showTradeStep(button.dataset.nextStep);
-    }});
-}});
-
-document.querySelectorAll('[data-confirm-step]').forEach(function(button){{
-    button.addEventListener('click', function(){{
-        if(button.dataset.confirmStep === 'get'){{
-            showTradeStep('give');
-            return;
-        }}
-        showTradeStep('final');
     }});
 }});
 
@@ -4192,7 +4151,7 @@ document.querySelectorAll('[data-add-visible-trade]').forEach(function(button){{
 
 document.getElementById('tradeReviewCurrentButton').addEventListener('click', function(){{
     if(tradeTotal(activeTradeMode) === 0) return;
-    showTradeStep(activeTradeMode === 'get' ? 'getReview' : 'giveReview');
+    showTradeStep(activeTradeMode === 'get' ? 'give' : 'final');
 }});
 
 document.addEventListener('click', function(event){{
