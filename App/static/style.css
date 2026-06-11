@@ -1223,6 +1223,45 @@
     margin:0;
 }
 
+.album-awards-grid{
+    grid-template-columns:repeat(auto-fill, minmax(132px, 1fr));
+    gap:10px;
+}
+
+.album-awards-grid .trophy{
+    min-height:0;
+    padding:12px;
+    border-radius:18px;
+}
+
+.album-awards-grid .trophy-pill{
+    font-size:10px;
+    padding:4px 7px;
+    margin-bottom:8px;
+}
+
+.album-awards-grid .trophy h2{
+    margin:0 0 6px;
+    font-size:15px;
+    line-height:1.12;
+}
+
+.album-awards-grid .trophy p{
+    margin:0 0 8px;
+    font-size:11px;
+    line-height:1.28;
+}
+
+.album-awards-grid .trophy-progress{
+    height:14px !important;
+    margin-top:8px !important;
+}
+
+.album-awards-grid .subline{
+    margin-top:7px !important;
+    font-size:11px !important;
+}
+
 @media (min-width:720px){
     .trophy-grid{
         grid-template-columns:repeat(2, minmax(0,1fr));
@@ -2163,8 +2202,8 @@
 /* App header and Sammlr Zentrale */
 .app-header{
     margin:0 0 12px;
-    min-height:92px;
-    padding:18px 24px;
+    min-height:104px;
+    padding:16px 22px;
     border-radius:28px;
     background:linear-gradient(135deg,#2b0f46,#5d2f86);
     color:white;
@@ -2186,9 +2225,9 @@
 }
 
 .app-header-brand img{
-    width:min(260px, 68vw);
+    width:min(320px, 76vw);
     height:auto;
-    max-height:82px;
+    max-height:96px;
     display:block;
     object-fit:contain;
 }

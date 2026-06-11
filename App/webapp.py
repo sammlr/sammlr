@@ -411,7 +411,7 @@ def render_trophy_steps(trophies, current_value, color_class, unit_text):
 
 
 def render_global_trophy_grid(trophies, current_value, unit_text):
-    html = '<div class="trophy-grid">'
+    html = '<div class="trophy-grid album-awards-grid">'
 
     for ziel, titel in trophies:
         percent = min(100, int((current_value / ziel) * 100)) if ziel else 0
@@ -1475,10 +1475,7 @@ def vfl_wall_chapters():
 
 
 def vfl_album_award_items(by_code, gesammelt, total):
-    items = [
-        award_item(title, f"Sammle {target} Sticker in diesem Album.", gesammelt, target)
-        for target, title in vfl_trophaeen()
-    ]
+    items = []
 
     for chapter in vfl_wall_chapters():
         title = chapter["title"]
@@ -1494,8 +1491,6 @@ def vfl_album_award_items(by_code, gesammelt, total):
 
     items.extend([
         award_item_for_codes("DJ Matze", "Sammle Sticker 124.", ["124"], by_code),
-        award_item_for_codes("Legendenelf", "Sammle alle Sticker 184-195.", vfl_chapter_codes(184, 195), by_code),
-        award_item_for_codes("90+6", "Sammle alle Sticker 199-213.", vfl_chapter_codes(199, 213), by_code),
     ])
 
     return items
