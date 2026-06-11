@@ -4691,7 +4691,16 @@ def profil():
             <h1>Profil</h1>
             <p>Dein Sammlr-Ausweis.</p>
         </div>
-        <a class="profile-logout" href="/logout">Abmelden</a>
+        <button type="button" class="profile-account-toggle" aria-label="Konto öffnen" onclick="toggleProfileAccountMenu()">⚙</button>
+        <div class="profile-account-menu" id="profileAccountMenu">
+            <h2>Konto</h2>
+            <a href="/profil/name">Name bearbeiten</a>
+            <a href="/profil/username">Benutzername bearbeiten</a>
+            <a href="/profil/password">Passwort ändern</a>
+            <div class="profile-account-divider"></div>
+            <a href="/logout">Abmelden</a>
+            <button type="button" onclick="openAccountDeleteDialog()">Sammlr-Konto löschen</button>
+        </div>
     </div>
 
     <div class="profile-card profile-pass-card">
@@ -4719,20 +4728,6 @@ def profil():
         </a>
     </div>
 
-    <div class="profile-account-section">
-        <h2>Konto</h2>
-        <div class="profile-account-actions">
-            <a class="profile-account-button" href="/profil/name">Name bearbeiten</a>
-            <a class="profile-account-button" href="/profil/username">Benutzername bearbeiten</a>
-            <a class="profile-account-button" href="/profil/password">Passwort ändern</a>
-        </div>
-    </div>
-
-    <div class="profile-account-section profile-danger-section">
-        <h2>Gefahrenzone</h2>
-        <button type="button" class="profile-account-button danger" onclick="openAccountDeleteDialog()">Account löschen</button>
-    </div>
-
     <div class="account-delete-backdrop" id="accountDeleteDialog" aria-hidden="true">
         <div class="account-delete-dialog" role="dialog" aria-modal="true" aria-labelledby="accountDeleteTitle">
             <h2 id="accountDeleteTitle">Deinen Sammlr Account wirklich löschen?</h2>
@@ -4748,7 +4743,15 @@ def profil():
     </div>
 
     <script>
+    function toggleProfileAccountMenu(){{
+        const menu = document.getElementById('profileAccountMenu');
+        if(!menu) return;
+        menu.classList.toggle('active');
+    }}
+
     function openAccountDeleteDialog(){{
+        const menu = document.getElementById('profileAccountMenu');
+        if(menu) menu.classList.remove('active');
         const dialog = document.getElementById('accountDeleteDialog');
         if(!dialog) return;
         dialog.classList.add('active');
@@ -4761,6 +4764,14 @@ def profil():
         dialog.classList.remove('active');
         dialog.setAttribute('aria-hidden', 'true');
     }}
+
+    document.addEventListener('click', function(event){{
+        const menu = document.getElementById('profileAccountMenu');
+        const toggle = document.querySelector('.profile-account-toggle');
+        if(!menu || !toggle || !menu.classList.contains('active')) return;
+        if(menu.contains(event.target) || toggle.contains(event.target)) return;
+        menu.classList.remove('active');
+    }});
     </script>
 
     {bottom_nav("profil")}
