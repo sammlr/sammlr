@@ -223,6 +223,27 @@ def klasse_und_text(code, by_code):
     return "duplicate", f"{display_code(code)}<br>{q}x"
 
 
+def sticker_card_inner(album_id, code, by_code):
+    import re
+    q = by_code[code]["quantity"] if code in by_code else 0
+    display = display_code(code)
+    team = ""
+    number = display
+
+    if album_id == "vfl":
+        team = "VfL"
+        number = display
+    else:
+        match = re.match(r"^([A-Z]+)(\d+)$", display)
+        if match:
+            team = match.group(1)
+            number = match.group(2)
+
+    team_class = "sticker-team" if team else "sticker-team empty"
+    qty_html = f'<span class="sticker-qty">{q}x</span>' if q > 1 else ""
+    return f'<span class="{team_class}">{team}</span><span class="sticker-number">{number}</span>{qty_html}'
+
+
 def filter_ok(filter_name, code, by_code):
     q = by_code[code]["quantity"] if code in by_code else 0
     if filter_name == "missing":
@@ -1704,7 +1725,7 @@ def albumseite(album_id):
             if trigger and compact(code) == compact(trigger):
                 klasse += " trigger-slot"
             search_text = f"{code} {text} {current_section}".lower()
-            html += f'<a class="slot {klasse}" data-code="{code}" data-display="{display_code(code)}" data-search="{search_text}" href="/sticker/{album_id}/{code}">{text}</a>'
+            html += f'<a class="slot {klasse}" data-code="{code}" data-display="{display_code(code)}" data-search="{search_text}" href="/sticker/{album_id}/{code}">{sticker_card_inner(album_id, code, by_code)}</a>'
         if open_wall:
             html += "</div>"
 
@@ -1730,7 +1751,7 @@ def albumseite(album_id):
                 if trigger and compact(code) == compact(trigger):
                     klasse += " trigger-slot"
                 search_text = f"{code} {text} {chapter_title}".lower()
-                html += f'<a class="slot {klasse}" data-code="{code}" data-display="{display_code(code)}" data-search="{search_text}" href="/sticker/{album_id}/{code}">{text}</a>'
+                html += f'<a class="slot {klasse}" data-code="{code}" data-display="{display_code(code)}" data-search="{search_text}" href="/sticker/{album_id}/{code}">{sticker_card_inner(album_id, code, by_code)}</a>'
 
             html += "</div>"
 
@@ -1788,7 +1809,7 @@ def albumseite(album_id):
             if trigger and compact(code) == compact(trigger):
                 klasse += " trigger-slot"
             search_text = f"{code} {text} {current_chapter} {current_team}".lower()
-            html += f'<a class="slot {klasse}" data-code="{code}" data-display="{display_code(code)}" data-search="{search_text}" href="/sticker/{album_id}/{code}">{text}</a>'
+            html += f'<a class="slot {klasse}" data-code="{code}" data-display="{display_code(code)}" data-search="{search_text}" href="/sticker/{album_id}/{code}">{sticker_card_inner(album_id, code, by_code)}</a>'
 
         if open_wall:
             html += "</div>"
@@ -1802,7 +1823,7 @@ def albumseite(album_id):
             if trigger and compact(code) == compact(trigger):
                 klasse += " trigger-slot"
             search_text = f"{code} {text}".lower()
-            html += f'<a class="slot {klasse}" data-code="{code}" data-display="{display_code(code)}" data-search="{search_text}" href="/sticker/{album_id}/{code}">{text}</a>'
+            html += f'<a class="slot {klasse}" data-code="{code}" data-display="{display_code(code)}" data-search="{search_text}" href="/sticker/{album_id}/{code}">{sticker_card_inner(album_id, code, by_code)}</a>'
         html += "</div>"
     html += f'''
 <div class="quick-action-modal" id="quickActionModal" style="display:none;">

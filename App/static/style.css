@@ -3990,3 +3990,128 @@ body .container{
         font-size:34px !important;
     }
 }
+
+/* Kompakte Albumauszeichnungen und trikotigere Stickerkarten */
+.album-awards-grid{
+    grid-template-columns:repeat(auto-fill, minmax(104px, 1fr)) !important;
+    gap:8px !important;
+}
+
+.album-awards-grid .trophy{
+    padding:9px !important;
+    border-radius:14px !important;
+    min-height:112px !important;
+}
+
+.album-awards-grid .trophy-pill{
+    font-size:9px !important;
+    padding:3px 6px !important;
+    margin-bottom:6px !important;
+}
+
+.album-awards-grid .trophy h2{
+    font-size:13px !important;
+    line-height:1.08 !important;
+    margin:0 0 5px !important;
+}
+
+.album-awards-grid .trophy p{
+    font-size:10px !important;
+    line-height:1.18 !important;
+    margin:0 0 6px !important;
+}
+
+.album-awards-grid .trophy-progress{
+    height:10px !important;
+    margin-top:5px !important;
+}
+
+.album-awards-grid .subline{
+    font-size:10px !important;
+    margin-top:5px !important;
+}
+
+.wall{
+    grid-template-columns:repeat(auto-fill, minmax(88px, 1fr)) !important;
+    gap:14px !important;
+}
+
+.slot{
+    aspect-ratio:1 / 1.18 !important;
+    min-height:108px !important;
+    padding:13px 8px !important;
+    border-radius:16px !important;
+}
+
+.sticker-team{
+    min-height:auto !important;
+    font-size:10px !important;
+    font-weight:950 !important;
+    letter-spacing:.14em !important;
+    text-transform:uppercase;
+    color:#5d2f86 !important;
+}
+
+.sticker-number{
+    font-size:40px !important;
+    font-weight:1000 !important;
+    line-height:.82 !important;
+    color:#08070a !important;
+}
+
+.sticker-qty{
+    margin-top:3px;
+    font-size:10px;
+    font-weight:950;
+    line-height:1;
+}
+
+.slot.owned{
+    background:#ffffff !important;
+}
+
+.slot.duplicate,
+.trade-slot.duplicate{
+    background:linear-gradient(145deg,#5d2f86,#2b0f46) !important;
+}
+
+.slot.duplicate .sticker-team,
+.slot.duplicate .sticker-number,
+.slot.duplicate .sticker-qty,
+.trade-slot.duplicate .sticker-team,
+.trade-slot.duplicate .sticker-number{
+    color:#ffffff !important;
+}
+
+.slot.duplicate .sticker-number,
+.trade-slot.duplicate .sticker-number{
+    font-size:42px !important;
+}
+
+.slot.missing{
+    background:#f0eff2 !important;
+    box-shadow:0 4px 10px rgba(18,5,31,.028) !important;
+}
+
+.slot.missing .sticker-team,
+.slot.missing .sticker-number,
+.slot.missing .sticker-qty{
+    color:#aaa4ae !important;
+    opacity:.58 !important;
+    text-shadow:none !important;
+}
+
+@media (max-width:520px){
+    .album-awards-grid{
+        grid-template-columns:repeat(auto-fill, minmax(92px, 1fr)) !important;
+    }
+
+    .slot{
+        min-height:98px !important;
+        aspect-ratio:1 / 1.16 !important;
+    }
+
+    .sticker-number{
+        font-size:34px !important;
+    }
+}
