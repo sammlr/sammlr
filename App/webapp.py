@@ -150,7 +150,21 @@ def init_db():
 
 
 def style():
-    return '<meta name="viewport" content="width=device-width, initial-scale=1.0"><link rel="stylesheet" href="/static/style.css">'
+    return """
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/static/style.css">
+    <script>
+    document.addEventListener('DOMContentLoaded', function(){
+        document.querySelectorAll('.progress[data-progress]').forEach(function(progress){
+            const raw = String(progress.dataset.progress || '').replace(',', '.');
+            const value = parseFloat(raw);
+            if (!Number.isNaN(value)) {
+                progress.classList.toggle('progress-text-on-fill', value >= 50);
+            }
+        });
+    });
+    </script>
+    """
 
 
 def page_title(title=None, subtitle=None):
@@ -240,7 +254,7 @@ def sticker_card_inner(album_id, code, by_code):
             number = match.group(2)
 
     team_class = "sticker-team" if team else "sticker-team empty"
-    qty_html = f'<span class="sticker-qty">{q}x</span>' if q > 1 else ""
+    qty_html = f'<span class="sticker-qty">×{q}</span>' if q > 1 else ""
     return f'<span class="{team_class}">{team}</span><span class="sticker-number">{number}</span>{qty_html}'
 
 

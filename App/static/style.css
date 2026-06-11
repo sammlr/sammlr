@@ -4115,3 +4115,160 @@ body .container{
         font-size:34px !important;
     }
 }
+
+/* Stickerkarten-Feinschliff: Trikotnummern, Mengenbadge und Balken-Kontrast */
+.slot{
+    position:relative !important;
+    aspect-ratio:1 / 1.22 !important;
+    min-height:112px !important;
+    padding:14px 8px 12px !important;
+}
+
+.sticker-number{
+    font-size:46px !important;
+    font-weight:1000 !important;
+    line-height:.76 !important;
+    letter-spacing:-.05em !important;
+    transform:scaleX(.92);
+    text-shadow:
+        0 1px 0 rgba(255,255,255,.78),
+        -1px 0 0 rgba(18,5,31,.16),
+        1px 0 0 rgba(18,5,31,.16),
+        0 0 1px rgba(18,5,31,.28) !important;
+}
+
+.slot.owned .sticker-number{
+    color:#050507 !important;
+}
+
+.slot.duplicate .sticker-number,
+.trade-slot.duplicate .sticker-number{
+    color:#ffffff !important;
+    font-size:48px !important;
+    text-shadow:
+        0 2px 0 rgba(0,0,0,.24),
+        -1px 0 0 rgba(255,255,255,.14),
+        1px 0 0 rgba(255,255,255,.14),
+        0 0 16px rgba(255,255,255,.18) !important;
+}
+
+.slot.missing .sticker-number{
+    color:#9d97a2 !important;
+    opacity:.48 !important;
+    text-shadow:none !important;
+}
+
+.sticker-qty{
+    position:absolute;
+    right:7px;
+    bottom:7px;
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    min-width:22px;
+    height:20px;
+    margin:0 !important;
+    padding:0 6px;
+    border-radius:999px;
+    background:#f1edf5;
+    color:#5d2f86 !important;
+    font-size:10px;
+    font-weight:1000;
+    line-height:1;
+    letter-spacing:0;
+    box-shadow:0 5px 12px rgba(18,5,31,.10);
+}
+
+.slot.duplicate .sticker-qty{
+    background:rgba(255,255,255,.16);
+    color:#ffffff !important;
+    box-shadow:inset 0 0 0 1px rgba(255,255,255,.18);
+}
+
+.slot.missing .sticker-qty{
+    background:#e5e2e8;
+    color:#8c8591 !important;
+    opacity:.45 !important;
+    box-shadow:none;
+}
+
+.progress::after,
+.album-main-progress::after{
+    color:#4b4650 !important;
+    text-shadow:0 1px 0 rgba(255,255,255,.78) !important;
+}
+
+.progress.progress-text-on-fill::after,
+.album-main-progress.progress-text-on-fill::after{
+    color:#ffffff !important;
+    text-shadow:0 1px 2px rgba(18,5,31,.42) !important;
+}
+
+@media (max-width:520px){
+    .slot{
+        min-height:102px !important;
+        aspect-ratio:1 / 1.2 !important;
+    }
+
+    .sticker-number{
+        font-size:38px !important;
+    }
+
+    .slot.duplicate .sticker-number,
+    .trade-slot.duplicate .sticker-number{
+        font-size:40px !important;
+    }
+}
+
+/* Nummernstyle: kompakter 80er/90er-Trikotlook */
+.sticker-number{
+    font-family:"Arial Black", Impact, system-ui, sans-serif !important;
+    font-size:50px !important;
+    font-weight:1000 !important;
+    line-height:.72 !important;
+    letter-spacing:-.085em !important;
+    transform:scaleX(.86);
+    -webkit-text-stroke:.55px rgba(18,5,31,.32);
+    paint-order:stroke fill;
+    text-shadow:
+        0 1px 0 rgba(255,255,255,.82),
+        0 2px 0 rgba(18,5,31,.10),
+        1px 0 0 rgba(18,5,31,.10),
+        -1px 0 0 rgba(18,5,31,.10) !important;
+}
+
+.slot.owned .sticker-number{
+    color:#070609 !important;
+    -webkit-text-stroke:.55px rgba(18,5,31,.38);
+}
+
+.slot.duplicate .sticker-number,
+.trade-slot.duplicate .sticker-number{
+    color:#ffffff !important;
+    font-size:52px !important;
+    -webkit-text-stroke:.55px rgba(255,255,255,.22);
+    text-shadow:
+        0 2px 0 rgba(0,0,0,.30),
+        0 4px 12px rgba(18,5,31,.30),
+        1px 0 0 rgba(255,255,255,.16),
+        -1px 0 0 rgba(255,255,255,.16) !important;
+}
+
+.slot.missing .sticker-number{
+    color:#a9a4ad !important;
+    opacity:.48 !important;
+    -webkit-text-stroke:.35px rgba(120,113,127,.20);
+    text-shadow:0 1px 0 rgba(255,255,255,.50) !important;
+}
+
+@media (max-width:520px){
+    .sticker-number{
+        font-size:42px !important;
+        letter-spacing:-.08em !important;
+    }
+
+    .slot.duplicate .sticker-number,
+    .trade-slot.duplicate .sticker-number{
+        font-size:44px !important;
+    }
+}
