@@ -4691,16 +4691,6 @@ def profil():
             <h1>Profil</h1>
             <p>Dein Sammlr-Ausweis.</p>
         </div>
-        <button type="button" class="profile-account-toggle" aria-label="Konto öffnen" onclick="toggleProfileAccountMenu()">⚙</button>
-        <div class="profile-account-menu" id="profileAccountMenu">
-            <h2>Konto</h2>
-            <a href="/profil/name">Name bearbeiten</a>
-            <a href="/profil/username">Benutzername bearbeiten</a>
-            <a href="/profil/password">Passwort ändern</a>
-            <div class="profile-account-divider"></div>
-            <a href="/logout">Abmelden</a>
-            <button type="button" onclick="openAccountDeleteDialog()">Sammlr-Konto löschen</button>
-        </div>
     </div>
 
     <div class="profile-card profile-pass-card">
@@ -4713,7 +4703,7 @@ def profil():
         </div>
     </div>
 
-    <div class="profile-link-list">
+    <div class="profile-link-list" style="margin-bottom:16px;">
         <a class="profile-link-card" href="/">
             <strong>Meine Alben</strong>
             <span>Zur Sammlr Zentrale</span>
@@ -4726,6 +4716,21 @@ def profil():
             <strong>Meine Trophäen</strong>
             <span>Abgestaubte Ziele und nächste Meilensteine</span>
         </a>
+        <a class="profile-link-card" href="#profileAccountPanel" onclick="toggleProfileAccountPanel(); return false;">
+            <strong>Profil & Konto</strong>
+            <span>Daten, Passwort und Abmeldung</span>
+        </a>
+    </div>
+
+    <div class="profile-account-section" id="profileAccountPanel" style="display:none;">
+        <h2>Profil & Konto</h2>
+        <div class="profile-account-actions">
+            <a class="profile-account-button" href="/profil/name">Name bearbeiten</a>
+            <a class="profile-account-button" href="/profil/username">Benutzername bearbeiten</a>
+            <a class="profile-account-button" href="/profil/password">Passwort ändern</a>
+            <a class="profile-account-button" href="/logout">Abmelden</a>
+            <button type="button" class="profile-account-button" onclick="openAccountDeleteDialog()">Sammlr-Konto löschen</button>
+        </div>
     </div>
 
     <div class="account-delete-backdrop" id="accountDeleteDialog" aria-hidden="true">
@@ -4743,15 +4748,15 @@ def profil():
     </div>
 
     <script>
-    function toggleProfileAccountMenu(){{
-        const menu = document.getElementById('profileAccountMenu');
-        if(!menu) return;
-        menu.classList.toggle('active');
+    function toggleProfileAccountPanel(){{
+        const panel = document.getElementById('profileAccountPanel');
+        if(!panel) return;
+        const isHidden = panel.style.display === 'none' || !panel.style.display;
+        panel.style.display = isHidden ? 'block' : 'none';
+        if(isHidden) panel.scrollIntoView({{behavior:'smooth', block:'nearest'}});
     }}
 
     function openAccountDeleteDialog(){{
-        const menu = document.getElementById('profileAccountMenu');
-        if(menu) menu.classList.remove('active');
         const dialog = document.getElementById('accountDeleteDialog');
         if(!dialog) return;
         dialog.classList.add('active');
@@ -4764,14 +4769,6 @@ def profil():
         dialog.classList.remove('active');
         dialog.setAttribute('aria-hidden', 'true');
     }}
-
-    document.addEventListener('click', function(event){{
-        const menu = document.getElementById('profileAccountMenu');
-        const toggle = document.querySelector('.profile-account-toggle');
-        if(!menu || !toggle || !menu.classList.contains('active')) return;
-        if(menu.contains(event.target) || toggle.contains(event.target)) return;
-        menu.classList.remove('active');
-    }});
     </script>
 
     {bottom_nav("profil")}

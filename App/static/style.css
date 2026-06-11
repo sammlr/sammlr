@@ -4567,3 +4567,138 @@ body .container{
         font-size:11px !important;
     }
 }
+
+/* Karten-Angleichung an die Stickerwand */
+.profile-card,
+.profile-link-card,
+.home-album-card,
+.album-card,
+.album-quick-card,
+.trophy,
+.trophy-summary-card,
+.global-album-card .trophy{
+    border-radius:16px !important;
+    border:1px solid rgba(18,5,31,.08) !important;
+    background:#ffffff !important;
+    box-shadow:0 10px 24px rgba(18,5,31,.055) !important;
+    transition:transform .18s ease, box-shadow .18s ease, border-color .18s ease, background .18s ease !important;
+}
+
+.profile-card,
+.profile-link-card,
+.home-album-card,
+.album-card,
+.album-quick-card,
+.trophy-summary-card{
+    padding:18px !important;
+}
+
+.trophy,
+.global-album-card .trophy{
+    padding:14px !important;
+}
+
+.profile-link-card:hover,
+.home-album-card:hover,
+.album-card:hover,
+.album-quick-card:hover,
+.trophy-unlocked:hover,
+.global-album-card:hover .trophy{
+    transform:translateY(-3px) scale(1.01) !important;
+    border-color:rgba(93,47,134,.18) !important;
+    box-shadow:0 16px 30px rgba(18,5,31,.10) !important;
+}
+
+.profile-link-card strong,
+.home-album-main h2,
+.album-quick-card strong,
+.trophy h2,
+.trophy-summary-card h2{
+    color:#2b0f46 !important;
+}
+
+.profile-link-card span,
+.album-season,
+.album-quick-card span,
+.trophy p,
+.trophy-summary-card p{
+    color:#72697c !important;
+}
+
+.home-album-stats div,
+.profile-stat-card{
+    border-radius:16px !important;
+    border:1px solid rgba(18,5,31,.08) !important;
+    background:#fbfafc !important;
+    box-shadow:none !important;
+}
+
+.trophy-gold,
+.trophy.gold,
+.trophy-unlocked.gold,
+.global-album-complete{
+    background:linear-gradient(135deg,#fffdfa,#fff7d6) !important;
+    border-color:rgba(160,120,20,.22) !important;
+}
+
+.btn,
+.favorite-change-button,
+.favorite-set-button,
+.profile-account-toggle,
+.profile-account-menu a,
+.profile-account-menu button,
+.trophy-nav-links .sammlr-back-link{
+    border-radius:999px !important;
+    font-weight:900 !important;
+    box-shadow:none !important;
+}
+
+.btn,
+.favorite-change-button,
+.favorite-set-button,
+.trophy-nav-links .sammlr-back-link{
+    border:1px solid rgba(93,47,134,.10) !important;
+    background:#5d2f86 !important;
+    color:#ffffff !important;
+}
+
+.btn.gray,
+.profile-account-toggle,
+.profile-account-menu a,
+.profile-account-menu button{
+    border:1px solid rgba(18,5,31,.07) !important;
+    background:#f5f0fa !important;
+    color:#5d2f86 !important;
+}
+
+.btn:hover,
+.favorite-change-button:hover,
+.favorite-set-button:hover,
+.trophy-nav-links .sammlr-back-link:hover{
+    background:#2b0f46 !important;
+    color:#ffffff !important;
+}
+
+.btn.gray:hover,
+.profile-account-toggle:hover,
+.profile-account-menu a:hover,
+.profile-account-menu button:hover{
+    background:#5d2f86 !important;
+    color:#ffffff !important;
+}
+
+@media (max-width:520px){
+    .profile-card,
+    .profile-link-card,
+    .home-album-card,
+    .album-card,
+    .album-quick-card,
+    .trophy-summary-card{
+        padding:16px !important;
+    }
+
+    .trophy,
+    .global-album-card .trophy{
+        padding:12px !important;
+    }
+}
