@@ -129,10 +129,15 @@ def init_db():
     INSERT OR IGNORE INTO users (id, username, password)
     VALUES (1, 'valentin', '1234')
     """)
+    wm26_total = len(build_wm26())
     cur.execute("""
     INSERT OR IGNORE INTO albums (id, name, season, total, complete, cover)
-    VALUES ('wm26', 'FIFA World Cup 2026', '2026', 991, 991, '🌍')
-    """)
+    VALUES ('wm26', 'FIFA World Cup 2026', '2026', ?, ?, '🌍')
+    """, (wm26_total, wm26_total))
+    cur.execute(
+        "UPDATE albums SET total=?, complete=? WHERE id='wm26'",
+        (wm26_total, wm26_total)
+    )
 
     cur.execute("""
     INSERT OR IGNORE INTO user_albums (user_id, album_id)
@@ -1224,10 +1229,13 @@ def wm26_team_code_for_wall(sticker):
 def wm26_wall_order(sticker):
     code = sticker["id"]
 
+    if code == "00":
+        return (0, 0)
+
     if code.startswith("FWC"):
         number = int(code.replace("FWC", ""))
         if number <= 8:
-            return (0, number)
+            return (0, number + 1)
         return (90, number)
 
     if code.startswith("CC"):
@@ -1249,6 +1257,9 @@ def wm26_wall_order(sticker):
 def wm26_chapter_for_wall(sticker):
     code = sticker["id"]
 
+    if code == "00":
+        return "World Cup 2026"
+
     if code.startswith("FWC"):
         number = int(code.replace("FWC", ""))
         return "World Cup 2026" if number <= 8 else "World Cup History"
@@ -1268,7 +1279,7 @@ def wm26_chapter_for_wall(sticker):
 
 def wm26_team_for_wall(sticker):
     code = sticker["id"]
-    if code.startswith("FWC") or code.startswith("CC"):
+    if code == "00" or code.startswith("FWC") or code.startswith("CC"):
         return ""
 
     return sticker.get("team_name") or wm26_team_code_for_wall(sticker)
@@ -1684,12 +1695,24 @@ function stickerSearchAliases(slot){{
 
         if(compact){{
             aliases.push(compact);
+            aliases.push('STICKER' + compact);
+            if(/^0+\\d+$/.test(compact)){{
+                const withoutLeadingZero = String(parseInt(compact, 10));
+                aliases.push(withoutLeadingZero);
+                aliases.push('STICKER' + withoutLeadingZero);
+            }}
         }}
 
         raw.split(/[^A-Z0-9]+/).forEach(function(part){{
             const normalizedPart = normalizeQuery(part);
             if(normalizedPart){{
                 aliases.push(normalizedPart);
+                aliases.push('STICKER' + normalizedPart);
+                if(/^0+\\d+$/.test(normalizedPart)){{
+                    const withoutLeadingZero = String(parseInt(normalizedPart, 10));
+                    aliases.push(withoutLeadingZero);
+                    aliases.push('STICKER' + withoutLeadingZero);
+                }}
             }}
         }});
     }});
@@ -1704,6 +1727,7 @@ function stickerSearchNumbers(slot){{
         const match = alias.match(/(\d+)$/);
         if(match){{
             numbers.push(match[1]);
+            numbers.push(String(parseInt(match[1], 10)));
         }}
     }});
 
@@ -1755,14 +1779,11 @@ function updateStickerSearchFeedback(term){{
 
 function findSlotByCode(code){{
     let foundSlot = null;
-    const needle = normalizeStickerToken(code);
+    const needle = normalizeQuery(code);
     if(!needle) return null;
 
     document.querySelectorAll('.slot').forEach(function(slot){{
-        const codeKey = normalizeStickerToken(slot.dataset.code || '');
-        const displayKey = normalizeStickerToken(slot.dataset.display || '');
-
-        if(!foundSlot && (codeKey === needle || displayKey === needle)){{
+        if(!foundSlot && stickerSearchAliases(slot).includes(needle)){{
             foundSlot = slot;
         }}
     }});
@@ -3408,6 +3429,42 @@ function tradeStickerNumber(code){{
     return match ? match[1] : '';
 }}
 
+function tradeSlotAliases(slot){{
+    const values = [
+        slot.dataset.code || '',
+        slot.dataset.display || '',
+        slot.textContent || ''
+    ];
+    const aliases = [];
+
+    values.forEach(function(value){{
+        const compact = tradeNormalizeQuery(value);
+        if(compact){{
+            aliases.push(compact);
+            aliases.push('STICKER' + compact);
+            if(/^0+\\d+$/.test(compact)){{
+                const withoutLeadingZero = String(parseInt(compact, 10));
+                aliases.push(withoutLeadingZero);
+                aliases.push('STICKER' + withoutLeadingZero);
+            }}
+        }}
+    }});
+
+    return Array.from(new Set(aliases));
+}}
+
+function tradeSlotNumbers(slot){{
+    const numbers = [];
+    tradeSlotAliases(slot).forEach(function(alias){{
+        const match = alias.match(/(\\d+)$/);
+        if(match){{
+            numbers.push(match[1]);
+            numbers.push(String(parseInt(match[1], 10)));
+        }}
+    }});
+    return Array.from(new Set(numbers));
+}}
+
 function tradeMatchesSlot(slot, rawTerm){{
     const term = String(rawTerm || '').trim();
     if(!term) return true;
@@ -3415,17 +3472,12 @@ function tradeMatchesSlot(slot, rawTerm){{
     const normalizedTerm = tradeNormalizeQuery(term);
     if(!normalizedTerm) return true;
 
-    const code = slot.dataset.code || '';
-    const display = slot.dataset.display || '';
-    const normalizedCode = tradeNormalizeQuery(code);
-    const normalizedDisplay = tradeNormalizeQuery(display);
-
     if(/^\\d+$/.test(normalizedTerm)){{
-        return tradeStickerNumber(code) === normalizedTerm;
+        return tradeSlotNumbers(slot).includes(normalizedTerm);
     }}
 
     if(/[A-Z]/.test(normalizedTerm) && /\\d/.test(normalizedTerm)){{
-        return normalizedCode === normalizedTerm || normalizedDisplay === normalizedTerm;
+        return tradeSlotAliases(slot).includes(normalizedTerm);
     }}
 
     return tradeNormalizeQuery(slot.dataset.search || slot.textContent || '').includes(normalizedTerm);
@@ -3512,7 +3564,7 @@ function tradeFindSlotByCode(mode, rawCode){{
     if(!needle) return null;
 
     return Array.from(document.querySelectorAll('.trade-slot[data-mode="' + mode + '"]')).find(function(slot){{
-        return tradeNormalizeQuery(slot.dataset.code || '') === needle || tradeNormalizeQuery(slot.dataset.display || '') === needle;
+        return tradeSlotAliases(slot).includes(needle);
     }}) || null;
 }}
 
