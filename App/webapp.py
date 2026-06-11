@@ -1303,6 +1303,38 @@ def sticker_counter_label(codes, by_code, filter_name):
 
     return f"{owned}/{total}"
 
+
+VFL_WALL_CHAPTERS = [
+    ("Intro", 1, 2),
+    ("Kader", 3, 84),
+    ("Rückblick", 85, 95),
+    ("Schönste Tore der Saison", 96, 108),
+    ("Bremer Brücke", 109, 139),
+    ("Trikots", 140, 152),
+    ("Choreos", 153, 170),
+    ("Historie", 171, 183),
+    ("Legendenelf", 184, 195),
+    ("Große Spieler", 196, 198),
+    ("90+6", 199, 213),
+    ("Eules letzter Flug", 214, 225),
+    ("Spiele für die Ewigkeit", 226, 243),
+    ("Fanshop", 244, 250),
+]
+
+
+def vfl_chapter_codes(start, end):
+    return [str(number) for number in range(start, end + 1)]
+
+
+def vfl_wall_chapters():
+    return [
+        {
+            "title": title,
+            "codes": vfl_chapter_codes(start, end),
+        }
+        for title, start, end in VFL_WALL_CHAPTERS
+    ]
+
 @app.route("/album/<album_id>", methods=["GET", "POST"])
 def albumseite(album_id):
     filter_name = request.args.get("filter", "all")
@@ -1501,6 +1533,32 @@ def albumseite(album_id):
             search_text = f"{code} {text} {current_section}".lower()
             html += f'<a class="slot {klasse}" data-code="{code}" data-display="{display_code(code)}" data-search="{search_text}" href="/sticker/{album_id}/{code}">{text}</a>'
         if open_wall:
+            html += "</div>"
+
+    elif album_id == "vfl":
+        for chapter in vfl_wall_chapters():
+            visible_codes = [code for code in chapter["codes"] if filter_ok(filter_name, code, by_code)]
+            if not visible_codes:
+                continue
+
+            chapter_title = chapter["title"]
+            chapter_id = "chapter-" + chapter_title.lower().replace(" ", "-").replace("/", "-").replace("+", "plus")
+            chapter_counter = sticker_counter_label(chapter["codes"], by_code, filter_name)
+            chapter_complete = all(sticker_quantity_for_counter(by_code, code) > 0 for code in chapter["codes"])
+            chapter_classes = "section-title album-chapter-title"
+            if chapter_complete:
+                chapter_classes += " chapter-complete chapter-collapsed"
+            chapter_expanded = "false" if chapter_complete else "true"
+            html += f'<h2 id="{chapter_id}" class="{chapter_classes}" role="button" tabindex="0" aria-expanded="{chapter_expanded}"><span>{chapter_title}</span><span>{chapter_counter}</span></h2>'
+            html += '<div class="wall">'
+
+            for code in visible_codes:
+                klasse, text = klasse_und_text(code, by_code)
+                if trigger and compact(code) == compact(trigger):
+                    klasse += " trigger-slot"
+                search_text = f"{code} {text} {chapter_title}".lower()
+                html += f'<a class="slot {klasse}" data-code="{code}" data-display="{display_code(code)}" data-search="{search_text}" href="/sticker/{album_id}/{code}">{text}</a>'
+
             html += "</div>"
 
     elif album_id == "wm26":
@@ -1886,6 +1944,33 @@ function wallHasVisibleSlot(wall){{
 function clearHiddenStickerSections(){{
     document.querySelectorAll('.wall, .team-title, .section-title, .album-chapter-title').forEach(function(node){{
         node.classList.remove('search-section-hidden');
+        node.classList.remove('collapse-section-hidden');
+    }});
+}}
+
+function hasActiveStickerSearch(){{
+    return stickerSearchInput && normalizeQuery(stickerSearchInput.value || '');
+}}
+
+function updateChapterCollapseVisibility(){{
+    const searchActive = hasActiveStickerSearch();
+
+    document.querySelectorAll('.collapse-section-hidden').forEach(function(node){{
+        node.classList.remove('collapse-section-hidden');
+    }});
+
+    document.querySelectorAll('.album-chapter-title').forEach(function(chapterTitle){{
+        if(searchActive || !chapterTitle.classList.contains('chapter-collapsed')){{
+            chapterTitle.setAttribute('aria-expanded', 'true');
+            return;
+        }}
+
+        chapterTitle.setAttribute('aria-expanded', 'false');
+        let node = chapterTitle.nextElementSibling;
+        while(node && !node.classList.contains('album-chapter-title') && !node.classList.contains('section-title')){{
+            node.classList.add('collapse-section-hidden');
+            node = node.nextElementSibling;
+        }}
     }});
 }}
 
@@ -1923,6 +2008,8 @@ function updateVisibleStickerSections(){{
 
         sectionTitle.classList.toggle('search-section-hidden', !hasVisibleSlot);
     }});
+
+    updateChapterCollapseVisibility();
 }}
 
 
@@ -1969,6 +2056,22 @@ if(stickerSearchInput){{
         }}
     }});
 }}
+
+document.querySelectorAll('.album-chapter-title').forEach(function(chapterTitle){{
+    chapterTitle.addEventListener('click', function(){{
+        chapterTitle.classList.toggle('chapter-collapsed');
+        updateChapterCollapseVisibility();
+    }});
+
+    chapterTitle.addEventListener('keydown', function(event){{
+        if(event.key !== 'Enter' && event.key !== ' ') return;
+        event.preventDefault();
+        chapterTitle.classList.toggle('chapter-collapsed');
+        updateChapterCollapseVisibility();
+    }});
+}});
+
+updateChapterCollapseVisibility();
 
 function openQuickActions(){{
     startNeutralPendingMode();
