@@ -1710,7 +1710,12 @@ def albumseite(album_id):
 
     html = f"""
     <html><head>{style()}</head><body><div class="container">
-    {app_header(album['name'], album['season'])}
+    {app_header()}
+    <div class="album-title-progress">
+        <i class="chapter-progress-fill" style="width:{prozent}%;"></i>
+        <span>{album['name']}</span>
+        <span>{prozent}%</span>
+    </div>
 
     {f'<div class="notice {"notice-error" if "nicht vorhanden" in message else "notice-duplicate" if "doppelt" in message else "notice-success"}"><h2>{message}</h2><p>Vertippt?</p><a class="btn gray" href="/undo">↩ Rückgängig machen</a></div>' if message and ("hinzugefügt" in message or "doppelt" in message or "entfernt" in message) else f'<div class="notice {"notice-error" if "nicht vorhanden" in message else "notice-duplicate" if "doppelt" in message else "notice-success"}"><h2>{message}</h2></div>' if message else ''}
     <div class="album-quick-links">
@@ -3515,7 +3520,7 @@ def trade_search_text(code, section="", team=""):
 
 def render_trade_wall(album_id, allowed_counts, mode):
     allowed_codes = set(allowed_counts.keys())
-    slot_class = "missing trade-slot"
+    slot_class = "missing trade-slot" if mode == "get" else "duplicate trade-slot"
     html = ""
 
     def render_slot(code, section="", team=""):
@@ -3529,7 +3534,7 @@ def render_trade_wall(album_id, allowed_counts, mode):
             f'<button type="button" class="slot {slot_class}" '
             f'data-code="{code}" data-display="{display}" data-mode="{mode}" '
             f'data-max="{max_count}" data-search="{search_text}">'
-            f'<span>{display}</span></button>'
+            f'{sticker_card_inner(album_id, code, {})}</button>'
         )
 
     if album_id == "em24":
@@ -3939,6 +3944,10 @@ function setTradeCount(mode, code, amount){{
     const max = parseInt(slot.dataset.max, 10) || 1;
     let nextAmount = Math.max(Math.min(parseInt(amount, 10) || 0, max), 0);
 
+    if(mode === 'give'){{
+        nextAmount = nextAmount > 0 ? 1 : 0;
+    }}
+
     if(mode === 'get'){{
         const currentAmount = tradeSelections[mode][code] || 0;
         const receiveTotalWithoutCode = tradeTotal('get') - currentAmount;
@@ -3965,6 +3974,10 @@ function setTradeCount(mode, code, amount){{
 function incrementTradeCode(mode, code){{
     if(mode === 'get' && tradeTotal('get') >= maxReceiveSelection){{
         showTradeReceiveLimitError();
+        return;
+    }}
+
+    if(mode === 'give' && (tradeSelections.give[code] || 0) >= 1){{
         return;
     }}
 
@@ -4046,12 +4059,14 @@ function renderTradeReviewList(mode, targetId){{
         amount.type = 'number';
         amount.min = '0';
         amount.step = '1';
+        if(mode === 'give') amount.max = '1';
         amount.value = tradeSelections[mode][code] || 0;
         amount.addEventListener('change', function(){{ setTradeCount(mode, code, amount.value); }});
 
         const plusButton = document.createElement('button');
         plusButton.type = 'button';
         plusButton.textContent = '+';
+        if(mode === 'give') plusButton.disabled = true;
         plusButton.addEventListener('click', function(){{ incrementTradeCode(mode, code); }});
 
         controls.appendChild(minusButton);
@@ -4178,6 +4193,13 @@ document.querySelectorAll('[data-trade-search]').forEach(function(input){{
             return;
         }}
 
+        if(mode === 'give' && (tradeSelections.give[slot.dataset.code] || 0) >= 1){{
+            input.value = '';
+            updateTradeSearch(input.closest('.trade-step'), '');
+            input.focus();
+            return;
+        }}
+
         incrementTradeCode(mode, slot.dataset.code);
         input.value = '';
         updateTradeSearch(input.closest('.trade-step'), '');
@@ -4202,6 +4224,10 @@ document.addEventListener('click', function(event){{
 
     if(slot.dataset.mode === 'get' && tradeTotal('get') >= maxReceiveSelection){{
         showTradeReceiveLimitError();
+        return;
+    }}
+
+    if(slot.dataset.mode === 'give' && (tradeSelections.give[slot.dataset.code] || 0) >= 1){{
         return;
     }}
 
