@@ -229,6 +229,125 @@ def lade_album(album_id):
     return album, by_code, gesammelt, doppelte, prozent, total
 
 
+def format_sammlr_date(value):
+    if not value:
+        return ""
+
+    from datetime import datetime
+
+    raw_value = str(value).strip()
+    for date_format in ("%Y-%m-%d %H:%M:%S", "%Y-%m-%dT%H:%M:%S", "%Y-%m-%d"):
+        try:
+            return datetime.strptime(raw_value[:19], date_format).strftime("%d.%m.%Y")
+        except ValueError:
+            pass
+
+    return raw_value[:10]
+
+
+def profile_trade_archive_html(user_id):
+    con = get_db()
+    albums = con.execute(
+        "SELECT id, name FROM albums ORDER BY name COLLATE NOCASE"
+    ).fetchall()
+    completed_trades = con.execute(
+        """
+        SELECT trade_requests.*,
+               sender.username AS sender_name,
+               receiver.username AS receiver_name,
+               albums.name AS album_name
+        FROM trade_requests
+        JOIN users sender ON sender.id = trade_requests.from_user_id
+        JOIN users receiver ON receiver.id = trade_requests.to_user_id
+        JOIN albums ON albums.id = trade_requests.album_id
+        WHERE trade_requests.status='completed'
+        AND (trade_requests.from_user_id=? OR trade_requests.to_user_id=?)
+        ORDER BY trade_requests.created_at DESC
+        """,
+        (user_id, user_id)
+    ).fetchall()
+    con.close()
+
+    archive_by_album = {
+        album["id"]: {
+            "name": album["name"],
+            "trades": []
+        }
+        for album in albums
+    }
+
+    for trade in completed_trades:
+        album_id = trade["album_id"]
+        archive_by_album.setdefault(album_id, {
+            "name": trade["album_name"],
+            "trades": []
+        })
+
+        give_codes = json.loads(trade["give_codes"] or "[]")
+        get_codes = json.loads(trade["get_codes"] or "[]")
+
+        if trade["from_user_id"] == user_id:
+            partner_name = trade["receiver_name"]
+            received_count = len(get_codes)
+            given_count = len(give_codes)
+        else:
+            partner_name = trade["sender_name"]
+            received_count = len(give_codes)
+            given_count = len(get_codes)
+
+        archive_by_album[album_id]["trades"].append({
+            "partner": partner_name,
+            "date": format_sammlr_date(trade["created_at"]),
+            "received": received_count,
+            "given": given_count
+        })
+
+    def render_archive_trade(trade_item):
+        return f"""
+        <div class="profile-trade-row">
+            <strong>{trade_item['partner']} · {trade_item['date']}</strong>
+            <span>+{trade_item['received']} erhalten · -{trade_item['given']} gegeben</span>
+        </div>
+        """
+
+    archive_html = ""
+    for album_archive in archive_by_album.values():
+        trades = album_archive["trades"]
+        trade_count = len(trades)
+        trade_word = "Trade" if trade_count == 1 else "Trades"
+        visible_trades = "".join(render_archive_trade(item) for item in trades[:3])
+        hidden_trades = "".join(render_archive_trade(item) for item in trades[3:])
+        empty_html = """
+        <div class="profile-trade-empty">
+            Noch keine abgeschlossenen Trades.
+        </div>
+        """ if not trades else ""
+        more_html = f"""
+        <details class="profile-trade-more">
+            <summary>Mehr anzeigen</summary>
+            <div class="profile-trade-list">
+                {hidden_trades}
+            </div>
+        </details>
+        """ if hidden_trades else ""
+
+        archive_html += f"""
+        <section class="profile-trade-album">
+            <div class="profile-trade-album-head">
+                <span>{album_archive['name']}</span>
+                <strong>{trade_count} {trade_word}</strong>
+            </div>
+            <div class="profile-trade-list">
+                {visible_trades}
+                {empty_html}
+            </div>
+            {more_html}
+        </section>
+        """
+
+    return archive_html
+
+
 def klasse_und_text(code, by_code):
     q = by_code[code]["quantity"] if code in by_code else 0
     if q == 0:
@@ -3235,7 +3354,7 @@ def album_trades(album_id):
         SELECT trade_requests.*, users.username AS sender_name
         FROM trade_requests
         JOIN users ON users.id = trade_requests.from_user_id
-        WHERE trade_requests.album_id=? AND trade_requests.to_user_id=? AND trade_requests.status IN ('open', 'accepted', 'completed', 'failed', 'declined')
+        WHERE trade_requests.album_id=? AND trade_requests.to_user_id=? AND trade_requests.status IN ('open', 'accepted')
         ORDER BY trade_requests.created_at DESC
         """,
         (album_id, current_user_id())
@@ -3246,7 +3365,7 @@ def album_trades(album_id):
         SELECT trade_requests.*, users.username AS receiver_name
         FROM trade_requests
         JOIN users ON users.id = trade_requests.to_user_id
-        WHERE trade_requests.album_id=? AND trade_requests.from_user_id=? AND trade_requests.status IN ('open', 'accepted', 'completed', 'failed', 'declined')
+        WHERE trade_requests.album_id=? AND trade_requests.from_user_id=? AND trade_requests.status IN ('open', 'accepted')
         ORDER BY trade_requests.created_at DESC
         """,
         (album_id, current_user_id())
@@ -3279,9 +3398,8 @@ def album_trades(album_id):
 
     html = f"""
     <html><head>{style()}</head><body><div class="container">
-    <a class="btn" href="/album/{album_id}">← Zurück</a>
-    <h1>Tauschbörse</h1>
-    <p class="subline">Finde Sammler, mit denen du Lücken schließen kannst.</p>
+    {app_header("Tauschbörse", "Finde Sammler, mit denen du Lücken schließen kannst.")}
+    <a class="sammlr-back-link trade-back-link" href="/album/{album_id}">← Zurück</a>
 
     <div class="trade-tabs">
         <a class="trade-tab-card {'active' if tab == 'partners' else ''}" href="/album/{album_id}/trades?tab=partners">
@@ -3662,9 +3780,8 @@ def trade_center(album_id, other_user_id):
 
     html = f"""
     <html><head>{style()}</head><body><div class="container">
-    <a class="btn" href="/album/{album_id}/trades">← Zurück</a>
-    <h1>Tauschanfrage</h1>
-    <p class="subline">Tauschen mit {other_user['username']}</p>
+    {app_header("Tauschanfrage", f"Tauschen mit {other_user['username']}")}
+    <a class="sammlr-back-link trade-back-link" href="/album/{album_id}/trades">← Zurück</a>
     {error_html}
 
     <div class="trade-wizard" id="tradeWizard">
@@ -4400,7 +4517,8 @@ def trades_overview():
         JOIN users sender ON sender.id = trade_requests.from_user_id
         JOIN users receiver ON receiver.id = trade_requests.to_user_id
         JOIN albums ON albums.id = trade_requests.album_id
-        WHERE trade_requests.from_user_id=? OR trade_requests.to_user_id=?
+        WHERE (trade_requests.from_user_id=? OR trade_requests.to_user_id=?)
+        AND trade_requests.status IN ('open', 'accepted')
         ORDER BY trade_requests.created_at DESC
         """,
         (current_user_id(), current_user_id())
@@ -4408,9 +4526,8 @@ def trades_overview():
 
     html = f"""
     <html><head>{style()}</head><body><div class="container">
-    <a class="btn" href="/">← Zurück</a>
-    <h1>🤝 Offene Tauschanfragen</h1>
-    <p class="subline">Anfragen, die später nach echtem Treffen abgeschlossen werden.</p>
+    {app_header("Tauschbörse", "Anfragen, die später nach echtem Treffen abgeschlossen werden.")}
+    <a class="sammlr-back-link trade-back-link" href="/">← Zurück</a>
     {f'<div class="notice notice-success"><h2>{message}</h2></div>' if message else ''}
     """
 
@@ -4754,12 +4871,12 @@ def profil():
 
     return f"""
     <html><head>{style()}</head><body><div class="container">
-    <div class="profile-header">
-        <div>
-            <h1>Profil</h1>
-            <p>Dein Sammlr-Ausweis.</p>
-        </div>
-    </div>
+    {app_header()}
+
+    <section class="profile-hero-bar">
+        <span>Profil</span>
+        <strong>Dein Sammlr-Ausweis.</strong>
+    </section>
 
     <div class="profile-card profile-pass-card">
         <div class="profile-identity">
@@ -4771,7 +4888,7 @@ def profil():
         </div>
     </div>
 
-    <div class="profile-link-list" style="margin-bottom:16px;">
+    <div class="profile-link-list">
         <a class="profile-link-card" href="/">
             <strong>Meine Alben</strong>
             <span>Zur Sammlr Zentrale</span>
@@ -4783,6 +4900,10 @@ def profil():
         <a class="profile-link-card" href="/trophaeen">
             <strong>Meine Trophäen</strong>
             <span>Abgestaubte Ziele und nächste Meilensteine</span>
+        </a>
+        <a class="profile-link-card" href="/profil/trade-archiv">
+            <strong>Trade-Archiv</strong>
+            <span>Abgeschlossene Tausche nach Album</span>
         </a>
         <a class="profile-link-card" href="#profileAccountPanel" onclick="toggleProfileAccountPanel(); return false;">
             <strong>Profil & Konto</strong>
@@ -4838,6 +4959,23 @@ def profil():
         dialog.setAttribute('aria-hidden', 'true');
     }}
     </script>
+
+    {bottom_nav("profil")}
+    </div></body></html>
+    """
+
+
+@app.route("/profil/trade-archiv")
+def profil_trade_archiv():
+    archive_html = profile_trade_archive_html(current_user_id())
+    return f"""
+    <html><head>{style()}</head><body><div class="container">
+    {app_header("Trade-Archiv", "Abgeschlossene Tausche nach Album.")}
+    <a class="sammlr-back-link trade-back-link" href="/profil">← Zurück</a>
+
+    <section class="profile-section profile-trade-archive profile-trade-archive-page">
+        {archive_html}
+    </section>
 
     {bottom_nav("profil")}
     </div></body></html>
