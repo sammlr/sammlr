@@ -157,7 +157,8 @@ def style():
     document.addEventListener('DOMContentLoaded', function(){
         document.querySelectorAll('.progress[data-progress]').forEach(function(progress){
             const raw = String(progress.dataset.progress || '').replace(',', '.');
-            const value = parseFloat(raw);
+            const match = raw.match(/\\d+(?:\\.\\d+)?/);
+            const value = match ? parseFloat(match[0]) : NaN;
             if (!Number.isNaN(value)) {
                 progress.classList.toggle('progress-text-on-fill', value >= 50);
             }
@@ -1513,6 +1514,14 @@ def sticker_counter_label(codes, by_code, filter_name):
     return f"{owned}/{total}"
 
 
+def sticker_progress_percent(codes, by_code):
+    if not codes:
+        return 0
+
+    owned = len([code for code in codes if sticker_quantity_for_counter(by_code, code) > 0])
+    return min(100, int((owned / len(codes)) * 100))
+
+
 VFL_WALL_CHAPTERS = [
     ("Intro", 1, 2),
     ("Kader", 3, 84),
@@ -1704,24 +1713,6 @@ def albumseite(album_id):
     {app_header(album['name'], album['season'])}
 
     {f'<div class="notice {"notice-error" if "nicht vorhanden" in message else "notice-duplicate" if "doppelt" in message else "notice-success"}"><h2>{message}</h2><p>Vertippt?</p><a class="btn gray" href="/undo">↩ Rückgängig machen</a></div>' if message and ("hinzugefügt" in message or "doppelt" in message or "entfernt" in message) else f'<div class="notice {"notice-error" if "nicht vorhanden" in message else "notice-duplicate" if "doppelt" in message else "notice-success"}"><h2>{message}</h2></div>' if message else ''}
-    <div class="album-collection-head">
-        <div class="album-collection-progress">
-            <p class="album-progress-label">Albumfortschritt</p>
-            <div class="album-progress-stats">
-                <div>
-                    <span>Sticker gesammelt</span>
-                    <strong>{gesammelt} / {total} Sticker</strong>
-                </div>
-                <div>
-                    <span>Doppelte</span>
-                    <strong>{doppelte} Doppelte</strong>
-                </div>
-            </div>
-            <div class="progress album-main-progress" data-progress="{prozent}%"><div class="progress-bar" style="width:{prozent}%;"></div></div>
-        </div>
-
-    </div>
-
     <div class="album-quick-links">
         <a class="album-quick-card" href="/album/{album_id}/trophaeen">
             <strong>Trophäen</strong>
@@ -1764,6 +1755,10 @@ def albumseite(album_id):
     if album_id == "em24":
         current_section = ""
         open_wall = False
+        section_codes = {}
+
+        for counter_sticker in build_em24():
+            section_codes.setdefault(counter_sticker["section"], []).append(counter_sticker["id"])
 
         for sticker in build_em24():
             code = sticker["id"]
@@ -1775,7 +1770,9 @@ def albumseite(album_id):
                     html += "</div>"
 
                 current_section = sticker["section"]
-                html += f'<h2 class="section-title">{current_section}</h2><div class="wall">'
+                section_counter = sticker_counter_label(section_codes[current_section], by_code, filter_name)
+                section_percent = sticker_progress_percent(section_codes[current_section], by_code)
+                html += f'<h2 class="section-title album-section-progress-title"><i class="chapter-progress-fill" style="width:{section_percent}%;"></i><span>{current_section}</span><span>{section_counter}</span></h2><div class="wall">'
                 open_wall = True
 
             klasse, text = klasse_und_text(code, by_code)
@@ -1795,12 +1792,13 @@ def albumseite(album_id):
             chapter_title = chapter["title"]
             chapter_id = "chapter-" + chapter_title.lower().replace(" ", "-").replace("/", "-").replace("+", "plus")
             chapter_counter = sticker_counter_label(chapter["codes"], by_code, filter_name)
+            chapter_percent = sticker_progress_percent(chapter["codes"], by_code)
             chapter_complete = all(sticker_quantity_for_counter(by_code, code) > 0 for code in chapter["codes"])
             chapter_classes = "section-title album-chapter-title"
             if chapter_complete:
                 chapter_classes += " chapter-complete chapter-collapsed"
             chapter_expanded = "false" if chapter_complete else "true"
-            html += f'<h2 id="{chapter_id}" class="{chapter_classes}" role="button" tabindex="0" aria-expanded="{chapter_expanded}"><span>{chapter_title}</span><span>{chapter_counter}</span></h2>'
+            html += f'<h2 id="{chapter_id}" class="{chapter_classes}" role="button" tabindex="0" aria-expanded="{chapter_expanded}"><i class="chapter-progress-fill" style="width:{chapter_percent}%;"></i><span>{chapter_title}</span><span>{chapter_counter}</span></h2>'
             html += '<div class="wall">'
 
             for code in visible_codes:
@@ -1847,7 +1845,8 @@ def albumseite(album_id):
                 current_team = ""
                 chapter_id = "chapter-" + current_chapter.lower().replace(" ", "-").replace("/", "-")
                 chapter_counter = sticker_counter_label(chapter_codes[current_chapter], by_code, filter_name)
-                html += f'<h2 id="{chapter_id}" class="section-title album-chapter-title"><span>{current_chapter}</span><span>{chapter_counter}</span></h2>'
+                chapter_percent = sticker_progress_percent(chapter_codes[current_chapter], by_code)
+                html += f'<h2 id="{chapter_id}" class="section-title album-chapter-title"><i class="chapter-progress-fill" style="width:{chapter_percent}%;"></i><span>{current_chapter}</span><span>{chapter_counter}</span></h2>'
 
             if team_name and team_name != current_team:
                 if open_wall:

@@ -4824,3 +4824,622 @@ body .container{
         grid-template-columns:repeat(3, minmax(0, 1fr)) !important;
     }
 }
+
+/* Trophäenkarten im Stickerkartenmaß */
+.album-awards-compact-grid,
+.sammlr-cabinet-section .album-awards-grid{
+    display:grid !important;
+    grid-template-columns:repeat(auto-fill, minmax(88px, 1fr)) !important;
+    gap:14px !important;
+    align-items:stretch !important;
+}
+
+.album-awards-compact-grid .trophy,
+.sammlr-cabinet-section .album-awards-grid .trophy{
+    position:relative !important;
+    display:flex !important;
+    flex-direction:column !important;
+    justify-content:flex-start !important;
+    aspect-ratio:1 / 1.22 !important;
+    min-height:112px !important;
+    max-height:112px !important;
+    padding:9px 8px 8px !important;
+    border-radius:16px !important;
+    overflow:hidden !important;
+}
+
+.album-awards-compact-grid .trophy-pill,
+.sammlr-cabinet-section .album-awards-grid .trophy-pill{
+    align-self:flex-start !important;
+    margin:0 0 5px !important;
+    padding:3px 6px !important;
+    font-size:8px !important;
+    line-height:1 !important;
+}
+
+.album-awards-compact-grid .trophy h2,
+.sammlr-cabinet-section .album-awards-grid .trophy h2{
+    margin:0 0 4px !important;
+    font-size:11px !important;
+    line-height:1.05 !important;
+    font-weight:950 !important;
+}
+
+.album-awards-compact-grid .trophy p,
+.sammlr-cabinet-section .album-awards-grid .trophy p{
+    margin:0 0 5px !important;
+    font-size:8.5px !important;
+    line-height:1.15 !important;
+}
+
+.album-awards-compact-grid .trophy-progress,
+.sammlr-cabinet-section .album-awards-grid .trophy-progress{
+    height:8px !important;
+    margin-top:auto !important;
+}
+
+.album-awards-compact-grid .progress::after,
+.sammlr-cabinet-section .album-awards-grid .progress::after{
+    font-size:8px !important;
+}
+
+.album-awards-compact-grid .subline,
+.sammlr-cabinet-section .album-awards-grid .subline{
+    margin-top:4px !important;
+    font-size:8.5px !important;
+    line-height:1.05 !important;
+}
+
+.global-album-completion-grid{
+    grid-template-columns:repeat(auto-fill, minmax(88px, 1fr)) !important;
+    gap:14px !important;
+}
+
+.global-album-completion-card{
+    grid-column:span 2 !important;
+    aspect-ratio:auto !important;
+    min-height:112px !important;
+    max-height:112px !important;
+}
+
+@media (max-width:520px){
+    .album-awards-compact-grid .trophy,
+    .sammlr-cabinet-section .album-awards-grid .trophy,
+    .global-album-completion-card{
+        min-height:102px !important;
+        max-height:102px !important;
+        aspect-ratio:1 / 1.2 !important;
+    }
+
+    .global-album-completion-card{
+        aspect-ratio:auto !important;
+    }
+}
+
+/* Albumseite: Stickerwand als Design-Master */
+.album-page-progress{
+    margin:0 0 14px !important;
+}
+
+.album-page-progress .album-main-progress{
+    height:44px !important;
+    margin:0 !important;
+    border-radius:18px !important;
+    border:1px solid rgba(255,255,255,.14) !important;
+    background:linear-gradient(135deg,#2b0f46,#5d2f86) !important;
+    box-shadow:
+        0 12px 28px rgba(18,5,31,.14),
+        inset 0 1px 0 rgba(255,255,255,.12) !important;
+}
+
+.album-page-progress .album-main-progress .progress-bar{
+    border-radius:18px !important;
+    background:linear-gradient(135deg,#5d2f86,#7b3bdb) !important;
+    box-shadow:none !important;
+}
+
+.album-page-progress .album-main-progress::after{
+    justify-content:flex-start !important;
+    padding:0 14px !important;
+    color:#ffffff !important;
+    font-size:13px !important;
+    font-weight:950 !important;
+    text-shadow:0 1px 2px rgba(18,5,31,.34) !important;
+}
+
+.album-collection-head,
+.album-progress-stats{
+    display:none !important;
+}
+
+.album-quick-links{
+    gap:10px !important;
+    margin:0 0 14px !important;
+}
+
+.album-quick-card{
+    min-height:96px !important;
+    padding:14px !important;
+    border-radius:18px !important;
+    border:1px solid rgba(18,5,31,.08) !important;
+    background:rgba(255,255,255,.86) !important;
+    box-shadow:0 10px 24px rgba(18,5,31,.055) !important;
+}
+
+.album-quick-card:hover{
+    transform:translateY(-2px) !important;
+    border-color:rgba(93,47,134,.18) !important;
+    box-shadow:0 14px 28px rgba(18,5,31,.095) !important;
+}
+
+.album-quick-card strong{
+    font-size:15px !important;
+}
+
+.album-quick-card span{
+    font-size:11.5px !important;
+    line-height:1.25 !important;
+}
+
+.sticker-wall-card{
+    border-radius:18px !important;
+    padding:16px !important;
+    box-shadow:0 10px 24px rgba(18,5,31,.055) !important;
+}
+
+.sticker-wall-headline{
+    margin-bottom:12px !important;
+}
+
+.sticker-wall-headline h2{
+    font-size:20px !important;
+}
+
+.smart-add-toggle{
+    min-width:0 !important;
+    height:38px !important;
+    padding:0 13px !important;
+    border-radius:999px !important;
+    border:1px solid rgba(93,47,134,.10) !important;
+    background:#5d2f86 !important;
+    color:#ffffff !important;
+    box-shadow:0 8px 18px rgba(93,47,134,.18) !important;
+    font-size:12px !important;
+    transition:transform .16s ease, box-shadow .16s ease, background .16s ease !important;
+}
+
+.smart-add-toggle:hover{
+    transform:translateY(-1px) !important;
+    background:#2b0f46 !important;
+    box-shadow:0 12px 24px rgba(18,5,31,.13) !important;
+}
+
+.sticker-search{
+    min-height:44px !important;
+    padding:12px 14px !important;
+    border-radius:18px !important;
+    background:rgba(255,255,255,.82) !important;
+    box-shadow:0 8px 18px rgba(18,5,31,.045) !important;
+}
+
+.album-chapter-title{
+    min-height:46px !important;
+    margin:22px 0 10px !important;
+    padding:9px 13px !important;
+    border-radius:18px !important;
+    display:flex !important;
+    align-items:center !important;
+    justify-content:space-between !important;
+    gap:10px !important;
+    box-shadow:0 10px 24px rgba(18,5,31,.12) !important;
+}
+
+.album-chapter-title span:first-child{
+    min-width:0 !important;
+    overflow:hidden !important;
+    text-overflow:ellipsis !important;
+    white-space:nowrap !important;
+    font-size:13px !important;
+    line-height:1.15 !important;
+}
+
+.album-chapter-title span:last-child{
+    flex:0 0 auto !important;
+    padding:4px 8px !important;
+    border-radius:999px !important;
+    font-size:11px !important;
+    line-height:1 !important;
+}
+
+.card,
+.profile-card,
+.profile-link-card,
+.home-album-card,
+.album-card,
+.album-quick-card,
+.sticker-wall-card,
+.notice,
+.trophy{
+    box-shadow:0 10px 24px rgba(18,5,31,.055) !important;
+}
+
+@media (max-width:520px){
+    .album-page-progress .album-main-progress{
+        height:40px !important;
+        border-radius:16px !important;
+    }
+
+    .album-page-progress .album-main-progress::after{
+        padding:0 12px !important;
+        font-size:12px !important;
+    }
+
+    .album-quick-links{
+        grid-template-columns:1fr 1fr !important;
+        gap:8px !important;
+    }
+
+    .album-quick-card{
+        min-height:88px !important;
+        padding:12px !important;
+    }
+
+    .sticker-wall-card{
+        padding:14px !important;
+    }
+
+    .album-chapter-title{
+        min-height:42px !important;
+        padding:8px 10px !important;
+        gap:8px !important;
+    }
+}
+
+/* Albumseite Feinschliff */
+.album-page-progress{
+    margin:0 0 12px !important;
+}
+
+.album-page-progress .album-main-progress{
+    position:relative !important;
+    height:42px !important;
+    min-height:42px !important;
+    margin:0 !important;
+    border-radius:18px !important;
+    border:1px solid rgba(255,255,255,.12) !important;
+    background:linear-gradient(135deg,#2b0f46,#5d2f86) !important;
+    box-shadow:0 10px 24px rgba(18,5,31,.12) !important;
+    overflow:hidden !important;
+}
+
+.album-page-progress .album-main-progress .progress-bar{
+    height:100% !important;
+    border-radius:18px !important;
+    background:linear-gradient(135deg,#5d2f86,#7b3bdb) !important;
+    box-shadow:none !important;
+}
+
+.album-page-progress .album-main-progress::after{
+    content:none !important;
+}
+
+.album-main-progress-label,
+.album-main-progress-badge{
+    position:absolute;
+    top:50%;
+    z-index:4;
+    transform:translateY(-50%);
+    color:#ffffff;
+    font-weight:950;
+    line-height:1;
+    text-shadow:0 1px 2px rgba(18,5,31,.32);
+    pointer-events:none;
+}
+
+.album-main-progress-label{
+    left:14px;
+    min-width:0;
+    max-width:calc(100% - 86px);
+    overflow:hidden;
+    text-overflow:ellipsis;
+    white-space:nowrap;
+    font-size:13px;
+}
+
+.album-main-progress-badge{
+    right:9px;
+    min-width:42px;
+    padding:6px 8px;
+    border-radius:999px;
+    background:rgba(255,255,255,.14);
+    box-shadow:inset 0 0 0 1px rgba(255,255,255,.10);
+    font-size:11px;
+    text-align:center;
+}
+
+.sticker-wall-card{
+    padding:0 !important;
+    border:0 !important;
+    border-radius:0 !important;
+    background:transparent !important;
+    box-shadow:none !important;
+}
+
+.album-quick-links{
+    gap:8px !important;
+    margin:0 0 16px !important;
+}
+
+.album-quick-card{
+    min-height:78px !important;
+    gap:5px !important;
+    padding:12px !important;
+    border-radius:16px !important;
+    background:rgba(255,255,255,.78) !important;
+    border:1px solid rgba(18,5,31,.07) !important;
+    box-shadow:0 8px 18px rgba(18,5,31,.05) !important;
+}
+
+.album-quick-card:hover{
+    transform:translateY(-1px) !important;
+    box-shadow:0 10px 24px rgba(18,5,31,.075) !important;
+}
+
+.album-quick-card strong{
+    font-size:14px !important;
+    padding-right:26px !important;
+}
+
+.album-quick-card span{
+    font-size:10.5px !important;
+    line-height:1.2 !important;
+}
+
+.smart-add-toggle{
+    height:34px !important;
+    padding:0 12px !important;
+    border-radius:999px !important;
+    box-shadow:0 7px 16px rgba(93,47,134,.14) !important;
+    font-size:11.5px !important;
+}
+
+.smart-add-toggle:hover{
+    transform:translateY(-1px) !important;
+    box-shadow:0 9px 20px rgba(18,5,31,.11) !important;
+}
+
+@media (max-width:520px){
+    .album-page-progress .album-main-progress{
+        height:40px !important;
+        min-height:40px !important;
+        border-radius:16px !important;
+    }
+
+    .album-main-progress-label{
+        left:12px;
+        font-size:12px;
+        max-width:calc(100% - 76px);
+    }
+
+    .album-main-progress-badge{
+        right:7px;
+        min-width:38px;
+        padding:5px 7px;
+        font-size:10px;
+    }
+
+    .album-quick-card{
+        min-height:74px !important;
+        padding:10px !important;
+    }
+}
+
+/* Einheitliches Fortschrittsbalken-System: lila/grau = Fortschritt */
+.progress,
+.album-main-progress,
+.home-album-progress,
+.trophy-progress{
+    position:relative !important;
+    overflow:hidden !important;
+    height:18px !important;
+    min-height:18px !important;
+    max-height:18px !important;
+    border-radius:999px !important;
+    border:0 !important;
+    background:#ece5f3 !important;
+    box-shadow:inset 0 1px 2px rgba(18,5,31,.08) !important;
+}
+
+.progress-bar,
+.album-main-progress .progress-bar,
+.home-album-progress .progress-bar,
+.trophy-progress .progress-bar{
+    display:block !important;
+    height:100% !important;
+    min-width:0 !important;
+    border-radius:999px !important;
+    background:linear-gradient(90deg,#5d2f86,#7b3bdb) !important;
+    box-shadow:none !important;
+    color:transparent !important;
+    font-size:0 !important;
+    text-indent:-9999px !important;
+}
+
+.progress::after,
+.album-main-progress::after,
+.home-album-progress::after,
+.trophy-progress::after{
+    content:attr(data-progress) !important;
+    position:absolute !important;
+    inset:0 !important;
+    z-index:3 !important;
+    display:flex !important;
+    align-items:center !important;
+    justify-content:center !important;
+    padding:0 !important;
+    color:#4b4650 !important;
+    font-size:11px !important;
+    font-weight:950 !important;
+    line-height:1 !important;
+    text-align:center !important;
+    text-shadow:0 1px 0 rgba(255,255,255,.78) !important;
+    pointer-events:none !important;
+}
+
+.progress.progress-text-on-fill::after,
+.album-main-progress.progress-text-on-fill::after,
+.home-album-progress.progress-text-on-fill::after,
+.trophy-progress.progress-text-on-fill::after{
+    color:#ffffff !important;
+    text-shadow:0 1px 2px rgba(18,5,31,.42) !important;
+}
+
+.album-page-progress{
+    margin:0 0 12px !important;
+}
+
+.album-page-progress .album-main-progress{
+    background:#ece5f3 !important;
+}
+
+.album-main-progress-label,
+.album-main-progress-badge{
+    display:none !important;
+}
+
+.album-awards-compact-grid .trophy-progress,
+.sammlr-cabinet-section .album-awards-grid .trophy-progress,
+.album-awards-grid .trophy-progress{
+    height:18px !important;
+    min-height:18px !important;
+    max-height:18px !important;
+    margin-top:auto !important;
+}
+
+.album-awards-compact-grid .progress::after,
+.sammlr-cabinet-section .album-awards-grid .progress::after{
+    font-size:10px !important;
+}
+
+/* Stickerwand-Kapitel als Fortschrittsbalken */
+.album-chapter-title,
+.album-section-progress-title{
+    position:sticky !important;
+    top:8px !important;
+    z-index:80 !important;
+    min-height:42px !important;
+    margin:22px 0 10px !important;
+    padding:8px 12px !important;
+    border-radius:18px !important;
+    display:flex !important;
+    align-items:center !important;
+    justify-content:space-between !important;
+    gap:10px !important;
+    overflow:hidden !important;
+    background:linear-gradient(135deg,#2b0f46,#3b1760) !important;
+    color:#ffffff !important;
+    border:1px solid rgba(255,255,255,.11) !important;
+    box-shadow:0 10px 24px rgba(18,5,31,.13) !important;
+}
+
+.album-section-progress-title{
+    cursor:default !important;
+}
+
+.chapter-progress-fill{
+    position:absolute;
+    inset:0 auto 0 0;
+    z-index:0;
+    display:block;
+    width:0;
+    min-width:0;
+    max-width:100%;
+    border-radius:inherit;
+    background:linear-gradient(135deg,#5d2f86,#7b3bdb);
+    pointer-events:none;
+}
+
+.album-chapter-title > span,
+.album-section-progress-title > span{
+    position:relative;
+    z-index:2;
+    color:#ffffff !important;
+    text-shadow:0 1px 2px rgba(18,5,31,.40);
+}
+
+.album-chapter-title > span:nth-of-type(1),
+.album-section-progress-title > span:nth-of-type(1){
+    min-width:0 !important;
+    overflow:hidden !important;
+    text-overflow:ellipsis !important;
+    white-space:nowrap !important;
+    display:flex !important;
+    align-items:center !important;
+    gap:8px !important;
+    font-size:13px !important;
+    line-height:1.15 !important;
+    font-weight:950 !important;
+}
+
+.album-chapter-title > span:nth-of-type(1)::before{
+    content:"▼";
+    width:18px;
+    height:18px;
+    border-radius:999px;
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    flex:0 0 auto;
+    background:rgba(255,255,255,.14);
+    color:#ffffff;
+    font-size:10px;
+    line-height:1;
+}
+
+.album-chapter-title.chapter-collapsed > span:nth-of-type(1)::before{
+    content:"▶";
+}
+
+.album-chapter-title > span:nth-of-type(2),
+.album-section-progress-title > span:nth-of-type(2){
+    flex:0 0 auto !important;
+    padding:4px 8px !important;
+    border-radius:999px !important;
+    background:rgba(255,255,255,.14) !important;
+    box-shadow:inset 0 0 0 1px rgba(255,255,255,.10) !important;
+    font-size:11px !important;
+    line-height:1 !important;
+    font-weight:950 !important;
+    white-space:nowrap !important;
+}
+
+.album-chapter-title.chapter-complete,
+.album-chapter-title.chapter-complete .chapter-progress-fill{
+    background:linear-gradient(135deg,#5d2f86,#7b3bdb) !important;
+}
+
+.album-chapter-title.chapter-complete > span:nth-of-type(2)::after{
+    content:" ✓";
+}
+
+@media (max-width:520px){
+    .album-chapter-title,
+    .album-section-progress-title{
+        min-height:40px !important;
+        padding:7px 9px !important;
+        gap:8px !important;
+        border-radius:16px !important;
+    }
+
+    .album-chapter-title > span:nth-of-type(1),
+    .album-section-progress-title > span:nth-of-type(1){
+        font-size:12px !important;
+        gap:6px !important;
+    }
+
+    .album-chapter-title > span:nth-of-type(2),
+    .album-section-progress-title > span:nth-of-type(2){
+        padding:4px 7px !important;
+        font-size:10px !important;
+    }
+}
