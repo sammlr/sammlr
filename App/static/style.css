@@ -4702,3 +4702,125 @@ body .container{
         padding:12px !important;
     }
 }
+
+/* Sammlr-Schrank */
+.sammlr-cabinet-section{
+    margin:0 0 22px;
+}
+
+.sammlr-cabinet-section > h2{
+    margin:0 0 10px;
+    color:#2b0f46;
+    font-size:18px;
+    line-height:1.15;
+    font-weight:950;
+}
+
+.global-album-completion-grid{
+    grid-template-columns:repeat(auto-fill, minmax(104px, 1fr)) !important;
+}
+
+.global-album-completion-card{
+    grid-column:span 2;
+    min-height:128px !important;
+}
+
+.global-album-completion-card h2{
+    font-size:15px !important;
+}
+
+.global-album-completion-card p{
+    font-size:11px !important;
+}
+
+.sammlr-cabinet-section .trophy.trophy-locked{
+    filter:none !important;
+    opacity:1 !important;
+    background:#f4f2f6 !important;
+    color:#5d5665 !important;
+}
+
+.sammlr-cabinet-section .trophy.trophy-locked h2{
+    color:#5d5665 !important;
+}
+
+.sammlr-cabinet-section .trophy.trophy-locked p,
+.sammlr-cabinet-section .trophy.trophy-locked .subline{
+    color:#837c89 !important;
+}
+
+@media (max-width:420px){
+    .global-album-completion-card{
+        grid-column:1 / -1;
+    }
+}
+
+/* Albumauszeichnungen: kompakter albumbezogener Schrank */
+.album-awards-section{
+    margin:0 0 18px;
+}
+
+.album-awards-section > h2{
+    margin:0 0 10px;
+    color:#2b0f46;
+    font-size:17px;
+    line-height:1.15;
+    font-weight:950;
+}
+
+.album-awards-compact-grid{
+    display:grid !important;
+    grid-template-columns:repeat(2, minmax(0, 1fr)) !important;
+    gap:10px !important;
+    margin-bottom:0 !important;
+}
+
+.album-awards-compact-grid .trophy{
+    min-height:0 !important;
+    padding:11px !important;
+    border-radius:16px !important;
+}
+
+.album-awards-compact-grid .trophy-locked{
+    filter:none !important;
+    opacity:1 !important;
+    background:#f4f2f6 !important;
+}
+
+.album-awards-compact-grid .trophy-pill{
+    margin-bottom:6px !important;
+    padding:3px 7px !important;
+    font-size:9px !important;
+}
+
+.album-awards-compact-grid .trophy h2{
+    margin:0 0 5px !important;
+    font-size:13px !important;
+    line-height:1.1 !important;
+}
+
+.album-awards-compact-grid .trophy p{
+    margin:0 0 6px !important;
+    font-size:10px !important;
+    line-height:1.22 !important;
+}
+
+.album-awards-compact-grid .trophy-progress{
+    height:9px !important;
+    margin-top:6px !important;
+}
+
+.album-awards-compact-grid .progress::after{
+    font-size:9px !important;
+}
+
+.album-awards-compact-grid .subline{
+    margin-top:5px !important;
+    font-size:10px !important;
+}
+
+@media (min-width:680px){
+    .album-awards-compact-grid{
+        grid-template-columns:repeat(3, minmax(0, 1fr)) !important;
+    }
+}

@@ -445,28 +445,40 @@ def render_trophy_steps(trophies, current_value, color_class, unit_text):
     return html
 
 
-def render_global_trophy_grid(trophies, current_value, unit_text):
-    html = '<div class="trophy-grid album-awards-grid">'
+def render_global_trophy_grid(section_title, trophies, current_value, unit_text):
+    next_trophy = next((trophy for trophy in trophies if current_value < trophy[0]), None)
+    visible_trophies = []
 
-    for ziel, titel in trophies:
+    for trophy in trophies:
+        ziel, _ = trophy
         percent = min(100, int((current_value / ziel) * 100)) if ziel else 0
         unlocked = current_value >= ziel
-        title_visible = percent > 0 or unlocked
-        description_visible = percent >= 50 or unlocked
 
-        title_html = titel if title_visible else '<span class="trophy-blurred-title">????????</span>'
+        if unlocked or trophy == next_trophy or percent >= 95:
+            visible_trophies.append((trophy, percent, unlocked, trophy == next_trophy))
+
+    if not visible_trophies:
+        return ""
+
+    html = f"""
+    <section class="sammlr-cabinet-section">
+        <h2>{section_title}</h2>
+        <div class="trophy-grid album-awards-grid">
+    """
+
+    for trophy, percent, unlocked, is_next in visible_trophies:
+        ziel, titel = trophy
         description = f"{ziel} {unit_text}"
-        description_html = description if description_visible else '<span class="trophy-blurred-title">Beschreibung verborgen</span>'
         card_class = "trophy-unlocked trophy-gold" if unlocked else "trophy-locked trophy-gold-muted"
         pill_class = "gold" if unlocked else "gray"
-        pill_text = "Abgestaubt" if unlocked else "Offen"
+        pill_text = "Abgestaubt" if unlocked else ("Nächstes Ziel" if is_next else "Fast geschafft")
         status_text = "Abgestaubt" if unlocked else f"{current_value} / {ziel}"
 
         html += f"""
         <div class="trophy {card_class}">
             <span class="trophy-pill {pill_class}">{pill_text}</span>
-            <h2>{title_html}</h2>
-            <p>{description_html}</p>
+            <h2>{titel}</h2>
+            <p>{description}</p>
             <div class="progress trophy-progress" data-progress="{percent}%">
                 <div class="progress-bar" style="width:{percent}%;"></div>
             </div>
@@ -474,7 +486,7 @@ def render_global_trophy_grid(trophies, current_value, unit_text):
         </div>
         """
 
-    html += "</div>"
+    html += "</div></section>"
     return html
 
 
@@ -518,7 +530,11 @@ def render_global_album_completion_trophies():
     ).fetchall()
     con.close()
 
-    html = '<div class="trophy-grid">'
+    html = """
+    <section class="sammlr-cabinet-section sammlr-cabinet-albums">
+        <h2>Album-Vollendet-Auszeichnungen</h2>
+        <div class="trophy-grid album-awards-grid global-album-completion-grid">
+    """
     has_items = False
 
     for album in albums:
@@ -535,7 +551,7 @@ def render_global_album_completion_trophies():
         status_text = "Abgestaubt" if unlocked else f"Fortschritt: {gesammelt} / {total}"
 
         html += f"""
-        <a class="trophy trophy-link {card_class}" href="/album/{album['id']}/trophaeen">
+        <a class="trophy trophy-link global-album-completion-card {card_class}" href="/album/{album['id']}/trophaeen">
             <span class="trophy-pill {pill_class}">{pill_text}</span>
             <h2>{album_completion_title(album)}</h2>
             <p>Vollende {album['name']}.</p>
@@ -546,7 +562,7 @@ def render_global_album_completion_trophies():
         </a>
         """
 
-    html += "</div>"
+    html += "</div></section>"
     return html if has_items else ""
 
 
@@ -604,7 +620,7 @@ def owned_count_for_codes(by_code, codes):
     ])
 
 
-def award_item(title, description, current, target):
+def award_item(title, description, current, target, category="Albumziel"):
     percent = min(100, int((current / target) * 100)) if target else 0
     return {
         "title": title,
@@ -613,18 +629,19 @@ def award_item(title, description, current, target):
         "target": target,
         "percent": percent,
         "unlocked": current >= target,
+        "category": category,
     }
 
 
-def award_item_for_codes(title, description, codes, by_code):
-    return award_item(title, description, owned_count_for_codes(by_code, codes), len(codes))
+def award_item_for_codes(title, description, codes, by_code, category="Kapitel"):
+    return award_item(title, description, owned_count_for_codes(by_code, codes), len(codes), category)
 
 
 def render_album_awards(items):
     next_item = next((item for item in items if not item["unlocked"]), None)
     visible_items = [
         item for item in items
-        if item["unlocked"] or item is next_item or item["percent"] >= 70
+        if item["unlocked"] or item is next_item or item["percent"] >= 95
     ]
 
     if not visible_items:
@@ -635,34 +652,51 @@ def render_album_awards(items):
         </div>
         """
 
-    html = '<div class="trophy-grid">'
+    html = ""
+    category_labels = {
+        "Albumziel": "Albumziel / Abschluss",
+        "Kapitel": "Kapitel",
+        "Spezial": "Spezial",
+    }
 
-    for item in visible_items:
-        unlocked = item["unlocked"]
-        is_next = item is next_item
-        percent = item["percent"]
-        card_class = "trophy-unlocked trophy-gold" if unlocked else "trophy-locked trophy-gold-muted"
-        pill_class = "gold" if unlocked else "gray"
-        pill_text = "Abgestaubt" if unlocked else ("Nächstes Ziel" if is_next else "Fast geschafft")
-        status_text = "Abgestaubt" if unlocked else f"{item['current']} / {item['target']}"
+    for category in ("Albumziel", "Kapitel", "Spezial"):
+        category_items = [item for item in visible_items if item.get("category", "Albumziel") == category]
+        if not category_items:
+            continue
 
         html += f"""
-        <div class="trophy {card_class}">
-            <span class="trophy-pill {pill_class}">{pill_text}</span>
-            <h2>{item['title']}</h2>
-            <p>{item['description']}</p>
-            <div class="progress trophy-progress" data-progress="{percent}%">
-                <div class="progress-bar" style="width:{percent}%;"></div>
-            </div>
-            <p class="subline">{status_text}</p>
-        </div>
+        <section class="album-awards-section">
+            <h2>{category_labels[category]}</h2>
+            <div class="trophy-grid album-awards-compact-grid">
         """
 
-    html += "</div>"
+        for item in category_items:
+            unlocked = item["unlocked"]
+            is_next = item is next_item
+            percent = item["percent"]
+            card_class = "trophy-unlocked trophy-gold" if unlocked else "trophy-locked trophy-gold-muted"
+            pill_class = "gold" if unlocked else "gray"
+            pill_text = "Abgestaubt" if unlocked else ("Nächstes Ziel" if is_next else "Fast geschafft")
+            status_text = "Abgestaubt" if unlocked else f"{item['current']} / {item['target']}"
+
+            html += f"""
+            <div class="trophy {card_class}">
+                <span class="trophy-pill {pill_class}">{pill_text}</span>
+                <h2>{item['title']}</h2>
+                <p>{item['description']}</p>
+                <div class="progress trophy-progress" data-progress="{percent}%">
+                    <div class="progress-bar" style="width:{percent}%;"></div>
+                </div>
+                <p class="subline">{status_text}</p>
+            </div>
+            """
+
+        html += "</div></section>"
+
     return html
 
 
-def wm26_trophy_progress(title, description, codes, by_code):
+def wm26_trophy_progress(title, description, codes, by_code, category="Kapitel"):
     current = owned_count_for_codes(by_code, codes)
     target = len(codes)
     percent = min(100, int((current / target) * 100)) if target else 0
@@ -676,10 +710,11 @@ def wm26_trophy_progress(title, description, codes, by_code):
         "unlocked": current >= target,
         "started": current > 0,
         "description_visible": percent >= 25,
+        "category": category,
     }
 
 
-def wm26_album_trophy_progress(title, description, current, target):
+def wm26_album_trophy_progress(title, description, current, target, category="Albumziel"):
     percent = min(100, int((current / target) * 100)) if target else 0
 
     return {
@@ -691,6 +726,7 @@ def wm26_album_trophy_progress(title, description, current, target):
         "unlocked": current >= target,
         "started": current > 0,
         "description_visible": percent >= 25,
+        "category": category,
     }
 
 
@@ -704,9 +740,10 @@ def wm26_trophy_items(by_code, gesammelt, total):
 
     items = [
         wm26_album_trophy_progress("Erster Sticker", "Sammle deinen ersten Sticker in diesem Album.", gesammelt, 1),
+        wm26_album_trophy_progress("Halbzeit", "Erreiche die Hälfte dieses Albums.", gesammelt, total // 2),
+        wm26_album_trophy_progress("Endspurt", "Dir fehlen nur noch 10 Sticker bis zur Vollendung.", gesammelt, max(total - 10, 1)),
+        wm26_album_trophy_progress("WM 2026 vollendet", "Sammle alle Sticker dieses Albums.", gesammelt, total),
         wm26_trophy_progress("Intro", "Sammle alle World-Cup-Intro-Sticker FWC1 bis FWC8.", intro_codes, by_code),
-        wm26_trophy_progress("Wappenkunde", "Sammle alle Nummer-1-Sticker der Teams.", wappen_codes, by_code),
-        wm26_trophy_progress("Teamfotograf", "Sammle alle Teamfotos, also alle Nummer-13-Sticker.", teamfoto_codes, by_code),
     ]
 
     for group_index, group_name in enumerate(WM26_GROUP_NAMES):
@@ -725,12 +762,11 @@ def wm26_trophy_items(by_code, gesammelt, total):
         )
 
     items.extend([
-        wm26_trophy_progress("Historiker", "Sammle alle World-Cup-History-Sticker FWC9 bis FWC19.", history_codes, by_code),
-        wm26_trophy_progress("Etikettenknibbler", "Sammle alle Coca-Cola-Sticker CC1 bis CC12.", cc_codes, by_code),
-        wm26_trophy_progress("Last Dance", "Sammle Messi und Ronaldo.", last_dance_codes, by_code),
-        wm26_album_trophy_progress("Halbzeit", "Erreiche die Hälfte dieses Albums.", gesammelt, total // 2),
-        wm26_album_trophy_progress("Endspurt", "Dir fehlen nur noch 10 Sticker bis zur Vollendung.", gesammelt, max(total - 10, 1)),
-        wm26_album_trophy_progress("WM 2026 vollendet", "Sammle alle Sticker dieses Albums.", gesammelt, total),
+        wm26_trophy_progress("Wappenkunde", "Sammle alle Nummer-1-Sticker der Teams.", wappen_codes, by_code, "Spezial"),
+        wm26_trophy_progress("Teamfotograf", "Sammle alle Teamfotos, also alle Nummer-13-Sticker.", teamfoto_codes, by_code, "Spezial"),
+        wm26_trophy_progress("Historiker", "Sammle alle World-Cup-History-Sticker FWC9 bis FWC19.", history_codes, by_code, "Spezial"),
+        wm26_trophy_progress("Etikettenknibbler", "Sammle alle Coca-Cola-Sticker CC1 bis CC12.", cc_codes, by_code, "Spezial"),
+        wm26_trophy_progress("Last Dance", "Sammle Messi und Ronaldo.", last_dance_codes, by_code, "Spezial"),
     ])
 
     return items
@@ -1510,7 +1546,12 @@ def vfl_wall_chapters():
 
 
 def vfl_album_award_items(by_code, gesammelt, total):
-    items = []
+    items = [
+        award_item("Erster Sticker", "Sammle deinen ersten Sticker in diesem Album.", gesammelt, 1, "Albumziel"),
+        award_item("Halbzeit", "Erreiche die Hälfte dieses Albums.", gesammelt, 125, "Albumziel"),
+        award_item("Endspurt", "Sammle 240 Sticker in diesem Album.", gesammelt, 240, "Albumziel"),
+        award_item("VfL Album vollendet", "Sammle alle Sticker dieses Albums.", gesammelt, total, "Albumziel"),
+    ]
 
     for chapter in vfl_wall_chapters():
         title = chapter["title"]
@@ -1525,7 +1566,9 @@ def vfl_album_award_items(by_code, gesammelt, total):
         )
 
     items.extend([
-        award_item_for_codes("DJ Matze", "Sammle Sticker 124.", ["124"], by_code),
+        award_item_for_codes("DJ Matze", "Sammle Sticker 124.", ["124"], by_code, "Spezial"),
+        award_item_for_codes("Legendenelf", "Sammle alle Sticker 184 bis 195.", vfl_chapter_codes(184, 195), by_code, "Spezial"),
+        award_item_for_codes("90+6", "Sammle alle Sticker 199 bis 213.", vfl_chapter_codes(199, 213), by_code, "Spezial"),
     ])
 
     return items
@@ -4521,7 +4564,7 @@ def album_trophaeen(album_id):
 
     html = f"""
     <html><head>{style()}</head><body><div class="container">
-    {app_header("Albumauszeichnungen", "Ziele und Kapitel dieses Albums.")}
+    {app_header("Albumauszeichnungen", "Trophäen und Kapitel dieses Albums.")}
     <div class="trophy-nav-links">
         <a class="sammlr-back-link" href="/album/{album_id}">Zurück zum Album</a>
         <a class="sammlr-back-link" href="/trophaeen">Zum Sammlr-Schrank</a>
@@ -4560,13 +4603,13 @@ def globale_trophaeen():
 
     html = f"""
     <html><head>{style()}</head><body><div class="container">
-    {app_header("Trophäenschrank", "Deine abgestaubten Sammlr-Ziele.")}
+    {app_header("Sammlr-Schrank", "Deine abgestaubten Sammlr-Ziele.")}
     """
 
-    html += render_global_trophy_grid(global_sticker_trophaeen(), sticker_gesamt, "gesammelte Sticker")
-    html += render_global_trophy_grid(global_duplicate_trophaeen(), doppelte_gesamt, "doppelte Sticker")
-    html += render_global_trophy_grid(global_trade_trophaeen(), completed_trades, "abgeschlossene Tausche")
     html += render_global_album_completion_trophies()
+    html += render_global_trophy_grid("Gesamtsticker-Trophäen", global_sticker_trophaeen(), sticker_gesamt, "gesammelte Sticker")
+    html += render_global_trophy_grid("Doppelte-Trophäen", global_duplicate_trophaeen(), doppelte_gesamt, "doppelte Sticker")
+    html += render_global_trophy_grid("Trade-Trophäen", global_trade_trophaeen(), completed_trades, "abgeschlossene Tausche")
 
     html += bottom_nav("trophaeen")
     html += "</div></body></html>"
