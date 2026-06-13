@@ -4639,8 +4639,11 @@ body .container{
     letter-spacing:-.04em;
 }
 
-.bottom-nav:not(.album-bottom-nav) .bottom-nav-link[href="/trophaeen"]::before{
-    content:"◇";
+.bottom-nav:not(.album-bottom-nav) .bottom-nav-link[href="/trades"]::before{
+    content:"";
+    background:currentColor;
+    -webkit-mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m11 17 2 2a1 1 0 1 0 3-3'/%3E%3Cpath d='m14 14 2.5 2.5a1 1 0 1 0 3-3l-3.88-3.88a3 3 0 0 0-4.24 0l-.88.88a1 1 0 1 1-3-3l2.81-2.81a5.79 5.79 0 0 1 7.06-.87l.47.28a2 2 0 0 0 1.42.25L21 4'/%3E%3Cpath d='m21 3 1 11h-2'/%3E%3Cpath d='M3 3 2 14l6.5 6.5a1 1 0 1 0 3-3'/%3E%3Cpath d='M3 4h8'/%3E%3C/svg%3E") center/19px 19px no-repeat;
+    mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m11 17 2 2a1 1 0 1 0 3-3'/%3E%3Cpath d='m14 14 2.5 2.5a1 1 0 1 0 3-3l-3.88-3.88a3 3 0 0 0-4.24 0l-.88.88a1 1 0 1 1-3-3l2.81-2.81a5.79 5.79 0 0 1 7.06-.87l.47.28a2 2 0 0 0 1.42.25L21 4'/%3E%3Cpath d='m21 3 1 11h-2'/%3E%3Cpath d='M3 3 2 14l6.5 6.5a1 1 0 1 0 3-3'/%3E%3Cpath d='M3 4h8'/%3E%3C/svg%3E") center/19px 19px no-repeat;
 }
 
 .bottom-nav:not(.album-bottom-nav) .bottom-nav-link[href="/statistik"]::before{
@@ -6697,4 +6700,206 @@ body .container{
 .app-header + .page-title,
 .app-header + .profile-hero-bar{
     display:none !important;
+}
+
+/* Globale Tauschbörse als Sammlr-Balken-Übersicht */
+.global-trade-album-list,
+.global-trade-segments{
+    display:flex;
+    flex-direction:column;
+    gap:14px;
+    margin:0 0 18px;
+}
+
+.global-trade-title{
+    margin:0 0 14px;
+    color:#2b0f46;
+    font-size:26px;
+    line-height:1.05;
+    font-weight:950;
+}
+
+.global-trade-subtitle{
+    margin:14px 0 0;
+    color:#2b0f46;
+    font-size:14px;
+    line-height:1.15;
+    font-weight:950;
+}
+
+.global-trade-album-section,
+.global-trade-segment{
+    display:flex;
+    flex-direction:column;
+    gap:9px;
+}
+
+.global-trade-album-bar{
+    position:relative;
+    min-height:46px;
+    padding:9px 12px;
+    border-radius:18px;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:10px;
+    overflow:hidden;
+    text-decoration:none;
+    background:linear-gradient(135deg,#2b0f46,#5d2f86);
+    color:#ffffff;
+    box-shadow:0 10px 24px rgba(18,5,31,.10);
+    transition:transform .16s ease, box-shadow .16s ease;
+}
+
+.global-trade-album-bar:hover{
+    transform:translateY(-1px);
+    box-shadow:0 14px 30px rgba(18,5,31,.14);
+}
+
+.global-trade-album-bar span{
+    min-width:0;
+    overflow:hidden;
+    text-overflow:ellipsis;
+    white-space:nowrap;
+    color:#ffffff;
+    font-size:13px;
+    line-height:1.15;
+    font-weight:950;
+    text-shadow:0 1px 2px rgba(18,5,31,.40);
+}
+
+.global-trade-album-bar strong{
+    flex:0 0 auto;
+    padding:4px 8px;
+    border-radius:999px;
+    background:rgba(255,255,255,.14);
+    box-shadow:inset 0 0 0 1px rgba(255,255,255,.10);
+    color:#ffffff;
+    font-size:11px;
+    line-height:1;
+    font-weight:950;
+    text-shadow:0 1px 2px rgba(18,5,31,.32);
+}
+
+.global-trade-collector-list{
+    display:flex;
+    flex-direction:column;
+    gap:8px;
+}
+
+.global-trade-collector-card,
+.global-trade-request-card,
+.global-trade-empty{
+    padding:12px;
+    border-radius:16px;
+    border:1px solid rgba(18,5,31,.07);
+    background:#ffffff;
+    box-shadow:0 10px 24px rgba(18,5,31,.055);
+}
+
+.global-trade-collector-card{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:12px;
+}
+
+.global-trade-collector-card strong,
+.global-trade-request-head strong{
+    display:block;
+    color:#2b0f46;
+    font-size:14px;
+    line-height:1.15;
+    font-weight:950;
+}
+
+.global-trade-collector-card span,
+.global-trade-request-card p,
+.global-trade-empty{
+    display:block;
+    margin:4px 0 0;
+    color:#6d6475;
+    font-size:12px;
+    line-height:1.3;
+    font-weight:800;
+}
+
+.global-trade-empty{
+    padding:10px 12px;
+    box-shadow:0 8px 18px rgba(18,5,31,.04);
+}
+
+.global-trade-collector-card a,
+.global-trade-more{
+    flex:0 0 auto;
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    min-height:34px;
+    padding:8px 12px;
+    border-radius:999px;
+    background:#5d2f86;
+    color:#ffffff;
+    text-decoration:none;
+    box-shadow:0 8px 18px rgba(93,47,134,.16);
+    font-size:12px;
+    line-height:1;
+    font-weight:950;
+}
+
+.global-trade-more{
+    align-self:flex-start;
+    background:#ffffff;
+    color:#5d2f86;
+    border:1px solid rgba(93,47,134,.16);
+    box-shadow:0 8px 18px rgba(18,5,31,.055);
+}
+
+.global-trade-segments{
+    margin-top:22px;
+    padding-bottom:112px;
+}
+
+.global-trade-segment h2{
+    margin:0;
+    color:#2b0f46;
+    font-size:17px;
+    line-height:1.15;
+    font-weight:950;
+}
+
+.global-trade-request-head{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:10px;
+    margin:0 0 7px;
+}
+
+.global-trade-request-head span{
+    flex:0 0 auto;
+    padding:4px 8px;
+    border-radius:999px;
+    background:#f5f0fa;
+    color:#5d2f86;
+    font-size:10px;
+    line-height:1;
+    font-weight:950;
+}
+
+@media (max-width:520px){
+    .global-trade-album-bar{
+        min-height:42px;
+        padding:8px 10px;
+        border-radius:16px;
+    }
+
+    .global-trade-collector-card{
+        align-items:stretch;
+        flex-direction:column;
+    }
+
+    .global-trade-collector-card a{
+        width:100%;
+    }
 }
