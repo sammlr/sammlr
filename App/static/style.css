@@ -4576,9 +4576,9 @@ body .container{
     z-index:9999 !important;
     display:grid !important;
     grid-template-columns:repeat(5, minmax(0,1fr)) !important;
-    gap:6px !important;
-    padding:8px !important;
-    border-radius:30px !important;
+    gap:7px !important;
+    padding:9px !important;
+    border-radius:31px !important;
     border:1px solid rgba(255,255,255,.72) !important;
     background:rgba(255,255,255,.76) !important;
     box-shadow:
@@ -4591,21 +4591,21 @@ body .container{
 
 .bottom-nav:not(.album-bottom-nav) .bottom-nav-link{
     position:relative;
-    min-height:56px !important;
+    min-height:60px !important;
     display:flex !important;
     flex-direction:column;
     align-items:center;
     justify-content:center;
-    gap:4px;
-    padding:7px 4px !important;
-    border-radius:22px !important;
+    gap:5px;
+    padding:8px 4px !important;
+    border-radius:23px !important;
     background:transparent !important;
     color:#766f7d !important;
     box-shadow:none !important;
     transform:none !important;
     text-decoration:none;
     text-align:center;
-    font-size:10.5px !important;
+    font-size:11px !important;
     font-weight:850 !important;
     line-height:1.05;
     letter-spacing:0;
@@ -4613,8 +4613,8 @@ body .container{
 }
 
 .bottom-nav:not(.album-bottom-nav) .bottom-nav-icon{
-    width:23px;
-    height:23px;
+    width:25px;
+    height:25px;
     color:#5d2f86;
     fill:none;
     stroke:currentColor;
@@ -4627,15 +4627,15 @@ body .container{
 }
 
 .bottom-nav:not(.album-bottom-nav) .bottom-nav-icon-sammlr{
-    width:26px;
-    height:26px;
-    margin-bottom:-1px;
+    width:29px;
+    height:29px;
+    margin-bottom:-2px;
 }
 
 .bottom-nav:not(.album-bottom-nav) .bottom-nav-icon-handshake,
 .bottom-nav:not(.album-bottom-nav) .bottom-nav-icon-chart{
-    width:24px;
-    height:24px;
+    width:27px;
+    height:27px;
 }
 
 .bottom-nav:not(.album-bottom-nav) .bottom-nav-icon-dot{
@@ -4684,6 +4684,11 @@ body .container{
     display:block;
 }
 
+.bottom-nav:not(.album-bottom-nav) .bottom-nav-brand-dot{
+    display:inline !important;
+    color:#5d2f86;
+}
+
 .bottom-nav:not(.album-bottom-nav) .bottom-nav-link[href="/"],
 .bottom-nav:not(.album-bottom-nav) .bottom-nav-link[href="/"].active{
     transform:none !important;
@@ -4703,6 +4708,10 @@ body .container{
 
 .bottom-nav:not(.album-bottom-nav) .bottom-nav-link.active .sammlr-card-dot{
     fill:#caa7ff;
+}
+
+.bottom-nav:not(.album-bottom-nav) .bottom-nav-link.active .bottom-nav-brand-dot{
+    color:#caa7ff;
 }
 
 .bottom-nav:not(.album-bottom-nav) .bottom-nav-link.active .bottom-nav-icon-chart .chart-bar-main{
@@ -4740,9 +4749,9 @@ body .container{
     }
 
     .bottom-nav:not(.album-bottom-nav) .bottom-nav-link{
-        min-height:52px !important;
-        border-radius:19px !important;
-        font-size:9.5px !important;
+        min-height:55px !important;
+        border-radius:20px !important;
+        font-size:10px !important;
     }
 }
 

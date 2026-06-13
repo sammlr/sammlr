@@ -1384,8 +1384,8 @@ def bottom_nav(active="sammlr"):
         """,
         "tauschen": """
             <svg class="bottom-nav-icon bottom-nav-icon-handshake" viewBox="0 0 24 24" aria-hidden="true">
-                <path class="trade-arrow-filled" d="M6.2 6.2h8.6V3.8l6.4 4.6-6.4 4.6v-2.4H6.2Z"></path>
-                <path d="M17.8 17.8H9.2v2.4l-6.4-4.6 6.4-4.6v2.4h8.6Z"></path>
+                <path class="trade-arrow-filled" d="M7 5.1h7.8V2.8l6.3 4.5-6.3 4.5V9.5H7Z"></path>
+                <path d="M17 18.9H9.2v2.3l-6.3-4.5 6.3-4.5v2.3H17Z"></path>
             </svg>
         """,
         "statistik": """
@@ -1407,7 +1407,8 @@ def bottom_nav(active="sammlr"):
     links = ""
     for key, href, label in items:
         active_class = " active" if key == active else ""
-        links += f'<a class="bottom-nav-link{active_class}" href="{href}">{icons[key]}<span>{label}</span></a>'
+        label_html = '<span>sammlr<span class="bottom-nav-brand-dot">.</span></span>' if key == "sammlr" else f'<span>{label}</span>'
+        links += f'<a class="bottom-nav-link{active_class}" href="{href}">{icons[key]}{label_html}</a>'
 
     return f'<nav class="bottom-nav">{links}</nav>'
 
