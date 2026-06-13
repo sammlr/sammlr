@@ -410,15 +410,15 @@
 .statistics-card{
     background:white;
     border:1px solid rgba(18,5,31,.08);
-    border-radius:26px;
-    padding:20px;
-    box-shadow:0 12px 32px rgba(18,5,31,.07);
+    border-radius:24px;
+    padding:22px;
+    box-shadow:0 14px 32px rgba(18,5,31,.055);
     margin-bottom:96px;
 }
 
 .statistics-block{
-    padding:18px 0;
-    border-top:1px solid rgba(18,5,31,.08);
+    padding:20px 0;
+    border-top:1px solid rgba(18,5,31,.065);
 }
 
 .statistics-block:first-child{
@@ -431,17 +431,40 @@
 }
 
 .statistics-block h2{
-    margin:0 0 10px;
+    margin:0 0 11px;
     color:#2b0f46;
-    font-size:18px;
+    font-size:17px;
+    line-height:1.1;
+    font-weight:950;
 }
 
 .statistics-block p{
-    margin:5px 0 0;
-    color:#5b5363;
-    font-size:15px;
+    margin:6px 0 0;
+    color:#655d6c;
+    font-size:14px;
     font-weight:850;
     line-height:1.35;
+}
+
+.statistics-trophy-card{
+    margin:0 0 16px;
+    min-height:126px;
+}
+
+.statistics-trophy-card .statistics-trophy-icon{
+    position:absolute;
+    top:16px;
+    right:16px;
+    width:28px;
+    height:28px;
+    border-radius:999px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    background:linear-gradient(135deg,#f6d98c,#c7952e);
+    box-shadow:0 8px 18px rgba(126,83,16,.16);
+    font-size:15px;
+    line-height:1;
 }
 
 .album-percent{
@@ -2493,9 +2516,9 @@
 }
 
 .app-header-brand img{
-    width:min(325px, 64vw);
+    width:min(270px, 54vw);
     height:auto;
-    max-height:88px;
+    max-height:74px;
     display:block;
     object-fit:contain;
 }
@@ -6322,10 +6345,10 @@ body .container{
 .album-awards-compact-grid,
 .sammlr-cabinet-section .album-awards-grid{
     display:grid !important;
-    grid-template-columns:repeat(auto-fill, minmax(148px, 1fr)) !important;
+    grid-template-columns:repeat(auto-fit, minmax(220px, 1fr)) !important;
     gap:12px !important;
     align-items:stretch !important;
-    margin-bottom:22px !important;
+    margin-bottom:24px !important;
 }
 
 .trophy,
@@ -6336,7 +6359,7 @@ body .container{
     position:relative !important;
     display:flex !important;
     flex-direction:column !important;
-    min-height:158px !important;
+    min-height:142px !important;
     max-height:none !important;
     aspect-ratio:auto !important;
     padding:14px !important;
@@ -6356,26 +6379,50 @@ body .container{
 .trophy.gold,
 .trophy-unlocked.gold,
 .global-album-complete{
-    background:linear-gradient(135deg,#ffffff,#fbf8ff) !important;
-    border-color:rgba(93,47,134,.16) !important;
-    border-left:4px solid #5d2f86 !important;
+    background:linear-gradient(145deg,#ffffff,#fffaf0) !important;
+    border-color:rgba(199,149,46,.34) !important;
+    border-left:4px solid #c7952e !important;
+    box-shadow:0 12px 26px rgba(18,5,31,.07) !important;
 }
 
 .trophy-locked,
 .trophy.trophy-gold-muted,
 .trophy-gold-muted{
-    background:#f6f4f8 !important;
+    background:#ffffff !important;
     border-color:rgba(18,5,31,.07) !important;
-    border-left:4px solid rgba(93,47,134,.22) !important;
+    border-left:4px solid rgba(93,47,134,.18) !important;
     color:#5d5665 !important;
+    opacity:.92 !important;
 }
 
 .trophy:hover,
 .trophy-unlocked:hover,
 .global-album-card:hover .trophy{
     transform:translateY(-2px) !important;
-    border-color:rgba(93,47,134,.18) !important;
+    border-color:rgba(93,47,134,.16) !important;
     box-shadow:0 14px 28px rgba(18,5,31,.09) !important;
+}
+
+.trophy::before,
+.global-album-card .trophy::before,
+.album-awards-compact-grid .trophy::before,
+.sammlr-cabinet-section .album-awards-grid .trophy::before{
+    content:"" !important;
+    position:absolute !important;
+    top:12px !important;
+    right:12px !important;
+    width:18px !important;
+    height:18px !important;
+    border-radius:999px !important;
+    background:linear-gradient(135deg,#f6d98c,#b88424) !important;
+    box-shadow:0 5px 12px rgba(126,83,16,.18), inset 0 0 0 1px rgba(255,255,255,.42) !important;
+    pointer-events:none !important;
+}
+
+.trophy-locked::before,
+.trophy-gold-muted::before{
+    opacity:.34 !important;
+    filter:saturate(.65) !important;
 }
 
 .trophy h2,
@@ -6434,9 +6481,16 @@ body .container{
 .trophy-unlocked .trophy-pill,
 .trophy-gold .trophy-pill,
 .global-album-complete .trophy-pill{
-    background:#5d2f86 !important;
-    color:#ffffff !important;
-    box-shadow:none !important;
+    background:linear-gradient(135deg,#c7952e,#f0c96f) !important;
+    color:#2f2209 !important;
+    box-shadow:0 6px 14px rgba(126,83,16,.16) !important;
+}
+
+.trophy-gold-muted .trophy-pill,
+.trophy-locked .trophy-pill{
+    background:#f5f0fa !important;
+    color:#5d2f86 !important;
+    box-shadow:inset 0 0 0 1px rgba(93,47,134,.08) !important;
 }
 
 .sammlr-progress,
@@ -6446,14 +6500,14 @@ body .container{
 .sammlr-cabinet-section .album-awards-grid .trophy-progress{
     position:relative !important;
     overflow:hidden !important;
-    height:18px !important;
-    min-height:18px !important;
-    max-height:18px !important;
+    height:19px !important;
+    min-height:19px !important;
+    max-height:19px !important;
     margin-top:auto !important;
     border-radius:999px !important;
     border:0 !important;
-    background:#ece5f3 !important;
-    box-shadow:inset 0 1px 2px rgba(18,5,31,.08) !important;
+    background:#d9c9e8 !important;
+    box-shadow:inset 0 1px 2px rgba(18,5,31,.10) !important;
 }
 
 .sammlr-progress-fill,
@@ -6485,11 +6539,11 @@ body .container{
     display:flex !important;
     align-items:center !important;
     justify-content:center !important;
-    color:#4b4650 !important;
+    color:#ffffff !important;
     font-size:10px !important;
     font-weight:950 !important;
     line-height:1 !important;
-    text-shadow:0 1px 0 rgba(255,255,255,.78) !important;
+    text-shadow:0 1px 2px rgba(18,5,31,.50) !important;
     pointer-events:none !important;
 }
 
@@ -6499,13 +6553,21 @@ body .container{
 }
 
 .global-album-completion-grid{
-    grid-template-columns:repeat(auto-fill, minmax(148px, 1fr)) !important;
+    grid-template-columns:repeat(auto-fit, minmax(220px, 1fr)) !important;
 }
 
 .global-album-completion-card{
     grid-column:span 2 !important;
-    min-height:158px !important;
+    min-height:150px !important;
     max-height:none !important;
+}
+
+.album-awards-section:first-of-type .trophy{
+    min-height:150px !important;
+}
+
+.album-awards-section:not(:first-of-type) .trophy{
+    min-height:136px !important;
 }
 
 .sammlr-cabinet-section,
@@ -6526,7 +6588,7 @@ body .container{
     .trophy-grid,
     .album-awards-compact-grid,
     .sammlr-cabinet-section .album-awards-grid{
-        grid-template-columns:repeat(2, minmax(0, 1fr)) !important;
+        grid-template-columns:1fr !important;
         gap:10px !important;
     }
 
@@ -6534,13 +6596,13 @@ body .container{
     .global-album-card .trophy,
     .album-awards-compact-grid .trophy,
     .sammlr-cabinet-section .album-awards-grid .trophy{
-        min-height:150px !important;
+        min-height:136px !important;
         padding:12px !important;
     }
 
     .global-album-completion-card{
         grid-column:1 / -1 !important;
-        min-height:148px !important;
+        min-height:136px !important;
     }
 
     .trophy h2,

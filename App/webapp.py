@@ -761,7 +761,18 @@ def render_album_awards(items):
     next_item = next((item for item in items if not item["unlocked"]), None)
     visible_items = [
         item for item in items
-        if item["unlocked"] or item is next_item or item["percent"] >= 95
+        if (
+            item["unlocked"]
+            or item is next_item
+            or (
+                item.get("category", "Albumziel") != "Spezial"
+                and item["percent"] >= 70
+            )
+            or (
+                item.get("category", "Albumziel") == "Spezial"
+                and item["percent"] >= 95
+            )
+        )
     ]
 
     if not visible_items:
@@ -4792,6 +4803,7 @@ def statistik():
     album_finished = 0
     missing_total = 0
     album_trophies = 0
+    trophy_preview_items = []
 
     for album in alben:
         _, _, gesammelt, _, _, total = lade_album(album["id"])
@@ -4801,6 +4813,13 @@ def statistik():
         missing_total += max(total - gesammelt, 0)
         _, _, trophies = trophy_status(album["id"], gesammelt, total)
         album_trophies += len([t for t in trophies if gesammelt >= t[0]])
+        for target, title in trophies:
+            trophy_preview_items.append({
+                "title": title,
+                "current": gesammelt,
+                "target": target,
+                "unlocked": gesammelt >= target,
+            })
 
     sticker_total = sum(row["quantity"] for row in stickers)
     duplicate_total = sum(row["duplicates"] for row in stickers)
@@ -4816,12 +4835,59 @@ def statistik():
         len([t for t in global_sticker_trophaeen() if sticker_total >= t[0]]) +
         len([t for t in global_duplicate_trophaeen() if duplicate_total >= t[0]])
     )
+    for target, title in global_sticker_trophaeen():
+        trophy_preview_items.append({
+            "title": title,
+            "current": sticker_total,
+            "target": target,
+            "unlocked": sticker_total >= target,
+        })
+    for target, title in global_duplicate_trophaeen():
+        trophy_preview_items.append({
+            "title": title,
+            "current": duplicate_total,
+            "target": target,
+            "unlocked": duplicate_total >= target,
+        })
+    for target, title in global_trade_trophaeen():
+        trophy_preview_items.append({
+            "title": title,
+            "current": completed_trade_count,
+            "target": target,
+            "unlocked": completed_trade_count >= target,
+        })
+
     trophy_total = album_trophies + global_trophies
     trade_word = "Tausch" if completed_trade_count == 1 else "Tausche"
+    reached_preview = [item for item in trophy_preview_items if item["unlocked"]]
+    next_preview = [
+        item for item in trophy_preview_items
+        if not item["unlocked"] and item["target"] > 0
+    ]
+    latest_trophy = reached_preview[-1]["title"] if reached_preview else "Noch keine Trophy abgestaubt"
+    next_trophy = max(
+        next_preview,
+        key=lambda item: min(100, int((item["current"] / item["target"]) * 100)),
+        default=None
+    )
+    if next_trophy:
+        next_trophy_line = next_trophy["title"]
+        next_trophy_progress = f"{min(next_trophy['current'], next_trophy['target'])} / {next_trophy['target']}"
+    else:
+        next_trophy_line = "Alle Ziele abgestaubt"
+        next_trophy_progress = f"{trophy_total} abgestaubt"
 
     return f"""
     <html><head>{style()}</head><body><div class="container">
     {app_header("Meine Statistik", "Dein Sammlr-Zwischenstand.")}
+
+    <a class="statistics-trophy-card album-quick-card" href="/trophaeen">
+        <span class="statistics-trophy-icon">🏆</span>
+        <strong>Trophäenschrank</strong>
+        <span>Zuletzt: {latest_trophy}</span>
+        <span>Nächste: {next_trophy_line}</span>
+        <span>{next_trophy_progress}</span>
+    </a>
 
     <div class="statistics-card">
         <div class="statistics-block">
