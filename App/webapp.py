@@ -1369,36 +1369,37 @@ def bottom_nav(active="sammlr"):
             </svg>
         """,
         "sammlr": """
-            <svg class="bottom-nav-icon" viewBox="0 0 24 24" aria-hidden="true">
-                <path d="M5 8.5 14.5 5a2 2 0 0 1 2.6 1.2l3.1 8.7a2 2 0 0 1-1.2 2.6l-9.5 3.4a2 2 0 0 1-2.6-1.2L3.8 11a2 2 0 0 1 1.2-2.5Z"></path>
-                <path d="M4.2 8.1 13 4.9"></path>
-                <path d="M6.1 5.6 13.7 3"></path>
-                <path d="M9.4 15.3c.5.7 1.3 1 2.3.8 1.1-.2 1.7-.8 1.7-1.6 0-.7-.5-1.1-1.7-1.3-1.5-.3-2.2-.9-2.2-1.9 0-1.1.9-1.8 2.2-1.8 1 0 1.8.4 2.2 1.1"></path>
-                <circle class="bottom-nav-icon-dot" cx="16.6" cy="16.2" r="1.3"></circle>
+            <svg class="bottom-nav-icon bottom-nav-icon-sammlr" viewBox="0 0 28 28" aria-hidden="true">
+                <defs>
+                    <mask id="sammlrBackCardMask">
+                        <rect x="0" y="0" width="28" height="28" fill="white"></rect>
+                        <rect x="7.35" y="6.05" width="16.7" height="17.6" rx="3.9" fill="black"></rect>
+                    </mask>
+                </defs>
+                <rect class="sammlr-card-back" x="4.2" y="2.9" width="15.4" height="16.5" rx="3.2" transform="rotate(-10 11.9 11.15)" mask="url(#sammlrBackCardMask)"></rect>
+                <rect class="sammlr-card-front" x="8.1" y="6.8" width="15.2" height="16.1" rx="3.2"></rect>
+                <text class="sammlr-card-s" x="15.05" y="18.55" text-anchor="middle">S</text>
+                <circle class="bottom-nav-icon-dot sammlr-card-dot" cx="19.25" cy="18.45" r="1.35"></circle>
             </svg>
         """,
         "tauschen": """
-            <svg class="bottom-nav-icon" viewBox="0 0 24 24" aria-hidden="true">
-                <path d="m11 17 2 2a1 1 0 0 0 1.4 0l.6-.6"></path>
-                <path d="m14 14 2.5 2.5a1 1 0 0 0 1.4 0l.6-.6a1 1 0 0 0 0-1.4l-3.7-3.7a3 3 0 0 0-4.2 0l-.9.9a1.2 1.2 0 0 1-1.7-1.7l2.5-2.5a4 4 0 0 1 4.9-.6l.6.4a2 2 0 0 0 1.5.3L20 7"></path>
-                <path d="m21 6 1 7h-3"></path>
-                <path d="M3 6 2 13h3"></path>
-                <path d="m4 7 5.5 5.5"></path>
+            <svg class="bottom-nav-icon bottom-nav-icon-handshake" viewBox="0 0 24 24" aria-hidden="true">
+                <path class="trade-arrow-filled" d="M6.2 6.2h8.6V3.8l6.4 4.6-6.4 4.6v-2.4H6.2Z"></path>
+                <path d="M17.8 17.8H9.2v2.4l-6.4-4.6 6.4-4.6v2.4h8.6Z"></path>
             </svg>
         """,
         "statistik": """
-            <svg class="bottom-nav-icon" viewBox="0 0 24 24" aria-hidden="true">
-                <path d="M4 20V10"></path>
-                <path d="M10 20V4"></path>
-                <path d="M16 20v-7"></path>
-                <path d="M22 20H2"></path>
+            <svg class="bottom-nav-icon bottom-nav-icon-chart" viewBox="0 0 24 24" aria-hidden="true">
+                <rect x="3.8" y="10.8" width="4.2" height="9" rx="1.1"></rect>
+                <rect class="chart-bar-main" x="9.9" y="4.2" width="4.2" height="15.6" rx="1.1"></rect>
+                <rect x="16" y="8.2" width="4.2" height="11.6" rx="1.1"></rect>
             </svg>
         """,
     }
     items = [
         ("profil", "/profil", "Profil"),
         ("favorit", "/favorit", "Favorit"),
-        ("sammlr", "/", "Sammlr"),
+        ("sammlr", "/", "sammlr"),
         ("tauschen", "/trades", "Tauschen"),
         ("statistik", "/statistik", "Statistik"),
     ]
