@@ -3,9 +3,9 @@ import os
 from flask import Flask, request, redirect, session
 import json
 from html import escape
-from em24_data import build_em24
-from wm26_data import build_wm26
-from services.notifications import create_notification, unread_notifications
+from App.em24_data import build_em24
+from App.wm26_data import build_wm26
+from App.services.notifications import create_notification, unread_notifications
 from urllib.parse import quote
 
 app = Flask(__name__)
@@ -215,7 +215,7 @@ def app_header(active_title=None, subtitle=None):
     """
 
 
-from services.albums import (
+from App.services.albums import (
     compact,
     display_code,
     em_map,
@@ -227,6 +227,7 @@ def lade_album(album_id):
     con = get_db()
     album = con.execute("SELECT * FROM albums WHERE id=?", (album_id,)).fetchone()
     sticker = con.execute(
+    
         "SELECT * FROM stickers WHERE user_id=? AND album_id=?",
         (current_user_id(), album_id)
     ).fetchall()
