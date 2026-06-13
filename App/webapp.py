@@ -2,6 +2,7 @@ import sqlite3
 import os
 from flask import Flask, request, redirect, session
 import json
+from html import escape
 from em24_data import build_em24
 from wm26_data import build_wm26
 from services.notifications import create_notification, unread_notifications
@@ -22,6 +23,29 @@ def get_db():
     con = sqlite3.connect(DB)
     con.row_factory = sqlite3.Row
     return con
+
+
+def collection_feedback_html(message):
+    if not message:
+        return ""
+
+    escaped_message = escape(message)
+    undoable = "hinzugefügt" in message or "doppelt" in message or "entfernt" in message
+
+    if undoable:
+        first_word = message.split(" ", 1)[0]
+        count = first_word if first_word.isdigit() else "1"
+        detail = f"&minus;{count} Sticker entfernt" if "entfernt" in message else f"+{count} Sticker eingeklebt"
+        return f"""
+        <div class="notice collection-notice">
+            <h2>Sammlung aktualisiert</h2>
+            <p>{detail}</p>
+            <a class="btn gray" href="/undo">↩ Rückgängig</a>
+        </div>
+        """
+
+    notice_class = "notice-error" if "nicht vorhanden" in message else "notice-duplicate" if "doppelt" in message else "notice-success"
+    return f'<div class="notice {notice_class}"><h2>{escaped_message}</h2></div>'
 
 
 @app.before_request
@@ -1332,6 +1356,45 @@ def favorite_album_choice_card(album, is_favorite=False):
 
 # --- Bottom Navigation ---
 def bottom_nav(active="sammlr"):
+    icons = {
+        "profil": """
+            <svg class="bottom-nav-icon" viewBox="0 0 24 24" aria-hidden="true">
+                <path d="M19 21a7 7 0 0 0-14 0"></path>
+                <circle cx="12" cy="7" r="4"></circle>
+            </svg>
+        """,
+        "favorit": """
+            <svg class="bottom-nav-icon" viewBox="0 0 24 24" aria-hidden="true">
+                <path d="M11.5 2.8a.6.6 0 0 1 1 0l2.7 5.4 6 .9a.6.6 0 0 1 .3 1l-4.3 4.2 1 6a.6.6 0 0 1-.9.6L12 18.1l-5.4 2.8a.6.6 0 0 1-.9-.6l1-6-4.3-4.2a.6.6 0 0 1 .3-1l6-.9 2.8-5.4Z"></path>
+            </svg>
+        """,
+        "sammlr": """
+            <svg class="bottom-nav-icon" viewBox="0 0 24 24" aria-hidden="true">
+                <path d="M5 8.5 14.5 5a2 2 0 0 1 2.6 1.2l3.1 8.7a2 2 0 0 1-1.2 2.6l-9.5 3.4a2 2 0 0 1-2.6-1.2L3.8 11a2 2 0 0 1 1.2-2.5Z"></path>
+                <path d="M4.2 8.1 13 4.9"></path>
+                <path d="M6.1 5.6 13.7 3"></path>
+                <path d="M9.4 15.3c.5.7 1.3 1 2.3.8 1.1-.2 1.7-.8 1.7-1.6 0-.7-.5-1.1-1.7-1.3-1.5-.3-2.2-.9-2.2-1.9 0-1.1.9-1.8 2.2-1.8 1 0 1.8.4 2.2 1.1"></path>
+                <circle class="bottom-nav-icon-dot" cx="16.6" cy="16.2" r="1.3"></circle>
+            </svg>
+        """,
+        "tauschen": """
+            <svg class="bottom-nav-icon" viewBox="0 0 24 24" aria-hidden="true">
+                <path d="m11 17 2 2a1 1 0 0 0 1.4 0l.6-.6"></path>
+                <path d="m14 14 2.5 2.5a1 1 0 0 0 1.4 0l.6-.6a1 1 0 0 0 0-1.4l-3.7-3.7a3 3 0 0 0-4.2 0l-.9.9a1.2 1.2 0 0 1-1.7-1.7l2.5-2.5a4 4 0 0 1 4.9-.6l.6.4a2 2 0 0 0 1.5.3L20 7"></path>
+                <path d="m21 6 1 7h-3"></path>
+                <path d="M3 6 2 13h3"></path>
+                <path d="m4 7 5.5 5.5"></path>
+            </svg>
+        """,
+        "statistik": """
+            <svg class="bottom-nav-icon" viewBox="0 0 24 24" aria-hidden="true">
+                <path d="M4 20V10"></path>
+                <path d="M10 20V4"></path>
+                <path d="M16 20v-7"></path>
+                <path d="M22 20H2"></path>
+            </svg>
+        """,
+    }
     items = [
         ("profil", "/profil", "Profil"),
         ("favorit", "/favorit", "Favorit"),
@@ -1343,7 +1406,7 @@ def bottom_nav(active="sammlr"):
     links = ""
     for key, href, label in items:
         active_class = " active" if key == active else ""
-        links += f'<a class="bottom-nav-link{active_class}" href="{href}">{label}</a>'
+        links += f'<a class="bottom-nav-link{active_class}" href="{href}">{icons[key]}<span>{label}</span></a>'
 
     return f'<nav class="bottom-nav">{links}</nav>'
 
@@ -1837,6 +1900,7 @@ def albumseite(album_id):
         else f"{direct_partner_count} direkte Tauschpartner"
     )
     trade_badge_html = f'<span class="album-quick-badge">{incoming_trade_request_count}</span>' if incoming_trade_request_count > 0 else ''
+    collection_feedback = collection_feedback_html(message)
 
     html = f"""
     <html><head>{style()}</head><body><div class="container">
@@ -1847,7 +1911,7 @@ def albumseite(album_id):
         <span>{prozent}%</span>
     </div>
 
-    {f'<div class="notice {"notice-error" if "nicht vorhanden" in message else "notice-duplicate" if "doppelt" in message else "notice-success"}"><h2>{message}</h2><p>Vertippt?</p><a class="btn gray" href="/undo">↩ Rückgängig machen</a></div>' if message and ("hinzugefügt" in message or "doppelt" in message or "entfernt" in message) else f'<div class="notice {"notice-error" if "nicht vorhanden" in message else "notice-duplicate" if "doppelt" in message else "notice-success"}"><h2>{message}</h2></div>' if message else ''}
+    {collection_feedback}
     <div class="album-quick-links">
         <a class="album-quick-card" href="/album/{album_id}/trophaeen">
             <strong>Trophäen</strong>
@@ -3599,12 +3663,12 @@ def album_trades(album_id):
 
                 <div class="trade-partner-stats">
                     <div>
-                        <strong>{len(du_suchst)}</strong>
-                        <span>Du suchst</span>
+                        <span class="trade-stat-label">Du suchst</span>
+                        <strong class="trade-stat-value">{len(du_suchst)} Fehlende</strong>
                     </div>
                     <div>
-                        <strong>{len(du_bietest_an)}</strong>
-                        <span>Du bietest an</span>
+                        <span class="trade-stat-label">Du bietest an</span>
+                        <strong class="trade-stat-value">{len(du_bietest_an)} Doppelte</strong>
                     </div>
                 </div>
 
@@ -4572,6 +4636,7 @@ def trades_overview():
         ).fetchall()
         meine_mengen = {s["sticker_code"]: s["quantity"] for s in meine_sticker}
         meine_fehlenden = {code for code in alle_codes if meine_mengen.get(code, 0) == 0}
+        meine_doppelten = {code for code in alle_codes if meine_mengen.get(code, 0) >= 2}
 
         active_trade_partner_ids = {
             row["partner_id"] for row in con.execute(
@@ -4611,19 +4676,22 @@ def trades_overview():
                 (other_user["id"], album_id)
             ).fetchall()
             andere_mengen = {s["sticker_code"]: s["quantity"] for s in andere_sticker}
+            andere_fehlenden = {code for code in alle_codes if andere_mengen.get(code, 0) == 0}
             andere_doppelten = {code for code in alle_codes if andere_mengen.get(code, 0) >= 2}
-            passende_sticker = len(meine_fehlenden.intersection(andere_doppelten))
+            du_suchst_count = len(meine_fehlenden.intersection(andere_doppelten))
+            du_bietest_count = len(meine_doppelten.intersection(andere_fehlenden))
 
-            if passende_sticker == 0:
+            if du_suchst_count == 0:
                 continue
 
             passende_sammler.append({
                 "id": other_user["id"],
                 "username": other_user["username"],
-                "passende_sticker": passende_sticker,
+                "du_suchst": du_suchst_count,
+                "du_bietest": du_bietest_count,
             })
 
-        passende_sammler.sort(key=lambda item: (-item["passende_sticker"], item["username"].lower()))
+        passende_sammler.sort(key=lambda item: (-item["du_suchst"], item["username"].lower()))
         album_sections.append({
             "album": album,
             "sammler": passende_sammler,
@@ -4697,14 +4765,24 @@ def trades_overview():
             if visible_sammler:
                 html += '<div class="global-trade-collector-list">'
                 for sammler_item in visible_sammler:
-                    sticker_word = "passender Sticker" if sammler_item["passende_sticker"] == 1 else "passende Sticker"
                     html += f"""
-                    <div class="global-trade-collector-card">
-                        <div>
-                            <strong>{sammler_item['username']}</strong>
-                            <span>{sammler_item['passende_sticker']} {sticker_word}</span>
+                    <div class="trade-partner-card global-trade-collector-card">
+                        <div class="trade-partner-head">
+                            <h2>{sammler_item['username']}</h2>
                         </div>
-                        <a href="/album/{album['id']}/trade/{sammler_item['id']}">Tausch starten</a>
+
+                        <div class="trade-partner-stats">
+                            <div>
+                                <span class="trade-stat-label">Du suchst</span>
+                                <strong class="trade-stat-value">{sammler_item['du_suchst']} Fehlende</strong>
+                            </div>
+                            <div>
+                                <span class="trade-stat-label">Du bietest an</span>
+                                <strong class="trade-stat-value">{sammler_item['du_bietest']} Doppelte</strong>
+                            </div>
+                        </div>
+
+                        <a class="trade-partner-button" href="/album/{album['id']}/trade/{sammler_item['id']}">Tausch starten</a>
                     </div>
                     """
                 html += "</div>"
@@ -4723,72 +4801,98 @@ def trades_overview():
             html += "</section>"
         html += "</section>"
 
-    def render_trade_segment(title, segment_rows):
-        segment_html = f"""
-        <section class="global-trade-segment">
-            <h2>{title}</h2>
-        """
-
+    def render_trade_board(segment_rows, empty_text, badge_word, mode):
         if not segment_rows:
-            segment_html += """
-            <div class="global-trade-empty">
-                Noch nichts offen.
-            </div>
+            return f"""
+            <section class="global-trade-album-list">
+                <div class="global-trade-empty">{empty_text}</div>
             </section>
             """
-            return segment_html
 
+        grouped = {}
         for trade in segment_rows:
-            give_codes = json.loads(trade["give_codes"])
-            get_codes = json.loads(trade["get_codes"])
-            is_receiver = trade["to_user_id"] == user_id
-            status = trade["status"]
+            grouped.setdefault(trade["album_id"], []).append(trade)
 
-            if is_receiver:
-                headline = trade["sender_name"]
-                partner_name = trade["sender_name"]
-                du_bekommst = give_codes
-                du_gibst = get_codes
+        board_html = '<section class="global-trade-album-list">'
+        for album in albums:
+            album_rows = grouped.get(album["id"], [])
+            if not album_rows:
+                continue
+
+            row_count = len(album_rows)
+            badge = f"1 {badge_word}" if row_count == 1 else f"{row_count} {badge_word}"
+            if mode == "agreements":
+                badge = f"{row_count} offen"
+                detail_tab = "agreements"
             else:
-                headline = trade["receiver_name"]
-                partner_name = trade["receiver_name"]
-                du_bekommst = get_codes
-                du_gibst = give_codes
+                detail_tab = "requests"
 
-            status_label = trade_status_label(trade, is_receiver)
-            actions = ""
-            if is_receiver and status == "open":
-                actions = trade_open_actions(trade)
-            elif status in ("accepted", "completed", "failed", "declined"):
-                actions = trade_completion_actions(trade, partner_name, is_receiver)
-            else:
-                actions = "<p><strong>Wartet auf Antwort</strong></p>"
-
-            segment_html += f"""
-            <div class="global-trade-request-card">
-                <div class="global-trade-request-head">
-                    <strong>{headline}</strong>
-                    <span>{status_label}</span>
-                </div>
-                <p>{trade['album_name']}</p>
-                <p>+{len(du_bekommst)} erhalten · -{len(du_gibst)} gegeben</p>
-                {actions}
-            </div>
+            board_html += f"""
+            <section class="global-trade-album-section">
+                <a class="global-trade-album-bar" href="/album/{album['id']}/trades?tab={detail_tab}">
+                    <span>{album['name']}</span>
+                    <strong>{badge}</strong>
+                </a>
+                <div class="global-trade-collector-list">
             """
 
-        segment_html += "</section>"
-        return segment_html
+            for trade in album_rows[:3]:
+                give_codes = json.loads(trade["give_codes"])
+                get_codes = json.loads(trade["get_codes"])
+                is_receiver = trade["to_user_id"] == user_id
+
+                if is_receiver:
+                    partner_name = trade["sender_name"]
+                    du_bekommst = give_codes
+                    du_gibst = get_codes
+                else:
+                    partner_name = trade["receiver_name"]
+                    du_bekommst = get_codes
+                    du_gibst = give_codes
+
+                status_label = trade_status_label(trade, is_receiver)
+                if mode == "agreements":
+                    summary_line = f"{len(du_gibst)} gegen {len(du_bekommst)} Sticker"
+                    if (
+                        (is_receiver and trade["to_confirmed"])
+                        or ((not is_receiver) and trade["from_confirmed"])
+                    ):
+                        status_line = "Tausch bestätigt"
+                    else:
+                        status_line = "Übergabe offen"
+                    actions = trade_completion_actions(trade, partner_name, is_receiver)
+                else:
+                    summary_line = f"+{len(du_bekommst)} erhalten"
+                    status_line = f"-{len(du_gibst)} gegeben"
+                    actions = trade_open_actions(trade) if is_receiver else "<p><strong>Wartet auf Antwort</strong></p>"
+
+                board_html += f"""
+                    <div class="global-trade-request-card">
+                        <div class="global-trade-request-head">
+                            <strong>{partner_name}</strong>
+                            <span>{status_label}</span>
+                        </div>
+                        <p>{summary_line}</p>
+                        <p>{status_line}</p>
+                        {actions}
+                    </div>
+                """
+
+            board_html += "</div>"
+            if row_count > 3:
+                board_html += f"""
+                <a class="global-trade-more" href="/album/{album['id']}/trades?tab={detail_tab}">Mehr anzeigen</a>
+                """
+
+            board_html += "</section>"
+
+        board_html += "</section>"
+        return board_html
 
     if tab == "agreements":
-        html += '<section class="global-trade-segments">'
-        html += render_trade_segment("Absprachen", accepted_rows)
-        html += "</section>"
+        html += render_trade_board(accepted_rows, "Keine offenen Absprachen.", "offen", "agreements")
     elif tab == "requests":
-        html += '<section class="global-trade-segments">'
-        html += render_trade_segment("Anfragen an dich", incoming_rows)
-        html += render_trade_segment("Deine Anfragen", outgoing_rows)
-        html += "</section>"
-
+        html += render_trade_board(incoming_rows + outgoing_rows, "Keine offenen Anfragen.", "Anfrage", "requests")
     html += bottom_nav("tauschen")
     html += "</div></body></html>"
     con.close()
