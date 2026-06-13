@@ -184,7 +184,7 @@ def app_header(active_title=None, subtitle=None):
     return f"""
     <header class="app-header">
         <a class="app-header-brand" href="/">
-            <img src="/static/sammlr_logo_transparent.png" alt="Sammlr">
+            <img src="/static/sammlr_logo_header.png" alt="Sammlr">
         </a>
     </header>
     {title_block}

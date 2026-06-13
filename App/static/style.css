@@ -2493,9 +2493,9 @@
 }
 
 .app-header-brand img{
-    width:min(320px, 76vw);
+    width:min(325px, 64vw);
     height:auto;
-    max-height:96px;
+    max-height:88px;
     display:block;
     object-fit:contain;
 }
@@ -6629,4 +6629,10 @@ body .container{
     border-radius:16px !important;
     background:#ffffff !important;
     box-shadow:0 10px 24px rgba(18,5,31,.055) !important;
+}
+
+/* Temporär: globale Seitentitel direkt unter dem Sammlr-Header ausblenden */
+.app-header + .page-title,
+.app-header + .profile-hero-bar{
+    display:none !important;
 }
