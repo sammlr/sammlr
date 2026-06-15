@@ -12,8 +12,10 @@ app = Flask(__name__)
 app.secret_key = "sammlr_dev_secret"
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-DB = os.path.join(BASE_DIR, "Database", "collectr.db")
-
+DB = os.environ.get(
+    "DATABASE_PATH",
+    os.path.join(BASE_DIR, "Database", "collectr.db")
+)
 
 def current_user_id():
     return session.get("user_id", 1)
@@ -1781,6 +1783,8 @@ def vfl_album_award_items(by_code, gesammelt, total):
 @app.route("/album/<album_id>", methods=["GET", "POST"])
 def albumseite(album_id):
     filter_name = request.args.get("filter", "all")
+    if filter_name not in ("all", "missing", "owned", "duplicate"):
+        filter_name = "all"
     show_album = filter_name in ("all", "album")
     show_duplicates = filter_name in ("all", "duplicates")
     message = request.args.get("message", "")
@@ -1927,6 +1931,11 @@ def albumseite(album_id):
             <span>{market_missing_line}</span>
             <span>{direct_partner_line}</span>
         </a>
+        <a class="album-quick-card" href="/album/{album_id}/liste">
+            <strong>📝 Stickerliste</strong>
+            <span>{total - gesammelt} fehlend</span>
+            <span>{doppelte} doppelt</span>
+        </a>
     </div>
 
     <div class="card sticker-wall-card">
@@ -1935,10 +1944,10 @@ def albumseite(album_id):
         <button type="button" class="smart-add-toggle" onclick="openQuickActions()">Hinzufügen</button>
             </div>
         <div class="sticker-filter-row">
-        <a class="sticker-filter-pill {'active' if filter_name == 'all' else ''}" href="/album/{album_id}">Alle</a>
-        <a class="sticker-filter-pill missing {'active' if filter_name == 'missing' else ''}" href="/album/{album_id}?filter=missing">Fehlende</a>
-        <a class="sticker-filter-pill owned {'active' if filter_name == 'owned' else ''}" href="/album/{album_id}?filter=owned">Vorhandene</a>
-        <a class="sticker-filter-pill duplicate {'active' if filter_name == 'duplicate' else ''}" href="/album/{album_id}?filter=duplicate">Doppelte</a>
+        <a class="sticker-filter-pill {'active' if filter_name == 'all' else ''}" href="/album/{album_id}" data-filter="all">Alle</a>
+        <a class="sticker-filter-pill missing {'active' if filter_name == 'missing' else ''}" href="/album/{album_id}?filter=missing" data-filter="missing">Fehlende</a>
+        <a class="sticker-filter-pill owned {'active' if filter_name == 'owned' else ''}" href="/album/{album_id}?filter=owned" data-filter="owned">Vorhandene</a>
+        <a class="sticker-filter-pill duplicate {'active' if filter_name == 'duplicate' else ''}" href="/album/{album_id}?filter=duplicate" data-filter="duplicate">Doppelte</a>
     </div>
     <input id="stickerSearch" class="sticker-search" type="search" placeholder="Sticker oder Team suchen..." autocomplete="off">
     <div id="pendingInputError" class="pending-input-error" style="display:none;"></div>
@@ -1946,7 +1955,7 @@ def albumseite(album_id):
 
     <p>
         
-        <strong>
+        <strong id="visibleStickerCount">
         {total if filter_name == "all" else doppelte if filter_name == "duplicate" else gesammelt if filter_name == "owned" else total - gesammelt}
         </strong>
         Sticker
@@ -1964,33 +1973,29 @@ def albumseite(album_id):
 
         for sticker in build_em24():
             code = sticker["id"]
-            if not filter_ok(filter_name, code, by_code):
-                continue
 
             if sticker["section"] != current_section:
                 if open_wall:
-                    html += "</div>"
+                    html += "</div></section>"
 
                 current_section = sticker["section"]
                 section_counter = sticker_counter_label(section_codes[current_section], by_code, filter_name)
                 section_percent = sticker_progress_percent(section_codes[current_section], by_code)
-                html += f'<h2 class="section-title album-section-progress-title"><i class="chapter-progress-fill" style="width:{section_percent}%;"></i><span>{current_section}</span><span>{section_counter}</span></h2><div class="wall">'
+                html += f'<section class="sticker-chapter-block"><h2 class="section-title album-section-progress-title"><i class="chapter-progress-fill" style="width:{section_percent}%;"></i><span>{current_section}</span><span>{section_counter}</span></h2><div class="wall">'
                 open_wall = True
 
             klasse, text = klasse_und_text(code, by_code)
+            if not filter_ok(filter_name, code, by_code):
+                klasse += " filter-hidden"
             if trigger and compact(code) == compact(trigger):
                 klasse += " trigger-slot"
             search_text = f"{code} {text} {current_section}".lower()
             html += f'<a class="slot {klasse}" data-code="{code}" data-display="{display_code(code)}" data-search="{search_text}" href="/sticker/{album_id}/{code}">{sticker_card_inner(album_id, code, by_code)}</a>'
         if open_wall:
-            html += "</div>"
+            html += "</div></section>"
 
     elif album_id == "vfl":
         for chapter in vfl_wall_chapters():
-            visible_codes = [code for code in chapter["codes"] if filter_ok(filter_name, code, by_code)]
-            if not visible_codes:
-                continue
-
             chapter_title = chapter["title"]
             chapter_id = "chapter-" + chapter_title.lower().replace(" ", "-").replace("/", "-").replace("+", "plus")
             chapter_counter = sticker_counter_label(chapter["codes"], by_code, filter_name)
@@ -2000,22 +2005,26 @@ def albumseite(album_id):
             if chapter_complete:
                 chapter_classes += " chapter-complete chapter-collapsed"
             chapter_expanded = "false" if chapter_complete else "true"
+            html += '<section class="sticker-chapter-block">'
             html += f'<h2 id="{chapter_id}" class="{chapter_classes}" role="button" tabindex="0" aria-expanded="{chapter_expanded}"><i class="chapter-progress-fill" style="width:{chapter_percent}%;"></i><span>{chapter_title}</span><span>{chapter_counter}</span></h2>'
             html += '<div class="wall">'
 
-            for code in visible_codes:
+            for code in chapter["codes"]:
                 klasse, text = klasse_und_text(code, by_code)
+                if not filter_ok(filter_name, code, by_code):
+                    klasse += " filter-hidden"
                 if trigger and compact(code) == compact(trigger):
                     klasse += " trigger-slot"
                 search_text = f"{code} {text} {chapter_title}".lower()
                 html += f'<a class="slot {klasse}" data-code="{code}" data-display="{display_code(code)}" data-search="{search_text}" href="/sticker/{album_id}/{code}">{sticker_card_inner(album_id, code, by_code)}</a>'
 
-            html += "</div>"
+            html += "</div></section>"
 
     elif album_id == "wm26":
         current_chapter = ""
         current_team = ""
         open_wall = False
+        open_team_block = False
 
         wm26_stickers = sorted(build_wm26(), key=wm26_wall_order)
         chapter_codes = {}
@@ -2032,8 +2041,6 @@ def albumseite(album_id):
 
         for sticker in wm26_stickers:
             code = sticker["id"]
-            if not filter_ok(filter_name, code, by_code):
-                continue
 
             chapter = wm26_chapter_for_wall(sticker)
             team_name = wm26_team_for_wall(sticker)
@@ -2042,28 +2049,40 @@ def albumseite(album_id):
                 if open_wall:
                     html += "</div>"
                     open_wall = False
+                if open_team_block:
+                    html += "</div>"
+                    open_team_block = False
+                if current_chapter:
+                    html += "</section>"
 
                 current_chapter = chapter
                 current_team = ""
                 chapter_id = "chapter-" + current_chapter.lower().replace(" ", "-").replace("/", "-")
                 chapter_counter = sticker_counter_label(chapter_codes[current_chapter], by_code, filter_name)
                 chapter_percent = sticker_progress_percent(chapter_codes[current_chapter], by_code)
+                html += '<section class="sticker-chapter-block">'
                 html += f'<h2 id="{chapter_id}" class="section-title album-chapter-title"><i class="chapter-progress-fill" style="width:{chapter_percent}%;"></i><span>{current_chapter}</span><span>{chapter_counter}</span></h2>'
 
             if team_name and team_name != current_team:
                 if open_wall:
                     html += "</div>"
                     open_wall = False
+                if open_team_block:
+                    html += "</div>"
+                    open_team_block = False
 
                 current_team = team_name
                 team_id = "team-" + current_team.lower().replace(" ", "-").replace("/", "-")
                 team_counter = sticker_counter_label(team_codes[current_team], by_code, filter_name)
-                html += f'<h3 id="{team_id}" class="team-title"><span>{current_team}</span><span>{team_counter}</span></h3>'
+                html += f'<div class="sticker-team-block"><h3 id="{team_id}" class="team-title"><span>{current_team}</span><span>{team_counter}</span></h3>'
+                open_team_block = True
             if not open_wall:
                 html += '<div class="wall">'
                 open_wall = True
 
             klasse, text = klasse_und_text(code, by_code)
+            if not filter_ok(filter_name, code, by_code):
+                klasse += " filter-hidden"
             if trigger and compact(code) == compact(trigger):
                 klasse += " trigger-slot"
             search_text = f"{code} {text} {current_chapter} {current_team}".lower()
@@ -2071,18 +2090,22 @@ def albumseite(album_id):
 
         if open_wall:
             html += "</div>"
+        if open_team_block:
+            html += "</div>"
+        if current_chapter:
+            html += "</section>"
 
     else:
-        html += '<div class="wall">'
+        html += '<section class="sticker-chapter-block"><div class="wall">'
         for code in all_codes(album_id):
-            if not filter_ok(filter_name, code, by_code):
-                continue
             klasse, text = klasse_und_text(code, by_code)
+            if not filter_ok(filter_name, code, by_code):
+                klasse += " filter-hidden"
             if trigger and compact(code) == compact(trigger):
                 klasse += " trigger-slot"
             search_text = f"{code} {text}".lower()
             html += f'<a class="slot {klasse}" data-code="{code}" data-display="{display_code(code)}" data-search="{search_text}" href="/sticker/{album_id}/{code}">{sticker_card_inner(album_id, code, by_code)}</a>'
-        html += "</div>"
+        html += "</div></section>"
     html += f'''
 <div class="quick-action-modal" id="quickActionModal" style="display:none;">
     <div class="quick-action-card">
@@ -2129,6 +2152,72 @@ let smartActionMode = null;
 let keyboardInputMode = false;
 
 const stickerSearchInput = document.getElementById('stickerSearch');
+let activeStickerFilter = '{filter_name if filter_name in ("all", "missing", "owned", "duplicate") else "all"}';
+
+function slotMatchesActiveFilter(slot){{
+    if(activeStickerFilter === 'all') return true;
+    if(activeStickerFilter === 'owned') return slot.classList.contains('owned') || slot.classList.contains('duplicate');
+    return slot.classList.contains(activeStickerFilter);
+}}
+
+function updateVisibleStickerCount(){{
+    const count = Array.from(document.querySelectorAll('.slot')).filter(slotIsVisible).length;
+    const counter = document.getElementById('visibleStickerCount');
+    if(counter) counter.textContent = count;
+}}
+
+function setActiveStickerFilter(nextFilter, options){{
+    const allowedFilters = ['all', 'missing', 'owned', 'duplicate'];
+    activeStickerFilter = allowedFilters.includes(nextFilter) ? nextFilter : 'all';
+
+    document.querySelectorAll('.sticker-filter-pill[data-filter]').forEach(function(pill){{
+        const isActive = pill.dataset.filter === activeStickerFilter;
+        pill.classList.toggle('active', isActive);
+        pill.setAttribute('aria-pressed', isActive ? 'true' : 'false');
+    }});
+
+    refreshStickerVisibility();
+
+    const shouldUpdateUrl = !options || options.updateUrl !== false;
+    if(shouldUpdateUrl && window.history && window.history.replaceState){{
+        const url = new URL(window.location.href);
+        if(activeStickerFilter === 'all'){{
+            url.searchParams.delete('filter');
+        }}else{{
+            url.searchParams.set('filter', activeStickerFilter);
+        }}
+        window.history.replaceState({{}}, '', url.toString());
+    }}
+}}
+
+function refreshStickerVisibility(){{
+    const term = stickerSearchInput ? stickerSearchInput.value.trim() : '';
+
+    document.querySelectorAll('.slot').forEach(function(slot){{
+        const isSearchMatch = matchesStickerSearch(slot, term);
+        const isFilterMatch = slotMatchesActiveFilter(slot);
+        slot.classList.toggle('search-hidden', !isSearchMatch);
+        slot.classList.toggle('filter-hidden', !isFilterMatch);
+    }});
+
+    document.querySelectorAll('.sticker-team-block').forEach(function(teamBlock){{
+        const hasVisibleSlot = Array.from(teamBlock.querySelectorAll('.slot')).some(slotIsVisible);
+        teamBlock.style.display = hasVisibleSlot ? '' : 'none';
+    }});
+
+    document.querySelectorAll('.sticker-chapter-block').forEach(function(chapterBlock){{
+        const hasVisibleSlot = Array.from(chapterBlock.querySelectorAll('.slot')).some(slotIsVisible);
+        chapterBlock.style.display = hasVisibleSlot ? '' : 'none';
+    }});
+
+    updateChapterCollapseVisibility();
+    updateVisibleStickerCount();
+    updateStickerSearchFeedback(term);
+}}
+
+function applyStickerVisibility(){{
+    refreshStickerVisibility();
+}}
 
 function resetStickerSearch(){{
     if(!stickerSearchInput) return;
@@ -2137,14 +2226,7 @@ function resetStickerSearch(){{
     stickerSearchInput.placeholder = 'Sticker oder Team suchen...';
     stickerSearchInput.type = 'search';
 
-    document.querySelectorAll('.slot').forEach(function(slot){{
-        slot.classList.remove('search-hidden');
-    }});
-
-    clearHiddenStickerSections();
-
-    updateVisibleStickerSections();
-    updateStickerSearchFeedback('');
+    applyStickerVisibility();
 }}
 
 function clearStickerFilter(){{
@@ -2152,9 +2234,7 @@ function clearStickerFilter(){{
         slot.classList.remove('search-hidden');
     }});
 
-    clearHiddenStickerSections();
-    updateVisibleStickerSections();
-    updateStickerSearchFeedback('');
+    refreshStickerVisibility();
 }}
 
 function getPendingCounts(){{
@@ -2194,7 +2274,7 @@ function stickerSearchAliases(slot){{
     const values = [
         slot.dataset.code || '',
         slot.dataset.display || '',
-        slot.textContent || ''
+        slot.dataset.search || ''
     ];
 
     const aliases = [];
@@ -2232,9 +2312,14 @@ function stickerSearchAliases(slot){{
 
 function stickerSearchNumbers(slot){{
     const numbers = [];
+    const values = [
+        slot.dataset.code || '',
+        slot.dataset.display || ''
+    ];
 
-    stickerSearchAliases(slot).forEach(function(alias){{
-        const match = alias.match(/(\d+)$/);
+    values.forEach(function(value){{
+        const normalizedValue = normalizeQuery(value);
+        const match = normalizedValue.match(/(\d+)$/);
         if(match){{
             numbers.push(match[1]);
             numbers.push(String(parseInt(match[1], 10)));
@@ -2263,7 +2348,7 @@ function matchesStickerSearch(slot, rawTerm){{
         return stickerSearchAliases(slot).includes(normalizedTerm);
     }}
 
-    const search = slot.dataset.search || slot.textContent || '';
+    const search = slot.dataset.search || slot.dataset.display || slot.dataset.code || '';
     return normalizeQuery(search).includes(normalizedTerm);
 }}
 
@@ -2386,7 +2471,7 @@ function clearPendingInputError(){{
 }}
 
 function slotIsVisible(slot){{
-    return slot && !slot.classList.contains('search-hidden');
+    return slot && !slot.classList.contains('search-hidden') && !slot.classList.contains('filter-hidden');
 }}
 
 function wallHasVisibleSlot(wall){{
@@ -2394,7 +2479,7 @@ function wallHasVisibleSlot(wall){{
 }}
 
 function clearHiddenStickerSections(){{
-    document.querySelectorAll('.wall, .team-title, .section-title, .album-chapter-title').forEach(function(node){{
+    document.querySelectorAll('.wall, .team-title, .section-title, .album-chapter-title, .sticker-team-block, .sticker-chapter-block').forEach(function(node){{
         node.classList.remove('search-section-hidden');
         node.classList.remove('collapse-section-hidden');
     }});
@@ -2418,65 +2503,25 @@ function updateChapterCollapseVisibility(){{
         }}
 
         chapterTitle.setAttribute('aria-expanded', 'false');
-        let node = chapterTitle.nextElementSibling;
-        while(node && !node.classList.contains('album-chapter-title') && !node.classList.contains('section-title')){{
-            node.classList.add('collapse-section-hidden');
-            node = node.nextElementSibling;
-        }}
+        const chapterBlock = chapterTitle.closest('.sticker-chapter-block');
+        if(!chapterBlock) return;
+
+        Array.from(chapterBlock.children).forEach(function(node){{
+            if(node !== chapterTitle){{
+                node.classList.add('collapse-section-hidden');
+            }}
+        }});
     }});
-}}
-
-function followingAreaHasVisibleSlot(startNode, stopMatcher){{
-    let node = startNode.nextElementSibling;
-
-    while(node && !stopMatcher(node)){{
-        if(node.classList.contains('wall') && wallHasVisibleSlot(node)){{
-            return true;
-        }}
-
-        node = node.nextElementSibling;
-    }}
-
-    return false;
 }}
 
 function updateVisibleStickerSections(){{
-    document.querySelectorAll('.wall').forEach(function(wall){{
-        wall.classList.toggle('search-section-hidden', !wallHasVisibleSlot(wall));
-    }});
-
-    document.querySelectorAll('.team-title').forEach(function(teamTitle){{
-        const hasVisibleSlot = followingAreaHasVisibleSlot(teamTitle, function(node){{
-            return node.classList.contains('team-title') || node.classList.contains('section-title');
-        }});
-
-        teamTitle.classList.toggle('search-section-hidden', !hasVisibleSlot);
-    }});
-
-    document.querySelectorAll('.section-title').forEach(function(sectionTitle){{
-        const hasVisibleSlot = followingAreaHasVisibleSlot(sectionTitle, function(node){{
-            return node.classList.contains('section-title');
-        }});
-
-        sectionTitle.classList.toggle('search-section-hidden', !hasVisibleSlot);
-    }});
-
-    updateChapterCollapseVisibility();
+    refreshStickerVisibility();
 }}
 
 
 if(stickerSearchInput){{
     stickerSearchInput.addEventListener('input', function(){{
-        const term = this.value.trim();
-        const slots = Array.from(document.querySelectorAll('.slot'));
-
-        slots.forEach(function(slot){{
-            const isMatch = matchesStickerSearch(slot, term);
-            slot.classList.toggle('search-hidden', !isMatch);
-        }});
-
-        updateVisibleStickerSections();
-        updateStickerSearchFeedback(term);
+        refreshStickerVisibility();
     }});
 
     stickerSearchInput.addEventListener('keydown', function(event){{
@@ -2509,6 +2554,16 @@ if(stickerSearchInput){{
     }});
 }}
 
+document.querySelectorAll('.sticker-filter-pill[data-filter]').forEach(function(pill){{
+    pill.setAttribute('role', 'button');
+    pill.setAttribute('aria-pressed', pill.classList.contains('active') ? 'true' : 'false');
+    pill.addEventListener('click', function(event){{
+        if(event.metaKey || event.ctrlKey || event.shiftKey || event.altKey || event.button !== 0) return;
+        event.preventDefault();
+        setActiveStickerFilter(pill.dataset.filter || 'all');
+    }});
+}});
+
 document.querySelectorAll('.album-chapter-title').forEach(function(chapterTitle){{
     chapterTitle.addEventListener('click', function(){{
         chapterTitle.classList.toggle('chapter-collapsed');
@@ -2523,7 +2578,7 @@ document.querySelectorAll('.album-chapter-title').forEach(function(chapterTitle)
     }});
 }});
 
-updateChapterCollapseVisibility();
+setActiveStickerFilter(activeStickerFilter, {{updateUrl:false}});
 
 function openQuickActions(){{
     startNeutralPendingMode();
@@ -2776,6 +2831,280 @@ document.addEventListener('click', function(event){{
     html += bottom_nav("sammlr")
     html += "</div></div></body></html>"
     return html
+
+
+@app.route("/album/<album_id>/liste")
+@app.route("/album/<album_id>/stickerliste")
+def stickerliste(album_id):
+    album, by_code, gesammelt, doppelte, prozent, total = lade_album(album_id)
+    message = request.args.get("message", "")
+    codes = all_codes(album_id)
+    missing_codes = [code for code in codes if sticker_quantity_for_counter(by_code, code) == 0]
+    duplicate_codes = [code for code in codes if sticker_quantity_for_counter(by_code, code) >= 2]
+    missing_count = total - gesammelt
+
+    def list_item(code, mode, instance=1):
+        label = display_code(code)
+        instance_attr = f' data-instance="{instance}"' if mode == "give" else ""
+        return f"""
+        <button type="button" class="sticker-list-item" data-list-mode="{mode}" data-code="{code}" data-display="{label}"{instance_attr}>
+            <span>{label}</span>
+        </button><span class="sticker-list-comma">,</span>
+        """
+
+    missing_html = "".join(list_item(code, "get") for code in missing_codes)
+    duplicate_html = "".join(
+        list_item(code, "give", index + 1)
+        for code in duplicate_codes
+        for index in range(max(sticker_quantity_for_counter(by_code, code) - 1, 0))
+    )
+    missing_empty = '<p class="sticker-list-empty">Keine fehlenden Sticker.</p>' if not missing_codes else ""
+    duplicate_empty = '<p class="sticker-list-empty">Keine doppelten Sticker.</p>' if not duplicate_codes else ""
+    notice = f'<div class="sticker-list-notice">{escape(message)}</div>' if message else ""
+
+    html = f"""
+    <html><head>{style()}</head><body class="sticker-list-page"><div class="sticker-list-shell">
+    {notice}
+
+    <header class="sticker-list-header">
+        <a class="sticker-list-logo" href="/">sammlr<span></span></a>
+        <a class="sticker-list-back" href="/album/{album_id}">← Album</a>
+        <h1>{escape(album['name'])}</h1>
+        <p class="sticker-list-stats">{gesammelt} gesammelt · {missing_count} fehlend · {doppelte} doppelt</p>
+    </header>
+
+    <main class="sticker-list-paper">
+        <section class="sticker-list-section">
+            <h2>Meine Fehlenden</h2>
+            <div class="sticker-list-grid">
+                {missing_html}
+                {missing_empty}
+            </div>
+        </section>
+
+        <section class="sticker-list-section">
+            <h2>Meine Doppelten</h2>
+            <div class="sticker-list-grid">
+                {duplicate_html}
+                {duplicate_empty}
+            </div>
+        </section>
+    </main>
+
+    <form method="POST" action="/album/{album_id}/liste/trade" id="stickerListTradeForm">
+        <div id="stickerListHiddenInputs"></div>
+    </form>
+
+    <aside class="sticker-list-tradebar">
+        <div class="sticker-list-trade-head">
+            <strong>Aktueller Tausch</strong>
+            <button type="button" id="stickerListClear">Leeren</button>
+        </div>
+        <div class="sticker-list-trade-columns">
+            <div>
+                <span class="sticker-list-green">Ich bekomme: <strong id="stickerListGetCount">0 Sticker</strong></span>
+                <div class="sticker-list-selection" id="stickerListGet">Noch nichts markiert</div>
+            </div>
+            <div>
+                <span class="sticker-list-red">Ich gebe ab: <strong id="stickerListGiveCount">0 Sticker</strong></span>
+                <div class="sticker-list-selection" id="stickerListGive">Noch nichts markiert</div>
+            </div>
+        </div>
+        <button type="button" class="sticker-list-check" id="stickerListReviewButton" disabled>Trade prüfen</button>
+    </aside>
+
+    <div class="sticker-list-modal" id="stickerListReviewModal" style="display:none;">
+        <div class="sticker-list-modal-card">
+            <h2>Trade prüfen</h2>
+            <div class="sticker-list-review-grid">
+                <div>
+                    <h3>Ich bekomme</h3>
+                    <div id="stickerListReviewGet"></div>
+                </div>
+                <div>
+                    <h3>Ich gebe ab</h3>
+                    <div id="stickerListReviewGive"></div>
+                </div>
+            </div>
+            <p id="stickerListReviewError" class="sticker-list-error" style="display:none;"></p>
+            <div class="sticker-list-modal-actions">
+                <button type="button" class="sticker-list-secondary" id="stickerListReviewClose">Zurück</button>
+                <button type="submit" form="stickerListTradeForm" class="sticker-list-primary" id="stickerListSubmit">Trade erstellen</button>
+            </div>
+        </div>
+    </div>
+
+<script>
+const stickerListSelections = {{
+    get: [],
+    give: []
+}};
+
+function stickerListCodeLabel(itemKey){{
+    const parts = String(itemKey).split('::');
+    const code = parts[0];
+    const item = Array.from(document.querySelectorAll('.sticker-list-item')).find(function(candidate){{
+        return stickerListItemKey(candidate) === itemKey || candidate.dataset.code === code;
+    }});
+    return item ? (item.dataset.display || code) : code;
+}}
+
+function stickerListItemKey(item){{
+    return item.dataset.code + '::' + (item.dataset.instance || '1');
+}}
+
+function stickerListRenderCodes(mode){{
+    const items = stickerListSelections[mode];
+    if(items.length === 0) return 'Noch nichts markiert';
+    return items.map(stickerListCodeLabel).join('<br>');
+}}
+
+function stickerListCountLabel(count){{
+    return count + (count === 1 ? ' Sticker' : ' Sticker');
+}}
+
+function stickerListSyncHiddenInputs(){{
+    const hidden = document.getElementById('stickerListHiddenInputs');
+    hidden.innerHTML = '';
+
+    stickerListSelections.get.forEach(function(itemKey){{
+        const input = document.createElement('input');
+        input.type = 'hidden';
+        input.name = 'get_codes';
+        input.value = String(itemKey).split('::')[0];
+        hidden.appendChild(input);
+    }});
+
+    stickerListSelections.give.forEach(function(itemKey){{
+        const input = document.createElement('input');
+        input.type = 'hidden';
+        input.name = 'give_codes';
+        input.value = String(itemKey).split('::')[0];
+        hidden.appendChild(input);
+    }});
+}}
+
+function stickerListUpdateTradebar(){{
+    document.getElementById('stickerListGet').innerHTML = stickerListRenderCodes('get');
+    document.getElementById('stickerListGive').innerHTML = stickerListRenderCodes('give');
+
+    const getCount = stickerListSelections.get.length;
+    const giveCount = stickerListSelections.give.length;
+    document.getElementById('stickerListGetCount').textContent = stickerListCountLabel(getCount);
+    document.getElementById('stickerListGiveCount').textContent = stickerListCountLabel(giveCount);
+    const canReview = getCount > 0 && giveCount > 0 && giveCount >= getCount;
+    document.getElementById('stickerListReviewButton').disabled = !canReview;
+
+    stickerListSyncHiddenInputs();
+}}
+
+function stickerListRenderReview(){{
+    document.getElementById('stickerListReviewGet').innerHTML = stickerListRenderCodes('get');
+    document.getElementById('stickerListReviewGive').innerHTML = stickerListRenderCodes('give');
+
+    const error = document.getElementById('stickerListReviewError');
+    const submit = document.getElementById('stickerListSubmit');
+    const getCount = stickerListSelections.get.length;
+    const giveCount = stickerListSelections.give.length;
+    const invalid = getCount === 0 || giveCount === 0 || giveCount < getCount;
+
+    error.style.display = invalid ? 'block' : 'none';
+    error.textContent = 'Du musst mindestens so viele doppelte Sticker abgeben, wie du erhältst.';
+    submit.disabled = invalid;
+}}
+
+document.querySelectorAll('.sticker-list-item').forEach(function(item){{
+    item.addEventListener('click', function(){{
+        const mode = item.dataset.listMode;
+        const itemKey = stickerListItemKey(item);
+        const selection = stickerListSelections[mode];
+
+        if(selection.includes(itemKey)){{
+            stickerListSelections[mode] = selection.filter(function(existing){{
+                return existing !== itemKey;
+            }});
+            item.classList.remove('selected');
+        }}else{{
+            selection.push(itemKey);
+            item.classList.add('selected');
+        }}
+
+        stickerListUpdateTradebar();
+    }});
+}});
+
+document.getElementById('stickerListClear').addEventListener('click', function(){{
+    stickerListSelections.get = [];
+    stickerListSelections.give = [];
+    document.querySelectorAll('.sticker-list-item.selected').forEach(function(item){{
+        item.classList.remove('selected');
+    }});
+    stickerListUpdateTradebar();
+}});
+
+document.getElementById('stickerListReviewButton').addEventListener('click', function(){{
+    stickerListRenderReview();
+    document.getElementById('stickerListReviewModal').style.display = 'flex';
+}});
+
+document.getElementById('stickerListReviewClose').addEventListener('click', function(){{
+    document.getElementById('stickerListReviewModal').style.display = 'none';
+}});
+
+document.getElementById('stickerListTradeForm').addEventListener('submit', function(event){{
+    stickerListRenderReview();
+    if(document.getElementById('stickerListSubmit').disabled){{
+        event.preventDefault();
+    }}
+}});
+
+stickerListUpdateTradebar();
+</script>
+    </div></body></html>
+    """
+    return html
+
+
+@app.route("/album/<album_id>/liste/trade", methods=["POST"])
+@app.route("/album/<album_id>/stickerliste/trade", methods=["POST"])
+def stickerliste_trade(album_id):
+    get_codes = [resolve_code(album_id, code) for code in request.form.getlist("get_codes")]
+    give_codes = [resolve_code(album_id, code) for code in request.form.getlist("give_codes")]
+    get_codes = [code for code in get_codes if code]
+    give_codes = [code for code in give_codes if code]
+    list_url = f"/album/{album_id}/liste"
+
+    if not get_codes or not give_codes or len(give_codes) < len(get_codes):
+        return redirect(f"{list_url}?message={quote('Bitte markiere auf beiden Seiten passende Sticker.')}")
+
+    con = get_db()
+    quantities = user_album_quantities(con, current_user_id(), album_id)
+    give_counts = {}
+    for code in give_codes:
+        give_counts[code] = give_counts.get(code, 0) + 1
+
+    for code in get_codes:
+        if quantities.get(code, 0) > 0:
+            con.close()
+            return redirect(f"{list_url}?message={quote('Ein erhaltener Sticker ist nicht mehr fehlend.')}")
+
+    for code, amount in give_counts.items():
+        if amount > max(quantities.get(code, 0) - 1, 0):
+            con.close()
+            return redirect(f"{list_url}?message={quote('Ein abgegebener Sticker ist nicht mehr doppelt.')}")
+
+    for code in give_codes:
+        remove_sticker_quantity(con, current_user_id(), album_id, code)
+
+    for code in get_codes:
+        add_sticker_quantity(con, current_user_id(), album_id, code)
+
+    con.commit()
+    con.close()
+
+    msg = f"Trade gespeichert: {len(get_codes)} erhalten, {len(give_codes)} abgegeben."
+    return redirect(f"{list_url}?message={quote(msg)}")
+
 @app.route("/bulk_add/<album_id>", methods=["POST"])
 def bulk_add(album_id):
     codes = request.form.getlist("codes")

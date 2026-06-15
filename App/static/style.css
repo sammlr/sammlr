@@ -3689,12 +3689,381 @@ body .container{
 }
 
 .slot.search-hidden,
+.slot.filter-hidden,
 .wall.search-hidden{
     display:none !important;
 }
 
 .search-section-hidden{
     display:none !important;
+}
+
+.album-quick-links{
+    grid-template-columns:repeat(3, minmax(0,1fr)) !important;
+}
+
+@media (max-width:520px){
+    .album-quick-links{
+        grid-template-columns:1fr !important;
+    }
+}
+
+/* Stickerliste: analoger Schmierzettel-Modus */
+.sticker-list-page{
+    min-height:100vh;
+    background:#f5eedf;
+    color:#251f1a;
+}
+
+.sticker-list-shell{
+    position:relative;
+    min-height:100vh;
+    padding:14px 14px 176px;
+    background:
+        radial-gradient(circle at 14px 18px, rgba(37,31,26,.035) 0 1px, transparent 1.5px),
+        linear-gradient(rgba(79,126,161,.16) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(79,126,161,.12) 1px, transparent 1px),
+        #f5eedf;
+    background-size:34px 34px, 28px 28px, 28px 28px, auto;
+}
+
+.sticker-list-back{
+    display:inline-flex;
+    margin:0 0 12px;
+    color:#35606f;
+    font-size:14px;
+    font-weight:900;
+    text-decoration:none;
+}
+
+.sticker-list-notice{
+    margin:0 0 14px;
+    padding:12px 14px;
+    border:2px solid rgba(47,95,71,.24);
+    border-radius:8px;
+    background:rgba(244,255,238,.82);
+    color:#234a34;
+    font-weight:900;
+}
+
+.sticker-list-header{
+    margin-bottom:14px;
+}
+
+.sticker-list-logo{
+    position:relative;
+    display:inline-flex;
+    align-items:flex-end;
+    margin:0 0 8px;
+    color:#17110d;
+    font-family:"Bradley Hand", "Marker Felt", Arial, sans-serif;
+    font-size:46px;
+    font-weight:950;
+    line-height:1;
+    letter-spacing:0;
+    text-decoration:none;
+    transform:rotate(-2deg);
+}
+
+.sticker-list-logo span{
+    width:13px;
+    height:12px;
+    margin:0 0 5px 4px;
+    border-radius:57% 43% 52% 48%;
+    background:#5d2f86;
+    box-shadow:
+        1px 0 0 rgba(93,47,134,.45),
+        -1px 1px 0 rgba(93,47,134,.26);
+    transform:rotate(-11deg);
+}
+
+.sticker-list-header h1{
+    margin:0 0 8px;
+    color:#241c17;
+    font-family:"Bradley Hand", "Marker Felt", Arial, sans-serif;
+    font-size:32px;
+    line-height:1;
+    letter-spacing:0;
+}
+
+.sticker-list-stats{
+    margin:0;
+    color:#3f3931;
+    font-family:"Bradley Hand", "Marker Felt", Arial, sans-serif;
+    font-size:18px;
+    font-weight:950;
+    letter-spacing:.01em;
+}
+
+.sticker-list-paper{
+    display:grid;
+    gap:22px;
+    padding:14px 0;
+    border-top:2px solid rgba(37,31,26,.10);
+    border-bottom:2px solid rgba(37,31,26,.08);
+    transform:rotate(-.15deg);
+}
+
+.sticker-list-section h2{
+    margin:0 0 8px;
+    color:#7b2e34;
+    font-family:"Bradley Hand", "Marker Felt", Arial, sans-serif;
+    font-size:23px;
+    line-height:1;
+    text-transform:uppercase;
+    letter-spacing:0;
+}
+
+.sticker-list-grid{
+    display:flex;
+    flex-wrap:wrap;
+    align-items:baseline;
+    column-gap:8px;
+    row-gap:7px;
+}
+
+.sticker-list-item{
+    position:relative;
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    min-height:0;
+    padding:2px 3px;
+    border:0;
+    border-radius:0;
+    background:transparent;
+    color:#211a15;
+    font-family:"Bradley Hand", "Marker Felt", Arial, sans-serif;
+    font-size:21px;
+    line-height:1.18;
+    font-weight:950;
+    letter-spacing:.025em;
+    text-align:center;
+    touch-action:manipulation;
+    transform:rotate(-.25deg);
+}
+
+.sticker-list-comma{
+    color:rgba(33,26,21,.62);
+    font-family:Arial, sans-serif;
+    font-size:16px;
+    font-weight:800;
+    margin-left:-5px;
+}
+
+.sticker-list-item:nth-of-type(2n){
+    transform:rotate(.2deg);
+}
+
+.sticker-list-item:nth-of-type(3n){
+    transform:rotate(-.45deg);
+}
+
+.sticker-list-item span:first-child{
+    position:relative;
+    z-index:1;
+}
+
+.sticker-list-item[data-list-mode="get"].selected::after{
+    content:"";
+    position:absolute;
+    inset:-5px -7px -4px -6px;
+    border:3px solid rgba(36,138,71,.62);
+    border-radius:48% 54% 46% 56%;
+    transform:rotate(-7deg);
+    pointer-events:none;
+}
+
+.sticker-list-item[data-list-mode="get"].selected::before{
+    content:"";
+    position:absolute;
+    inset:-3px -5px -6px -3px;
+    border:2px solid rgba(36,138,71,.36);
+    border-radius:54% 46% 56% 44%;
+    transform:rotate(5deg);
+    pointer-events:none;
+}
+
+.sticker-list-item[data-list-mode="give"].selected::before,
+.sticker-list-item[data-list-mode="give"].selected::after{
+    content:"";
+    position:absolute;
+    left:-4px;
+    right:-4px;
+    top:50%;
+    height:3px;
+    border-radius:999px;
+    background:rgba(200,52,52,.62);
+    pointer-events:none;
+}
+
+.sticker-list-item[data-list-mode="give"].selected::before{
+    transform:translateY(-50%) rotate(17deg);
+}
+
+.sticker-list-item[data-list-mode="give"].selected::after{
+    transform:translateY(-50%) rotate(-15deg);
+}
+
+.sticker-list-empty{
+    margin:4px 0 0;
+    color:#71665b;
+    font-weight:800;
+}
+
+.sticker-list-tradebar{
+    position:fixed;
+    right:10px;
+    bottom:10px;
+    left:10px;
+    z-index:50;
+    padding:12px;
+    border:2px solid rgba(37,31,26,.16);
+    border-radius:10px;
+    background:rgba(255,250,235,.96);
+    box-shadow:0 16px 38px rgba(46,36,25,.18);
+}
+
+.sticker-list-trade-head{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:12px;
+    margin-bottom:10px;
+}
+
+.sticker-list-trade-head strong{
+    font-size:16px;
+    font-weight:950;
+}
+
+.sticker-list-trade-head button{
+    border:0;
+    background:transparent;
+    color:#6d5f51;
+    font-weight:900;
+}
+
+.sticker-list-trade-columns{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:10px;
+    margin-bottom:10px;
+}
+
+.sticker-list-green,
+.sticker-list-red{
+    display:block;
+    margin-bottom:4px;
+    font-size:13px;
+    font-weight:950;
+}
+
+.sticker-list-green{color:#248a47;}
+.sticker-list-red{color:#c83434;}
+
+.sticker-list-green strong,
+.sticker-list-red strong{
+    color:inherit;
+}
+
+.sticker-list-selection{
+    min-height:38px;
+    padding:7px 8px;
+    border-radius:6px;
+    background:rgba(255,255,255,.42);
+    font-size:15px;
+    line-height:1.35;
+    font-weight:900;
+}
+
+.sticker-list-check,
+.sticker-list-primary,
+.sticker-list-secondary{
+    width:100%;
+    min-height:44px;
+    border:0;
+    border-radius:8px;
+    font-size:15px;
+    font-weight:950;
+}
+
+.sticker-list-check,
+.sticker-list-primary{
+    background:#253f33;
+    color:white;
+}
+
+.sticker-list-check:disabled,
+.sticker-list-primary:disabled{
+    opacity:.45;
+}
+
+.sticker-list-secondary{
+    background:#efe4d2;
+    color:#332820;
+}
+
+.sticker-list-modal{
+    position:fixed;
+    inset:0;
+    z-index:80;
+    align-items:flex-end;
+    justify-content:center;
+    padding:14px;
+    background:rgba(28,22,16,.34);
+}
+
+.sticker-list-modal-card{
+    width:min(560px, 100%);
+    padding:18px;
+    border-radius:12px;
+    background:#fff7e5;
+    box-shadow:0 24px 70px rgba(22,16,10,.28);
+}
+
+.sticker-list-modal-card h2{
+    margin:0 0 14px;
+    font-family:"Bradley Hand", "Marker Felt", Arial, sans-serif;
+    font-size:28px;
+}
+
+.sticker-list-review-grid{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:12px;
+    margin-bottom:14px;
+}
+
+.sticker-list-review-grid h3{
+    margin:0 0 6px;
+    font-size:14px;
+    text-transform:uppercase;
+}
+
+.sticker-list-error{
+    margin:0 0 12px;
+    color:#9d2b2b;
+    font-weight:900;
+}
+
+.sticker-list-modal-actions{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:10px;
+}
+
+@media (min-width:720px){
+    .sticker-list-shell{
+        padding:28px max(24px, calc((100vw - 760px) / 2)) 180px;
+    }
+
+    .sticker-list-tradebar{
+        right:50%;
+        left:auto;
+        width:560px;
+        transform:translateX(50%);
+    }
 }
 
 .trade-wizard{
