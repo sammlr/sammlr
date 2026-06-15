@@ -79,7 +79,16 @@ def init_db():
         password TEXT
     )
     """)
-
+    cur.execute("""
+    CREATE TABLE IF NOT EXISTS albums (
+        id TEXT PRIMARY KEY,
+        name TEXT,
+        season TEXT,
+        total INTEGER,
+        complete INTEGER,
+        cover TEXT
+    )
+    """)
     try:
         cur.execute("ALTER TABLE users ADD COLUMN name TEXT")
     except sqlite3.OperationalError:
