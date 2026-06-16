@@ -1142,6 +1142,7 @@ def startseite():
         FROM albums
         JOIN user_albums ON user_albums.album_id = albums.id
         WHERE user_albums.user_id=?
+        ORDER BY albums.season DESC, albums.name ASC
         """,
         (current_user_id(),)
     ).fetchall()
@@ -1166,16 +1167,7 @@ def startseite():
     """
 
     for album, gesammelt, doppelte, prozent, total, tauschbare_luecken in infos:
-        if prozent < 100:
-            html += album_card(album, gesammelt, doppelte, prozent, total, tauschbare_luecken, is_favorite=(album["id"] == favorite_album_id))
-
-    html += """
-    <h2 class="home-section-title">Vitrine</h2>
-    """
-
-    for album, gesammelt, doppelte, prozent, total, tauschbare_luecken in infos:
-        if prozent == 100:
-            html += album_card(album, gesammelt, doppelte, prozent, total, tauschbare_luecken, is_favorite=(album["id"] == favorite_album_id))
+        html += album_card(album, gesammelt, doppelte, prozent, total, tauschbare_luecken, is_favorite=(album["id"] == favorite_album_id))
 
     html += bottom_nav("sammlr")
     html += "</div></body></html>"
