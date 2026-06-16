@@ -1,5 +1,6 @@
 import sqlite3
 import os
+import shutil
 from flask import Flask, request, redirect, session
 import json
 from html import escape
@@ -16,6 +17,78 @@ DB = os.environ.get(
     "DATABASE_PATH",
     os.path.join(BASE_DIR, "Database", "sammlr.db")
 )
+SEED_DB = os.path.join(BASE_DIR, "Database", "sammlr.db")
+
+
+def table_exists(con, table_name):
+    row = con.execute(
+        "SELECT 1 FROM sqlite_master WHERE type='table' AND name=?",
+        (table_name,)
+    ).fetchone()
+    return row is not None
+
+
+def table_count(con, table_name):
+    if not table_exists(con, table_name):
+        return 0
+    row = con.execute(f"SELECT COUNT(*) AS count FROM {table_name}").fetchone()
+    return row["count"] if row else 0
+
+
+def target_db_has_user_data(db_path):
+    if not os.path.exists(db_path):
+        return False
+
+    con = sqlite3.connect(db_path)
+    con.row_factory = sqlite3.Row
+    try:
+        for table_name in ("stickers", "trade_requests", "notifications", "unlocked_trophies"):
+            if table_count(con, table_name) > 0:
+                return True
+
+        if table_exists(con, "users"):
+            user_count = con.execute(
+                "SELECT COUNT(*) AS count FROM users WHERE id != 1 OR username NOT IN ('valentin', 'Valy')"
+            ).fetchone()["count"]
+            if user_count > 0:
+                return True
+
+        return False
+    finally:
+        con.close()
+
+
+def album_count_in_db(db_path):
+    if not os.path.exists(db_path):
+        return 0
+
+    con = sqlite3.connect(db_path)
+    con.row_factory = sqlite3.Row
+    try:
+        return table_count(con, "albums")
+    finally:
+        con.close()
+
+
+def initialize_render_database_from_seed():
+    target_path = os.path.abspath(DB)
+    seed_path = os.path.abspath(SEED_DB)
+
+    if target_path != "/var/data/sammlr.db":
+        return
+
+    if not os.path.exists(seed_path):
+        return
+
+    needs_seed = (not os.path.exists(target_path)) or album_count_in_db(target_path) < 3
+    if not needs_seed:
+        return
+
+    if target_db_has_user_data(target_path):
+        return
+
+    os.makedirs(os.path.dirname(target_path), exist_ok=True)
+    shutil.copy2(seed_path, target_path)
 
 def current_user_id():
     return session.get("user_id", 1)
@@ -5869,5 +5942,6 @@ def profil_delete():
     return redirect("/login")
 
 
+initialize_render_database_from_seed()
 init_db()
 app.run(debug=True, host="0.0.0.0", port=8080)
