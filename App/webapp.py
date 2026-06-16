@@ -14,7 +14,7 @@ app.secret_key = "sammlr_dev_secret"
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 DB = os.environ.get(
     "DATABASE_PATH",
-    os.path.join(BASE_DIR, "Database", "collectr.db")
+    os.path.join(BASE_DIR, "Database", "sammlr.db")
 )
 
 def current_user_id():
