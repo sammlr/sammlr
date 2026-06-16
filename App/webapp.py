@@ -1307,7 +1307,21 @@ def startseite():
     """
 
     for album, gesammelt, doppelte, prozent, total, tauschbare_luecken in infos:
-        html += album_card(album, gesammelt, doppelte, prozent, total, tauschbare_luecken, is_favorite=(album["id"] == favorite_album_id))
+        if gesammelt != total:
+            html += album_card(album, gesammelt, doppelte, prozent, total, tauschbare_luecken, is_favorite=(album["id"] == favorite_album_id))
+
+    completed_infos = [
+        info for info in infos
+        if info[1] == info[4]
+    ]
+
+    if completed_infos:
+        html += """
+        <h2 class="home-section-title">Vitrine</h2>
+        """
+
+        for album, gesammelt, doppelte, prozent, total, tauschbare_luecken in completed_infos:
+            html += album_card(album, gesammelt, doppelte, prozent, total, tauschbare_luecken, is_favorite=(album["id"] == favorite_album_id))
 
     html += bottom_nav("sammlr")
     html += "</div></body></html>"
@@ -1856,12 +1870,29 @@ def sticker_counter_label(codes, by_code, filter_name):
     duplicate_extra = sum(max(sticker_quantity_for_counter(by_code, code) - 1, 0) for code in codes)
 
     if filter_name == "missing":
-        return f"{missing} fehlen"
+        return f"{missing} fehlend"
+
+    if filter_name == "owned":
+        return f"{owned} vorhanden"
 
     if filter_name == "duplicate":
         return f"{duplicate_extra} doppelt"
 
     return f"{owned}/{total}"
+
+
+def sticker_counter_data_attrs(codes, by_code):
+    total = len(codes)
+    owned = len([code for code in codes if sticker_quantity_for_counter(by_code, code) > 0])
+    missing = total - owned
+    duplicate_extra = sum(max(sticker_quantity_for_counter(by_code, code) - 1, 0) for code in codes)
+
+    return (
+        f'data-counter-total="{total}" '
+        f'data-counter-owned="{owned}" '
+        f'data-counter-missing="{missing}" '
+        f'data-counter-duplicate="{duplicate_extra}"'
+    )
 
 
 def sticker_progress_percent(codes, by_code):
@@ -2132,8 +2163,9 @@ def albumseite(album_id):
 
                 current_section = sticker["section"]
                 section_counter = sticker_counter_label(section_codes[current_section], by_code, filter_name)
+                section_counter_attrs = sticker_counter_data_attrs(section_codes[current_section], by_code)
                 section_percent = sticker_progress_percent(section_codes[current_section], by_code)
-                html += f'<section class="sticker-chapter-block"><h2 class="section-title album-section-progress-title"><i class="chapter-progress-fill" style="width:{section_percent}%;"></i><span>{current_section}</span><span>{section_counter}</span></h2><div class="wall">'
+                html += f'<section class="sticker-chapter-block"><h2 class="section-title album-section-progress-title" {section_counter_attrs}><i class="chapter-progress-fill" style="width:{section_percent}%;"></i><span>{current_section}</span><span>{section_counter}</span></h2><div class="wall">'
                 open_wall = True
 
             klasse, text = klasse_und_text(code, by_code)
@@ -2151,6 +2183,7 @@ def albumseite(album_id):
             chapter_title = chapter["title"]
             chapter_id = "chapter-" + chapter_title.lower().replace(" ", "-").replace("/", "-").replace("+", "plus")
             chapter_counter = sticker_counter_label(chapter["codes"], by_code, filter_name)
+            chapter_counter_attrs = sticker_counter_data_attrs(chapter["codes"], by_code)
             chapter_percent = sticker_progress_percent(chapter["codes"], by_code)
             chapter_complete = all(sticker_quantity_for_counter(by_code, code) > 0 for code in chapter["codes"])
             chapter_classes = "section-title album-chapter-title"
@@ -2158,7 +2191,7 @@ def albumseite(album_id):
                 chapter_classes += " chapter-complete chapter-collapsed"
             chapter_expanded = "false" if chapter_complete else "true"
             html += '<section class="sticker-chapter-block">'
-            html += f'<h2 id="{chapter_id}" class="{chapter_classes}" role="button" tabindex="0" aria-expanded="{chapter_expanded}"><i class="chapter-progress-fill" style="width:{chapter_percent}%;"></i><span>{chapter_title}</span><span>{chapter_counter}</span></h2>'
+            html += f'<h2 id="{chapter_id}" class="{chapter_classes}" role="button" tabindex="0" aria-expanded="{chapter_expanded}" {chapter_counter_attrs}><i class="chapter-progress-fill" style="width:{chapter_percent}%;"></i><span>{chapter_title}</span><span>{chapter_counter}</span></h2>'
             html += '<div class="wall">'
 
             for code in chapter["codes"]:
@@ -2211,9 +2244,10 @@ def albumseite(album_id):
                 current_team = ""
                 chapter_id = "chapter-" + current_chapter.lower().replace(" ", "-").replace("/", "-")
                 chapter_counter = sticker_counter_label(chapter_codes[current_chapter], by_code, filter_name)
+                chapter_counter_attrs = sticker_counter_data_attrs(chapter_codes[current_chapter], by_code)
                 chapter_percent = sticker_progress_percent(chapter_codes[current_chapter], by_code)
                 html += '<section class="sticker-chapter-block">'
-                html += f'<h2 id="{chapter_id}" class="section-title album-chapter-title"><i class="chapter-progress-fill" style="width:{chapter_percent}%;"></i><span>{current_chapter}</span><span>{chapter_counter}</span></h2>'
+                html += f'<h2 id="{chapter_id}" class="section-title album-chapter-title" {chapter_counter_attrs}><i class="chapter-progress-fill" style="width:{chapter_percent}%;"></i><span>{current_chapter}</span><span>{chapter_counter}</span></h2>'
 
             if team_name and team_name != current_team:
                 if open_wall:
@@ -2226,7 +2260,8 @@ def albumseite(album_id):
                 current_team = team_name
                 team_id = "team-" + current_team.lower().replace(" ", "-").replace("/", "-")
                 team_counter = sticker_counter_label(team_codes[current_team], by_code, filter_name)
-                html += f'<div class="sticker-team-block"><h3 id="{team_id}" class="team-title"><span>{current_team}</span><span>{team_counter}</span></h3>'
+                team_counter_attrs = sticker_counter_data_attrs(team_codes[current_team], by_code)
+                html += f'<div class="sticker-team-block"><h3 id="{team_id}" class="team-title" {team_counter_attrs}><span>{current_team}</span><span>{team_counter}</span></h3>'
                 open_team_block = True
             if not open_wall:
                 html += '<div class="wall">'
@@ -2318,6 +2353,33 @@ function updateVisibleStickerCount(){{
     if(counter) counter.textContent = count;
 }}
 
+function stickerCounterNumber(heading, key){{
+    const value = parseInt(heading.dataset[key] || '0', 10);
+    return Number.isNaN(value) ? 0 : value;
+}}
+
+function stickerCounterLabelForHeading(heading){{
+    const total = stickerCounterNumber(heading, 'counterTotal');
+    const owned = stickerCounterNumber(heading, 'counterOwned');
+    const missing = stickerCounterNumber(heading, 'counterMissing');
+    const duplicate = stickerCounterNumber(heading, 'counterDuplicate');
+
+    if(activeStickerFilter === 'missing') return missing + ' fehlend';
+    if(activeStickerFilter === 'owned') return owned + ' vorhanden';
+    if(activeStickerFilter === 'duplicate') return duplicate + ' doppelt';
+    return owned + '/' + total;
+}}
+
+function updateStickerCounterBadges(){{
+    document.querySelectorAll('[data-counter-total]').forEach(function(heading){{
+        const spans = heading.querySelectorAll('span');
+        const badge = spans[spans.length - 1];
+        if(!badge) return;
+
+        badge.textContent = stickerCounterLabelForHeading(heading);
+    }});
+}}
+
 function setActiveStickerFilter(nextFilter, options){{
     const allowedFilters = ['all', 'missing', 'owned', 'duplicate'];
     activeStickerFilter = allowedFilters.includes(nextFilter) ? nextFilter : 'all';
@@ -2364,6 +2426,7 @@ function refreshStickerVisibility(){{
 
     updateChapterCollapseVisibility();
     updateVisibleStickerCount();
+    updateStickerCounterBadges();
     updateStickerSearchFeedback(term);
 }}
 
