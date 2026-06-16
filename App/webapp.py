@@ -46,12 +46,6 @@ def target_db_has_user_data(db_path):
             if table_count(con, table_name) > 0:
                 return True
 
-        if table_exists(con, "users"):
-            user_count = con.execute(
-                "SELECT COUNT(*) AS count FROM users WHERE id != 1 OR username NOT IN ('valentin', 'Valy')"
-            ).fetchone()["count"]
-            if user_count > 0:
-                return True
 
         return False
     finally:
@@ -155,6 +149,24 @@ def debug_db():
     return "<pre>" + escape(json.dumps(debug_data, indent=2, ensure_ascii=False)) + "</pre>"
 
 
+# --- Debug Seed Now route ---
+@app.route("/debug-seed-now")
+def debug_seed_now():
+    if request.args.get("key") != "sammlr-reset":
+        return "Forbidden", 403
+
+    target_path = os.path.abspath(DB)
+    seed_path = os.path.abspath(SEED_DB)
+
+    if not os.path.exists(seed_path):
+        return "Seed database not found", 500
+
+    os.makedirs(os.path.dirname(target_path), exist_ok=True)
+    shutil.copy2(seed_path, target_path)
+
+    return redirect("/debug-db?fresh=seeded")
+
+
 def collection_feedback_html(message):
     if not message:
         return ""
@@ -180,7 +192,7 @@ def collection_feedback_html(message):
 
 @app.before_request
 def require_login():
-    public_endpoints = {"login", "register", "static"}
+    public_endpoints = {"login", "register", "static", "debug_db", "debug_seed_now"}
 
     if request.endpoint in public_endpoints:
         return None
@@ -5961,6 +5973,8 @@ def profil_delete():
     return redirect("/login")
 
 
-initialize_render_database_from_seed()
 init_db()
-app.run(debug=True, host="0.0.0.0", port=8080)
+initialize_render_database_from_seed()
+
+if __name__ == "__main__":
+    app.run(debug=True, host="0.0.0.0", port=8080)
