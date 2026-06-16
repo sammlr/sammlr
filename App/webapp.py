@@ -43,7 +43,7 @@ def debug_db():
         "SELECT album_id, COUNT(*) AS count FROM stickers GROUP BY album_id ORDER BY album_id"
     ).fetchall()
     user_albums = con.execute(
-        "SELECT * FROM user_albums LIMIT 20"
+        "SELECT user_id, album_id FROM user_albums ORDER BY user_id, album_id"
     ).fetchall()
     con.close()
 
@@ -57,7 +57,7 @@ def debug_db():
         "tables": [row["name"] for row in tables],
         "albums": rows_to_dicts(albums),
         "sticker_counts_by_album": rows_to_dicts(sticker_counts),
-        "user_albums_limit_20": rows_to_dicts(user_albums),
+        "user_albums": rows_to_dicts(user_albums),
     }
 
     return "<pre>" + escape(json.dumps(debug_data, indent=2, ensure_ascii=False)) + "</pre>"
