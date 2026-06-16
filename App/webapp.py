@@ -80,6 +80,17 @@ def init_db():
     )
     """)
     cur.execute("""
+    CREATE TABLE IF NOT EXISTS stickers (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        album_id TEXT,
+        sticker_code TEXT,
+        status TEXT,
+        duplicates INTEGER DEFAULT 0,
+        quantity INTEGER DEFAULT 1,
+        user_id INTEGER DEFAULT 1
+    )
+    """)
+    cur.execute("""
     CREATE TABLE IF NOT EXISTS albums (
         id TEXT PRIMARY KEY,
         name TEXT,
