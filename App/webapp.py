@@ -27,6 +27,42 @@ def get_db():
     return con
 
 
+@app.route("/debug-db")
+def debug_db():
+    db_exists = os.path.exists(DB)
+    db_size = os.path.getsize(DB) if db_exists else 0
+    con = get_db()
+
+    tables = con.execute(
+        "SELECT name FROM sqlite_master WHERE type='table' ORDER BY name"
+    ).fetchall()
+    albums = con.execute(
+        "SELECT id, name FROM albums ORDER BY id"
+    ).fetchall()
+    sticker_counts = con.execute(
+        "SELECT album_id, COUNT(*) AS count FROM stickers GROUP BY album_id ORDER BY album_id"
+    ).fetchall()
+    user_albums = con.execute(
+        "SELECT * FROM user_albums LIMIT 20"
+    ).fetchall()
+    con.close()
+
+    def rows_to_dicts(rows):
+        return [dict(row) for row in rows]
+
+    debug_data = {
+        "db_path": DB,
+        "file_exists": db_exists,
+        "file_size_bytes": db_size,
+        "tables": [row["name"] for row in tables],
+        "albums": rows_to_dicts(albums),
+        "sticker_counts_by_album": rows_to_dicts(sticker_counts),
+        "user_albums_limit_20": rows_to_dicts(user_albums),
+    }
+
+    return "<pre>" + escape(json.dumps(debug_data, indent=2, ensure_ascii=False)) + "</pre>"
+
+
 def collection_feedback_html(message):
     if not message:
         return ""
