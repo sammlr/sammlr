@@ -104,6 +104,18 @@ def get_db():
 def debug_db():
     db_exists = os.path.exists(DB)
     db_size = os.path.getsize(DB) if db_exists else 0
+    cwd = os.getcwd()
+    root_files = sorted(os.listdir("."))
+    database_files = []
+    database_error = None
+    if os.path.isdir("Database"):
+        database_files = sorted(os.listdir("Database"))
+    else:
+        database_error = "Database folder not found from current working directory"
+
+    seed_exists = os.path.exists(SEED_DB)
+    seed_size = os.path.getsize(SEED_DB) if seed_exists else 0
+
     con = get_db()
 
     tables = con.execute(
@@ -124,6 +136,13 @@ def debug_db():
         return [dict(row) for row in rows]
 
     debug_data = {
+        "cwd": cwd,
+        "root_files": root_files,
+        "database_files": database_files,
+        "database_error": database_error,
+        "seed_db_path": SEED_DB,
+        "seed_file_exists": seed_exists,
+        "seed_file_size_bytes": seed_size,
         "db_path": DB,
         "file_exists": db_exists,
         "file_size_bytes": db_size,
