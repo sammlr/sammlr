@@ -3917,6 +3917,9 @@ body .container{
     bottom:10px;
     left:10px;
     z-index:50;
+    display:flex;
+    flex-direction:column;
+    max-height:38vh;
     padding:12px;
     border:2px solid rgba(37,31,26,.16);
     border-radius:10px;
@@ -3948,7 +3951,13 @@ body .container{
     display:grid;
     grid-template-columns:1fr 1fr;
     gap:10px;
+    min-height:0;
+    overflow:hidden;
     margin-bottom:10px;
+}
+
+.sticker-list-trade-columns > div{
+    min-height:0;
 }
 
 .sticker-list-green,
@@ -3969,6 +3978,8 @@ body .container{
 
 .sticker-list-selection{
     min-height:38px;
+    max-height:92px;
+    overflow-y:auto;
     padding:7px 8px;
     border-radius:6px;
     background:rgba(255,255,255,.42);
@@ -3986,6 +3997,12 @@ body .container{
     border-radius:8px;
     font-size:15px;
     font-weight:950;
+}
+
+.sticker-list-check{
+    position:sticky;
+    bottom:0;
+    flex:0 0 auto;
 }
 
 .sticker-list-check,
@@ -4062,7 +4079,12 @@ body .container{
         right:50%;
         left:auto;
         width:560px;
+        max-height:320px;
         transform:translateX(50%);
+    }
+
+    .sticker-list-selection{
+        max-height:180px;
     }
 }
 

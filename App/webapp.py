@@ -3049,7 +3049,7 @@ def stickerliste(album_id):
 
     <aside class="sticker-list-tradebar">
         <div class="sticker-list-trade-head">
-            <strong>Aktueller Tausch</strong>
+            <strong>Aktueller Transfer</strong>
             <button type="button" id="stickerListClear">Leeren</button>
         </div>
         <div class="sticker-list-trade-columns">
@@ -3062,12 +3062,12 @@ def stickerliste(album_id):
                 <div class="sticker-list-selection" id="stickerListGive">Noch nichts markiert</div>
             </div>
         </div>
-        <button type="button" class="sticker-list-check" id="stickerListReviewButton" disabled>Trade prüfen</button>
+        <button type="button" class="sticker-list-check" id="stickerListReviewButton" disabled>Transfer durchführen</button>
     </aside>
 
     <div class="sticker-list-modal" id="stickerListReviewModal" style="display:none;">
         <div class="sticker-list-modal-card">
-            <h2>Trade prüfen</h2>
+            <h2>Transfer durchführen</h2>
             <div class="sticker-list-review-grid">
                 <div>
                     <h3>Ich bekomme</h3>
@@ -3081,7 +3081,7 @@ def stickerliste(album_id):
             <p id="stickerListReviewError" class="sticker-list-error" style="display:none;"></p>
             <div class="sticker-list-modal-actions">
                 <button type="button" class="sticker-list-secondary" id="stickerListReviewClose">Zurück</button>
-                <button type="submit" form="stickerListTradeForm" class="sticker-list-primary" id="stickerListSubmit">Trade erstellen</button>
+                <button type="submit" form="stickerListTradeForm" class="sticker-list-primary" id="stickerListSubmit">Transfer speichern</button>
             </div>
         </div>
     </div>
@@ -3144,7 +3144,7 @@ function stickerListUpdateTradebar(){{
     const giveCount = stickerListSelections.give.length;
     document.getElementById('stickerListGetCount').textContent = stickerListCountLabel(getCount);
     document.getElementById('stickerListGiveCount').textContent = stickerListCountLabel(giveCount);
-    const canReview = getCount > 0 && giveCount > 0 && giveCount >= getCount;
+    const canReview = getCount > 0 || giveCount > 0;
     document.getElementById('stickerListReviewButton').disabled = !canReview;
 
     stickerListSyncHiddenInputs();
@@ -3158,19 +3158,29 @@ function stickerListRenderReview(){{
     const submit = document.getElementById('stickerListSubmit');
     const getCount = stickerListSelections.get.length;
     const giveCount = stickerListSelections.give.length;
-    const invalid = getCount === 0 || giveCount === 0 || giveCount < getCount;
+    const invalid = getCount === 0 && giveCount === 0;
 
     error.style.display = invalid ? 'block' : 'none';
-    error.textContent = 'Du musst mindestens so viele doppelte Sticker abgeben, wie du erhältst.';
+    error.textContent = 'Markiere mindestens einen Sticker für diesen Transfer.';
     submit.disabled = invalid;
 }}
 
 document.querySelectorAll('.sticker-list-item').forEach(function(item){{
     item.addEventListener('click', function(){{
         const mode = item.dataset.listMode;
-        const itemKey = stickerListItemKey(item);
         const selection = stickerListSelections[mode];
 
+        if(mode === 'get'){{
+            const existingCount = selection.filter(function(existing){{
+                return String(existing).split('::')[0] === item.dataset.code;
+            }}).length;
+            selection.push(item.dataset.code + '::' + (existingCount + 1));
+            item.classList.add('selected');
+            stickerListUpdateTradebar();
+            return;
+        }}
+
+        const itemKey = stickerListItemKey(item);
         if(selection.includes(itemKey)){{
             stickerListSelections[mode] = selection.filter(function(existing){{
                 return existing !== itemKey;
@@ -3226,8 +3236,8 @@ def stickerliste_trade(album_id):
     give_codes = [code for code in give_codes if code]
     list_url = f"/album/{album_id}/liste"
 
-    if not get_codes or not give_codes or len(give_codes) < len(get_codes):
-        return redirect(f"{list_url}?message={quote('Bitte markiere auf beiden Seiten passende Sticker.')}")
+    if not get_codes and not give_codes:
+        return redirect(f"{list_url}?message={quote('Bitte markiere mindestens einen Sticker für diesen Transfer.')}")
 
     con = get_db()
     quantities = user_album_quantities(con, current_user_id(), album_id)
@@ -3235,15 +3245,10 @@ def stickerliste_trade(album_id):
     for code in give_codes:
         give_counts[code] = give_counts.get(code, 0) + 1
 
-    for code in get_codes:
-        if quantities.get(code, 0) > 0:
-            con.close()
-            return redirect(f"{list_url}?message={quote('Ein erhaltener Sticker ist nicht mehr fehlend.')}")
-
     for code, amount in give_counts.items():
         if amount > max(quantities.get(code, 0) - 1, 0):
             con.close()
-            return redirect(f"{list_url}?message={quote('Ein abgegebener Sticker ist nicht mehr doppelt.')}")
+            return redirect(f"{list_url}?message={quote('Ein abgegebener Sticker ist nicht mehr ausreichend doppelt vorhanden.')}")
 
     for code in give_codes:
         remove_sticker_quantity(con, current_user_id(), album_id, code)
@@ -3254,7 +3259,7 @@ def stickerliste_trade(album_id):
     con.commit()
     con.close()
 
-    msg = f"Trade gespeichert: {len(get_codes)} erhalten, {len(give_codes)} abgegeben."
+    msg = f"Transfer gespeichert: {len(get_codes)} erhalten, {len(give_codes)} abgegeben."
     return redirect(f"{list_url}?message={quote(msg)}")
 
 @app.route("/bulk_add/<album_id>", methods=["POST"])
