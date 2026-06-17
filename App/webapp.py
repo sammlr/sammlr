@@ -1636,6 +1636,16 @@ def favorite_album_choice_card(album, is_favorite=False):
 
 
 # --- Bottom Navigation ---
+def trade_icon_svg(extra_class=""):
+    extra_class = f" {extra_class}" if extra_class else ""
+    return f"""
+            <svg class="bottom-nav-icon bottom-nav-icon-handshake{extra_class}" viewBox="0 0 24 24" aria-hidden="true">
+                <path class="trade-arrow-filled" d="M7 5.1h7.8V2.8l6.3 4.5-6.3 4.5V9.5H7Z"></path>
+                <path d="M17 18.9H9.2v2.3l-6.3-4.5 6.3-4.5v2.3H17Z"></path>
+            </svg>
+        """
+
+
 def bottom_nav(active="sammlr"):
     icons = {
         "profil": """
@@ -1663,12 +1673,7 @@ def bottom_nav(active="sammlr"):
                 <circle class="bottom-nav-icon-dot sammlr-card-dot" cx="19.25" cy="18.45" r="1.35"></circle>
             </svg>
         """,
-        "tauschen": """
-            <svg class="bottom-nav-icon bottom-nav-icon-handshake" viewBox="0 0 24 24" aria-hidden="true">
-                <path class="trade-arrow-filled" d="M7 5.1h7.8V2.8l6.3 4.5-6.3 4.5V9.5H7Z"></path>
-                <path d="M17 18.9H9.2v2.3l-6.3-4.5 6.3-4.5v2.3H17Z"></path>
-            </svg>
-        """,
+        "tauschen": trade_icon_svg(),
         "statistik": """
             <svg class="bottom-nav-icon bottom-nav-icon-chart" viewBox="0 0 24 24" aria-hidden="true">
                 <rect x="3.8" y="10.8" width="4.2" height="9" rx="1.1"></rect>
@@ -2213,36 +2218,70 @@ def albumseite(album_id):
 
     {collection_feedback}
     <div class="album-quick-links">
-        <a class="album-quick-card" href="/album/{album_id}/trophaeen">
-            <strong>Trophäen</strong>
-            <span>{trophy_next_line}</span>
-            <span>{trophy_last_line}</span>
+        <a class="album-quick-card" href="/album/{album_id}/liste">
+            <svg class="album-quick-icon album-quick-icon-list" viewBox="0 0 24 24" aria-hidden="true">
+                <path d="M6.4 4.8h8.8a2 2 0 0 1 2 2v8.8"></path>
+                <path d="M5.4 6.2v11.1a2 2 0 0 0 2 2h7"></path>
+                <path d="M8.4 9.1h5.6"></path>
+                <path d="M8.4 12h4.1"></path>
+                <path d="M14.6 18.8l4.4-4.4a1.4 1.4 0 0 1 2 2l-4.4 4.4-2.6.6.6-2.6Z"></path>
+            </svg>
+            <span class="album-quick-text">
+                <strong>Stickerliste</strong>
+                <span id="albumMissingQuickStat">{total - gesammelt} fehlend</span>
+                <span id="albumDuplicateQuickStat">{doppelte} doppelt</span>
+            </span>
         </a>
         <a class="album-quick-card {'has-badge' if incoming_trade_request_count > 0 else ''}" href="/album/{album_id}/trades?tab={'incoming' if incoming_trade_request_count > 0 else 'partners'}">
             {trade_badge_html}
-            <strong>Tauschbörse</strong>
-            <span>{market_missing_line}</span>
-            <span>{direct_partner_line}</span>
+            {trade_icon_svg("album-quick-icon album-quick-icon-trade")}
+            <span class="album-quick-text">
+                <strong>Tauschbörse</strong>
+                <span>{market_missing_line}</span>
+                <span>{direct_partner_line}</span>
+            </span>
         </a>
-        <a class="album-quick-card" href="/album/{album_id}/liste">
-            <strong>📝 Stickerliste</strong>
-            <span id="albumMissingQuickStat">{total - gesammelt} fehlend</span>
-            <span id="albumDuplicateQuickStat">{doppelte} doppelt</span>
+        <a class="album-quick-card" href="/album/{album_id}/trophaeen">
+            <svg class="album-quick-icon album-quick-icon-trophy" viewBox="0 0 24 24" aria-hidden="true">
+                <path d="M7.2 4.4h9.6v3.9a4.8 4.8 0 0 1-9.6 0Z"></path>
+                <path d="M7.2 6.2H4.6v1.5a3.4 3.4 0 0 0 3.1 3.4"></path>
+                <path d="M16.8 6.2h2.6v1.5a3.4 3.4 0 0 1-3.1 3.4"></path>
+                <path d="M12 13.1v3.4"></path>
+                <path d="M8.7 19.6h6.6"></path>
+                <path d="M10 16.5h4"></path>
+            </svg>
+            <span class="album-quick-text">
+                <strong>Trophäen</strong>
+                <span>{trophy_next_line}</span>
+                <span>{trophy_last_line}</span>
+            </span>
         </a>
     </div>
 
     <div class="card sticker-wall-card">
-    <div class="sticker-wall-headline">
-        <h2>Stickerwand</h2>
-        <button type="button" class="smart-add-toggle" onclick="openQuickActions()">Hinzufügen</button>
-            </div>
+    <div class="sticker-wall-controlbar">
+        <div class="sticker-wall-headline">
+            <h2>Stickerwand</h2>
+            <button type="button" class="smart-add-toggle" onclick="openQuickActions()">
+                <svg class="smart-add-icon" viewBox="0 0 24 24" aria-hidden="true">
+                    <path d="M4.5 19.5l4.2-.9 10-10a2.1 2.1 0 0 0-3-3l-10 10-.9 4.2Z"></path>
+                    <path d="M14.4 6.9l2.7 2.7"></path>
+                </svg>
+                <span>Bearbeiten</span>
+            </button>
+        </div>
         <div class="sticker-filter-row">
-        <a class="sticker-filter-pill {'active' if filter_name == 'all' else ''}" href="/album/{album_id}" data-filter="all">Alle</a>
-        <a class="sticker-filter-pill missing {'active' if filter_name == 'missing' else ''}" href="/album/{album_id}?filter=missing" data-filter="missing">Fehlende</a>
-        <a class="sticker-filter-pill owned {'active' if filter_name == 'owned' else ''}" href="/album/{album_id}?filter=owned" data-filter="owned">Vorhandene</a>
-        <a class="sticker-filter-pill duplicate {'active' if filter_name == 'duplicate' else ''}" href="/album/{album_id}?filter=duplicate" data-filter="duplicate">Doppelte</a>
+            <a class="sticker-filter-pill {'active' if filter_name == 'all' else ''}" href="/album/{album_id}" data-filter="all">Alle</a>
+            <a class="sticker-filter-pill missing {'active' if filter_name == 'missing' else ''}" href="/album/{album_id}?filter=missing" data-filter="missing">Fehlende</a>
+            <a class="sticker-filter-pill owned {'active' if filter_name == 'owned' else ''}" href="/album/{album_id}?filter=owned" data-filter="owned">Vorhandene</a>
+            <a class="sticker-filter-pill duplicate {'active' if filter_name == 'duplicate' else ''}" href="/album/{album_id}?filter=duplicate" data-filter="duplicate">Doppelte</a>
+        </div>
+        <input id="stickerSearch" class="sticker-search" type="search" placeholder="Sticker suchen..." autocomplete="off">
+        <div class="sticker-current-section-bar" id="stickerCurrentSectionBar" aria-live="polite">
+            <span id="stickerCurrentSectionName">Stickerwand</span>
+            <strong id="stickerCurrentSectionCount">{gesammelt}/{total}</strong>
+        </div>
     </div>
-    <input id="stickerSearch" class="sticker-search" type="search" placeholder="Sticker oder Team suchen..." autocomplete="off">
     <div id="pendingInputError" class="pending-input-error" style="display:none;"></div>
     <div id="searchDebugBox" class="search-debug-box" style="display:none;"></div>
 
@@ -2410,8 +2449,8 @@ def albumseite(album_id):
         <button type="button" class="sticker-detail-close" data-sticker-detail-close aria-label="Schließen">×</button>
         <div class="sticker-detail-layout sticker-detail-modal-layout">
             <div class="sticker-detail-preview">
-                <div class="sticker-detail-stack" id="stickerDetailStack">
-                    <div class="sticker-detail-image-placeholder sticker-detail-modal-preview">
+                <div class="sticker-detail-image-placeholder sticker-detail-modal-preview">
+                    <div class="sticker-detail-stack" id="stickerDetailStack">
                         <div class="slot sticker-detail-tile missing" id="stickerDetailPreviewTile"></div>
                     </div>
                 </div>
@@ -2547,7 +2586,12 @@ function updateStickerDetailView(code, display, quantity, statusClass, statusLab
         tile.classList.remove('missing', 'owned', 'duplicate');
         tile.classList.add(statusClass);
     }}
-    if(stack) stack.classList.toggle('has-stack', quantity > 1);
+    if(stack){{
+        stack.querySelectorAll('.sticker-stack-layer').forEach(function(layer){{
+            layer.remove();
+        }});
+        stack.classList.remove('has-stack');
+    }}
     if(minus) minus.disabled = stickerDetailBusy || quantity <= 0;
     if(hint) hint.textContent = 'Änderungen werden direkt in deiner Stickerwand gespeichert.';
 }}
@@ -2694,6 +2738,117 @@ function updateStickerCounterBadges(){{
 
         badge.textContent = stickerCounterLabelForHeading(heading);
     }});
+
+    updateCurrentStickerSectionBar();
+}}
+
+function headingTitleText(heading){{
+    if(!heading) return '';
+    const firstSpan = heading.querySelector('span');
+    return firstSpan ? firstSpan.textContent.trim() : heading.textContent.trim();
+}}
+
+function headingCounterText(heading){{
+    if(!heading) return '';
+    return stickerCounterLabelForHeading(heading);
+}}
+
+function headingIsDisplayed(heading){{
+    if(!heading) return false;
+    const style = window.getComputedStyle(heading);
+    if(style.display === 'none' || style.visibility === 'hidden') return false;
+    if(heading.closest('.collapse-section-hidden')) return false;
+    return heading.getClientRects().length > 0;
+}}
+
+function headingScope(heading){{
+    if(heading.classList.contains('team-title')) return heading.closest('.sticker-team-block');
+    return heading.closest('.sticker-chapter-block');
+}}
+
+function scopeHasVisibleContent(scope, heading){{
+    if(!scope) return false;
+    if(scope.style.display === 'none') return false;
+    if(heading && heading.classList.contains('chapter-collapsed')) return true;
+    return Array.from(scope.querySelectorAll('.slot')).some(slotIsVisible);
+}}
+
+function currentSectionLabelForHeading(heading){{
+    if(!heading) return 'Stickerwand';
+    if(heading.classList.contains('team-title')){{
+        const chapter = heading.closest('.sticker-chapter-block');
+        const chapterTitle = chapter ? chapter.querySelector('.album-chapter-title, .album-section-progress-title') : null;
+        const chapterName = headingTitleText(chapterTitle);
+        const teamName = headingTitleText(heading);
+        return chapterName ? chapterName + ' · ' + teamName : teamName;
+    }}
+    return headingTitleText(heading) || 'Stickerwand';
+}}
+
+function updateCurrentStickerSectionBar(){{
+    const nameNode = document.getElementById('stickerCurrentSectionName');
+    const countNode = document.getElementById('stickerCurrentSectionCount');
+    const controlbar = document.querySelector('.sticker-wall-controlbar');
+    if(!nameNode || !countNode || !controlbar) return;
+
+    const referenceY = controlbar.getBoundingClientRect().bottom + 12;
+    const headings = Array.from(document.querySelectorAll('.album-chapter-title, .album-section-progress-title, .team-title'))
+        .filter(function(heading){{
+            return headingIsDisplayed(heading) && scopeHasVisibleContent(headingScope(heading), heading);
+        }});
+
+    if(headings.length === 0){{
+        nameNode.textContent = 'Stickerwand';
+        countNode.textContent = '';
+        return;
+    }}
+
+    let activeHeading = headings[0];
+    let bestAboveDistance = Infinity;
+    let bestBelowDistance = Infinity;
+    let firstBelow = null;
+
+    headings.forEach(function(heading){{
+        const rect = heading.getBoundingClientRect();
+        const scope = headingScope(heading);
+        const scopeRect = scope ? scope.getBoundingClientRect() : rect;
+
+        if(rect.top <= referenceY && scopeRect.bottom >= referenceY){{
+            const distance = referenceY - rect.top;
+            if(distance < bestAboveDistance){{
+                bestAboveDistance = distance;
+                activeHeading = heading;
+            }}
+            return;
+        }}
+
+        if(rect.top > referenceY){{
+            const distance = rect.top - referenceY;
+            if(distance < bestBelowDistance){{
+                bestBelowDistance = distance;
+                firstBelow = heading;
+            }}
+            return;
+        }}
+
+        activeHeading = heading;
+    }});
+
+    if(bestAboveDistance === Infinity && firstBelow){{
+        activeHeading = firstBelow;
+    }}
+
+    nameNode.textContent = currentSectionLabelForHeading(activeHeading);
+    countNode.textContent = headingCounterText(activeHeading);
+}}
+
+let currentSectionBarFrame = null;
+function scheduleCurrentStickerSectionBar(){{
+    if(currentSectionBarFrame !== null) return;
+    currentSectionBarFrame = window.requestAnimationFrame(function(){{
+        currentSectionBarFrame = null;
+        updateCurrentStickerSectionBar();
+    }});
 }}
 
 function recalculateStickerCounterData(){{
@@ -2785,7 +2940,7 @@ function resetStickerSearch(){{
     if(!stickerSearchInput) return;
 
     stickerSearchInput.value = '';
-    stickerSearchInput.placeholder = 'Sticker oder Team suchen...';
+    stickerSearchInput.placeholder = 'Sticker suchen...';
     stickerSearchInput.type = 'search';
 
     applyStickerVisibility();
@@ -3130,6 +3285,7 @@ document.querySelectorAll('.album-chapter-title').forEach(function(chapterTitle)
     chapterTitle.addEventListener('click', function(){{
         chapterTitle.classList.toggle('chapter-collapsed');
         updateChapterCollapseVisibility();
+        scheduleCurrentStickerSectionBar();
     }});
 
     chapterTitle.addEventListener('keydown', function(event){{
@@ -3137,8 +3293,12 @@ document.querySelectorAll('.album-chapter-title').forEach(function(chapterTitle)
         event.preventDefault();
         chapterTitle.classList.toggle('chapter-collapsed');
         updateChapterCollapseVisibility();
+        scheduleCurrentStickerSectionBar();
     }});
 }});
+
+window.addEventListener('scroll', scheduleCurrentStickerSectionBar, {{passive:true}});
+window.addEventListener('resize', scheduleCurrentStickerSectionBar);
 
 setActiveStickerFilter(activeStickerFilter, {{updateUrl:false}});
 
@@ -3224,7 +3384,7 @@ function startNeutralPendingMode(){{
     const input = document.getElementById('stickerSearch');
     if(input){{
         input.type = 'text';
-        input.placeholder = 'Sticker suchen oder Code eingeben...';
+        input.placeholder = 'Sticker suchen...';
         input.focus();
     }}
 
@@ -3457,14 +3617,14 @@ def stickerliste(album_id):
 
     <header class="sticker-list-header">
         <a class="sticker-list-logo" href="/">sammlr<span></span></a>
-        <a class="sticker-list-back" href="/album/{album_id}">← Album</a>
+        <a class="sticker-list-back" href="/album/{album_id}">← zurück zum Album</a>
         <h1>{escape(album['name'])}</h1>
         <p class="sticker-list-stats">{gesammelt} gesammelt · {missing_count} fehlend · {doppelte} doppelt</p>
     </header>
 
     <main class="sticker-list-paper">
         <section class="sticker-list-section">
-            <h2>Meine Fehlenden</h2>
+            <h2>Fehlende Sticker</h2>
             <div class="sticker-list-grid">
                 {missing_html}
                 {missing_empty}
@@ -3472,21 +3632,18 @@ def stickerliste(album_id):
         </section>
 
         <section class="sticker-list-section">
-            <h2>Meine Doppelten</h2>
+            <h2>Doppelte Sticker</h2>
             <div class="sticker-list-grid">
                 {duplicate_html}
                 {duplicate_empty}
             </div>
         </section>
-    </main>
 
-    <form method="POST" action="/album/{album_id}/liste/trade" id="stickerListTradeForm">
-        <div id="stickerListHiddenInputs"></div>
-    </form>
+    </main>
 
     <aside class="sticker-list-tradebar">
         <div class="sticker-list-trade-head">
-            <strong>Aktueller Transfer</strong>
+            <strong>Aktueller Tausch</strong>
             <button type="button" id="stickerListClear">Leeren</button>
         </div>
         <div class="sticker-list-trade-columns">
@@ -3501,6 +3658,10 @@ def stickerliste(album_id):
         </div>
         <button type="button" class="sticker-list-check" id="stickerListReviewButton" disabled>Transfer durchführen</button>
     </aside>
+
+    <form method="POST" action="/album/{album_id}/liste/trade" id="stickerListTradeForm">
+        <div id="stickerListHiddenInputs"></div>
+    </form>
 
     <div class="sticker-list-modal" id="stickerListReviewModal" style="display:none;">
         <div class="sticker-list-modal-card">
@@ -3606,18 +3767,8 @@ document.querySelectorAll('.sticker-list-item').forEach(function(item){{
     item.addEventListener('click', function(){{
         const mode = item.dataset.listMode;
         const selection = stickerListSelections[mode];
-
-        if(mode === 'get'){{
-            const existingCount = selection.filter(function(existing){{
-                return String(existing).split('::')[0] === item.dataset.code;
-            }}).length;
-            selection.push(item.dataset.code + '::' + (existingCount + 1));
-            item.classList.add('selected');
-            stickerListUpdateTradebar();
-            return;
-        }}
-
         const itemKey = stickerListItemKey(item);
+
         if(selection.includes(itemKey)){{
             stickerListSelections[mode] = selection.filter(function(existing){{
                 return existing !== itemKey;
@@ -3657,6 +3808,19 @@ document.getElementById('stickerListTradeForm').addEventListener('submit', funct
     }}
 }});
 
+function stickerListReserveTradebarSpace(){{
+    const tradebar = document.querySelector('.sticker-list-tradebar');
+    if(!tradebar) return;
+    document.body.style.setProperty('--sticker-list-tradebar-space', (tradebar.offsetHeight + 34) + 'px');
+}}
+
+if('ResizeObserver' in window){{
+    const stickerListTradebarObserver = new ResizeObserver(stickerListReserveTradebarSpace);
+    stickerListTradebarObserver.observe(document.querySelector('.sticker-list-tradebar'));
+}}
+
+window.addEventListener('resize', stickerListReserveTradebarSpace);
+stickerListReserveTradebarSpace();
 stickerListUpdateTradebar();
 </script>
     </div></body></html>

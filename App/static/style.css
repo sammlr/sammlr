@@ -3876,6 +3876,7 @@ body .container{
 /* Stickerliste: analoger Schmierzettel-Modus */
 .sticker-list-page{
     min-height:100vh;
+    --sticker-list-tradebar-space:230px;
     background:#f5eedf;
     color:#251f1a;
 }
@@ -7520,5 +7521,417 @@ body .container{
 
     .global-trade-collector-card .trade-partner-button{
         width:100%;
+    }
+}
+
+/* Stickerwall power controls */
+.sticker-wall-controlbar{
+    position:sticky;
+    top:0;
+    z-index:150;
+    margin:-8px -8px 12px;
+    padding:9px 8px 10px;
+    background:#ffffff;
+    backdrop-filter:blur(16px);
+    border:1px solid rgba(93,47,134,.08);
+    border-top:0;
+    border-radius:2px 2px 18px 18px;
+    box-shadow:0 9px 20px rgba(24,16,32,.07);
+}
+
+.sticker-wall-controlbar .sticker-wall-headline{
+    margin:0 0 6px;
+}
+
+.sticker-wall-controlbar .sticker-filter-row{
+    margin:0 0 6px;
+    gap:6px;
+}
+
+.sticker-wall-controlbar .sticker-search{
+    margin:0;
+    min-height:40px;
+    padding-top:9px;
+    padding-bottom:9px;
+}
+
+.sticker-current-section-bar{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:10px;
+    margin-top:7px;
+    padding:7px 10px;
+    min-height:34px;
+    border-radius:12px;
+    background:#ffffff;
+    border:1px solid rgba(93,47,134,.12);
+    box-shadow:0 5px 14px rgba(24,16,32,.06);
+    color:#241832;
+    font-size:12px;
+    line-height:1.1;
+    font-weight:950;
+}
+
+.sticker-current-section-bar span{
+    min-width:0;
+    overflow:hidden;
+    text-overflow:ellipsis;
+    white-space:nowrap;
+}
+
+.sticker-current-section-bar strong{
+    flex:0 0 auto;
+    padding:4px 8px;
+    border-radius:999px;
+    background:rgba(93,47,134,.09);
+    color:#5d2f86;
+    font-size:11px;
+    line-height:1;
+    white-space:nowrap;
+}
+
+.sticker-wall-controlbar .smart-add-toggle{
+    display:inline-flex;
+    align-items:center;
+    gap:7px;
+    white-space:nowrap;
+}
+
+.album-quick-icon{
+    width:27px;
+    height:27px;
+    color:#5d2f86;
+    fill:none;
+    stroke:currentColor;
+    stroke-width:2.05;
+    stroke-linecap:round;
+    stroke-linejoin:round;
+    flex:0 0 auto;
+    overflow:visible;
+    margin-bottom:2px;
+}
+
+.album-quick-icon .trade-arrow-filled{
+    fill:currentColor;
+    stroke:currentColor;
+}
+
+.album-quick-icon-list{
+    width:28px;
+    height:28px;
+}
+
+.smart-add-icon{
+    width:17px;
+    height:17px;
+    flex:0 0 auto;
+    fill:none;
+    stroke:#5d2f86;
+    stroke-width:2.2;
+    stroke-linecap:round;
+    stroke-linejoin:round;
+    padding:4px;
+    border-radius:999px;
+    background:rgba(255,255,255,.92);
+}
+
+/* Calm quantity stack: only the sticker tile stacks, not the white frame. */
+.sticker-detail-stack{
+    position:relative;
+    width:132px;
+    min-height:132px;
+    display:flex;
+    align-items:flex-start;
+    justify-content:center;
+    padding:0;
+}
+
+.sticker-detail-stack::before,
+.sticker-detail-stack::after{
+    content:none !important;
+}
+
+.sticker-detail-stack #stickerDetailPreviewTile{
+    position:relative;
+    z-index:50;
+}
+
+.sticker-stack-layer{
+    display:none;
+}
+
+.sticker-stack-layer.owned{
+    background:linear-gradient(145deg,#6fcf97,#24905c);
+}
+
+.sticker-stack-layer.duplicate{
+    background:linear-gradient(145deg,#8f52ff,#5d2f86);
+}
+
+.sticker-stack-layer.missing{
+    background:linear-gradient(145deg,#ded8e8,#bdb3cc);
+}
+
+@media (max-width:680px){
+    .sticker-wall-controlbar{
+        top:0;
+        margin:-6px -6px 10px;
+        padding:8px 6px 9px;
+        border-radius:2px 2px 16px 16px;
+    }
+
+    .sticker-wall-controlbar .sticker-wall-headline{
+        gap:10px;
+    }
+
+    .sticker-wall-controlbar .smart-add-toggle{
+        min-height:42px;
+        padding:9px 12px;
+        font-size:13px;
+    }
+
+    .sticker-stack-layer{
+        width:118px;
+        min-height:118px;
+        transform:translateY(calc(var(--stack-offset) * 5px));
+    }
+
+    .sticker-detail-stack{
+        width:118px;
+        min-height:118px;
+        padding-bottom:0;
+    }
+}
+
+/* Stickerwall card radius fix */
+.sticker-wall-card{
+    border-radius:18px !important;
+    overflow:visible !important;
+    background:#fbfafc !important;
+    border:1px solid rgba(18,5,31,.07) !important;
+    box-shadow:0 18px 46px rgba(18,5,31,.06) !important;
+    padding:10px !important;
+}
+
+.sticker-wall-card .sticker-wall-controlbar{
+    margin:-10px -10px 12px !important;
+    border-radius:18px 18px 16px 16px !important;
+    border-left:0;
+    border-right:0;
+}
+
+.sticker-wall-card .wall{
+    padding:0 0 10px;
+}
+
+.sticker-wall-card .album-chapter-title,
+.sticker-wall-card .album-section-progress-title,
+.sticker-wall-card .team-title{
+    position:relative !important;
+    top:auto !important;
+    z-index:1 !important;
+}
+
+/* Album quick-card layout */
+.album-quick-links{
+    grid-template-columns:repeat(3, minmax(0,1fr)) !important;
+}
+
+.album-quick-text{
+    display:flex !important;
+    flex-direction:column;
+    gap:4px;
+    min-width:0;
+}
+
+.album-quick-text strong,
+.album-quick-text span{
+    padding-right:0 !important;
+}
+
+@media (max-width:640px){
+    .album-quick-links{
+        grid-template-columns:1fr !important;
+        gap:9px !important;
+    }
+
+    .album-quick-card{
+        width:100%;
+        min-height:0 !important;
+        display:grid !important;
+        grid-template-columns:34px minmax(0,1fr);
+        align-items:center;
+        gap:11px !important;
+        padding:11px 12px !important;
+        text-align:left;
+    }
+
+    .album-quick-card .album-quick-icon{
+        grid-column:1;
+        grid-row:1;
+        margin:0;
+        align-self:center;
+        justify-self:center;
+    }
+
+    .album-quick-card .album-quick-text{
+        grid-column:2;
+        grid-row:1;
+        align-items:flex-start;
+        text-align:left;
+    }
+
+    .album-quick-card .album-quick-text strong,
+    .album-quick-card .album-quick-text span{
+        text-align:left;
+    }
+}
+
+/* Stickerliste: finaler Papiermodus */
+.sticker-list-shell{
+    padding-bottom:var(--sticker-list-tradebar-space, 230px) !important;
+}
+
+.sticker-list-back{
+    display:block !important;
+    width:max-content;
+    margin:-2px 0 14px 4px !important;
+    color:#5d2f86 !important;
+    font-family:"Bradley Hand", "Marker Felt", Arial, sans-serif !important;
+    font-size:15px !important;
+    font-weight:950 !important;
+    transform:rotate(-1deg);
+}
+
+.sticker-list-header h1,
+.sticker-list-stats,
+.sticker-list-section h2,
+.sticker-list-trade-head strong,
+.sticker-list-review-grid h3{
+    font-family:"Bradley Hand", "Marker Felt", Arial, sans-serif !important;
+}
+
+.sticker-list-paper{
+    gap:28px !important;
+    border-top:2px solid rgba(93,47,134,.16) !important;
+    border-bottom:0 !important;
+}
+
+.sticker-list-section{
+    padding:0 0 18px;
+    border-bottom:1px dashed rgba(93,47,134,.22);
+}
+
+.sticker-list-section h2{
+    color:#5d2f86 !important;
+    font-size:25px !important;
+    text-transform:none !important;
+}
+
+.sticker-list-section h2::before{
+    content:none !important;
+}
+
+.sticker-list-tradebar{
+    position:fixed !important;
+    right:12px !important;
+    bottom:max(14px, env(safe-area-inset-bottom)) !important;
+    left:12px !important;
+    z-index:50 !important;
+    max-height:38vh !important;
+    width:auto !important;
+    transform:none !important;
+    padding:12px !important;
+    border:1px dashed rgba(93,47,134,.34) !important;
+    border-radius:10px !important;
+    background:rgba(255,250,235,.94) !important;
+    box-shadow:0 12px 28px rgba(46,36,25,.12) !important;
+    backdrop-filter:blur(8px);
+}
+
+.sticker-list-trade-head{
+    margin-bottom:8px !important;
+}
+
+.sticker-list-trade-head strong{
+    color:#5d2f86;
+    font-size:25px !important;
+    line-height:1;
+    transform:rotate(-.3deg);
+}
+
+.sticker-list-trade-head strong::before{
+    content:none !important;
+}
+
+.sticker-list-trade-head button{
+    color:#5d2f86 !important;
+    font-family:"Bradley Hand", "Marker Felt", Arial, sans-serif !important;
+    font-size:16px;
+}
+
+.sticker-list-trade-columns{
+    gap:18px !important;
+    margin-bottom:12px !important;
+    overflow:hidden !important;
+    min-height:0;
+}
+
+.sticker-list-green,
+.sticker-list-red{
+    color:#5d2f86 !important;
+    font-family:"Bradley Hand", "Marker Felt", Arial, sans-serif;
+    font-size:16px !important;
+}
+
+.sticker-list-selection{
+    min-height:28px !important;
+    max-height:96px !important;
+    padding:5px 0 !important;
+    border-radius:0 !important;
+    background:transparent !important;
+    border-top:1px solid rgba(93,47,134,.16);
+    color:#251f1a;
+    font-family:"Bradley Hand", "Marker Felt", Arial, sans-serif;
+}
+
+.sticker-list-check,
+.sticker-list-primary{
+    background:#5d2f86 !important;
+}
+
+.sticker-list-secondary{
+    color:#5d2f86 !important;
+}
+
+.sticker-list-item[data-list-mode="get"].selected::after,
+.sticker-list-item[data-list-mode="get"].selected::before{
+    border-color:rgba(93,47,134,.56) !important;
+}
+
+.sticker-list-item[data-list-mode="give"].selected::before,
+.sticker-list-item[data-list-mode="give"].selected::after{
+    background:rgba(93,47,134,.62) !important;
+}
+
+@media (max-width:640px){
+    .sticker-list-shell{
+        padding-bottom:var(--sticker-list-tradebar-space, 260px) !important;
+    }
+
+    .sticker-list-trade-columns{
+        grid-template-columns:1fr !important;
+        gap:12px !important;
+    }
+}
+
+@media (min-width:720px){
+    .sticker-list-tradebar{
+        right:50% !important;
+        left:auto !important;
+        width:560px !important;
+        transform:translateX(50%) !important;
+        max-height:320px !important;
     }
 }
