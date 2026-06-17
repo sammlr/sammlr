@@ -1,7 +1,7 @@
 import sqlite3
 import os
 import shutil
-from flask import Flask, request, redirect, session
+from flask import Flask, request, redirect, session, jsonify
 import json
 from html import escape
 from em24_data import build_em24
@@ -385,13 +385,13 @@ from services.albums import (
     all_codes
 )
 
-def lade_album(album_id):
+def lade_album_for_user(album_id, user_id):
     con = get_db()
     album = con.execute("SELECT * FROM albums WHERE id=?", (album_id,)).fetchone()
     sticker = con.execute(
     
         "SELECT * FROM stickers WHERE user_id=? AND album_id=?",
-        (current_user_id(), album_id)
+        (user_id, album_id)
     ).fetchall()
     con.close()
 
@@ -414,6 +414,10 @@ def lade_album(album_id):
 
     prozent = int((gesammelt / total) * 100)
     return album, by_code, gesammelt, doppelte, prozent, total
+
+
+def lade_album(album_id):
+    return lade_album_for_user(album_id, current_user_id())
 
 
 def format_sammlr_date(value):
@@ -563,6 +567,22 @@ def sticker_card_inner(album_id, code, by_code):
     team_class = "sticker-team" if team else "sticker-team empty"
     qty_html = f'<span class="sticker-qty">×{q}</span>' if q > 1 else ""
     return f'<span class="{team_class}">{team}</span><span class="sticker-number">{number}</span>{qty_html}'
+
+
+def sticker_status_class_for_quantity(quantity):
+    if quantity <= 0:
+        return "missing"
+    if quantity == 1:
+        return "owned"
+    return "duplicate"
+
+
+def sticker_status_label_for_quantity(quantity):
+    if quantity <= 0:
+        return "Fehlt"
+    if quantity == 1:
+        return "Vorhanden"
+    return "Doppelt"
 
 
 def filter_ok(filter_name, code, by_code):
@@ -1125,7 +1145,11 @@ def render_wm26_trophy_items(items):
     return html
 
 def erreichte_trophaeen(album_id):
-    album, by_code, gesammelt, doppelte, prozent, total = lade_album(album_id)
+    return erreichte_trophaeen_for_user(album_id, current_user_id())
+
+
+def erreichte_trophaeen_for_user(album_id, user_id):
+    album, by_code, gesammelt, doppelte, prozent, total = lade_album_for_user(album_id, user_id)
     last, next_trophy, trophies = trophy_status(album_id, gesammelt, total)
 
     erreicht = [titel for ziel, titel in trophies if gesammelt >= ziel]
@@ -1141,6 +1165,90 @@ def erreichte_trophaeen(album_id):
                 erreicht.append(item["title"])
 
     return list(dict.fromkeys(erreicht))
+
+
+def record_trophy_unlocks(album_id, newly_reached, user_id=None, silent_reached=None, con=None):
+    user_id = user_id or current_user_id()
+    silent_reached = silent_reached or []
+    own_connection = con is None
+    con = con or get_db()
+
+    existing = {
+        row["trophy_name"]
+        for row in con.execute(
+            "SELECT trophy_name FROM unlocked_trophies WHERE user_id=? AND album_id=?",
+            (user_id, album_id)
+        ).fetchall()
+    }
+    visible_new = [title for title in dict.fromkeys(newly_reached) if title and title not in existing]
+
+    for title in dict.fromkeys(list(silent_reached) + visible_new):
+        if not title:
+            continue
+        con.execute(
+            """
+            INSERT OR IGNORE INTO unlocked_trophies (user_id, album_id, trophy_name)
+            VALUES (?, ?, ?)
+            """,
+            (user_id, album_id, title)
+        )
+
+    if own_connection:
+        con.commit()
+        con.close()
+
+    return visible_new
+
+
+def queue_trophy_popup(album_id, trophy_titles):
+    trophy_titles = [title for title in dict.fromkeys(trophy_titles) if title]
+    if not trophy_titles:
+        return
+
+    popups = session.get("pending_trophy_popups", [])
+    popups.append({
+        "album_id": album_id,
+        "titles": trophy_titles
+    })
+    session["pending_trophy_popups"] = popups
+
+
+def trophy_popup_html(album_id, trophy_titles):
+    trophy_titles = [title for title in dict.fromkeys(trophy_titles) if title]
+    if not trophy_titles:
+        return ""
+
+    trophy_text = "Neue Trophäe freigeschaltet!" if len(trophy_titles) == 1 else f"{len(trophy_titles)} neue Trophäen freigeschaltet!"
+    trophy_lines = "<br>".join(escape(title) for title in trophy_titles)
+    return f"""
+    <div class="trophy-popup-overlay">
+        <div class="trophy-popup">
+            <div class="trophy-popup-patch">🏆</div>
+            <h2>Neuer Patch erhalten</h2>
+            <p><strong>{trophy_text}</strong><br>{trophy_lines}</p>
+            <div class="popup-actions">
+                <button type="button" class="popup-button popup-secondary" onclick="this.closest('.trophy-popup-overlay').remove()">Okay</button>
+                <a href="/album/{album_id}/trophaeen" class="popup-button">Trophäenschrank</a>
+            </div>
+        </div>
+    </div>
+    """
+
+
+def consume_trophy_popup_html(fallback_album_id=None):
+    popups = session.pop("pending_trophy_popups", [])
+    if not popups:
+        return ""
+
+    album_id = popups[0].get("album_id") or fallback_album_id
+    titles = []
+    for popup in popups:
+        titles.extend(popup.get("titles", []))
+
+    if not album_id:
+        return ""
+
+    return trophy_popup_html(album_id, titles)
 
 
 def trophy_status(album_id, gesammelt, total):
@@ -1294,11 +1402,15 @@ def startseite():
         tauschbare_luecken = tauschbare_luecken_count(album["id"])
         infos.append((album, gesammelt, doppelte, prozent, total, tauschbare_luecken))
 
+    if favorite_album_id:
+        infos.sort(key=lambda item: 0 if item[0]["id"] == favorite_album_id else 1)
+
     html = f"""
     <html><head>{style()}</head><body><div class="container">
 
     {app_header("Zentrale", "Deine Alben, Fortschritte und nächsten Sammelziele.")}
     {trade_request_popup_html()}
+    {consume_trophy_popup_html(favorite_album_id)}
 
     <div class="home-section-toolbar">
         <h2 class="home-section-title">Aktive Alben</h2>
@@ -1975,28 +2087,17 @@ def albumseite(album_id):
     mode = request.args.get("mode", focus)
     trophy = request.args.get("trophy", "")
     count = request.args.get("count", "1")
-    anzahl = int(count)
+    try:
+        anzahl = int(count)
+    except ValueError:
+        anzahl = 1
     trigger = request.args.get("trigger", "")
     smart_prefix_active = request.args.get("smart", "") == "1"
     print("TRIGGER =", trigger)
-    trophy_popup = ""
+    trophy_popup = consume_trophy_popup_html(album_id)
 
     if trophy:
-        trophy_text = "Neue Trophäe freigeschaltet!" if anzahl == 1 else f"{anzahl} neue Trophäen freigeschaltet!"
-        trophy_lines = trophy.replace(",", "<br>")
-        trophy_popup = f"""
-        <div class="trophy-popup-overlay">
-            <div class="trophy-popup">
-                <div class="trophy-popup-patch">🏆</div>
-                <h2>Neuer Patch erhalten</h2>
-                <p><strong>{trophy_text}</strong><br>{trophy_lines}</p>
-                <div class="popup-actions">
-                    <a href="/album/{album_id}" class="popup-button popup-secondary">Okay</a>
-                    <a href="/album/{album_id}/trophaeen" class="popup-button">Trophäenschrank</a>
-                </div>
-            </div>
-        </div>
-        """
+        trophy_popup += trophy_popup_html(album_id, trophy.split(",")[:anzahl])
 
     if request.method == "POST":
         aktion = request.form.get("aktion", "add")
@@ -2005,6 +2106,7 @@ def albumseite(album_id):
         if aktion == "trade":
             trade_out_raw = request.form.get("trade_out", "").strip()
             trade_in_raw = request.form.get("trade_in", "").strip()
+            vorher_erreicht = erreichte_trophaeen(album_id)
 
             trade_out = resolve_code(album_id, trade_out_raw) if trade_out_raw else None
             trade_in = resolve_code(album_id, trade_in_raw) if trade_in_raw else None
@@ -2059,6 +2161,14 @@ def albumseite(album_id):
             con.commit()
             con.close()
 
+            nachher_erreicht = erreichte_trophaeen(album_id)
+            neue_trophies = record_trophy_unlocks(
+                album_id,
+                [t for t in nachher_erreicht if t not in vorher_erreicht],
+                silent_reached=vorher_erreicht
+            )
+            queue_trophy_popup(album_id, neue_trophies)
+
             msg = f"Tausch gespeichert: {display_code(trade_out)} abgegeben, {display_code(trade_in)} eingesammelt."
             return redirect(f"/album/{album_id}?filter={current_filter}&message={quote(msg)}&focus=trade")
 
@@ -2096,9 +2206,9 @@ def albumseite(album_id):
     <html><head>{style()}</head><body><div class="container">
     {app_header()}
     <div class="album-title-progress">
-        <i class="chapter-progress-fill" style="width:{prozent}%;"></i>
+        <i id="albumProgressFill" class="chapter-progress-fill" style="width:{prozent}%;"></i>
         <span>{album['name']}</span>
-        <span>{prozent}%</span>
+        <span id="albumProgressPercent">{prozent}%</span>
     </div>
 
     {collection_feedback}
@@ -2116,8 +2226,8 @@ def albumseite(album_id):
         </a>
         <a class="album-quick-card" href="/album/{album_id}/liste">
             <strong>📝 Stickerliste</strong>
-            <span>{total - gesammelt} fehlend</span>
-            <span>{doppelte} doppelt</span>
+            <span id="albumMissingQuickStat">{total - gesammelt} fehlend</span>
+            <span id="albumDuplicateQuickStat">{doppelte} doppelt</span>
         </a>
     </div>
 
@@ -2174,7 +2284,7 @@ def albumseite(album_id):
             if trigger and compact(code) == compact(trigger):
                 klasse += " trigger-slot"
             search_text = f"{code} {text} {current_section}".lower()
-            html += f'<a class="slot {klasse}" data-code="{code}" data-display="{display_code(code)}" data-search="{search_text}" href="/sticker/{album_id}/{code}">{sticker_card_inner(album_id, code, by_code)}</a>'
+            html += f'<a class="slot {klasse}" data-code="{code}" data-display="{display_code(code)}" data-search="{search_text}" data-quantity="{sticker_quantity_for_counter(by_code, code)}" href="/sticker/{album_id}/{code}">{sticker_card_inner(album_id, code, by_code)}</a>'
         if open_wall:
             html += "</div></section>"
 
@@ -2201,7 +2311,7 @@ def albumseite(album_id):
                 if trigger and compact(code) == compact(trigger):
                     klasse += " trigger-slot"
                 search_text = f"{code} {text} {chapter_title}".lower()
-                html += f'<a class="slot {klasse}" data-code="{code}" data-display="{display_code(code)}" data-search="{search_text}" href="/sticker/{album_id}/{code}">{sticker_card_inner(album_id, code, by_code)}</a>'
+                html += f'<a class="slot {klasse}" data-code="{code}" data-display="{display_code(code)}" data-search="{search_text}" data-quantity="{sticker_quantity_for_counter(by_code, code)}" href="/sticker/{album_id}/{code}">{sticker_card_inner(album_id, code, by_code)}</a>'
 
             html += "</div></section>"
 
@@ -2273,7 +2383,7 @@ def albumseite(album_id):
             if trigger and compact(code) == compact(trigger):
                 klasse += " trigger-slot"
             search_text = f"{code} {text} {current_chapter} {current_team}".lower()
-            html += f'<a class="slot {klasse}" data-code="{code}" data-display="{display_code(code)}" data-search="{search_text}" href="/sticker/{album_id}/{code}">{sticker_card_inner(album_id, code, by_code)}</a>'
+            html += f'<a class="slot {klasse}" data-code="{code}" data-display="{display_code(code)}" data-search="{search_text}" data-quantity="{sticker_quantity_for_counter(by_code, code)}" href="/sticker/{album_id}/{code}">{sticker_card_inner(album_id, code, by_code)}</a>'
 
         if open_wall:
             html += "</div>"
@@ -2291,9 +2401,46 @@ def albumseite(album_id):
             if trigger and compact(code) == compact(trigger):
                 klasse += " trigger-slot"
             search_text = f"{code} {text}".lower()
-            html += f'<a class="slot {klasse}" data-code="{code}" data-display="{display_code(code)}" data-search="{search_text}" href="/sticker/{album_id}/{code}">{sticker_card_inner(album_id, code, by_code)}</a>'
+            html += f'<a class="slot {klasse}" data-code="{code}" data-display="{display_code(code)}" data-search="{search_text}" data-quantity="{sticker_quantity_for_counter(by_code, code)}" href="/sticker/{album_id}/{code}">{sticker_card_inner(album_id, code, by_code)}</a>'
         html += "</div></section>"
     html += f'''
+<div class="sticker-detail-modal" id="stickerDetailModal" style="display:none;" aria-hidden="true">
+    <div class="sticker-detail-modal-backdrop" data-sticker-detail-close></div>
+    <div class="sticker-detail-modal-card" role="dialog" aria-modal="true" aria-labelledby="stickerDetailTitle">
+        <button type="button" class="sticker-detail-close" data-sticker-detail-close aria-label="Schließen">×</button>
+        <div class="sticker-detail-layout sticker-detail-modal-layout">
+            <div class="sticker-detail-preview">
+                <div class="sticker-detail-stack" id="stickerDetailStack">
+                    <div class="sticker-detail-image-placeholder sticker-detail-modal-preview">
+                        <div class="slot sticker-detail-tile missing" id="stickerDetailPreviewTile"></div>
+                    </div>
+                </div>
+                <p>Sticker im Album</p>
+            </div>
+            <div class="sticker-detail-content">
+                <p class="sticker-detail-eyebrow">Sticker</p>
+                <h1 id="stickerDetailTitle">Sticker</h1>
+                <div class="sticker-detail-status missing" id="stickerDetailStatus">Fehlt</div>
+                <div class="sticker-detail-meta">
+                    <div>
+                        <span>Stickercode</span>
+                        <strong id="stickerDetailCode">-</strong>
+                    </div>
+                    <div>
+                        <span>Anzahl</span>
+                        <strong id="stickerDetailQuantity">0</strong>
+                    </div>
+                </div>
+                <div class="quantity-stepper" aria-label="Stickeranzahl ändern">
+                    <button type="button" id="stickerDetailMinus" aria-label="Sticker entfernen">−</button>
+                    <strong id="stickerDetailQuantityCenter">0</strong>
+                    <button type="button" id="stickerDetailPlus" aria-label="Sticker hinzufügen">+</button>
+                </div>
+                <p class="sticker-detail-modal-hint" id="stickerDetailHint">Änderungen werden direkt in deiner Stickerwand gespeichert.</p>
+            </div>
+        </div>
+    </div>
+</div>
 <div class="quick-action-modal" id="quickActionModal" style="display:none;">
     <div class="quick-action-card">
         <div id="quickActionStep1">
@@ -2340,6 +2487,175 @@ let keyboardInputMode = false;
 
 const stickerSearchInput = document.getElementById('stickerSearch');
 let activeStickerFilter = '{filter_name if filter_name in ("all", "missing", "owned", "duplicate") else "all"}';
+let activeStickerDetailCode = null;
+let stickerDetailBusy = false;
+
+function stickerQuantityFromSlot(slot){{
+    const value = parseInt(slot.dataset.quantity || '0', 10);
+    return Number.isNaN(value) ? 0 : value;
+}}
+
+function stickerStatusClassForQuantity(quantity){{
+    if(quantity <= 0) return 'missing';
+    if(quantity === 1) return 'owned';
+    return 'duplicate';
+}}
+
+function stickerStatusLabelForQuantity(quantity){{
+    if(quantity <= 0) return 'Fehlt';
+    if(quantity === 1) return 'Vorhanden';
+    return 'Doppelt';
+}}
+
+function stickerSlotByCode(code){{
+    return Array.from(document.querySelectorAll('a.slot[data-code]')).find(function(slot){{
+        return slot.dataset.code === code;
+    }});
+}}
+
+function setStickerDetailBusy(isBusy){{
+    stickerDetailBusy = isBusy;
+    const minus = document.getElementById('stickerDetailMinus');
+    const plus = document.getElementById('stickerDetailPlus');
+    if(minus) minus.disabled = isBusy;
+    if(plus) plus.disabled = isBusy;
+}}
+
+function updateStickerDetailView(code, display, quantity, statusClass, statusLabel, cardHtml){{
+    activeStickerDetailCode = code;
+    const title = document.getElementById('stickerDetailTitle');
+    const codeNode = document.getElementById('stickerDetailCode');
+    const quantityNode = document.getElementById('stickerDetailQuantity');
+    const quantityCenter = document.getElementById('stickerDetailQuantityCenter');
+    const status = document.getElementById('stickerDetailStatus');
+    const tile = document.getElementById('stickerDetailPreviewTile');
+    const stack = document.getElementById('stickerDetailStack');
+    const minus = document.getElementById('stickerDetailMinus');
+    const hint = document.getElementById('stickerDetailHint');
+
+    if(title) title.textContent = display;
+    if(codeNode) codeNode.textContent = display;
+    if(quantityNode) quantityNode.textContent = quantity;
+    if(quantityCenter) quantityCenter.textContent = quantity;
+    if(status){{
+        status.textContent = statusLabel;
+        status.classList.remove('missing', 'owned', 'duplicate');
+        status.classList.add(statusClass);
+    }}
+    if(tile){{
+        tile.innerHTML = cardHtml || display;
+        tile.classList.remove('missing', 'owned', 'duplicate');
+        tile.classList.add(statusClass);
+    }}
+    if(stack) stack.classList.toggle('has-stack', quantity > 1);
+    if(minus) minus.disabled = stickerDetailBusy || quantity <= 0;
+    if(hint) hint.textContent = 'Änderungen werden direkt in deiner Stickerwand gespeichert.';
+}}
+
+function openStickerDetail(slot){{
+    const modal = document.getElementById('stickerDetailModal');
+    if(!modal || !slot) return;
+
+    const quantity = stickerQuantityFromSlot(slot);
+    const statusClass = stickerStatusClassForQuantity(quantity);
+    updateStickerDetailView(
+        slot.dataset.code || '',
+        slot.dataset.display || slot.dataset.code || '',
+        quantity,
+        statusClass,
+        stickerStatusLabelForQuantity(quantity),
+        slot.innerHTML
+    );
+
+    modal.style.display = 'flex';
+    modal.setAttribute('aria-hidden', 'false');
+}}
+
+function closeStickerDetail(){{
+    const modal = document.getElementById('stickerDetailModal');
+    if(!modal) return;
+    modal.style.display = 'none';
+    modal.setAttribute('aria-hidden', 'true');
+    activeStickerDetailCode = null;
+}}
+
+function applyStickerPayload(payload){{
+    const slot = stickerSlotByCode(payload.code);
+    if(slot){{
+        slot.dataset.quantity = payload.quantity;
+        slot.dataset.display = payload.display;
+        slot.innerHTML = payload.cardHtml;
+        slot.classList.remove('missing', 'owned', 'duplicate');
+        slot.classList.add(payload.statusClass);
+    }}
+
+    updateStickerDetailView(
+        payload.code,
+        payload.display,
+        payload.quantity,
+        payload.statusClass,
+        payload.statusLabel,
+        payload.cardHtml
+    );
+
+    if(payload.album){{
+        const albumFill = document.getElementById('albumProgressFill');
+        const albumPercent = document.getElementById('albumProgressPercent');
+        const missingQuickStat = document.getElementById('albumMissingQuickStat');
+        const duplicateQuickStat = document.getElementById('albumDuplicateQuickStat');
+        if(albumFill) albumFill.style.width = payload.album.percent + '%';
+        if(albumPercent) albumPercent.textContent = payload.album.percent + '%';
+        if(missingQuickStat) missingQuickStat.textContent = payload.album.missing + ' fehlend';
+        if(duplicateQuickStat) duplicateQuickStat.textContent = payload.album.duplicates + ' doppelt';
+    }}
+
+    recalculateStickerCounterData();
+    refreshStickerVisibility();
+
+    if(payload.trophyHtml){{
+        const holder = document.createElement('div');
+        holder.innerHTML = payload.trophyHtml;
+        Array.from(holder.children).forEach(function(node){{
+            document.body.appendChild(node);
+        }});
+    }}
+}}
+
+function changeActiveStickerQuantity(delta){{
+    if(!activeStickerDetailCode || stickerDetailBusy) return;
+
+    setStickerDetailBusy(true);
+    const body = new URLSearchParams();
+    body.set('delta', String(delta));
+
+    fetch('/album/{album_id}/sticker/' + encodeURIComponent(activeStickerDetailCode) + '/quantity', {{
+        method: 'POST',
+        headers: {{'Content-Type': 'application/x-www-form-urlencoded'}},
+        body: body.toString()
+    }})
+    .then(function(response){{
+        if(!response.ok) throw new Error('Sticker konnte nicht aktualisiert werden.');
+        return response.json();
+    }})
+    .then(function(payload){{
+        if(payload && payload.ok){{
+            applyStickerPayload(payload);
+        }}
+    }})
+    .catch(function(){{
+        const hint = document.getElementById('stickerDetailHint');
+        if(hint) hint.textContent = 'Die Änderung konnte nicht gespeichert werden. Bitte kurz erneut versuchen.';
+    }})
+    .finally(function(){{
+        setStickerDetailBusy(false);
+        const slot = activeStickerDetailCode ? stickerSlotByCode(activeStickerDetailCode) : null;
+        if(slot){{
+            const quantity = stickerQuantityFromSlot(slot);
+            const minus = document.getElementById('stickerDetailMinus');
+            if(minus) minus.disabled = quantity <= 0;
+        }}
+    }});
+}}
 
 function slotMatchesActiveFilter(slot){{
     if(activeStickerFilter === 'all') return true;
@@ -2378,6 +2694,37 @@ function updateStickerCounterBadges(){{
 
         badge.textContent = stickerCounterLabelForHeading(heading);
     }});
+}}
+
+function recalculateStickerCounterData(){{
+    document.querySelectorAll('[data-counter-total]').forEach(function(heading){{
+        const scope = heading.classList.contains('team-title')
+            ? heading.closest('.sticker-team-block')
+            : heading.closest('.sticker-chapter-block');
+        if(!scope) return;
+
+        const slots = Array.from(scope.querySelectorAll('a.slot[data-code]'));
+        const total = slots.length;
+        const owned = slots.filter(function(slot){{
+            return stickerQuantityFromSlot(slot) >= 1;
+        }}).length;
+        const duplicate = slots.reduce(function(sum, slot){{
+            return sum + Math.max(stickerQuantityFromSlot(slot) - 1, 0);
+        }}, 0);
+
+        heading.dataset.counterTotal = total;
+        heading.dataset.counterOwned = owned;
+        heading.dataset.counterMissing = Math.max(total - owned, 0);
+        heading.dataset.counterDuplicate = duplicate;
+
+        const fill = heading.querySelector('.chapter-progress-fill');
+        if(fill){{
+            const percent = total > 0 ? Math.min(100, Math.floor((owned / total) * 100)) : 0;
+            fill.style.width = percent + '%';
+        }}
+    }});
+
+    updateStickerCounterBadges();
 }}
 
 function setActiveStickerFilter(nextFilter, options){{
@@ -3031,14 +3378,39 @@ function confirmSmartAdd(action){{
 }}
 
 document.addEventListener('click', function(event){{
-    const slot = event.target.closest('.slot');
-    if(!smartAddMode || !slot) return;
+    const slot = event.target.closest('a.slot[data-code]');
+    if(!slot) return;
 
+    if(smartAddMode){{
+        event.preventDefault();
+
+        const code = slot.dataset.code || decodeURIComponent(slot.getAttribute('href').split('/').pop());
+
+        incrementPendingCode(code);
+        return;
+    }}
+
+    if(event.metaKey || event.ctrlKey || event.shiftKey || event.altKey || event.button !== 0) return;
     event.preventDefault();
+    openStickerDetail(slot);
+}});
 
-    const code = slot.dataset.code || decodeURIComponent(slot.getAttribute('href').split('/').pop());
+document.querySelectorAll('[data-sticker-detail-close]').forEach(function(button){{
+    button.addEventListener('click', closeStickerDetail);
+}});
 
-    incrementPendingCode(code);
+document.getElementById('stickerDetailMinus').addEventListener('click', function(){{
+    changeActiveStickerQuantity(-1);
+}});
+
+document.getElementById('stickerDetailPlus').addEventListener('click', function(){{
+    changeActiveStickerQuantity(1);
+}});
+
+document.addEventListener('keydown', function(event){{
+    if(event.key === 'Escape'){{
+        closeStickerDetail();
+    }}
 }});
 </script>
 '''
@@ -3076,9 +3448,11 @@ def stickerliste(album_id):
     missing_empty = '<p class="sticker-list-empty">Keine fehlenden Sticker.</p>' if not missing_codes else ""
     duplicate_empty = '<p class="sticker-list-empty">Keine doppelten Sticker.</p>' if not duplicate_codes else ""
     notice = f'<div class="sticker-list-notice">{escape(message)}</div>' if message else ""
+    trophy_popup = consume_trophy_popup_html(album_id)
 
     html = f"""
     <html><head>{style()}</head><body class="sticker-list-page"><div class="sticker-list-shell">
+    {trophy_popup}
     {notice}
 
     <header class="sticker-list-header">
@@ -3302,6 +3676,8 @@ def stickerliste_trade(album_id):
     if not get_codes and not give_codes:
         return redirect(f"{list_url}?message={quote('Bitte markiere mindestens einen Sticker für diesen Transfer.')}")
 
+    vorher_erreicht = erreichte_trophaeen(album_id)
+
     con = get_db()
     quantities = user_album_quantities(con, current_user_id(), album_id)
     give_counts = {}
@@ -3321,6 +3697,14 @@ def stickerliste_trade(album_id):
 
     con.commit()
     con.close()
+
+    nachher_erreicht = erreichte_trophaeen(album_id)
+    neue_trophies = record_trophy_unlocks(
+        album_id,
+        [t for t in nachher_erreicht if t not in vorher_erreicht],
+        silent_reached=vorher_erreicht
+    )
+    queue_trophy_popup(album_id, neue_trophies)
 
     msg = f"Transfer gespeichert: {len(get_codes)} erhalten, {len(give_codes)} abgegeben."
     return redirect(f"{list_url}?message={quote(msg)}")
@@ -3369,7 +3753,12 @@ def bulk_add(album_id):
     con.close()
 
     nachher_erreicht = erreichte_trophaeen(album_id)
-    neue_trophies = [t for t in nachher_erreicht if t not in vorher_erreicht]
+    neue_trophies = record_trophy_unlocks(
+        album_id,
+        [t for t in nachher_erreicht if t not in vorher_erreicht],
+        silent_reached=vorher_erreicht
+    )
+    queue_trophy_popup(album_id, neue_trophies)
 
     session["last_action"] = {
         "action": "bulk_add",
@@ -3380,10 +3769,6 @@ def bulk_add(album_id):
 
     msg = f"{len(resolved_codes)} Sticker hinzugefügt."
     url = f"/album/{album_id}?message={quote(msg)}&focus=add"
-
-    if neue_trophies:
-        trophy_text = ", ".join(neue_trophies)
-        url += f"&trophy={quote(trophy_text)}&count={len(neue_trophies)}"
 
     return redirect(url)
 
@@ -3400,6 +3785,8 @@ def bulk_remove(album_id):
 
     if not resolved_codes:
         return redirect(f"/album/{album_id}?message=Keine%20Sticker%20ausgewählt.&focus=remove")
+
+    vorher_erreicht = erreichte_trophaeen(album_id)
 
     con = get_db()
     cur = con.cursor()
@@ -3427,6 +3814,14 @@ def bulk_remove(album_id):
     con.commit()
     con.close()
 
+    nachher_erreicht = erreichte_trophaeen(album_id)
+    neue_trophies = record_trophy_unlocks(
+        album_id,
+        [t for t in nachher_erreicht if t not in vorher_erreicht],
+        silent_reached=vorher_erreicht
+    )
+    queue_trophy_popup(album_id, neue_trophies)
+
     session["last_action"] = {
         "action": "bulk_remove",
         "album_id": album_id,
@@ -3443,6 +3838,7 @@ def sticker_detail(album_id, code):
     current_filter = request.args.get("filter", "all")
 
     if request.method == "POST":
+        vorher_erreicht = erreichte_trophaeen(album_id)
         raw_quantity = request.form.get("quantity", "0").strip()
 
         try:
@@ -3478,6 +3874,14 @@ def sticker_detail(album_id, code):
 
         con.commit()
         con.close()
+
+        nachher_erreicht = erreichte_trophaeen(album_id)
+        neue_trophies = record_trophy_unlocks(
+            album_id,
+            [t for t in nachher_erreicht if t not in vorher_erreicht],
+            silent_reached=vorher_erreicht
+        )
+        queue_trophy_popup(album_id, neue_trophies)
 
         msg = f"Anzahl für Sticker {display_code(code)} auf {quantity} gesetzt."
         if quantity == 0:
@@ -3547,6 +3951,57 @@ def sticker_detail(album_id, code):
     """
 
 
+@app.route("/album/<album_id>/sticker/<path:code>/quantity", methods=["POST"])
+def update_sticker_quantity_inline(album_id, code):
+    resolved_code = resolve_code(album_id, code)
+    if resolved_code is None:
+        return jsonify({"ok": False, "message": "Sticker nicht vorhanden."}), 404
+
+    try:
+        delta = int(request.form.get("delta", "0"))
+    except ValueError:
+        delta = 0
+
+    if delta == 0:
+        return jsonify({"ok": False, "message": "Keine Änderung."}), 400
+
+    vorher_erreicht = erreichte_trophaeen(album_id)
+
+    con = get_db()
+    change_sticker_quantity(con, current_user_id(), album_id, resolved_code, delta)
+    con.commit()
+    con.close()
+
+    album, by_code, gesammelt, doppelte, prozent, total = lade_album(album_id)
+    quantity = sticker_quantity_for_counter(by_code, resolved_code)
+    status_class = sticker_status_class_for_quantity(quantity)
+    nachher_erreicht = erreichte_trophaeen(album_id)
+    neue_trophies = record_trophy_unlocks(
+        album_id,
+        [t for t in nachher_erreicht if t not in vorher_erreicht],
+        silent_reached=vorher_erreicht
+    )
+
+    return jsonify({
+        "ok": True,
+        "code": resolved_code,
+        "display": display_code(resolved_code),
+        "quantity": quantity,
+        "duplicates": max(quantity - 1, 0),
+        "statusClass": status_class,
+        "statusLabel": sticker_status_label_for_quantity(quantity),
+        "cardHtml": sticker_card_inner(album_id, resolved_code, by_code),
+        "album": {
+            "collected": gesammelt,
+            "duplicates": doppelte,
+            "missing": total - gesammelt,
+            "percent": prozent,
+            "total": total
+        },
+        "trophyHtml": trophy_popup_html(album_id, neue_trophies)
+    })
+
+
 @app.route("/add/<album_id>/<path:code>")
 def add(album_id, code):
     vorher_erreicht = erreichte_trophaeen(album_id)
@@ -3586,16 +4041,17 @@ def add(album_id, code):
     nachher_erreicht = erreichte_trophaeen(album_id)
     
 
-    neue_trophies = [t for t in nachher_erreicht if t not in vorher_erreicht] 
+    neue_trophies = record_trophy_unlocks(
+        album_id,
+        [t for t in nachher_erreicht if t not in vorher_erreicht],
+        silent_reached=vorher_erreicht
+    )
+    queue_trophy_popup(album_id, neue_trophies)
 
 
     msg = f"Du hast Sticker {display_code(code)} doppelt." if neue_duplicates >= 1 else f"Du hast Sticker {display_code(code)} zur Sammlung hinzugefügt."
 
     url = f"/album/{album_id}?filter={current_filter}&message={quote(msg)}&focus=add&smart=1"
-
-    if neue_trophies:
-        trophy_text = ", ".join(neue_trophies)
-        url += f"&trophy={quote(trophy_text)}&count={len(neue_trophies)}&trigger={quote(code)}"
 
     session["last_action"] = {
         "action": "add",
@@ -3688,6 +4144,7 @@ def undo_last_action():
 @app.route("/remove/<album_id>/<path:code>")
 
 def remove(album_id, code):
+    vorher_erreicht = erreichte_trophaeen(album_id)
     con = get_db()
     current_filter = request.args.get("filter", "all")
     cur = con.cursor()
@@ -3707,6 +4164,13 @@ def remove(album_id, code):
 
     con.commit()
     con.close()
+    nachher_erreicht = erreichte_trophaeen(album_id)
+    neue_trophies = record_trophy_unlocks(
+        album_id,
+        [t for t in nachher_erreicht if t not in vorher_erreicht],
+        silent_reached=vorher_erreicht
+    )
+    queue_trophy_popup(album_id, neue_trophies)
     session["last_action"] = {
         "action": "remove",
         "album_id": album_id,
@@ -5279,6 +5743,7 @@ def trades_overview():
     html = f"""
     <html><head>{style()}</head><body><div class="container">
     {app_header("Tauschbörse", "Passende Sammler nach Album.")}
+    {consume_trophy_popup_html()}
     {f'<div class="notice notice-success"><h2>{message}</h2></div>' if message else ''}
 
     <h1 class="global-trade-title">Tauschbörse</h1>
@@ -5471,14 +5936,37 @@ def confirm_trade_done(trade_id):
         con.close()
         return redirect(request.referrer or "/trades?message=Tauschanfrage%20nicht%20gefunden")
 
-    if trade["from_user_id"] == current_user_id():
+    album_id = trade["album_id"]
+    current_user = current_user_id()
+    other_user_id = trade["to_user_id"] if trade["from_user_id"] == current_user else trade["from_user_id"]
+    before_current = erreichte_trophaeen_for_user(album_id, current_user)
+    before_other = erreichte_trophaeen_for_user(album_id, other_user_id)
+
+    if trade["from_user_id"] == current_user:
         con.execute("UPDATE trade_requests SET from_confirmed=1 WHERE id=?", (trade_id,))
     else:
         con.execute("UPDATE trade_requests SET to_confirmed=1 WHERE id=?", (trade_id,))
 
-    if complete_trade_if_ready(con, trade):
+    completed = complete_trade_if_ready(con, trade)
+    if completed:
         con.commit()
         con.close()
+
+        after_current = erreichte_trophaeen_for_user(album_id, current_user)
+        after_other = erreichte_trophaeen_for_user(album_id, other_user_id)
+        current_new = record_trophy_unlocks(
+            album_id,
+            [t for t in after_current if t not in before_current],
+            user_id=current_user,
+            silent_reached=before_current
+        )
+        record_trophy_unlocks(
+            album_id,
+            [t for t in after_other if t not in before_other],
+            user_id=other_user_id,
+            silent_reached=before_other
+        )
+        queue_trophy_popup(album_id, current_new)
         return redirect("/trades?message=Tausch%20abgeschlossen")
 
     con.commit()
