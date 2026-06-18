@@ -7528,7 +7528,7 @@ body .container{
 .sticker-wall-controlbar{
     position:sticky;
     top:0;
-    z-index:150;
+    z-index:300;
     margin:-8px -8px 12px;
     padding:9px 8px 10px;
     background:#ffffff;
@@ -7553,42 +7553,6 @@ body .container{
     min-height:40px;
     padding-top:9px;
     padding-bottom:9px;
-}
-
-.sticker-current-section-bar{
-    display:flex;
-    align-items:center;
-    justify-content:space-between;
-    gap:10px;
-    margin-top:7px;
-    padding:7px 10px;
-    min-height:34px;
-    border-radius:12px;
-    background:#ffffff;
-    border:1px solid rgba(93,47,134,.12);
-    box-shadow:0 5px 14px rgba(24,16,32,.06);
-    color:#241832;
-    font-size:12px;
-    line-height:1.1;
-    font-weight:950;
-}
-
-.sticker-current-section-bar span{
-    min-width:0;
-    overflow:hidden;
-    text-overflow:ellipsis;
-    white-space:nowrap;
-}
-
-.sticker-current-section-bar strong{
-    flex:0 0 auto;
-    padding:4px 8px;
-    border-radius:999px;
-    background:rgba(93,47,134,.09);
-    color:#5d2f86;
-    font-size:11px;
-    line-height:1;
-    white-space:nowrap;
 }
 
 .sticker-wall-controlbar .smart-add-toggle{
@@ -7636,15 +7600,18 @@ body .container{
     background:rgba(255,255,255,.92);
 }
 
-/* Calm quantity stack: only the sticker tile stacks, not the white frame. */
+/* Calm quantity stack: only the sticker tile stacks in the overlay, not the wall. */
 .sticker-detail-stack{
     position:relative;
+    --sticker-overlay-card-size:132px;
     width:132px;
-    min-height:132px;
+    height:calc(var(--sticker-overlay-card-size) + (var(--sticker-stack-edges, 0) * 5px));
+    min-height:calc(var(--sticker-overlay-card-size) + (var(--sticker-stack-edges, 0) * 5px));
     display:flex;
     align-items:flex-start;
     justify-content:center;
-    padding:0;
+    padding:0 0 calc(var(--sticker-stack-edges, 0) * 5px);
+    overflow:visible;
 }
 
 .sticker-detail-stack::before,
@@ -7654,23 +7621,34 @@ body .container{
 
 .sticker-detail-stack #stickerDetailPreviewTile{
     position:relative;
-    z-index:50;
+    z-index:20;
+    height:var(--sticker-overlay-card-size) !important;
+    min-height:var(--sticker-overlay-card-size) !important;
+    box-sizing:border-box;
 }
 
 .sticker-stack-layer{
-    display:none;
-}
-
-.sticker-stack-layer.owned{
-    background:linear-gradient(145deg,#6fcf97,#24905c);
-}
-
-.sticker-stack-layer.duplicate{
+    position:absolute;
+    top:0;
+    left:0;
+    right:0;
+    display:block;
+    width:var(--sticker-overlay-card-size);
+    height:var(--sticker-overlay-card-size);
+    min-height:var(--sticker-overlay-card-size);
+    border-radius:16px;
+    transform:translateY(calc(var(--stack-index) * 5px));
     background:linear-gradient(145deg,#8f52ff,#5d2f86);
+    box-shadow:0 3px 8px rgba(46,21,72,.10);
+    pointer-events:none;
 }
 
-.sticker-stack-layer.missing{
-    background:linear-gradient(145deg,#ded8e8,#bdb3cc);
+.sticker-detail-modal-preview{
+    overflow:visible !important;
+}
+
+.sticker-detail-modal-preview{
+    padding-bottom:18px !important;
 }
 
 @media (max-width:680px){
@@ -7691,16 +7669,19 @@ body .container{
         font-size:13px;
     }
 
-    .sticker-stack-layer{
+    .sticker-detail-stack{
+        --sticker-overlay-card-size:118px;
         width:118px;
-        min-height:118px;
-        transform:translateY(calc(var(--stack-offset) * 5px));
+        height:calc(var(--sticker-overlay-card-size) + (var(--sticker-stack-edges, 0) * 5px));
+        min-height:calc(var(--sticker-overlay-card-size) + (var(--sticker-stack-edges, 0) * 5px));
+        padding-bottom:calc(var(--sticker-stack-edges, 0) * 5px);
     }
 
-    .sticker-detail-stack{
-        width:118px;
-        min-height:118px;
-        padding-bottom:0;
+    .sticker-stack-layer{
+        width:var(--sticker-overlay-card-size);
+        height:var(--sticker-overlay-card-size);
+        min-height:var(--sticker-overlay-card-size);
+        transform:translateY(calc(var(--stack-index) * 5px));
     }
 }
 
@@ -7933,5 +7914,436 @@ body .container{
         width:560px !important;
         transform:translateX(50%) !important;
         max-height:320px !important;
+    }
+}
+
+/* Tauschbereich: kleine Börsenzettel nur für konkrete Angebote */
+.trade-tab-badge.danger,
+.trade-tab-card.active .trade-tab-badge.danger{
+    background:#dc2626 !important;
+    color:#ffffff !important;
+    box-shadow:0 0 0 2px rgba(220,38,38,.10) !important;
+}
+
+.trade-request-card,
+.global-trade-request-card{
+    position:relative !important;
+    overflow:hidden !important;
+    border-radius:12px !important;
+    border:1px solid rgba(78,58,38,.13) !important;
+    background:
+        radial-gradient(circle at 14px 18px, rgba(37,31,26,.032) 0 1px, transparent 1.5px),
+        linear-gradient(rgba(79,126,161,.12) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(79,126,161,.09) 1px, transparent 1px),
+        #f5eedf !important;
+    background-size:34px 34px, 28px 28px, 28px 28px, auto !important;
+    box-shadow:0 10px 24px rgba(46,36,25,.11) !important;
+}
+
+.trade-request-card::before,
+.global-trade-request-card::before{
+    content:"";
+    position:absolute;
+    left:14px;
+    right:14px;
+    top:0;
+    height:7px;
+    background:radial-gradient(circle, rgba(78,58,38,.23) 0 1.4px, transparent 1.6px) repeat-x;
+    background-size:10px 7px;
+    opacity:.65;
+    pointer-events:none;
+}
+
+.trade-request-card::after,
+.global-trade-request-card::after{
+    content:"sammlr.";
+    position:absolute;
+    right:12px;
+    bottom:8px;
+    color:#17110d;
+    font-family:"Bradley Hand", "Marker Felt", Arial, sans-serif;
+    font-size:28px;
+    font-weight:950;
+    line-height:1;
+    opacity:.045;
+    transform:rotate(-7deg);
+    pointer-events:none;
+}
+
+.trade-request-card .trade-partner-head,
+.global-trade-request-card .global-trade-request-head{
+    position:relative;
+    z-index:1;
+}
+
+.trade-request-card h2,
+.global-trade-request-head strong{
+    font-family:"Bradley Hand", "Marker Felt", Arial, sans-serif !important;
+    font-weight:950 !important;
+}
+
+.trade-request-card .trade-partner-stats div,
+.trade-request-card .trade-completion-box{
+    background:rgba(255,250,235,.58) !important;
+    border-color:rgba(78,58,38,.12) !important;
+}
+
+.trade-request-card .trade-request-summary,
+.global-trade-request-card p,
+.global-trade-request-card .trade-request-actions,
+.global-trade-request-card > strong{
+    position:relative;
+    z-index:1;
+}
+
+.trade-request-card .trade-request-summary p,
+.global-trade-request-card p{
+    color:#42382f !important;
+}
+
+.sticker-list-paper::after{
+    content:"sammlr.";
+    position:absolute;
+    right:18px;
+    bottom:22px;
+    color:#17110d;
+    font-family:"Bradley Hand", "Marker Felt", Arial, sans-serif;
+    font-size:54px;
+    font-weight:950;
+    line-height:1;
+    opacity:.035;
+    transform:rotate(-8deg);
+    pointer-events:none;
+}
+
+.sticker-list-paper{
+    position:relative;
+}
+
+/* Tauschzettel: Angebotskarten folgen der Stickerliste, nur kompakter */
+.trade-request-card,
+.global-trade-request-card{
+    padding:18px 16px 16px !important;
+    border-radius:9px !important;
+    border:0 !important;
+    outline:1px solid rgba(93,47,134,.15);
+    background:
+        radial-gradient(circle at 14px 18px, rgba(37,31,26,.035) 0 1px, transparent 1.5px),
+        linear-gradient(rgba(79,126,161,.16) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(79,126,161,.12) 1px, transparent 1px),
+        #f5eedf !important;
+    background-size:34px 34px, 28px 28px, 28px 28px, auto !important;
+    box-shadow:0 12px 28px rgba(46,36,25,.13) !important;
+    transform:rotate(-.12deg);
+}
+
+.trade-request-card:nth-of-type(2n),
+.global-trade-request-card:nth-of-type(2n){
+    transform:rotate(.1deg);
+}
+
+.trade-request-card::before,
+.global-trade-request-card::before{
+    left:0;
+    right:0;
+    top:0;
+    height:8px;
+    background:
+        radial-gradient(circle at 4px 0, transparent 0 4px, rgba(93,47,134,.18) 4.2px 5.6px, transparent 5.8px),
+        linear-gradient(90deg, rgba(93,47,134,.18) 0 42%, transparent 42% 58%, rgba(93,47,134,.18) 58% 100%);
+    background-size:16px 8px, 16px 1px;
+    background-position:0 0, 0 7px;
+    opacity:.55;
+}
+
+.trade-request-card::after,
+.global-trade-request-card::after{
+    font-size:34px;
+    opacity:.04;
+}
+
+.trade-request-card .trade-partner-head,
+.global-trade-request-card .global-trade-request-head{
+    display:flex !important;
+    align-items:flex-start !important;
+    justify-content:space-between !important;
+    gap:12px !important;
+    margin:0 0 12px !important;
+    padding:0 0 10px !important;
+    border-bottom:1px dashed rgba(93,47,134,.24);
+}
+
+.trade-request-card h2,
+.global-trade-request-head strong{
+    color:#5d2f86 !important;
+    font-family:"Bradley Hand", "Marker Felt", Arial, sans-serif !important;
+    font-size:25px !important;
+    line-height:1 !important;
+    font-weight:950 !important;
+    letter-spacing:0 !important;
+    transform:rotate(-.5deg);
+}
+
+.trade-request-card .trade-partner-status,
+.global-trade-request-head span{
+    flex:0 0 auto !important;
+    min-height:0 !important;
+    padding:4px 7px !important;
+    border-radius:999px !important;
+    background:rgba(93,47,134,.08) !important;
+    color:#5d2f86 !important;
+    border:1px solid rgba(93,47,134,.14) !important;
+    box-shadow:none !important;
+    font-family:"Bradley Hand", "Marker Felt", Arial, sans-serif !important;
+    font-size:12px !important;
+    line-height:1 !important;
+    font-weight:950 !important;
+    transform:rotate(.4deg);
+}
+
+.trade-request-card .trade-partner-stats{
+    display:grid !important;
+    grid-template-columns:1fr 1fr !important;
+    gap:14px !important;
+    margin:0 0 12px !important;
+    padding:0 0 12px !important;
+    border-bottom:1px dashed rgba(93,47,134,.18);
+}
+
+.trade-request-card .trade-partner-stats div{
+    padding:0 !important;
+    border:0 !important;
+    border-radius:0 !important;
+    background:transparent !important;
+    box-shadow:none !important;
+}
+
+.trade-request-card .trade-partner-stats strong{
+    display:block !important;
+    color:#5d2f86 !important;
+    font-family:"Bradley Hand", "Marker Felt", Arial, sans-serif !important;
+    font-size:30px !important;
+    line-height:1 !important;
+    font-weight:950 !important;
+    transform:rotate(-.35deg);
+}
+
+.trade-request-card .trade-partner-stats span{
+    display:block !important;
+    margin:3px 0 0 !important;
+    color:#251f1a !important;
+    font-family:"Bradley Hand", "Marker Felt", Arial, sans-serif !important;
+    font-size:15px !important;
+    line-height:1.1 !important;
+    font-weight:950 !important;
+    text-transform:none !important;
+}
+
+.trade-request-card .trade-request-summary{
+    margin:0 0 10px !important;
+    padding:0 0 10px !important;
+    border-top:0 !important;
+    border-bottom:1px dashed rgba(93,47,134,.18) !important;
+}
+
+.trade-request-card .trade-request-summary p,
+.global-trade-request-card p{
+    margin:5px 0 0 !important;
+    color:#251f1a !important;
+    font-family:"Bradley Hand", "Marker Felt", Arial, sans-serif !important;
+    font-size:17px !important;
+    line-height:1.2 !important;
+    font-weight:950 !important;
+}
+
+.trade-request-card .trade-request-summary strong,
+.global-trade-request-card p strong,
+.global-trade-request-card > p > strong{
+    color:#5d2f86 !important;
+    font-weight:950 !important;
+}
+
+.global-trade-request-card{
+    display:block;
+}
+
+.global-trade-request-card .trade-request-actions,
+.trade-request-card .trade-request-actions{
+    display:grid !important;
+    grid-template-columns:1fr 1fr !important;
+    gap:8px !important;
+    margin-top:12px !important;
+    padding-top:10px !important;
+    border-top:1px dashed rgba(93,47,134,.18);
+}
+
+.trade-request-card .trade-request-actions .btn,
+.global-trade-request-card .trade-request-actions .btn{
+    min-height:36px !important;
+    border-radius:8px !important;
+    box-shadow:none !important;
+}
+
+.trade-request-card > p,
+.global-trade-request-card > p:last-child{
+    position:relative;
+    z-index:1;
+    margin-top:10px !important;
+    color:#5d2f86 !important;
+    font-family:"Bradley Hand", "Marker Felt", Arial, sans-serif !important;
+    font-size:16px !important;
+    font-weight:950 !important;
+}
+
+.trade-request-card .trade-completion-box{
+    margin-top:12px !important;
+    padding:10px 0 0 !important;
+    border:0 !important;
+    border-top:1px dashed rgba(93,47,134,.18) !important;
+    border-radius:0 !important;
+    background:transparent !important;
+    box-shadow:none !important;
+}
+
+.trade-request-card .trade-completion-box h3{
+    margin:0 0 6px !important;
+    color:#5d2f86 !important;
+    font-family:"Bradley Hand", "Marker Felt", Arial, sans-serif !important;
+    font-size:22px !important;
+    line-height:1 !important;
+}
+
+.trade-request-card .trade-completion-box p{
+    color:#251f1a !important;
+    font-family:"Bradley Hand", "Marker Felt", Arial, sans-serif !important;
+    font-size:16px !important;
+    line-height:1.2 !important;
+    font-weight:950 !important;
+}
+
+@media (max-width:520px){
+    .trade-request-card,
+    .global-trade-request-card{
+        padding:17px 14px 15px !important;
+    }
+
+    .trade-request-card h2,
+    .global-trade-request-head strong{
+        font-size:23px !important;
+    }
+
+    .trade-request-card .trade-partner-stats strong{
+        font-size:28px !important;
+    }
+}
+
+.trade-detail-link{
+    position:relative;
+    z-index:2;
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    min-height:34px;
+    margin-top:10px;
+    padding:0 12px;
+    border-radius:8px;
+    border:1px dashed rgba(93,47,134,.26);
+    color:#5d2f86;
+    background:rgba(255,250,235,.44);
+    font-family:"Bradley Hand", "Marker Felt", Arial, sans-serif;
+    font-size:16px;
+    font-weight:950;
+    text-decoration:none;
+}
+
+.trade-detail-page{
+    background:#f5eedf;
+}
+
+.trade-detail-shell{
+    padding-bottom:var(--sticker-list-tradebar-space, 260px) !important;
+}
+
+.trade-detail-paper{
+    padding-bottom:22px !important;
+}
+
+.trade-detail-partner-block{
+    padding:0 0 18px;
+    border-bottom:1px dashed rgba(93,47,134,.22);
+}
+
+.trade-detail-partner-block > div{
+    display:flex;
+    align-items:flex-start;
+    justify-content:space-between;
+    gap:12px;
+    margin-bottom:8px;
+}
+
+.trade-detail-partner-block h2{
+    margin:0;
+    color:#5d2f86;
+    font-family:"Bradley Hand", "Marker Felt", Arial, sans-serif;
+    font-size:31px;
+    line-height:1;
+    font-weight:950;
+    transform:rotate(-.6deg);
+}
+
+.trade-detail-partner-block span{
+    flex:0 0 auto;
+    padding:4px 8px;
+    border-radius:999px;
+    border:1px solid rgba(93,47,134,.16);
+    background:rgba(93,47,134,.08);
+    color:#5d2f86;
+    font-family:"Bradley Hand", "Marker Felt", Arial, sans-serif;
+    font-size:13px;
+    line-height:1;
+    font-weight:950;
+}
+
+.trade-detail-partner-block button{
+    min-height:32px;
+    padding:0 12px;
+    border:1px dashed rgba(93,47,134,.28);
+    border-radius:8px;
+    background:transparent;
+    color:#5d2f86;
+    font-family:"Bradley Hand", "Marker Felt", Arial, sans-serif;
+    font-size:16px;
+    font-weight:950;
+}
+
+.trade-detail-partner-block p{
+    margin:10px 0 0;
+    color:#251f1a;
+    font-family:"Bradley Hand", "Marker Felt", Arial, sans-serif;
+    font-size:17px;
+    line-height:1.2;
+    font-weight:950;
+}
+
+.trade-detail-sticker{
+    pointer-events:none;
+}
+
+.trade-detail-bar form{
+    margin:0;
+}
+
+.trade-detail-bar .sticker-list-check{
+    position:relative;
+}
+
+@media (max-width:640px){
+    .trade-detail-partner-block > div{
+        display:block;
+    }
+
+    .trade-detail-partner-block span{
+        display:inline-flex;
+        margin-top:8px;
     }
 }

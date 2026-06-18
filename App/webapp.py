@@ -1409,7 +1409,6 @@ def startseite():
     <html><head>{style()}</head><body><div class="container">
 
     {app_header("Zentrale", "Deine Alben, Fortschritte und nächsten Sammelziele.")}
-    {trade_request_popup_html()}
     {consume_trophy_popup_html(favorite_album_id)}
 
     <div class="home-section-toolbar">
@@ -2277,10 +2276,6 @@ def albumseite(album_id):
             <a class="sticker-filter-pill duplicate {'active' if filter_name == 'duplicate' else ''}" href="/album/{album_id}?filter=duplicate" data-filter="duplicate">Doppelte</a>
         </div>
         <input id="stickerSearch" class="sticker-search" type="search" placeholder="Sticker suchen..." autocomplete="off">
-        <div class="sticker-current-section-bar" id="stickerCurrentSectionBar" aria-live="polite">
-            <span id="stickerCurrentSectionName">Stickerwand</span>
-            <strong id="stickerCurrentSectionCount">{gesammelt}/{total}</strong>
-        </div>
     </div>
     <div id="pendingInputError" class="pending-input-error" style="display:none;"></div>
     <div id="searchDebugBox" class="search-debug-box" style="display:none;"></div>
@@ -2590,7 +2585,17 @@ function updateStickerDetailView(code, display, quantity, statusClass, statusLab
         stack.querySelectorAll('.sticker-stack-layer').forEach(function(layer){{
             layer.remove();
         }});
-        stack.classList.remove('has-stack');
+        const visibleStackEdges = Math.min(Math.max(quantity - 1, 0), 3);
+        stack.classList.toggle('has-stack', visibleStackEdges > 0);
+        stack.style.setProperty('--sticker-stack-edges', String(visibleStackEdges));
+        for(let index = visibleStackEdges; index >= 1; index -= 1){{
+            const layer = document.createElement('span');
+            layer.className = 'sticker-stack-layer';
+            layer.setAttribute('aria-hidden', 'true');
+            layer.style.setProperty('--stack-index', String(index));
+            layer.style.zIndex = String(10 - index);
+            stack.insertBefore(layer, tile || stack.firstChild);
+        }}
     }}
     if(minus) minus.disabled = stickerDetailBusy || quantity <= 0;
     if(hint) hint.textContent = 'Änderungen werden direkt in deiner Stickerwand gespeichert.';
@@ -2737,117 +2742,6 @@ function updateStickerCounterBadges(){{
         if(!badge) return;
 
         badge.textContent = stickerCounterLabelForHeading(heading);
-    }});
-
-    updateCurrentStickerSectionBar();
-}}
-
-function headingTitleText(heading){{
-    if(!heading) return '';
-    const firstSpan = heading.querySelector('span');
-    return firstSpan ? firstSpan.textContent.trim() : heading.textContent.trim();
-}}
-
-function headingCounterText(heading){{
-    if(!heading) return '';
-    return stickerCounterLabelForHeading(heading);
-}}
-
-function headingIsDisplayed(heading){{
-    if(!heading) return false;
-    const style = window.getComputedStyle(heading);
-    if(style.display === 'none' || style.visibility === 'hidden') return false;
-    if(heading.closest('.collapse-section-hidden')) return false;
-    return heading.getClientRects().length > 0;
-}}
-
-function headingScope(heading){{
-    if(heading.classList.contains('team-title')) return heading.closest('.sticker-team-block');
-    return heading.closest('.sticker-chapter-block');
-}}
-
-function scopeHasVisibleContent(scope, heading){{
-    if(!scope) return false;
-    if(scope.style.display === 'none') return false;
-    if(heading && heading.classList.contains('chapter-collapsed')) return true;
-    return Array.from(scope.querySelectorAll('.slot')).some(slotIsVisible);
-}}
-
-function currentSectionLabelForHeading(heading){{
-    if(!heading) return 'Stickerwand';
-    if(heading.classList.contains('team-title')){{
-        const chapter = heading.closest('.sticker-chapter-block');
-        const chapterTitle = chapter ? chapter.querySelector('.album-chapter-title, .album-section-progress-title') : null;
-        const chapterName = headingTitleText(chapterTitle);
-        const teamName = headingTitleText(heading);
-        return chapterName ? chapterName + ' · ' + teamName : teamName;
-    }}
-    return headingTitleText(heading) || 'Stickerwand';
-}}
-
-function updateCurrentStickerSectionBar(){{
-    const nameNode = document.getElementById('stickerCurrentSectionName');
-    const countNode = document.getElementById('stickerCurrentSectionCount');
-    const controlbar = document.querySelector('.sticker-wall-controlbar');
-    if(!nameNode || !countNode || !controlbar) return;
-
-    const referenceY = controlbar.getBoundingClientRect().bottom + 12;
-    const headings = Array.from(document.querySelectorAll('.album-chapter-title, .album-section-progress-title, .team-title'))
-        .filter(function(heading){{
-            return headingIsDisplayed(heading) && scopeHasVisibleContent(headingScope(heading), heading);
-        }});
-
-    if(headings.length === 0){{
-        nameNode.textContent = 'Stickerwand';
-        countNode.textContent = '';
-        return;
-    }}
-
-    let activeHeading = headings[0];
-    let bestAboveDistance = Infinity;
-    let bestBelowDistance = Infinity;
-    let firstBelow = null;
-
-    headings.forEach(function(heading){{
-        const rect = heading.getBoundingClientRect();
-        const scope = headingScope(heading);
-        const scopeRect = scope ? scope.getBoundingClientRect() : rect;
-
-        if(rect.top <= referenceY && scopeRect.bottom >= referenceY){{
-            const distance = referenceY - rect.top;
-            if(distance < bestAboveDistance){{
-                bestAboveDistance = distance;
-                activeHeading = heading;
-            }}
-            return;
-        }}
-
-        if(rect.top > referenceY){{
-            const distance = rect.top - referenceY;
-            if(distance < bestBelowDistance){{
-                bestBelowDistance = distance;
-                firstBelow = heading;
-            }}
-            return;
-        }}
-
-        activeHeading = heading;
-    }});
-
-    if(bestAboveDistance === Infinity && firstBelow){{
-        activeHeading = firstBelow;
-    }}
-
-    nameNode.textContent = currentSectionLabelForHeading(activeHeading);
-    countNode.textContent = headingCounterText(activeHeading);
-}}
-
-let currentSectionBarFrame = null;
-function scheduleCurrentStickerSectionBar(){{
-    if(currentSectionBarFrame !== null) return;
-    currentSectionBarFrame = window.requestAnimationFrame(function(){{
-        currentSectionBarFrame = null;
-        updateCurrentStickerSectionBar();
     }});
 }}
 
@@ -3285,7 +3179,6 @@ document.querySelectorAll('.album-chapter-title').forEach(function(chapterTitle)
     chapterTitle.addEventListener('click', function(){{
         chapterTitle.classList.toggle('chapter-collapsed');
         updateChapterCollapseVisibility();
-        scheduleCurrentStickerSectionBar();
     }});
 
     chapterTitle.addEventListener('keydown', function(event){{
@@ -3293,12 +3186,8 @@ document.querySelectorAll('.album-chapter-title').forEach(function(chapterTitle)
         event.preventDefault();
         chapterTitle.classList.toggle('chapter-collapsed');
         updateChapterCollapseVisibility();
-        scheduleCurrentStickerSectionBar();
     }});
 }});
-
-window.addEventListener('scroll', scheduleCurrentStickerSectionBar, {{passive:true}});
-window.addEventListener('resize', scheduleCurrentStickerSectionBar);
 
 setActiveStickerFilter(activeStickerFilter, {{updateUrl:false}});
 
@@ -4558,6 +4447,134 @@ def trade_completion_actions(trade, partner_name, is_receiver=False):
     """
 
 
+def trade_detail_sticker_items(codes, mode):
+    if not codes:
+        return '<p class="sticker-list-empty">Keine Sticker.</p>'
+
+    items = []
+    for code in codes:
+        label = display_code(code)
+        items.append(f"""
+        <span class="sticker-list-item trade-detail-sticker selected" data-list-mode="{mode}">
+            <span>{label}</span>
+        </span><span class="sticker-list-comma">,</span>
+        """)
+    return "".join(items)
+
+
+def trade_detail_primary_action(trade, is_receiver):
+    if trade["status"] == "open" and is_receiver:
+        return f"""
+        <form method="POST" action="/trade/{trade['id']}/accept">
+            <button type="submit" class="sticker-list-check">Transfer durchführen</button>
+        </form>
+        """
+    if trade["status"] == "accepted":
+        return f"""
+        <form method="POST" action="/trade/{trade['id']}/confirm">
+            <button type="submit" class="sticker-list-check">Transfer durchführen</button>
+        </form>
+        """
+    if trade["status"] == "open":
+        return '<button type="button" class="sticker-list-check" disabled>Wartet auf Antwort</button>'
+    return '<button type="button" class="sticker-list-check" disabled>Transfer abgeschlossen</button>'
+
+
+@app.route("/trade/<int:trade_id>")
+@app.route("/trades/<int:trade_id>")
+def trade_detail(trade_id):
+    con = get_db()
+    trade = con.execute(
+        """
+        SELECT trade_requests.*,
+               sender.username AS sender_name,
+               receiver.username AS receiver_name,
+               albums.name AS album_name
+        FROM trade_requests
+        JOIN users sender ON sender.id = trade_requests.from_user_id
+        JOIN users receiver ON receiver.id = trade_requests.to_user_id
+        JOIN albums ON albums.id = trade_requests.album_id
+        WHERE trade_requests.id=?
+        AND (trade_requests.from_user_id=? OR trade_requests.to_user_id=?)
+        """,
+        (trade_id, current_user_id(), current_user_id())
+    ).fetchone()
+    con.close()
+
+    if not trade:
+        return redirect("/trades?message=Tauschangebot%20nicht%20gefunden")
+
+    album_id = trade["album_id"]
+    album, by_code, gesammelt, doppelte, prozent, total = lade_album(album_id)
+    missing_count = total - gesammelt
+    is_receiver = trade["to_user_id"] == current_user_id()
+    partner_name = trade["sender_name"] if is_receiver else trade["receiver_name"]
+    give_codes = json.loads(trade["give_codes"] or "[]")
+    get_codes = json.loads(trade["get_codes"] or "[]")
+    du_bekommst = give_codes if is_receiver else get_codes
+    du_gibst = get_codes if is_receiver else give_codes
+    status_label = trade_status_label(trade, is_receiver)
+    back_tab = "agreements" if trade["status"] == "accepted" else "requests"
+    detail_info = f"{len(du_bekommst)} bekommst · {len(du_gibst)} gibst ab"
+
+    html = f"""
+    <html><head>{style()}</head><body class="sticker-list-page trade-detail-page"><div class="sticker-list-shell trade-detail-shell">
+    {consume_trophy_popup_html(album_id)}
+
+    <header class="sticker-list-header">
+        <a class="sticker-list-logo" href="/">sammlr<span></span></a>
+        <a class="sticker-list-back" href="/trades?tab={back_tab}">← zurück zur Tauschbörse</a>
+        <h1>{escape(album['name'])}</h1>
+        <p class="sticker-list-stats">{gesammelt} gesammelt · {missing_count} fehlend · {doppelte} doppelt</p>
+    </header>
+
+    <main class="sticker-list-paper trade-detail-paper">
+        <section class="trade-detail-partner-block">
+            <div>
+                <h2>{escape(partner_name)}</h2>
+                <span>{status_label}</span>
+            </div>
+            <button type="button" onclick="document.getElementById('tradeDetailInfo').hidden = !document.getElementById('tradeDetailInfo').hidden">Infos</button>
+            <p id="tradeDetailInfo" hidden>{detail_info}</p>
+        </section>
+
+        <section class="sticker-list-section">
+            <h2>Du bekommst: {len(du_bekommst)} Sticker</h2>
+            <div class="sticker-list-grid">
+                {trade_detail_sticker_items(du_bekommst, "get")}
+            </div>
+        </section>
+
+        <section class="sticker-list-section">
+            <h2>Du gibst ab: {len(du_gibst)} Sticker</h2>
+            <div class="sticker-list-grid">
+                {trade_detail_sticker_items(du_gibst, "give")}
+            </div>
+        </section>
+    </main>
+
+    <aside class="sticker-list-tradebar trade-detail-bar">
+        <div class="sticker-list-trade-head">
+            <strong>Aktueller Tausch</strong>
+        </div>
+        <div class="sticker-list-trade-columns">
+            <div>
+                <span class="sticker-list-green">Du bekommst: <strong>{len(du_bekommst)} Sticker</strong></span>
+                <div class="sticker-list-selection">{'<br>'.join(display_code(code) for code in du_bekommst) or 'Keine Sticker'}</div>
+            </div>
+            <div>
+                <span class="sticker-list-red">Du gibst ab: <strong>{len(du_gibst)} Sticker</strong></span>
+                <div class="sticker-list-selection">{'<br>'.join(display_code(code) for code in du_gibst) or 'Keine Sticker'}</div>
+            </div>
+        </div>
+        {trade_detail_primary_action(trade, is_receiver)}
+    </aside>
+
+    </div></body></html>
+    """
+    return html
+
+
 def trade_request_popup_html():
     incoming = first_open_incoming_trade_request()
     if not incoming:
@@ -4710,6 +4727,7 @@ def album_trades(album_id):
                         <span>Du gibst ab</span>
                     </div>
                 </div>
+                <a class="trade-detail-link" href="/trades/{trade['id']}">Ansehen</a>
                 {request_actions}
             </div>
             """
@@ -4754,6 +4772,7 @@ def album_trades(album_id):
                     <p><strong>Du gibst ab:</strong> {trade_code_summary(get_codes)}</p>
                     <p><strong>Status:</strong> {status_label}</p>
                 </div>
+                <a class="trade-detail-link" href="/trades/{trade['id']}">Ansehen</a>
                 {request_actions}
             </div>
             """
@@ -4789,6 +4808,7 @@ def album_trades(album_id):
                     <p><strong>Du bietest an:</strong> {trade_code_summary(give_codes)}</p>
                     <p><strong>Status:</strong> {status_label}</p>
                 </div>
+                <a class="trade-detail-link" href="/trades/{trade['id']}">Ansehen</a>
                 {request_actions}
             </div>
             """
@@ -6055,6 +6075,7 @@ def trades_overview():
                         </div>
                         <p>{summary_line}</p>
                         <p>{status_line}</p>
+                        <a class="trade-detail-link" href="/trades/{trade['id']}">Ansehen</a>
                         {actions}
                     </div>
                 """
