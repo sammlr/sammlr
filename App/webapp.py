@@ -1,6 +1,7 @@
 import sqlite3
 import os
 import shutil
+import re
 from flask import Flask, request, redirect, session, jsonify
 import json
 from html import escape
@@ -167,27 +168,106 @@ def debug_seed_now():
     return redirect("/debug-db?fresh=seeded")
 
 
+def sammlr_feedback_html(message, undo_url=None):
+    if not message:
+        return ""
+
+    title = message
+    lines = []
+    undoable = undo_url is not None
+
+    if "Transfer durchgeführt:" in message:
+        title = "Transfer gespeichert"
+        detail = message.split(":", 1)[1].strip().rstrip(".")
+        for part in detail.split(","):
+            part = part.strip()
+            if part:
+                lines.append(part)
+    elif "Transfer gespeichert:" in message:
+        title = "Transfer gespeichert"
+        detail = message.split(":", 1)[1].strip().rstrip(".")
+        for part in detail.split(","):
+            part = part.strip()
+            if part:
+                lines.append(part)
+    elif "rückgängig" in message.lower():
+        title = "Rückgängig"
+        lines.append(message.rstrip("."))
+    elif "hinzugefügt" in message or "doppelt" in message or "zur Sammlung hinzugefügt" in message:
+        title = "Sticker eingeklebt"
+        first_word = message.split(" ", 1)[0]
+        count = first_word if first_word.isdigit() else "1"
+        lines.append(f"+{count} Sticker hinzugefügt")
+    elif "entfernt" in message:
+        title = "Sticker entfernt"
+        first_word = message.split(" ", 1)[0]
+        count = first_word if first_word.isdigit() else "1"
+        lines.append(f"-{count} Sticker entfernt")
+    else:
+        lines.append(message)
+
+    line_html = "".join(f"<p>{escape(line)}</p>" for line in lines)
+    undo_html = f'<a href="{undo_url}">Rückgängig</a>' if undoable else ""
+    tone = " error" if "nicht" in message.lower() or "fehler" in message.lower() else ""
+    return f"""
+    <div class="sammlr-feedback{tone}">
+        <div>
+            <strong>{escape(title)}</strong>
+            {line_html}
+        </div>
+        {undo_html}
+    </div>
+    """
+
+
 def collection_feedback_html(message):
     if not message:
         return ""
 
-    escaped_message = escape(message)
-    undoable = "hinzugefügt" in message or "doppelt" in message or "entfernt" in message
+    undoable = "hinzugefügt" in message or "doppelt" in message or "entfernt" in message or "rückgängig" in message.lower()
+    return sammlr_feedback_html(message, "/undo" if undoable and "rückgängig" not in message.lower() else None)
 
-    if undoable:
-        first_word = message.split(" ", 1)[0]
-        count = first_word if first_word.isdigit() else "1"
-        detail = f"&minus;{count} Sticker entfernt" if "entfernt" in message else f"+{count} Sticker eingeklebt"
-        return f"""
-        <div class="notice collection-notice">
-            <h2>Sammlung aktualisiert</h2>
-            <p>{detail}</p>
-            <a class="btn gray" href="/undo">↩ Rückgängig</a>
+
+def confirm_selection_modal_html(
+    modal_id,
+    get_content_id,
+    give_content_id,
+    primary_text,
+    primary_attributes,
+    secondary_attributes,
+    error_id=None,
+    extra_class="",
+    alternate_text=None,
+    alternate_attributes=""
+):
+    error_html = (
+        f'<p id="{error_id}" class="sticker-list-error" style="display:none;"></p>'
+        if error_id else ""
+    )
+    extra_class = f" {extra_class.strip()}" if extra_class.strip() else ""
+    return f"""
+    <div class="quick-action-modal review-modal confirm-selection-modal{extra_class}" id="{modal_id}" style="display:none;">
+        <div class="quick-action-card review-card sammlr-confirm-card">
+            <h3 class="sammlr-confirm-title">Auswahl prüfen</h3>
+            <div class="sammlr-confirm-grid">
+                <section class="sammlr-confirm-panel">
+                    <h3>Du bekommst</h3>
+                    <div class="sammlr-confirm-content" id="{get_content_id}"></div>
+                </section>
+                <section class="sammlr-confirm-panel">
+                    <h3>Du gibst ab</h3>
+                    <div class="sammlr-confirm-content" id="{give_content_id}"></div>
+                </section>
+            </div>
+            {error_html}
+            <div class="sammlr-confirm-actions{' has-three-actions' if alternate_text else ''}">
+                <button type="button" class="sammlr-confirm-secondary" {secondary_attributes}>Bearbeiten</button>
+                {f'<button type="button" class="sammlr-confirm-secondary sammlr-confirm-danger" {alternate_attributes}>{alternate_text}</button>' if alternate_text else ''}
+                <button type="button" class="sammlr-confirm-primary" {primary_attributes}>{primary_text}</button>
+            </div>
         </div>
-        """
-
-    notice_class = "notice-error" if "nicht vorhanden" in message else "notice-duplicate" if "doppelt" in message else "notice-success"
-    return f'<div class="notice {notice_class}"><h2>{escaped_message}</h2></div>'
+    </div>
+    """
 
 
 @app.before_request
@@ -2205,6 +2285,20 @@ def albumseite(album_id):
     )
     trade_badge_html = f'<span class="album-quick-badge">{incoming_trade_request_count}</span>' if incoming_trade_request_count > 0 else ''
     collection_feedback = collection_feedback_html(message)
+    wall_confirm_modal = """
+    <div class="quick-action-modal review-modal sticker-wall-review-modal" id="pendingReviewModal" style="display:none;">
+        <div class="quick-action-card review-card sticker-wall-review-card">
+            <h3>Auswahl prüfen</h3>
+            <div class="pending-review-list sticker-wall-review-list" id="pendingReviewList"></div>
+            <p id="pendingReviewError" class="pending-input-error" style="display:none;"></p>
+            <div class="sticker-wall-review-actions">
+                <button type="button" class="sticker-wall-review-secondary" onclick="closePendingReview()">Bearbeiten</button>
+                <button type="button" class="sticker-wall-review-primary" id="pendingReviewPrimary" onclick="confirmSmartAdd('add')">Hinzufügen</button>
+                <button type="button" class="sticker-wall-review-danger" id="pendingReviewRemove" onclick="confirmSmartAdd('remove')">Entfernen</button>
+            </div>
+        </div>
+    </div>
+    """
 
     html = f"""
     <html><head>{style()}</head><body><div class="container">
@@ -2263,10 +2357,10 @@ def albumseite(album_id):
             <h2>Stickerwand</h2>
             <button type="button" class="smart-add-toggle" onclick="openQuickActions()">
                 <svg class="smart-add-icon" viewBox="0 0 24 24" aria-hidden="true">
-                    <path d="M4.5 19.5l4.2-.9 10-10a2.1 2.1 0 0 0-3-3l-10 10-.9 4.2Z"></path>
-                    <path d="M14.4 6.9l2.7 2.7"></path>
+                    <circle cx="12" cy="12" r="7.5"></circle>
+                    <path d="M8.8 12.2l2.1 2.1 4.5-4.7"></path>
                 </svg>
-                <span>Bearbeiten</span>
+                <span>Auswählen</span>
             </button>
         </div>
         <div class="sticker-filter-row">
@@ -2475,23 +2569,6 @@ def albumseite(album_id):
         </div>
     </div>
 </div>
-<div class="quick-action-modal" id="quickActionModal" style="display:none;">
-    <div class="quick-action-card">
-        <div id="quickActionStep1">
-            <h3>Sticker verwalten</h3>
-            <button type="button" class="btn green" onclick="chooseAction('add')">Sticker hinzufügen</button>
-            <button type="button" class="btn gray" onclick="chooseAction('remove')">Sticker entfernen</button>
-            <button type="button" class="btn gray" onclick="closeQuickActions()">Abbrechen</button>
-        </div>
-
-        <div id="quickActionStep2" style="display:none;">
-            <h3 id="quickActionTitle">Sticker hinzufügen</h3>
-            <button type="button" class="btn" onclick="chooseMode('input')">Sticker eintragen</button>
-            <button type="button" class="btn" onclick="chooseMode('select')">Sticker auswählen</button>
-            <button type="button" class="btn gray" onclick="closeQuickActions()">Abbrechen</button>
-        </div>
-    </div>
-</div>
 <div class="smart-add-bar" id="smartAddBar" style="display:none;">
     <div class="smart-add-count">
         <strong id="smartAddCount">0</strong> <span id="smartAddLabel">Sticker ausgewählt</span>
@@ -2501,17 +2578,7 @@ def albumseite(album_id):
         <button type="button" class="smart-add-primary" id="smartAddPrimary" onclick="submitSmartAdd()">Auswahl prüfen</button>
     </div>
 </div>
-<div class="quick-action-modal review-modal" id="pendingReviewModal" style="display:none;">
-    <div class="quick-action-card review-card">
-        <h3 id="pendingReviewTitle">Auswahl prüfen</h3>
-        <div class="pending-review-list" id="pendingReviewList"></div>
-        <div class="pending-review-actions">
-            <button type="button" class="btn gray" onclick="closePendingReview()">Bearbeiten</button>
-            <button type="button" class="btn" onclick="confirmSmartAdd('add')">Hinzufügen</button>
-            <button type="button" class="btn gray" onclick="confirmSmartAdd('remove')">Entfernen</button>
-        </div>
-    </div>
-</div>
+{wall_confirm_modal}
 
     <script>
 let smartAddMode = false;
@@ -3195,70 +3262,6 @@ function openQuickActions(){{
     startNeutralPendingMode();
 }}
 
-function closeQuickActions(){{
-    const modal = document.getElementById('quickActionModal');
-    if(modal) modal.style.display = 'none';
-}}
-
-function chooseAction(action){{
-    const step1 = document.getElementById('quickActionStep1');
-    const step2 = document.getElementById('quickActionStep2');
-    const title = document.getElementById('quickActionTitle');
-
-    window.selectedQuickAction = action;
-    if(step1) step1.style.display = 'none';
-    if(step2) step2.style.display = 'block';
-    if(title) title.textContent = action === 'remove' ? 'Sticker entfernen' : 'Sticker hinzufügen';
-}}
-
-function chooseMode(mode){{
-    closeQuickActions();
-
-    if(mode === 'select'){{
-        if(window.selectedQuickAction === 'remove'){{
-            toggleSmartRemove();
-        }}else{{
-            toggleSmartAdd();
-        }}
-        return;
-    }}
-
-    if(window.selectedQuickAction === 'remove'){{
-        showKeyboardInput('remove');
-    }}else{{
-        showKeyboardInput('add');
-    }}
-}}
-
-function showKeyboardInput(mode){{
-    smartActionMode = null;
-    smartAddMode = true;
-    keyboardInputMode = true;
-    selectedStickers = [];
-    document.body.classList.remove('smart-add-active');
-    document.body.classList.add('pending-active');
-    document.body.classList.add('keyboard-input-active');
-
-    const input = document.getElementById('stickerSearch');
-    if(input){{
-        input.value = '';
-        input.type = 'text';
-        input.placeholder = mode === "remove" ? "Sticker-Code eintragen und Enter drücken" : "Sticker-Code eintragen und Enter drücken";
-        input.focus();
-    }}
-
-    clearPendingInputError();
-    updateSmartAddBar();
-}}
-
-function toggleSmartRemove(){{
-    startNeutralPendingMode();
-}}
-
-function toggleSmartAdd(){{
-    startNeutralPendingMode();
-}}
-
 function startNeutralPendingMode(){{
     smartActionMode = null;
     smartAddMode = true;
@@ -3323,17 +3326,24 @@ function submitSmartAdd(){{
 
 function renderPendingReview(){{
     const list = document.getElementById('pendingReviewList');
-    const title = document.getElementById('pendingReviewTitle');
-    if(!list || !title) return;
+    const primary = document.getElementById('pendingReviewPrimary');
+    const removePrimary = document.getElementById('pendingReviewRemove');
+    const error = document.getElementById('pendingReviewError');
+    if(!list || !primary || !removePrimary) return;
 
     const counts = getPendingCounts();
     const codes = Object.keys(counts);
 
-    title.textContent = 'Auswahl prüfen';
     list.innerHTML = '';
+    primary.disabled = codes.length === 0;
+    removePrimary.disabled = codes.length === 0;
+    if(error){{
+        error.style.display = codes.length === 0 ? 'block' : 'none';
+        error.textContent = 'Markiere mindestens einen Sticker.';
+    }}
 
     if(codes.length === 0){{
-        list.innerHTML = '<p class="pending-review-empty">Keine Sticker vorgemerkt.</p>';
+        list.innerHTML = '<p class="pending-review-empty">Keine Sticker ausgewählt.</p>';
         return;
     }}
 
@@ -3386,9 +3396,13 @@ function renderPendingReview(){{
             removePendingCode(code);
         }});
 
+        const actions = document.createElement('div');
+        actions.className = 'confirm-selection-row-actions';
+        actions.appendChild(controls);
+        actions.appendChild(removeButton);
+
         row.appendChild(codeText);
-        row.appendChild(controls);
-        row.appendChild(removeButton);
+        row.appendChild(actions);
         list.appendChild(row);
     }});
 }}
@@ -3408,7 +3422,6 @@ function closePendingReview(){{
 
 function confirmSmartAdd(action){{
     if(selectedStickers.length === 0) return;
-
     smartActionMode = action === 'remove' ? 'remove' : 'add';
 
     const form = document.createElement('form');
@@ -3488,16 +3501,75 @@ def stickerliste(album_id):
         </button><span class="sticker-list-comma">,</span>
         """
 
-    missing_html = "".join(list_item(code, "get") for code in missing_codes)
-    duplicate_html = "".join(
-        list_item(code, "give", index + 1)
-        for code in duplicate_codes
-        for index in range(max(sticker_quantity_for_counter(by_code, code) - 1, 0))
-    )
+    def sticker_list_group_key(code):
+        normalized = display_code(code)
+        match = re.match(r"([A-Za-z]+)", normalized)
+        return match.group(1) if match else normalized
+
+    def grouped_list_html(mode):
+        parts = []
+        current_group = None
+        visible_in_group = 0
+
+        for code in codes:
+            group = sticker_list_group_key(code)
+            quantity = sticker_quantity_for_counter(by_code, code)
+            if mode == "get":
+                amount = 1 if quantity == 0 else 0
+            else:
+                amount = max(quantity - 1, 0)
+
+            if amount <= 0:
+                continue
+
+            if current_group is not None and group != current_group and visible_in_group > 0:
+                parts.append('<span class="sticker-list-team-break" aria-hidden="true"></span>')
+                visible_in_group = 0
+
+            current_group = group
+            for index in range(amount):
+                parts.append(list_item(code, mode, index + 1))
+                visible_in_group += 1
+
+        return "".join(parts)
+
+    sticker_list_prefixes = {
+        sticker_list_group_key(code)
+        for code in codes
+        if re.match(r"[A-Za-z]+", display_code(code))
+    }
+    team_based_sticker_list = len(sticker_list_prefixes) > 1
+    if team_based_sticker_list:
+        missing_html = grouped_list_html("get")
+        duplicate_html = grouped_list_html("give")
+    else:
+        def numeric_list_key(code):
+            label = display_code(code)
+            match = re.search(r"\d+", label)
+            return (int(match.group()) if match else float("inf"), label)
+
+        sorted_missing_codes = sorted(missing_codes, key=numeric_list_key)
+        sorted_duplicate_codes = sorted(duplicate_codes, key=numeric_list_key)
+        missing_html = "".join(list_item(code, "get") for code in sorted_missing_codes)
+        duplicate_html = "".join(
+            list_item(code, "give", index + 1)
+            for code in sorted_duplicate_codes
+            for index in range(max(sticker_quantity_for_counter(by_code, code) - 1, 0))
+        )
     missing_empty = '<p class="sticker-list-empty">Keine fehlenden Sticker.</p>' if not missing_codes else ""
     duplicate_empty = '<p class="sticker-list-empty">Keine doppelten Sticker.</p>' if not duplicate_codes else ""
-    notice = f'<div class="sticker-list-notice">{escape(message)}</div>' if message else ""
+    notice = sammlr_feedback_html(message, "/undo" if "Transfer durchgeführt" in message or "Transfer gespeichert" in message else None)
     trophy_popup = consume_trophy_popup_html(album_id)
+    sticker_list_confirm_modal = confirm_selection_modal_html(
+        "stickerListReviewModal",
+        "stickerListReviewGet",
+        "stickerListReviewGive",
+        "Transfer speichern",
+        'id="stickerListSubmit" onclick="document.getElementById(\'stickerListTradeForm\').requestSubmit()"',
+        'id="stickerListReviewClose"',
+        error_id="stickerListReviewError",
+        extra_class="sticker-list-modal"
+    )
 
     html = f"""
     <html><head>{style()}</head><body class="sticker-list-page"><div class="sticker-list-shell">
@@ -3535,43 +3607,15 @@ def stickerliste(album_id):
             <strong>Aktueller Tausch</strong>
             <button type="button" id="stickerListClear">Leeren</button>
         </div>
-        <div class="sticker-list-trade-columns">
-            <div>
-                <span class="sticker-list-green">Ich bekomme: <strong id="stickerListGetCount">0 Sticker</strong></span>
-                <div class="sticker-list-selection" id="stickerListGet">Noch nichts markiert</div>
-            </div>
-            <div>
-                <span class="sticker-list-red">Ich gebe ab: <strong id="stickerListGiveCount">0 Sticker</strong></span>
-                <div class="sticker-list-selection" id="stickerListGive">Noch nichts markiert</div>
-            </div>
-        </div>
-        <button type="button" class="sticker-list-check" id="stickerListReviewButton" disabled>Transfer durchführen</button>
+        <p class="sticker-list-transfer-summary" id="stickerListSummary">0 erhalten • 0 abgegeben</p>
+        <button type="button" class="sticker-list-check" id="stickerListReviewButton" disabled>Auswahl prüfen</button>
     </aside>
 
     <form method="POST" action="/album/{album_id}/liste/trade" id="stickerListTradeForm">
         <div id="stickerListHiddenInputs"></div>
     </form>
 
-    <div class="sticker-list-modal" id="stickerListReviewModal" style="display:none;">
-        <div class="sticker-list-modal-card">
-            <h2>Transfer durchführen</h2>
-            <div class="sticker-list-review-grid">
-                <div>
-                    <h3>Ich bekomme</h3>
-                    <div id="stickerListReviewGet"></div>
-                </div>
-                <div>
-                    <h3>Ich gebe ab</h3>
-                    <div id="stickerListReviewGive"></div>
-                </div>
-            </div>
-            <p id="stickerListReviewError" class="sticker-list-error" style="display:none;"></p>
-            <div class="sticker-list-modal-actions">
-                <button type="button" class="sticker-list-secondary" id="stickerListReviewClose">Zurück</button>
-                <button type="submit" form="stickerListTradeForm" class="sticker-list-primary" id="stickerListSubmit">Transfer speichern</button>
-            </div>
-        </div>
-    </div>
+    {sticker_list_confirm_modal}
 
 <script>
 const stickerListSelections = {{
@@ -3624,13 +3668,9 @@ function stickerListSyncHiddenInputs(){{
 }}
 
 function stickerListUpdateTradebar(){{
-    document.getElementById('stickerListGet').innerHTML = stickerListRenderCodes('get');
-    document.getElementById('stickerListGive').innerHTML = stickerListRenderCodes('give');
-
     const getCount = stickerListSelections.get.length;
     const giveCount = stickerListSelections.give.length;
-    document.getElementById('stickerListGetCount').textContent = stickerListCountLabel(getCount);
-    document.getElementById('stickerListGiveCount').textContent = stickerListCountLabel(giveCount);
+    document.getElementById('stickerListSummary').textContent = getCount + ' erhalten • ' + giveCount + ' abgegeben';
     const canReview = getCount > 0 || giveCount > 0;
     document.getElementById('stickerListReviewButton').disabled = !canReview;
 
@@ -3638,8 +3678,8 @@ function stickerListUpdateTradebar(){{
 }}
 
 function stickerListRenderReview(){{
-    document.getElementById('stickerListReviewGet').innerHTML = stickerListRenderCodes('get');
-    document.getElementById('stickerListReviewGive').innerHTML = stickerListRenderCodes('give');
+    stickerListRenderReviewMode('get', 'stickerListReviewGet');
+    stickerListRenderReviewMode('give', 'stickerListReviewGive');
 
     const error = document.getElementById('stickerListReviewError');
     const submit = document.getElementById('stickerListSubmit');
@@ -3650,6 +3690,51 @@ function stickerListRenderReview(){{
     error.style.display = invalid ? 'block' : 'none';
     error.textContent = 'Markiere mindestens einen Sticker für diesen Transfer.';
     submit.disabled = invalid;
+}}
+
+function stickerListRenderReviewMode(mode, targetId){{
+    const target = document.getElementById(targetId);
+    if(!target) return;
+
+    target.innerHTML = '';
+    const items = stickerListSelections[mode];
+    if(items.length === 0){{
+        target.innerHTML = '<p class="pending-review-empty">Keine Sticker ausgewählt.</p>';
+        return;
+    }}
+
+    items.forEach(function(itemKey){{
+        const row = document.createElement('div');
+        row.className = 'pending-review-row';
+
+        const label = document.createElement('strong');
+        label.textContent = stickerListCodeLabel(itemKey);
+
+        const remove = document.createElement('button');
+        remove.type = 'button';
+        remove.className = 'pending-review-remove';
+        remove.textContent = '×';
+        remove.setAttribute('aria-label', stickerListCodeLabel(itemKey) + ' entfernen');
+        remove.addEventListener('click', function(){{
+            stickerListSelections[mode] = stickerListSelections[mode].filter(function(existing){{
+                return existing !== itemKey;
+            }});
+            const selectedItem = Array.from(document.querySelectorAll('.sticker-list-item')).find(function(item){{
+                return stickerListItemKey(item) === itemKey;
+            }});
+            if(selectedItem) selectedItem.classList.remove('selected');
+            stickerListUpdateTradebar();
+            stickerListRenderReview();
+        }});
+
+        const actions = document.createElement('div');
+        actions.className = 'confirm-selection-row-actions';
+        actions.appendChild(remove);
+
+        row.appendChild(label);
+        row.appendChild(actions);
+        target.appendChild(row);
+    }});
 }}
 
 document.querySelectorAll('.sticker-list-item').forEach(function(item){{
@@ -3758,6 +3843,14 @@ def stickerliste_trade(album_id):
         silent_reached=vorher_erreicht
     )
     queue_trophy_popup(album_id, neue_trophies)
+
+    session["last_action"] = {
+        "action": "transfer",
+        "album_id": album_id,
+        "get_codes": get_codes,
+        "give_codes": give_codes,
+        "filter": "all"
+    }
 
     msg = f"Transfer gespeichert: {len(get_codes)} erhalten, {len(give_codes)} abgegeben."
     return redirect(f"{list_url}?message={quote(msg)}")
@@ -4130,6 +4223,8 @@ def undo_last_action():
     current_filter = data.get("filter", "all")
     code = data.get("code")
     codes = data.get("codes", [])
+    get_codes = data.get("get_codes", [])
+    give_codes = data.get("give_codes", [])
 
     con = get_db()
     cur = con.cursor()
@@ -4180,6 +4275,46 @@ def undo_last_action():
                     (current_user_id(), album_id, undo_code)
                 )
 
+    elif action == "transfer":
+        for undo_code in get_codes:
+            row = con.execute(
+                "SELECT * FROM stickers WHERE user_id=? AND album_id=? AND sticker_code=?",
+                (current_user_id(), album_id, undo_code)
+            ).fetchone()
+
+            if row:
+                neue_quantity = max(row["quantity"] - 1, 0)
+                neue_duplicates = max(neue_quantity - 1, 0)
+                if neue_quantity == 0:
+                    cur.execute("DELETE FROM stickers WHERE id=?", (row["id"],))
+                else:
+                    cur.execute(
+                        "UPDATE stickers SET quantity=?, duplicates=? WHERE id=?",
+                        (neue_quantity, neue_duplicates, row["id"])
+                    )
+
+        for undo_code in give_codes:
+            row = con.execute(
+                "SELECT * FROM stickers WHERE user_id=? AND album_id=? AND sticker_code=?",
+                (current_user_id(), album_id, undo_code)
+            ).fetchone()
+
+            if row:
+                neue_quantity = row["quantity"] + 1
+                neue_duplicates = max(neue_quantity - 1, 0)
+                cur.execute(
+                    "UPDATE stickers SET quantity=?, duplicates=? WHERE id=?",
+                    (neue_quantity, neue_duplicates, row["id"])
+                )
+            else:
+                cur.execute(
+                    """
+                    INSERT INTO stickers (user_id, album_id, sticker_code, status, duplicates, quantity)
+                    VALUES (?, ?, ?, "owned", 0, 1)
+                    """,
+                    (current_user_id(), album_id, undo_code)
+                )
+
     con.commit()
     con.close()
 
@@ -4189,6 +4324,9 @@ def undo_last_action():
         msg = f"{len(codes)} hinzugefügte Sticker rückgängig gemacht."
     elif action == "bulk_remove":
         msg = f"{len(codes)} entfernte Sticker rückgängig gemacht."
+    elif action == "transfer":
+        msg = f"Transfer rückgängig gemacht: {len(get_codes)} erhalten, {len(give_codes)} abgegeben."
+        return redirect(f"/album/{album_id}/liste?message={quote(msg)}")
     else:
         msg = f"Aktion für Sticker {display_code(code)} rückgängig gemacht."
     return redirect(f"/album/{album_id}?filter={current_filter}&message={quote(msg)}&focus=add")
@@ -5089,7 +5227,7 @@ def trade_center(album_id, other_user_id):
     )
     get_wall = render_trade_wall(album_id, get_counts, "get")
     give_wall = render_trade_wall(album_id, give_counts, "give")
-    error_html = f'<div class="notice notice-error"><h2>{message}</h2></div>' if message else ''
+    error_html = sammlr_feedback_html(message) if message else ''
 
     html = f"""
     <html><head>{style()}</head><body><div class="container">
@@ -5928,7 +6066,7 @@ def trades_overview():
     <html><head>{style()}</head><body><div class="container">
     {app_header("Tauschbörse", "Passende Sammler nach Album.")}
     {consume_trophy_popup_html()}
-    {f'<div class="notice notice-success"><h2>{message}</h2></div>' if message else ''}
+    {sammlr_feedback_html(message) if message else ''}
 
     <h1 class="global-trade-title">Tauschbörse</h1>
 

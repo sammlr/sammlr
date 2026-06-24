@@ -2167,9 +2167,6 @@
     text-align:center !important;
 }
 
-#quickActionStep2{
-    padding-top:0 !important;
-}
 .sticker-search{
     position:sticky !important;
     top:10px !important;
@@ -2187,7 +2184,7 @@
     pointer-events:none;
 }
 
-/* Final quick-action modal placement and copy */
+/* Modal placement */
 .quick-action-modal{
     position:fixed !important;
     inset:0 !important;
@@ -2199,24 +2196,6 @@
 
 .quick-action-card{
     margin:0 auto !important;
-}
-
-#quickActionStep1 h3::after,
-#quickActionStep2 h3::after{
-    display:block;
-    margin-top:8px;
-    color:#72697c;
-    font-size:15px;
-    font-weight:700;
-    line-height:1.35;
-}
-
-#quickActionStep1 h3::after{
-    content:"Was möchtest du machen?";
-}
-
-#quickActionStep2 h3::after{
-    content:"Wie möchtest du fortfahren?";
 }
 
 /* Final sticky hierarchy for the sticker wall */
@@ -8345,5 +8324,454 @@ body .container{
     .trade-detail-partner-block span{
         display:inline-flex;
         margin-top:8px;
+    }
+}
+
+/* Einheitliches Sammlr-Feedback */
+.sammlr-feedback{
+    position:relative;
+    width:min(420px, 100%);
+    margin:0 0 16px !important;
+    padding:13px 14px !important;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:12px;
+    border-radius:16px;
+    border:1px solid rgba(93,47,134,.16);
+    background:#ffffff;
+    box-shadow:0 12px 26px rgba(18,5,31,.09);
+    animation:sammlrFeedbackIn .22s ease-out both;
+}
+
+.sammlr-feedback::before{
+    content:"";
+    position:absolute;
+    inset:0 auto 0 0;
+    width:4px;
+    border-radius:12px 0 0 12px;
+    background:#5d2f86;
+    opacity:.86;
+}
+
+.sammlr-feedback.error::before{
+    background:#dc2626;
+}
+
+.sammlr-feedback strong{
+    display:block;
+    color:#5d2f86;
+    font-family:Arial, sans-serif;
+    font-size:15px;
+    line-height:1.15;
+    font-weight:950;
+}
+
+.sammlr-feedback p{
+    margin:5px 0 0;
+    color:#251f1a;
+    font-size:13px;
+    line-height:1.18;
+    font-weight:900;
+}
+
+.sammlr-feedback a{
+    flex:0 0 auto;
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    min-height:34px;
+    padding:0 12px;
+    border-radius:999px;
+    border:1px solid rgba(93,47,134,.20);
+    color:#5d2f86;
+    background:#f5f0fa;
+    font-size:12px;
+    font-weight:950;
+    text-decoration:none;
+}
+
+@keyframes sammlrFeedbackIn{
+    from{
+        opacity:0;
+        transform:translateY(-6px) rotate(-.2deg);
+    }
+    to{
+        opacity:1;
+        transform:translateY(0) rotate(0);
+    }
+}
+
+.sticker-list-team-break{
+    flex-basis:100%;
+    height:13px;
+}
+
+.sticker-wall-card > #smartAddBar{
+    position:fixed !important;
+    left:16px !important;
+    right:16px !important;
+    bottom:calc(104px + env(safe-area-inset-bottom)) !important;
+    z-index:95000 !important;
+}
+
+.sticker-wall-card > #pendingReviewModal,
+#pendingReviewModal{
+    position:fixed !important;
+    z-index:96000 !important;
+}
+
+.sticker-wall-review-modal{
+    position:fixed !important;
+    inset:0 !important;
+    z-index:96000 !important;
+    align-items:center !important;
+    justify-content:center !important;
+    padding:24px 16px calc(110px + env(safe-area-inset-bottom)) !important;
+    box-sizing:border-box !important;
+    background:rgba(20,14,26,.48) !important;
+}
+
+.sticker-wall-review-card{
+    width:min(560px, 100%) !important;
+    max-height:calc(100vh - 150px - env(safe-area-inset-bottom)) !important;
+    display:flex !important;
+    flex-direction:column !important;
+    padding:18px !important;
+    border-radius:18px !important;
+    border:1px solid rgba(93,47,134,.14) !important;
+    background:#ffffff !important;
+    box-shadow:0 24px 70px rgba(18,5,31,.28) !important;
+}
+
+.sticker-wall-review-card > h3{
+    margin:0 0 14px !important;
+    color:#2b0f46 !important;
+    font-family:Arial, sans-serif !important;
+    font-size:22px !important;
+    line-height:1.1 !important;
+    font-weight:950 !important;
+}
+
+.sticker-wall-review-list{
+    min-height:0;
+    max-height:calc(100vh - 340px - env(safe-area-inset-bottom));
+    overflow-y:auto;
+    display:flex;
+    flex-direction:column;
+    gap:8px;
+    margin:0 0 14px !important;
+}
+
+.sticker-wall-review-list .pending-review-row{
+    grid-template-columns:minmax(0,1fr) auto !important;
+    min-height:48px;
+    padding:8px 10px !important;
+    border-radius:12px !important;
+    border:1px solid rgba(93,47,134,.10) !important;
+    background:#faf8fc !important;
+}
+
+.sticker-wall-review-list .pending-review-row > strong{
+    color:#251f1a;
+    font-family:Arial, sans-serif;
+    font-size:14px;
+    line-height:1.1;
+    font-weight:950;
+}
+
+.sticker-wall-review-actions{
+    display:grid;
+    grid-template-columns:repeat(3, minmax(0,1fr));
+    gap:8px;
+    margin-top:auto;
+    padding-top:12px;
+    background:#ffffff;
+}
+
+.sticker-wall-review-actions button{
+    min-height:44px;
+    border:0;
+    border-radius:10px;
+    font-family:Arial, sans-serif;
+    font-size:14px;
+    font-weight:950;
+}
+
+.sticker-wall-review-secondary{
+    background:#f1edf5;
+    color:#5d2f86;
+}
+
+.sticker-wall-review-primary{
+    background:#5d2f86;
+    color:#ffffff;
+}
+
+.sticker-wall-review-danger{
+    background:#fff0f1;
+    color:#b4232d;
+}
+
+.sticker-wall-review-actions button:disabled{
+    opacity:.45;
+}
+
+/* Gemeinsame Prüfung für Stickerwand und Stickerliste */
+.confirm-selection-modal{
+    position:fixed !important;
+    inset:0 !important;
+    z-index:96000 !important;
+    align-items:center !important;
+    justify-content:center !important;
+    padding:24px 16px calc(110px + env(safe-area-inset-bottom)) !important;
+    box-sizing:border-box !important;
+    background:rgba(28,22,16,.34) !important;
+}
+
+.sammlr-confirm-card{
+    width:min(560px, 100%) !important;
+    max-height:calc(100vh - 150px - env(safe-area-inset-bottom)) !important;
+    display:flex !important;
+    flex-direction:column !important;
+    padding:18px !important;
+    border-radius:16px !important;
+    border:1px solid rgba(93,47,134,.14) !important;
+    background:#ffffff !important;
+    box-shadow:0 24px 70px rgba(18,5,31,.28) !important;
+}
+
+.sammlr-confirm-title{
+    margin:0 0 14px !important;
+    color:#5d2f86 !important;
+    font-family:Arial, sans-serif !important;
+    font-size:22px !important;
+    line-height:1.1 !important;
+    font-weight:950 !important;
+}
+
+.sammlr-confirm-grid{
+    display:grid !important;
+    grid-template-columns:repeat(2, minmax(0,1fr)) !important;
+    gap:12px !important;
+    min-height:0;
+    overflow-y:auto;
+    margin-bottom:14px !important;
+}
+
+.sammlr-confirm-panel{
+    min-width:0;
+    padding:12px !important;
+    border-radius:12px;
+    border:1px solid rgba(93,47,134,.12);
+    background:#faf8fc;
+}
+
+.sammlr-confirm-panel h3{
+    margin:0 0 10px !important;
+    color:#5d2f86 !important;
+    font-family:Arial, sans-serif !important;
+    font-size:14px !important;
+    line-height:1.1 !important;
+    font-weight:950 !important;
+    text-transform:none !important;
+}
+
+.sammlr-confirm-content{
+    min-height:0;
+    overflow-y:auto;
+}
+
+.sammlr-confirm-content .pending-review-row{
+    grid-template-columns:minmax(0,1fr) auto !important;
+    min-height:46px;
+    gap:10px !important;
+    padding:8px 10px !important;
+    border-radius:10px !important;
+    border:1px solid rgba(93,47,134,.10) !important;
+    background:rgba(255,255,255,.48) !important;
+}
+
+.sammlr-confirm-content .pending-review-row > strong{
+    min-width:0;
+    color:#251f1a;
+    font-family:Arial, sans-serif;
+    font-size:14px;
+    line-height:1.1;
+    font-weight:950;
+}
+
+.confirm-selection-row-actions{
+    display:flex;
+    align-items:center;
+    justify-content:flex-end;
+    gap:8px;
+}
+
+.sammlr-confirm-content .pending-review-controls{
+    display:grid;
+    grid-template-columns:32px 48px 32px;
+    gap:5px;
+}
+
+.sammlr-confirm-content .pending-review-controls button,
+.sammlr-confirm-content .pending-review-controls input,
+.sammlr-confirm-content .pending-review-remove{
+    height:32px !important;
+    border-radius:8px !important;
+}
+
+.sammlr-confirm-content .pending-review-controls button{
+    width:32px !important;
+    background:#5d2f86 !important;
+}
+
+.sammlr-confirm-content .pending-review-controls input{
+    width:48px !important;
+}
+
+.sammlr-confirm-content .pending-review-remove{
+    width:32px !important;
+    flex:0 0 32px;
+    background:#efe4d2 !important;
+    color:#5d2f86 !important;
+    font-size:18px !important;
+}
+
+.sammlr-confirm-actions{
+    position:sticky !important;
+    bottom:0 !important;
+    display:grid !important;
+    grid-template-columns:repeat(2, minmax(0,1fr)) !important;
+    gap:10px !important;
+    margin-top:auto !important;
+    padding-top:12px !important;
+    background:#ffffff !important;
+}
+
+.sammlr-confirm-actions.has-three-actions{
+    grid-template-columns:repeat(3, minmax(0,1fr)) !important;
+}
+
+.sammlr-confirm-primary,
+.sammlr-confirm-secondary{
+    width:100%;
+    min-height:44px;
+    border-radius:8px;
+    border:0;
+    font-size:14px;
+    font-weight:950;
+}
+
+.sammlr-confirm-primary{
+    background:#5d2f86;
+    color:#ffffff;
+}
+
+.sammlr-confirm-primary:disabled{
+    opacity:.45;
+}
+
+.sammlr-confirm-secondary{
+    background:#f1edf5;
+    color:#5d2f86;
+}
+
+.sammlr-confirm-danger{
+    background:#fff0f1;
+    color:#b4232d;
+}
+
+.sticker-list-transfer-summary{
+    margin:0 0 12px;
+    color:#5d2f86;
+    font-family:"Bradley Hand", "Marker Felt", Arial, sans-serif;
+    font-size:18px;
+    line-height:1.1;
+    font-weight:950;
+}
+
+.sticker-list-page .sammlr-feedback{
+    border-radius:12px;
+    background:
+        radial-gradient(circle at 14px 18px, rgba(37,31,26,.026) 0 1px, transparent 1.5px),
+        linear-gradient(rgba(79,126,161,.10) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(79,126,161,.08) 1px, transparent 1px),
+        rgba(255,250,235,.96);
+    background-size:34px 34px, 28px 28px, 28px 28px, auto;
+    box-shadow:0 12px 26px rgba(46,36,25,.11);
+}
+
+.sticker-list-page .sammlr-feedback strong,
+.sticker-list-page .sammlr-confirm-title,
+.sticker-list-page .sammlr-confirm-panel h3,
+.sticker-list-page .sammlr-confirm-content .pending-review-row > strong{
+    font-family:"Bradley Hand", "Marker Felt", Arial, sans-serif !important;
+}
+
+.sticker-list-page .sammlr-feedback strong{
+    font-size:20px;
+    line-height:1;
+}
+
+.sticker-list-page .sammlr-confirm-card{
+    background:#fffaf0 !important;
+    box-shadow:0 24px 70px rgba(22,16,10,.26) !important;
+}
+
+.sticker-list-page .sammlr-confirm-title{
+    font-size:28px !important;
+    line-height:1 !important;
+}
+
+.sticker-list-page .sammlr-confirm-panel{
+    border-style:dashed;
+    background:rgba(255,255,255,.36);
+}
+
+.sticker-list-page .sammlr-confirm-panel h3{
+    font-size:18px !important;
+    line-height:1 !important;
+}
+
+.sticker-list-page .sammlr-confirm-content .pending-review-row > strong{
+    font-size:17px;
+}
+
+.sticker-list-page .sammlr-confirm-actions{
+    background:#fffaf0 !important;
+}
+
+@media (max-width:640px){
+    .sticker-wall-review-card{
+        max-height:calc(100vh - 120px - env(safe-area-inset-bottom)) !important;
+        padding:14px !important;
+    }
+
+    .sticker-wall-review-actions{
+        grid-template-columns:1fr;
+    }
+
+    .sammlr-confirm-card{
+        max-height:calc(100vh - 120px - env(safe-area-inset-bottom)) !important;
+        padding:14px !important;
+    }
+
+    .sammlr-confirm-grid{
+        gap:8px !important;
+    }
+
+    .sammlr-confirm-panel{
+        padding:9px !important;
+    }
+
+    .sammlr-confirm-content .pending-review-row{
+        display:flex !important;
+        flex-direction:column;
+        align-items:stretch;
+    }
+
+    .confirm-selection-row-actions{
+        justify-content:space-between;
     }
 }
