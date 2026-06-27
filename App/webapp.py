@@ -202,7 +202,7 @@ def sammlr_feedback_html(message, undo_url=None):
         title = "Sticker entfernt"
         first_word = message.split(" ", 1)[0]
         count = first_word if first_word.isdigit() else "1"
-        lines.append(f"-{count} Sticker entfernt")
+        lines.append(f"{count} Sticker entfernt")
     else:
         lines.append(message)
 
@@ -238,17 +238,24 @@ def confirm_selection_modal_html(
     error_id=None,
     extra_class="",
     alternate_text=None,
-    alternate_attributes=""
+    alternate_attributes="",
+    subtitle_id=None,
+    subtitle_text=""
 ):
     error_html = (
         f'<p id="{error_id}" class="sticker-list-error" style="display:none;"></p>'
         if error_id else ""
+    )
+    subtitle_html = (
+        f'<p id="{subtitle_id}" class="sammlr-confirm-subtitle">{escape(subtitle_text)}</p>'
+        if subtitle_id else ""
     )
     extra_class = f" {extra_class.strip()}" if extra_class.strip() else ""
     return f"""
     <div class="quick-action-modal review-modal confirm-selection-modal{extra_class}" id="{modal_id}" style="display:none;">
         <div class="quick-action-card review-card sammlr-confirm-card">
             <h3 class="sammlr-confirm-title">Auswahl prüfen</h3>
+            {subtitle_html}
             <div class="sammlr-confirm-grid">
                 <section class="sammlr-confirm-panel">
                     <h3>Du bekommst</h3>
@@ -2289,6 +2296,7 @@ def albumseite(album_id):
     <div class="quick-action-modal review-modal sticker-wall-review-modal" id="pendingReviewModal" style="display:none;">
         <div class="quick-action-card review-card sticker-wall-review-card">
             <h3>Auswahl prüfen</h3>
+            <p class="sticker-wall-review-subtitle" id="pendingReviewSubtitle">0 Sticker ausgewählt</p>
             <div class="pending-review-list sticker-wall-review-list" id="pendingReviewList"></div>
             <p id="pendingReviewError" class="pending-input-error" style="display:none;"></p>
             <div class="sticker-wall-review-actions">
@@ -3326,6 +3334,7 @@ function submitSmartAdd(){{
 
 function renderPendingReview(){{
     const list = document.getElementById('pendingReviewList');
+    const subtitle = document.getElementById('pendingReviewSubtitle');
     const primary = document.getElementById('pendingReviewPrimary');
     const removePrimary = document.getElementById('pendingReviewRemove');
     const error = document.getElementById('pendingReviewError');
@@ -3333,8 +3342,12 @@ function renderPendingReview(){{
 
     const counts = getPendingCounts();
     const codes = Object.keys(counts);
+    const total = selectedStickers.length;
 
     list.innerHTML = '';
+    if(subtitle){{
+        subtitle.textContent = total + (total === 1 ? ' Sticker ausgewählt' : ' Sticker ausgewählt');
+    }}
     primary.disabled = codes.length === 0;
     removePrimary.disabled = codes.length === 0;
     if(error){{
@@ -3568,7 +3581,9 @@ def stickerliste(album_id):
         'id="stickerListSubmit" onclick="document.getElementById(\'stickerListTradeForm\').requestSubmit()"',
         'id="stickerListReviewClose"',
         error_id="stickerListReviewError",
-        extra_class="sticker-list-modal"
+        extra_class="sticker-list-modal",
+        subtitle_id="stickerListReviewSubtitle",
+        subtitle_text="0 erhalten • 0 abgegeben"
     )
 
     html = f"""
@@ -3683,10 +3698,14 @@ function stickerListRenderReview(){{
 
     const error = document.getElementById('stickerListReviewError');
     const submit = document.getElementById('stickerListSubmit');
+    const subtitle = document.getElementById('stickerListReviewSubtitle');
     const getCount = stickerListSelections.get.length;
     const giveCount = stickerListSelections.give.length;
     const invalid = getCount === 0 && giveCount === 0;
 
+    if(subtitle){{
+        subtitle.textContent = getCount + ' erhalten • ' + giveCount + ' abgegeben';
+    }}
     error.style.display = invalid ? 'block' : 'none';
     error.textContent = 'Markiere mindestens einen Sticker für diesen Transfer.';
     submit.disabled = invalid;

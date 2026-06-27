@@ -8438,19 +8438,28 @@ body .container{
     display:flex !important;
     flex-direction:column !important;
     padding:18px !important;
-    border-radius:18px !important;
+    border-radius:16px !important;
     border:1px solid rgba(93,47,134,.14) !important;
     background:#ffffff !important;
     box-shadow:0 24px 70px rgba(18,5,31,.28) !important;
 }
 
 .sticker-wall-review-card > h3{
-    margin:0 0 14px !important;
+    margin:0 0 6px !important;
     color:#2b0f46 !important;
     font-family:Arial, sans-serif !important;
     font-size:22px !important;
     line-height:1.1 !important;
     font-weight:950 !important;
+}
+
+.sticker-wall-review-subtitle{
+    margin:0 0 14px !important;
+    color:#6b6274 !important;
+    font-family:Arial, sans-serif !important;
+    font-size:14px !important;
+    line-height:1.2 !important;
+    font-weight:850 !important;
 }
 
 .sticker-wall-review-list{
@@ -8465,9 +8474,9 @@ body .container{
 
 .sticker-wall-review-list .pending-review-row{
     grid-template-columns:minmax(0,1fr) auto !important;
-    min-height:48px;
+    min-height:46px;
     padding:8px 10px !important;
-    border-radius:12px !important;
+    border-radius:10px !important;
     border:1px solid rgba(93,47,134,.10) !important;
     background:#faf8fc !important;
 }
@@ -8542,12 +8551,21 @@ body .container{
 }
 
 .sammlr-confirm-title{
-    margin:0 0 14px !important;
+    margin:0 0 6px !important;
     color:#5d2f86 !important;
     font-family:Arial, sans-serif !important;
     font-size:22px !important;
     line-height:1.1 !important;
     font-weight:950 !important;
+}
+
+.sammlr-confirm-subtitle{
+    margin:0 0 14px !important;
+    color:#6b6274 !important;
+    font-family:Arial, sans-serif !important;
+    font-size:14px !important;
+    line-height:1.2 !important;
+    font-weight:850 !important;
 }
 
 .sammlr-confirm-grid{
@@ -8704,6 +8722,7 @@ body .container{
 
 .sticker-list-page .sammlr-feedback strong,
 .sticker-list-page .sammlr-confirm-title,
+.sticker-list-page .sammlr-confirm-subtitle,
 .sticker-list-page .sammlr-confirm-panel h3,
 .sticker-list-page .sammlr-confirm-content .pending-review-row > strong{
     font-family:"Bradley Hand", "Marker Felt", Arial, sans-serif !important;
@@ -8722,6 +8741,13 @@ body .container{
 .sticker-list-page .sammlr-confirm-title{
     font-size:28px !important;
     line-height:1 !important;
+}
+
+.sticker-list-page .sammlr-confirm-subtitle{
+    color:#5d2f86 !important;
+    font-size:18px !important;
+    line-height:1 !important;
+    font-weight:950 !important;
 }
 
 .sticker-list-page .sammlr-confirm-panel{
