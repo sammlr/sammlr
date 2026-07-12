@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 2048 2048" role="img" aria-labelledby="title desc">
+  <title id="title">Master Logo VfL</title>
+  <desc id="desc">Quellengetreue Sammlr-Ableitung des offiziellen VfL-Logos. Die Logoform wird nicht nachgezeichnet, rekonstruiert oder interpretiert; Geometrie-Traeger ist ausschliesslich die verbindliche PNG-Quelle.</desc>
+  <metadata>
+    official-source: Branding/Design Bible/00 Source Assets/vfl_official_logo_source.png
+    geometry-policy: source-png-only; no redraw; no reconstructed letters; no reconstructed diamonds; no interpreted proportions
+    vector-policy: a true vector SVG may only be created by vectorizing vfl_official_logo_source.png
+    material-policy: enamel, relief, light and material treatment are allowed only after successful source-based vectorization
+  </metadata>
+  <image
+    id="vfl_official_logo_source_raster"
+    href="master_logo_vfl.png"
+    x="0"
+    y="0"
+    width="2048"
+    height="2048"
+    preserveAspectRatio="xMidYMid meet"/>
+</svg>

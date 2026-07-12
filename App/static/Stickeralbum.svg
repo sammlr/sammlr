@@ -1,0 +1,83 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 142" role="img" aria-labelledby="title desc">
+  <title id="title">Stickeralbum</title>
+  <desc id="desc">Ein geschlossenes Sammlr-Stickeralbum in frontaler Ansicht mit vier Stickerfeldern auf dem Cover.</desc>
+  <style>
+    :root {
+      --sammlr-purple: #7C3AED;
+      --sammlr-dark: #2b0f46;
+      --sammlr-paper: #ffffff;
+    }
+
+    .outline {
+      fill: var(--sammlr-paper);
+      stroke: var(--sammlr-purple);
+      stroke-width: 3;
+      vector-effect: non-scaling-stroke;
+    }
+
+    .detail {
+      fill: none;
+      stroke: var(--sammlr-purple);
+      stroke-width: 3;
+      stroke-linecap: round;
+      vector-effect: non-scaling-stroke;
+    }
+
+    .paper-line {
+      fill: none;
+      stroke: var(--sammlr-purple);
+      stroke-width: 1.5;
+      stroke-linecap: round;
+      vector-effect: non-scaling-stroke;
+    }
+
+    .sticker {
+      fill: var(--sammlr-purple);
+      stroke: var(--sammlr-purple);
+      stroke-width: 2;
+      vector-effect: non-scaling-stroke;
+    }
+
+    .silhouette {
+      fill: var(--sammlr-paper);
+      stroke: var(--sammlr-paper);
+      stroke-width: 1.7;
+      stroke-linecap: round;
+      vector-effect: non-scaling-stroke;
+    }
+  </style>
+
+  <g id="stickeralbum" transform="translate(0 7)">
+    <path class="outline" d="M22 19h83a10 10 0 0 1 10 10v83a10 10 0 0 1-10 10H22a10 10 0 0 1-10-10V29a10 10 0 0 1 10-10Z"/>
+
+    <path class="detail" d="M28 19v103"/>
+    <path class="paper-line" d="M18 31v79"/>
+    <path class="paper-line" d="M23 29v83"/>
+
+    <g id="cover-stickers">
+      <g transform="translate(43 38)">
+        <rect class="sticker" x="0" y="0" width="21" height="25" rx="4"/>
+        <circle class="silhouette" cx="10.5" cy="9.2" r="3.2"/>
+        <path class="silhouette" d="M5.6 19.1c2.2-4.4 7.8-4.4 9.8 0"/>
+      </g>
+
+      <g transform="translate(72 38)">
+        <rect class="sticker" x="0" y="0" width="21" height="25" rx="4"/>
+        <circle class="silhouette" cx="10.5" cy="9.2" r="3.2"/>
+        <path class="silhouette" d="M5.6 19.1c2.2-4.4 7.8-4.4 9.8 0"/>
+      </g>
+
+      <g transform="translate(43 71)">
+        <rect class="sticker" x="0" y="0" width="21" height="25" rx="4"/>
+        <circle class="silhouette" cx="10.5" cy="9.2" r="3.2"/>
+        <path class="silhouette" d="M5.6 19.1c2.2-4.4 7.8-4.4 9.8 0"/>
+      </g>
+
+      <g transform="translate(72 71)">
+        <rect class="sticker" x="0" y="0" width="21" height="25" rx="4"/>
+        <circle class="silhouette" cx="10.5" cy="9.2" r="3.2"/>
+        <path class="silhouette" d="M5.6 19.1c2.2-4.4 7.8-4.4 9.8 0"/>
+      </g>
+    </g>
+  </g>
+</svg>

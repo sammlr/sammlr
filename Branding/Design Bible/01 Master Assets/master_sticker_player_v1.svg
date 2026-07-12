@@ -1,0 +1,28 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 500 700" role="img" aria-labelledby="title desc">
+  <title id="title">Master Sticker Player V1</title>
+  <desc id="desc">Universeller Sammlr-Spielersticker im Seitenverhältnis 5:7 mit weißer Fläche, lila Outline und minimalistischer lila Spieler-Silhouette.</desc>
+  <g id="master_sticker_player_v1">
+    <g id="sticker_base">
+      <rect
+        id="sticker_shape"
+        x="6.25"
+        y="6.25"
+        width="487.5"
+        height="687.5"
+        rx="60"
+        ry="60"
+        fill="#FFFFFF"
+        stroke="#6B3DF2"
+        stroke-width="12.5"
+        vector-effect="non-scaling-stroke"
+      />
+    </g>
+    <g id="player_silhouette" fill="#6B3DF2">
+      <circle id="player_head" cx="250" cy="268" r="70" />
+      <path
+        id="player_body"
+        d="M105 545V510C105 431.023 164.202 382 250 382C335.798 382 395 431.023 395 510V545C395 556.046 386.046 565 375 565H125C113.954 565 105 556.046 105 545Z"
+      />
+    </g>
+  </g>
+</svg>
