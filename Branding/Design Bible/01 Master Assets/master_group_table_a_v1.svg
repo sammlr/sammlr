@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 500 360" role="img" aria-labelledby="title desc">
+  <title id="title">Master Group Table A V1</title>
+  <desc id="desc">Gedrucktes Sammlr-Tabellenblatt fuer die WM26-Gruppe A mit vier Teamkuerzeln.</desc>
+  <g id="master_group_table_a_v1" fill="none" stroke="#6B3DF2" stroke-linecap="round" stroke-linejoin="round">
+    <g id="table_page" transform="translate(49 0) scale(0.93)">
+      <rect id="table_page_outline" x="56" y="20" width="320" height="320" rx="24" ry="24" stroke-width="7"/>
+      <rect id="table_header_bar" x="82" y="48" width="268" height="34" rx="9" ry="9" fill="#6B3DF2" stroke="none"/>
+      <text id="group_letter" x="104" y="72" fill="#FFFFFF" stroke="none" font-family="Inter, Arial, sans-serif" font-size="27" font-weight="900" dominant-baseline="middle">A</text>
+      <g id="team_rows" fill="#6B3DF2" stroke="#6B3DF2">
+        <g id="team_row_mex">
+          <text id="mex_label" x="116" y="136" stroke="none" font-family="Inter, Arial Black, Arial, sans-serif" font-size="64" font-weight="900" letter-spacing="0" dominant-baseline="middle">MEX</text>
+        </g>
+        <g id="team_row_rsa">
+          <text id="rsa_label" x="116" y="195" stroke="none" font-family="Inter, Arial Black, Arial, sans-serif" font-size="64" font-weight="900" letter-spacing="0" dominant-baseline="middle">RSA</text>
+        </g>
+        <g id="team_row_kor">
+          <text id="kor_label" x="116" y="254" stroke="none" font-family="Inter, Arial Black, Arial, sans-serif" font-size="64" font-weight="900" letter-spacing="0" dominant-baseline="middle">KOR</text>
+        </g>
+        <g id="team_row_cze">
+          <text id="cze_label" x="116" y="313" stroke="none" font-family="Inter, Arial Black, Arial, sans-serif" font-size="64" font-weight="900" letter-spacing="0" dominant-baseline="middle">CZE</text>
+        </g>
+      </g>
+    </g>
+  </g>
+</svg>

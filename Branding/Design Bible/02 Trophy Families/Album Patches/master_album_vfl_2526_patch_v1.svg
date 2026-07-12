@@ -1,0 +1,126 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024" role="img" aria-labelledby="title desc">
+  <title id="title">Master Album VfL 25/26 Patch V1</title>
+  <desc id="desc">Sammlr Album-Patch fuer VfL Osnabrueck 25/26, zusammengesetzt aus Master Shield V1, Master Header V1, Master Logo VfL und Master Logo Emboss.</desc>
+  <defs>
+    <linearGradient id="shield_surface" x1="0.18" y1="0.04" x2="0.82" y2="0.96">
+      <stop offset="0" stop-color="#FFFFFF"/>
+      <stop offset="0.44" stop-color="#F8F5FA"/>
+      <stop offset="0.76" stop-color="#EEE8F1"/>
+      <stop offset="1" stop-color="#FFFFFF"/>
+    </linearGradient>
+    <linearGradient id="shield_edge" x1="0.16" y1="0.06" x2="0.9" y2="0.96">
+      <stop offset="0" stop-color="#FFFFFF"/>
+      <stop offset="0.48" stop-color="#E7E0EA"/>
+      <stop offset="0.7" stop-color="#FFFFFF"/>
+      <stop offset="1" stop-color="#CFC5D9"/>
+    </linearGradient>
+    <linearGradient id="shield_inner_line" x1="0.2" y1="0.08" x2="0.8" y2="0.92">
+      <stop offset="0" stop-color="#9B72FF"/>
+      <stop offset="0.5" stop-color="#6B3DF2"/>
+      <stop offset="1" stop-color="#4C1EC8"/>
+    </linearGradient>
+    <filter id="shield_drop_shadow" x="-12%" y="-10%" width="124%" height="124%">
+      <feDropShadow dx="0" dy="24" stdDeviation="20" flood-color="#160536" flood-opacity="0.32"/>
+    </filter>
+    <filter id="shield_soft_depth" x="-3%" y="-3%" width="106%" height="106%">
+      <feDropShadow dx="0" dy="5" stdDeviation="4" flood-color="#FFFFFF" flood-opacity="0.7"/>
+      <feDropShadow dx="0" dy="-5" stdDeviation="5" flood-color="#6B3DF2" flood-opacity="0.14"/>
+    </filter>
+    <linearGradient id="emboss_line" x1="0.16" y1="0.08" x2="0.86" y2="0.92">
+      <stop offset="0" stop-color="#FFFFFF"/>
+      <stop offset="0.52" stop-color="#EDE7F2"/>
+      <stop offset="1" stop-color="#FFFFFF"/>
+    </linearGradient>
+    <linearGradient id="vfl_panel_fill" x1="0.2" y1="0.04" x2="0.82" y2="0.96">
+      <stop offset="0" stop-color="#6B3DF2"/>
+      <stop offset="0.5" stop-color="#3E168D"/>
+      <stop offset="1" stop-color="#1D0648"/>
+    </linearGradient>
+    <linearGradient id="vfl_panel_edge" x1="0.14" y1="0.04" x2="0.86" y2="0.96">
+      <stop offset="0" stop-color="#FFFFFF"/>
+      <stop offset="0.3" stop-color="#A982FF"/>
+      <stop offset="0.66" stop-color="#6B3DF2"/>
+      <stop offset="1" stop-color="#1B0644"/>
+    </linearGradient>
+    <linearGradient id="vfl_letter_surface" x1="0.2" y1="0.08" x2="0.86" y2="0.95">
+      <stop offset="0" stop-color="#FFFFFF"/>
+      <stop offset="0.56" stop-color="#F4EFF8"/>
+      <stop offset="1" stop-color="#DED4E8"/>
+    </linearGradient>
+    <linearGradient id="vfl_letter_edge" x1="0.18" y1="0.06" x2="0.82" y2="0.94">
+      <stop offset="0" stop-color="#FFFFFF"/>
+      <stop offset="0.62" stop-color="#D8CEE3"/>
+      <stop offset="1" stop-color="#2B0A6B"/>
+    </linearGradient>
+    <filter id="vfl_branding_shadow" x="-10%" y="-8%" width="120%" height="122%">
+      <feDropShadow dx="0" dy="14" stdDeviation="9" flood-color="#160536" flood-opacity="0.28"/>
+    </filter>
+    <filter id="vfl_letter_depth" x="-8%" y="-8%" width="116%" height="116%">
+      <feDropShadow dx="0" dy="7" stdDeviation="3" flood-color="#160536" flood-opacity="0.32"/>
+      <feDropShadow dx="0" dy="-3" stdDeviation="3" flood-color="#FFFFFF" flood-opacity="0.58"/>
+    </filter>
+    <style>
+      .header-text {
+        fill: #6B3DF2;
+        font-family: Inter, "Inter ExtraBold", Arial, sans-serif;
+        font-weight: 800;
+        letter-spacing: 10px;
+        text-anchor: middle;
+        dominant-baseline: middle;
+      }
+      .header-line {
+        fill: none;
+        stroke: #6B3DF2;
+        stroke-width: 12;
+        stroke-linecap: square;
+      }
+    </style>
+    <symbol id="master_logo_vfl_symbol" viewBox="0 0 1024 1024">
+      <image href="../../01 Master Assets/master_logo_vfl.png" x="0" y="0" width="1024" height="1024" preserveAspectRatio="xMidYMid meet"/>
+    </symbol>
+  </defs>
+  <g id="master_album_vfl_2526_patch_v1">
+    <g id="master_shield_v1">
+      <g id="shield_shadow" filter="url(#shield_drop_shadow)">
+        <path d="M217 72H807C847 72 879 104 879 144V184C879 193 886 200 895 200H936C972 200 1000 228 1000 264V360C1000 402 966 436 924 436H914C902 436 892 446 892 458V752C892 786 872 816 841 829L543 956C523 965 501 965 481 956L183 829C152 816 132 786 132 752V458C132 446 122 436 110 436H100C58 436 24 402 24 360V264C24 228 52 200 88 200H129C138 200 145 193 145 184V144C145 104 177 72 217 72Z" fill="#1A063F" opacity="0.18"/>
+      </g>
+      <g id="shield_outer" filter="url(#shield_soft_depth)">
+        <path d="M217 72H807C847 72 879 104 879 144V184C879 193 886 200 895 200H936C972 200 1000 228 1000 264V360C1000 402 966 436 924 436H914C902 436 892 446 892 458V752C892 786 872 816 841 829L543 956C523 965 501 965 481 956L183 829C152 816 132 786 132 752V458C132 446 122 436 110 436H100C58 436 24 402 24 360V264C24 228 52 200 88 200H129C138 200 145 193 145 184V144C145 104 177 72 217 72Z" fill="url(#shield_edge)"/>
+      </g>
+      <g id="shield_inner_fill">
+        <path d="M225 100H799C823 100 843 120 843 144V200C843 221 860 238 881 238H932C947 238 960 251 960 266V358C960 381 941 400 918 400H892C868 400 848 420 848 444V744C848 763 837 781 819 789L529 913C518 918 506 918 495 913L205 789C187 781 176 763 176 744V444C176 420 156 400 132 400H106C83 400 64 381 64 358V266C64 251 77 238 92 238H143C164 238 181 221 181 200V144C181 120 201 100 225 100Z" fill="url(#shield_surface)"/>
+      </g>
+      <g id="shield_inner_outline">
+        <path d="M229 164H795C812 164 826 178 826 195V219C826 238 841 253 860 253H919C929 253 937 261 937 271V361C937 371 929 379 919 379H891C856 379 828 407 828 442V727C828 747 816 765 798 773L528 888C518 892 506 892 496 888L226 773C208 765 196 747 196 727V442C196 407 168 379 133 379H105C95 379 87 371 87 361V271C87 261 95 253 105 253H164C183 253 198 238 198 219V195C198 178 212 164 229 164Z" fill="none" stroke="url(#shield_inner_line)" stroke-width="12" stroke-linejoin="round" stroke-linecap="round"/>
+      </g>
+      <g id="shield_highlights">
+        <path d="M226 100H798C822 100 842 120 842 144" fill="none" stroke="#FFFFFF" stroke-width="10" stroke-linecap="round" opacity="0.62"/>
+        <path d="M176 456V733C176 754 187 774 206 783" fill="none" stroke="#FFFFFF" stroke-width="8" stroke-linecap="round" opacity="0.42"/>
+      </g>
+    </g>
+    <g id="master_header_v1" transform="translate(143 124) scale(0.36)">
+      <g id="header_lines" transform="translate(0 256)">
+        <path id="header_line_left" class="header-line" d="M282 0H430"/>
+        <path id="header_line_right" class="header-line" d="M1618 0H1766"/>
+      </g>
+      <g id="header_text">
+        <text id="header_text_two_line_top" class="header-text" x="1024" y="190" font-size="96">VFL OSNABRÜCK</text>
+        <text id="header_text_two_line_bottom" class="header-text" x="1024" y="324" font-size="126">25/26</text>
+      </g>
+    </g>
+    <g id="album_branding_vfl" transform="translate(208 220) scale(0.65)">
+      <use href="#master_logo_vfl_symbol" width="1024" height="1024"/>
+    </g>
+    <g id="master_logo_emboss" transform="translate(456 764) scale(0.11)" opacity="0.78">
+      <g id="back_card" transform="translate(-92 -82) rotate(-8 555 535)">
+        <rect x="300" y="300" width="470" height="470" rx="46" ry="46" fill="none" stroke="url(#emboss_line)" stroke-width="26"/>
+      </g>
+      <g id="front_card">
+        <rect x="320" y="300" width="470" height="470" rx="46" ry="46" fill="none" stroke="url(#emboss_line)" stroke-width="26"/>
+      </g>
+      <g id="letter_s" transform="matrix(0.975 0 0 0.975 3 6)">
+        <path d="M637 389C594 349 501 348 462 405C427 456 467 503 545 520C637 540 676 586 647 640C608 711 487 713 407 641" fill="none" stroke="url(#emboss_line)" stroke-width="88" stroke-linecap="round" stroke-linejoin="round" opacity="0.74"/>
+      </g>
+    </g>
+  </g>
+</svg>

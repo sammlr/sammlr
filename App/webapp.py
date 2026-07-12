@@ -2,11 +2,16 @@ import sqlite3
 import os
 import shutil
 import re
-from flask import Flask, request, redirect, session, jsonify
+from flask import Flask, request, redirect, session, jsonify, send_from_directory
 import json
 from html import escape
 from em24_data import build_em24
 from wm26_data import build_wm26
+from trophy_definitions import (
+    GLOBAL_SCOPE,
+    album_trophy_definitions,
+    global_trophy_definitions,
+)
 from services.notifications import create_notification, unread_notifications
 from urllib.parse import quote
 
@@ -14,6 +19,30 @@ app = Flask(__name__)
 app.secret_key = "sammlr_dev_secret"
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+PROJECT_DIR = os.path.dirname(BASE_DIR)
+MASTER_ASSET_DIR = os.path.join(
+    PROJECT_DIR,
+    "Branding",
+    "Design Bible",
+    "01 Master Assets",
+)
+MASTER_LOGO_V1_FILENAME = "master_logo_v1.png"
+MASTER_LOGO_V1_PATH = os.path.join(MASTER_ASSET_DIR, MASTER_LOGO_V1_FILENAME)
+ALBUM_BRANDING_FILENAMES = {
+    "vfl": "master_album_branding_vfl_v1.png",
+    "wm26": "master_album_branding_wm_stamp_v1.png",
+}
+ALBUM_COVER_BRANDING_FILENAMES = {
+    "vfl": "master_album_branding_vfl_v1.png",
+    "wm26": "master_album_branding_wm_v1.png",
+}
+MASTER_TROPHY_ASSETS = {
+    "album_empty": "master_album_open_empty_v1.svg",
+    "album_full": "master_album_open_full_v1.svg",
+    "sticker_player": "master_sticker_player_v1.svg",
+    "group_table": "master_group_table_v1.svg",
+}
+WM26_GROUP_ASSET_LETTERS = "abcdefghijkl"
 DB = os.environ.get(
     "DATABASE_PATH",
     os.path.join(BASE_DIR, "Database", "sammlr.db")
@@ -84,6 +113,12 @@ def initialize_render_database_from_seed():
 
     os.makedirs(os.path.dirname(target_path), exist_ok=True)
     shutil.copy2(seed_path, target_path)
+
+
+@app.route("/design-bible/master-assets/<path:filename>")
+def design_bible_master_asset(filename):
+    return send_from_directory(MASTER_ASSET_DIR, filename)
+
 
 def current_user_id():
     return session.get("user_id", 1)
@@ -279,7 +314,7 @@ def confirm_selection_modal_html(
 
 @app.before_request
 def require_login():
-    public_endpoints = {"login", "register", "static", "debug_db", "debug_seed_now"}
+    public_endpoints = {"login", "register", "static", "debug_db", "debug_seed_now", "design_bible_master_asset"}
 
     if request.endpoint in public_endpoints:
         return None
@@ -776,42 +811,25 @@ def nearest_album_trophy(album_id):
 
 def global_trade_trophaeen():
     return [
-        (1, "Erster Wechsel"),
-        (5, "Transfertelefon"),
-        (10, "Handschlag-Dealer"),
-        (25, "Transferexpress"),
-        (50, "Deadline-Day-Profi"),
-        (100, "Sportdirektor"),
+        (definition["trigger_value"], definition["name"])
+        for definition in global_trophy_definitions()
+        if definition["trigger_type"] == "global_trades"
     ]
 
 
 def global_sticker_trophaeen():
     return [
-        (100, "100 gesammelte Sticker"),
-        (200, "200 gesammelte Sticker"),
-        (300, "300 gesammelte Sticker"),
-        (500, "500 gesammelte Sticker"),
-        (750, "750 gesammelte Sticker"),
-        (1000, "1000 gesammelte Sticker"),
-        (1500, "1500 gesammelte Sticker"),
-        (2000, "2000 gesammelte Sticker"),
-        (3000, "3000 gesammelte Sticker"),
-        (5000, "5000 gesammelte Sticker"),
-        (10000, "10000 gesammelte Sticker"),
+        (definition["trigger_value"], definition["name"])
+        for definition in global_trophy_definitions()
+        if definition["trigger_type"] == "global_stickers"
     ]
 
 
 def global_duplicate_trophaeen():
     return [
-        (1, "Erster doppelter Sticker"),
-        (25, "25 doppelte Sticker"),
-        (50, "50 doppelte Sticker"),
-        (100, "100 doppelte Sticker"),
-        (250, "250 doppelte Sticker"),
-        (500, "500 doppelte Sticker"),
-        (1000, "1000 doppelte Sticker"),
-        (2500, "2500 doppelte Sticker"),
-        (5000, "5000 doppelte Sticker"),
+        (definition["trigger_value"], definition["name"])
+        for definition in global_trophy_definitions()
+        if definition["trigger_type"] == "global_duplicates"
     ]
 
 
@@ -860,16 +878,15 @@ def render_trophy_steps(trophies, current_value, color_class, unit_text):
 
 
 def render_global_trophy_grid(section_title, trophies, current_value, unit_text):
-    next_trophy = next((trophy for trophy in trophies if current_value < trophy[0]), None)
     visible_trophies = []
+    definitions = global_trophy_definitions()
 
     for trophy in trophies:
         ziel, _ = trophy
-        percent = min(100, int((current_value / ziel) * 100)) if ziel else 0
         unlocked = current_value >= ziel
 
-        if unlocked or trophy == next_trophy or percent >= 95:
-            visible_trophies.append((trophy, percent, unlocked, trophy == next_trophy))
+        if unlocked:
+            visible_trophies.append(trophy)
 
     if not visible_trophies:
         return ""
@@ -880,28 +897,44 @@ def render_global_trophy_grid(section_title, trophies, current_value, unit_text)
         <div class="trophy-grid album-awards-grid">
     """
 
-    for trophy, percent, unlocked, is_next in visible_trophies:
+    for trophy in visible_trophies:
         ziel, titel = trophy
-        description = f"{ziel} {unit_text}"
-        card_class = "trophy-unlocked trophy-gold" if unlocked else "trophy-locked trophy-gold-muted"
-        pill_class = "gold" if unlocked else "gray"
-        pill_text = "Abgestaubt" if unlocked else ("Nächstes Ziel" if is_next else "Fast geschafft")
-        status_text = "Abgestaubt" if unlocked else f"{current_value} / {ziel}"
+        definition = trophy_definition_by_name(titel, definitions) or {}
+        description = definition.get("description", f"{ziel} {unit_text}")
 
         html += f"""
-        <div class="trophy {card_class}">
-            <span class="trophy-pill {pill_class}">{pill_text}</span>
-            <h2>{titel}</h2>
-            <p>{description}</p>
-            <div class="progress trophy-progress" data-progress="{percent}%">
-                <div class="progress-bar" style="width:{percent}%;"></div>
-            </div>
-            <p class="subline">{status_text}</p>
+        <div class="trophy trophy-unlocked trophy-gold">
+            {trophy_icon_svg(definition.get('icon_key', 'album_generic'), titel)}
+            <h2>{escape(titel)}</h2>
+            <span class="trophy-pill gold">Abgestaubt</span>
         </div>
         """
 
     html += "</div></section>"
     return html
+
+
+def global_trophies(sticker_total, duplicate_total, completed_trades):
+    return [
+        {
+            "section_title": "Gesamtsticker-Trophäen",
+            "trophies": global_sticker_trophaeen(),
+            "current_value": sticker_total,
+            "unit_text": "gesammelte Sticker",
+        },
+        {
+            "section_title": "Doppelte-Trophäen",
+            "trophies": global_duplicate_trophaeen(),
+            "current_value": duplicate_total,
+            "unit_text": "doppelte Sticker",
+        },
+        {
+            "section_title": "Trade-Trophäen",
+            "trophies": global_trade_trophaeen(),
+            "current_value": completed_trades,
+            "unit_text": "abgeschlossene Tausche",
+        },
+    ]
 
 
 def album_trophy_preview(album_id, by_code, gesammelt, total):
@@ -930,7 +963,7 @@ def album_completion_title(album):
     return labels.get(album["id"], f"{album['name']} vollendet")
 
 
-def render_global_album_completion_trophies():
+def album_portal_cards():
     con = get_db()
     albums = con.execute(
         """
@@ -944,40 +977,67 @@ def render_global_album_completion_trophies():
     ).fetchall()
     con.close()
 
-    html = """
-    <section class="sammlr-cabinet-section sammlr-cabinet-albums">
-        <h2>Album-Vollendet-Auszeichnungen</h2>
-        <div class="trophy-grid album-awards-grid global-album-completion-grid">
-    """
-    has_items = False
-
+    cards = []
     for album in albums:
         _, _, gesammelt, _, _, total = lade_album(album["id"])
-        if gesammelt <= 0:
-            continue
-
-        has_items = True
         percent = min(100, int((gesammelt / total) * 100)) if total else 0
-        unlocked = gesammelt >= total
-        card_class = "trophy-unlocked trophy-gold" if unlocked else "trophy-locked trophy-gold-muted"
-        pill_class = "gold" if unlocked else "gray"
-        pill_text = "Abgestaubt" if unlocked else "Albumziel"
-        status_text = "Abgestaubt" if unlocked else f"Fortschritt: {gesammelt} / {total}"
+        if total and gesammelt >= total:
+            status = "complete"
+            pill_text = "100%"
+            status_text = f"Vollständig: {gesammelt} / {total}"
+        elif gesammelt > 0:
+            status = "active"
+            pill_text = "Aktiv"
+            status_text = f"Fortschritt: {gesammelt} / {total}"
+        else:
+            status = "not_started"
+            pill_text = "Bereit"
+            status_text = f"Noch nicht begonnen: 0 / {total}"
+
+        cards.append({
+            "album": album,
+            "current": gesammelt,
+            "total": total,
+            "percent": percent,
+            "status": status,
+            "pill_text": pill_text,
+            "status_text": status_text,
+            "icon_key": "wm26_album" if album["id"] == "wm26" else ("vfl_album" if album["id"] == "vfl" else "album_generic"),
+        })
+
+    return cards
+
+
+def render_album_portal_cards(cards):
+    if not cards:
+        return ""
+
+    html = """
+    <section class="sammlr-cabinet-section sammlr-cabinet-albums">
+        <h2>Alben</h2>
+        <div class="trophy-grid album-awards-grid album-portal-card-grid">
+    """
+
+    for card in cards:
+        album = card["album"]
+        card_class = "trophy-gold" if card["status"] == "complete" else ("trophy-unlocked" if card["status"] == "active" else "trophy-locked trophy-gold-muted")
+        pill_class = "gold" if card["status"] == "complete" else ("purple" if card["status"] == "active" else "gray")
 
         html += f"""
-        <a class="trophy trophy-link global-album-completion-card {card_class}" href="/album/{album['id']}/trophaeen">
-            <span class="trophy-pill {pill_class}">{pill_text}</span>
-            <h2>{album_completion_title(album)}</h2>
-            <p>Vollende {album['name']}.</p>
-            <div class="progress trophy-progress" data-progress="{percent}%">
-                <div class="progress-bar" style="width:{percent}%;"></div>
+        <a class="trophy trophy-link album-portal-card {card_class}" href="/album/{album['id']}/trophaeen">
+            {trophy_icon_svg(card['icon_key'], album['name'], badge_type='sammlr', album_id=album['id'])}
+            <h2>{escape(album['name'])}</h2>
+            <span class="trophy-pill {pill_class}">{card['pill_text']}</span>
+            <p>Album-Trophäenschrank</p>
+            <div class="progress trophy-progress" data-progress="{card['percent']}%">
+                <div class="progress-bar" style="width:{card['percent']}%;"></div>
             </div>
-            <p class="subline">{status_text}</p>
+            <p class="subline">{card['status_text']}</p>
         </a>
         """
 
     html += "</div></section>"
-    return html if has_items else ""
+    return html
 
 
 def em24_gruppen_trophaeen(by_code):
@@ -1034,7 +1094,7 @@ def owned_count_for_codes(by_code, codes):
     ])
 
 
-def award_item(title, description, current, target, category="Albumziel"):
+def award_item(title, description, current, target, category="Albumziel", icon_key="album_generic"):
     percent = min(100, int((current / target) * 100)) if target else 0
     return {
         "title": title,
@@ -1044,6 +1104,7 @@ def award_item(title, description, current, target, category="Albumziel"):
         "percent": percent,
         "unlocked": current >= target,
         "category": category,
+        "icon_key": icon_key,
     }
 
 
@@ -1051,73 +1112,586 @@ def award_item_for_codes(title, description, codes, by_code, category="Kapitel")
     return award_item(title, description, owned_count_for_codes(by_code, codes), len(codes), category)
 
 
-def render_album_awards(items):
-    next_item = next((item for item in items if not item["unlocked"]), None)
-    visible_items = [
-        item for item in items
-        if (
-            item["unlocked"]
-            or item is next_item
-            or (
-                item.get("category", "Albumziel") != "Spezial"
-                and item["percent"] >= 70
-            )
-            or (
-                item.get("category", "Albumziel") == "Spezial"
-                and item["percent"] >= 95
-            )
-        )
+def trophy_category(definition):
+    trigger_type = definition.get("trigger_type")
+    if trigger_type in ("album_count", "album_complete"):
+        return "Albumziel"
+    if definition.get("name") in ("Wappenexperte", "Teamfotograf", "Historiker", "Etikettenknibbler", "The Last Dance", "DJ Matze"):
+        return "Spezial"
+    return "Kapitel"
+
+
+def trophy_item_from_definition(definition, by_code, gesammelt, total, unlocked_at=None):
+    trigger_type = definition["trigger_type"]
+    target = definition.get("trigger_value") or len(definition.get("sticker_codes", []))
+
+    if trigger_type in ("album_count", "album_complete"):
+        current = gesammelt
+    elif trigger_type == "codes":
+        current = owned_count_for_codes(by_code, definition.get("sticker_codes", []))
+    else:
+        current = 0
+
+    item = award_item(
+        definition["name"],
+        definition["description"],
+        current,
+        target,
+        trophy_category(definition),
+        definition.get("icon_key", "album_generic")
+    )
+    item["id"] = definition["id"]
+    item["unlocked_at"] = unlocked_at
+    return item
+
+
+def album_award_items_v1(album_id, by_code, gesammelt, total):
+    return [
+        trophy_item_from_definition(definition, by_code, gesammelt, total)
+        for definition in album_trophy_definitions(album_id, total)
     ]
+
+
+def trophy_header_lines(icon_key="", label="", badge_type="sammlr"):
+    label_text = str(label or "").strip()
+    upper = label_text.upper()
+    number = "".join(char for char in label_text if char.isdigit())[:5]
+
+    if icon_key == "first_sticker":
+        return ["ERSTER", "STICKER"]
+    if icon_key == "half_circle" or upper == "HALBZEIT":
+        return ["HALBZEIT"]
+    if "ALBUM VOLLENDET" in upper or upper == "ALBUM VOLLENDET":
+        return ["ALBUM", "VOLLENDET"]
+    if icon_key == "global_sticker" and number:
+        return [number, "STICKER"]
+    if icon_key == "global_duplicates" and number:
+        return [number, "DOPPELTE"]
+    if icon_key == "global_trades" and number:
+        return [number, "TRADE" if number == "1" else "TRADES"]
+    if icon_key.startswith("group_") and len(icon_key) == len("group_a"):
+        return ["GRUPPE", icon_key[-1].upper()]
+
+    normalized = (
+        upper.replace("STICKERJÄGER ", "")
+        .replace("STICKERJAEGER ", "")
+        .replace("TAUSCHMATERIAL ", "")
+        .replace("TAUSCHGESCHÄFTE ", "")
+        .replace("TAUSCHGESCHAEFTE ", "")
+        .replace("-", " ")
+    )
+    words = [word for word in normalized.split() if word]
+
+    if len(words) <= 1:
+        return [normalized or "TROPHY"]
+    if len(words) == 2:
+        return words
+
+    midpoint = (len(words) + 1) // 2
+    return [" ".join(words[:midpoint]), " ".join(words[midpoint:])]
+
+
+def trophy_header_text_svg(lines):
+    header_axis_x = 1025
+    text_attrs = (
+        'fill="#6B3DF2" font-family="Inter, Arial, sans-serif" font-weight="900" '
+        'letter-spacing="13" paint-order="stroke fill" stroke="#6B3DF2" '
+        'stroke-width="1.8" stroke-linejoin="round" text-anchor="middle" '
+        'dominant-baseline="middle"'
+    )
+    safe_lines = [escape(line) for line in lines[:2]]
+    if len(safe_lines) == 1:
+        text = safe_lines[0]
+        font_size = 190 if len(text) > 10 else 220
+        return f'<text {text_attrs} x="{header_axis_x}" y="625" font-size="{font_size}">{text}</text>'
+
+    top, bottom = safe_lines
+    longest = max(len(top), len(bottom))
+    font_size = 188 if longest > 12 else 220
+    return (
+        f'<text {text_attrs} x="{header_axis_x}" y="500" font-size="{font_size}">{top}</text>'
+        f'<text {text_attrs} x="{header_axis_x}" y="750" font-size="{font_size}">{bottom}</text>'
+    )
+
+
+def sammlr_emboss_svg():
+    if not os.path.exists(MASTER_LOGO_V1_PATH):
+        return f"""
+        <g id="master_logo_missing_error">
+            <rect x="360" y="714" width="304" height="64" rx="8" fill="#FFF4F4" stroke="#C00000" stroke-width="3"/>
+            <text x="512" y="742" fill="#C00000" font-family="Inter, Arial, sans-serif" font-size="18" font-weight="900" text-anchor="middle">MASTERLOGO FEHLT</text>
+            <text x="512" y="764" fill="#C00000" font-family="Inter, Arial, sans-serif" font-size="12" font-weight="700" text-anchor="middle">{escape(MASTER_LOGO_V1_FILENAME)}</text>
+        </g>
+        """
+
+    return """
+    <g id="master_logo_v1_blind_emboss" opacity="0.88">
+        <image
+            href="/design-bible/master-assets/master_logo_v1.png"
+            x="425"
+            y="708"
+            width="174"
+            height="174"
+            filter="url(#sammlr_png_paper_emboss)"
+            preserveAspectRatio="xMidYMid meet"
+        />
+        <image
+            href="/design-bible/master-assets/master_logo_v1.png"
+            x="425"
+            y="708"
+            width="174"
+            height="174"
+            filter="url(#sammlr_png_purple_dot)"
+            preserveAspectRatio="xMidYMid meet"
+        />
+    </g>
+    """
+
+
+def album_branding_svg(album_id):
+    branding_filename = ALBUM_BRANDING_FILENAMES.get(album_id)
+    if not branding_filename:
+        return ""
+
+    branding_path = os.path.join(MASTER_ASSET_DIR, branding_filename)
+    if not os.path.exists(branding_path):
+        return f"""
+        <g id="album_branding_missing_error">
+            <rect x="350" y="714" width="324" height="64" rx="8" fill="#FFF4F4" stroke="#C00000" stroke-width="3"/>
+            <text x="512" y="742" fill="#C00000" font-family="Inter, Arial, sans-serif" font-size="18" font-weight="900" text-anchor="middle">ALBUMBRANDING FEHLT</text>
+            <text x="512" y="764" fill="#C00000" font-family="Inter, Arial, sans-serif" font-size="12" font-weight="700" text-anchor="middle">{escape(branding_filename)}</text>
+        </g>
+        """
+
+    safe_filename = escape(branding_filename)
+    if album_id == "wm26":
+        return f"""
+    <mask id="album_branding_{escape(album_id)}_stamp_mask" maskUnits="userSpaceOnUse" mask-type="alpha" x="437" y="720" width="150" height="150">
+        <image
+            href="/design-bible/master-assets/{safe_filename}"
+            x="437"
+            y="720"
+            width="150"
+            height="150"
+            preserveAspectRatio="xMidYMid meet"
+        />
+    </mask>
+    <g id="album_branding_{escape(album_id)}_blind_emboss" opacity="0.88">
+        <rect
+            x="437"
+            y="720"
+            width="150"
+            height="150"
+            fill="#4B2E83"
+            filter="url(#album_branding_paper_emboss)"
+            mask="url(#album_branding_{escape(album_id)}_stamp_mask)"
+        />
+    </g>
+    """
+
+    return f"""
+    <g id="album_branding_{escape(album_id)}_blind_emboss" opacity="0.88" clip-path="url(#album_branding_slot_clip)">
+        <image
+            href="/design-bible/master-assets/{safe_filename}"
+            x="440"
+            y="704"
+            width="340"
+            height="355"
+            filter="url(#album_branding_paper_emboss)"
+            preserveAspectRatio="xMidYMid meet"
+        />
+    </g>
+    """
+
+
+def trophy_cover_icon_svg(icon_key, album_id=None):
+    if icon_key not in ("vfl_album", "wm26_album"):
+        return ""
+
+    branding_filename = ALBUM_COVER_BRANDING_FILENAMES.get(album_id)
+    if not branding_filename:
+        return ""
+
+    branding_path = os.path.join(MASTER_ASSET_DIR, branding_filename)
+    if not os.path.exists(branding_path):
+        return ""
+
+    safe_filename = escape(branding_filename)
+    icon_id = "vfl_album_cover_icon" if album_id == "vfl" else "wm_album_cover_icon"
+    x, y, width, height = (382, 407, 620, 648) if album_id == "vfl" else (290, 390, 460, 310)
+    clip_attr = ' clip-path="url(#vfl_cover_slot_clip)"' if album_id == "vfl" else ""
+    filter_attr = ' filter="url(#vfl_cover_enamel)"' if album_id == "vfl" else ""
+    blend_attr = ' style="mix-blend-mode:multiply"' if album_id == "wm26" else ""
+    return f"""
+    <g id="{icon_id}"{clip_attr}>
+        <image
+            href="/design-bible/master-assets/{safe_filename}"
+            x="{x}"
+            y="{y}"
+            width="{width}"
+            height="{height}"
+            {filter_attr}
+            {blend_attr}
+            preserveAspectRatio="xMidYMid meet"
+        />
+    </g>
+    """
+
+
+def master_asset_image(filename, x, y, width, height, extra_attrs=""):
+    safe_filename = escape(filename)
+    return f"""
+        <image
+            href="/design-bible/master-assets/{safe_filename}"
+            x="{x}"
+            y="{y}"
+            width="{width}"
+            height="{height}"
+            preserveAspectRatio="xMidYMid meet"
+            {extra_attrs}
+        />
+    """
+
+
+def wm26_group_table_asset(icon_key):
+    if not icon_key.startswith("group_") or len(icon_key) != len("group_a"):
+        return None
+
+    group_letter = icon_key[-1].lower()
+    if group_letter not in WM26_GROUP_ASSET_LETTERS:
+        return None
+
+    return f"master_group_table_{group_letter}_v1.svg"
+
+
+def duplicate_stack_count(label):
+    number = int("".join(char for char in str(label or "") if char.isdigit()) or "0")
+    if number >= 10000:
+        return 36
+    if number >= 5000:
+        return 30
+    if number >= 2500:
+        return 24
+    if number >= 1000:
+        return 18
+    if number >= 500:
+        return 12
+    if number >= 250:
+        return 8
+    if number >= 100:
+        return 5
+    return 3
+
+
+def duplicate_sticker_stack_svg(label):
+    sticker_player = MASTER_TROPHY_ASSETS["sticker_player"]
+    count = duplicate_stack_count(label)
+    width = 142
+    height = 199
+    bottom_y = 675
+    top_x = 441
+    lower_x = top_x + 7
+    layer_spacing = 1.5
+    edge_depth = (count - 1) * layer_spacing
+    top_y = bottom_y - height - edge_depth
+    right_clip_id = f"duplicate_stack_right_edge_clip_{count}"
+    bottom_clip_id = f"duplicate_stack_bottom_edge_clip_{count}"
+    layers = []
+
+    for index in range(count - 1):
+        y = top_y + ((count - 1 - index) * layer_spacing)
+        layers.append(master_asset_image(sticker_player, lower_x, y, width, height, f'clip-path="url(#{right_clip_id})"'))
+        layers.append(master_asset_image(sticker_player, lower_x, y, width, height, f'clip-path="url(#{bottom_clip_id})"'))
+
+    layers.append(master_asset_image(sticker_player, top_x, top_y, width, height))
+
+    return f"""
+        <g id="production_icon_duplicate_stack_{count}" filter="url(#production_icon_depth)" transform="matrix(1.002 0.065 -0.095 0.94 64 2)">
+            <defs>
+                <clipPath id="{right_clip_id}">
+                    <rect x="{top_x + width - 5}" y="{top_y - 2}" width="{12 + edge_depth}" height="{height + edge_depth + 4}"/>
+                </clipPath>
+                <clipPath id="{bottom_clip_id}">
+                    <rect x="{top_x}" y="{top_y + height - 5}" width="{width + 14}" height="{12 + edge_depth}"/>
+                </clipPath>
+            </defs>
+            {''.join(layers)}
+        </g>
+    """
+
+
+def trophy_production_icon_svg(icon_key):
+    sticker_player = MASTER_TROPHY_ASSETS["sticker_player"]
+    album_empty = MASTER_TROPHY_ASSETS["album_empty"]
+    album_full = MASTER_TROPHY_ASSETS["album_full"]
+    group_table = MASTER_TROPHY_ASSETS["group_table"]
+
+    if icon_key == "first_sticker":
+        return f"""
+        <g id="production_icon_first_sticker">
+            {master_asset_image(album_empty, 222, 330, 580, 386.667, 'filter="url(#production_icon_depth)"')}
+            <g transform="translate(222 330) scale(0.483333) translate(235 208) rotate(2.8)">
+                {master_asset_image(sticker_player, 0, 0, 72, 100.8)}
+            </g>
+        </g>
+        """
+
+    if icon_key == "half_circle":
+        return f"""
+        <g id="production_icon_album_half">
+            {master_asset_image(album_empty, 222, 330, 580, 386.667, 'filter="url(#production_icon_depth)"')}
+            <g clip-path="url(#production_album_half_clip)">
+                {master_asset_image(album_full, 222, 330, 580, 386.667)}
+            </g>
+        </g>
+        """
+
+    if icon_key == "finish_line":
+        return f"""
+        <g id="production_icon_album_endspurt">
+            {master_asset_image(album_full, 222, 330, 580, 386.667, 'filter="url(#production_icon_depth)"')}
+            <g clip-path="url(#production_album_endspurt_clip)" opacity="0.98">
+                {master_asset_image(album_empty, 222, 330, 580, 386.667)}
+            </g>
+        </g>
+        """
+
+    if icon_key == "album_generic":
+        return f"""
+        <g id="production_icon_album_complete">
+            {master_asset_image(album_full, 222, 330, 580, 386.667, 'filter="url(#production_icon_depth)"')}
+        </g>
+        """
+
+    if icon_key == "group":
+        return f"""
+        <g id="production_icon_group_table">
+            {master_asset_image(group_table, 337, 405, 350, 252, 'filter="url(#production_icon_depth)"')}
+        </g>
+        """
+
+    group_table_asset = wm26_group_table_asset(icon_key)
+    if group_table_asset:
+        return f"""
+        <g id="production_icon_group_table_{escape(icon_key[-1])}">
+            {master_asset_image(group_table_asset, 319.5, 392.5, 385, 277, 'filter="url(#production_icon_depth)"')}
+        </g>
+        """
+
+    return ""
+
+
+def trophy_center_icon_svg(icon_key, label="", album_id=None, badge_type="sammlr"):
+    cover_icon = trophy_cover_icon_svg(icon_key, album_id)
+    if cover_icon:
+        return cover_icon
+    if badge_type == "sammlr" and icon_key == "global_duplicates":
+        return duplicate_sticker_stack_svg(label)
+    if badge_type == "album":
+        return trophy_cover_icon_svg(icon_key, album_id) or trophy_production_icon_svg(icon_key)
+    return ""
+
+
+def trophy_icon_svg(icon_key, label="", badge_type="sammlr", album_id=None):
+    header_text = trophy_header_text_svg(trophy_header_lines(icon_key, label, badge_type))
+    center_icon = trophy_center_icon_svg(icon_key, label, album_id, badge_type)
+    header_lines = """
+                <g id="header_lines" transform="translate(0 625)">
+                    <path d="M120 0H310" fill="none" stroke="#6B3DF2" stroke-width="13.2" stroke-linecap="square"/>
+                    <path d="M1740 0H1930" fill="none" stroke="#6B3DF2" stroke-width="13.2" stroke-linecap="square"/>
+                </g>
+    """
+    if badge_type == "sammlr":
+        bottom_branding = sammlr_emboss_svg()
+    elif badge_type == "album":
+        bottom_branding = album_branding_svg(album_id)
+    else:
+        bottom_branding = ""
+
+    return f"""
+    <div class="trophy-patch trophy-patch-master" aria-hidden="true">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024" role="img" focusable="false">
+            <defs>
+                <linearGradient id="shield_surface" x1="0.18" y1="0.04" x2="0.82" y2="0.96">
+                    <stop offset="0" stop-color="#FFFDF9"/>
+                    <stop offset="0.48" stop-color="#FBF7F0"/>
+                    <stop offset="0.84" stop-color="#F5EFE6"/>
+                    <stop offset="1" stop-color="#FFFDF8"/>
+                </linearGradient>
+                <linearGradient id="shield_edge" x1="0.16" y1="0.06" x2="0.9" y2="0.96">
+                    <stop offset="0" stop-color="#FFFFFF"/>
+                    <stop offset="0.5" stop-color="#F4EFE8"/>
+                    <stop offset="0.74" stop-color="#FFFDF8"/>
+                    <stop offset="1" stop-color="#E8DFD6"/>
+                </linearGradient>
+                <linearGradient id="shield_inner_line" x1="0.2" y1="0.08" x2="0.8" y2="0.92">
+                    <stop offset="0" stop-color="#9B72FF"/>
+                    <stop offset="0.5" stop-color="#6B3DF2"/>
+                    <stop offset="1" stop-color="#4C1EC8"/>
+                </linearGradient>
+                <filter id="shield_drop_shadow" x="-12%" y="-10%" width="124%" height="124%">
+                    <feDropShadow dx="0" dy="22" stdDeviation="18.5" flood-color="#160536" flood-opacity="0.28"/>
+                </filter>
+                <filter id="shield_soft_depth" x="-3%" y="-3%" width="106%" height="106%">
+                    <feDropShadow dx="0" dy="2.6" stdDeviation="3" flood-color="#FFFFFF" flood-opacity="0.32"/>
+                    <feDropShadow dx="0" dy="-2.4" stdDeviation="3.6" flood-color="#D8D0C7" flood-opacity="0.06"/>
+                </filter>
+                <filter id="paper_texture" x="-2%" y="-2%" width="104%" height="104%">
+                    <feTurbulence type="fractalNoise" baseFrequency="1.85" numOctaves="2" seed="27" result="paper_noise"/>
+                    <feColorMatrix in="paper_noise" type="matrix" values="0 0 0 0 0.985 0 0 0 0 0.965 0 0 0 0 0.925 0 0 0 0.026 0" result="paper_fibers"/>
+                    <feBlend in="SourceGraphic" in2="paper_fibers" mode="multiply"/>
+                </filter>
+                <clipPath id="album_branding_slot_clip">
+                    <rect x="414" y="696" width="196" height="196"/>
+                </clipPath>
+                <clipPath id="vfl_cover_slot_clip">
+                    <rect x="290" y="390" width="460" height="310"/>
+                </clipPath>
+                <clipPath id="production_album_half_clip">
+                    <rect x="222" y="330" width="290" height="386.667"/>
+                </clipPath>
+                <clipPath id="production_album_endspurt_clip">
+                    <rect x="592" y="552" width="45" height="62"/>
+                    <rect x="638" y="552" width="45" height="62"/>
+                </clipPath>
+                <filter id="sammlr_png_paper_emboss" x="-12%" y="-12%" width="124%" height="124%" color-interpolation-filters="sRGB">
+                    <feColorMatrix in="SourceGraphic" type="matrix" values="0 0 0 0 0.985 0 0 0 0 0.965 0 0 0 0 0.925 -0.35 -0.35 -0.35 0 1" result="paper_mark"/>
+                    <feComponentTransfer in="paper_mark" result="paper_alpha">
+                        <feFuncA type="linear" slope="0.63" intercept="-0.018"/>
+                    </feComponentTransfer>
+                    <feDropShadow in="paper_alpha" dx="0" dy="-1" stdDeviation="0.5" flood-color="#FFFFFF" flood-opacity="0.44" result="emboss_light"/>
+                    <feDropShadow in="paper_alpha" dx="1" dy="1.5" stdDeviation="0.72" flood-color="#D8D0C7" flood-opacity="0.26" result="emboss_shadow"/>
+                    <feMerge>
+                        <feMergeNode in="emboss_shadow"/>
+                        <feMergeNode in="paper_alpha"/>
+                        <feMergeNode in="emboss_light"/>
+                    </feMerge>
+                </filter>
+                <filter id="album_branding_paper_emboss" x="-12%" y="-12%" width="124%" height="124%" color-interpolation-filters="sRGB">
+                    <feColorMatrix in="SourceGraphic" type="matrix" values="0 0 0 0 0.985 0 0 0 0 0.965 0 0 0 0 0.925 -0.425 -0.425 -0.425 0 1" result="paper_mark"/>
+                    <feComponentTransfer in="paper_mark" result="paper_alpha">
+                        <feFuncA type="linear" slope="0.677" intercept="-0.02"/>
+                    </feComponentTransfer>
+                    <feDropShadow in="paper_alpha" dx="0" dy="-1" stdDeviation="0.5" flood-color="#FFFFFF" flood-opacity="0.44" result="emboss_light"/>
+                    <feDropShadow in="paper_alpha" dx="1" dy="1.5" stdDeviation="0.72" flood-color="#D8D0C7" flood-opacity="0.26" result="emboss_shadow"/>
+                    <feMerge>
+                        <feMergeNode in="emboss_shadow"/>
+                        <feMergeNode in="paper_alpha"/>
+                        <feMergeNode in="emboss_light"/>
+                    </feMerge>
+                </filter>
+                <filter id="sammlr_png_purple_dot" x="-4%" y="-4%" width="108%" height="108%" color-interpolation-filters="sRGB">
+                    <feColorMatrix in="SourceGraphic" type="matrix" values="1 0 0 0 0 0 1 0 0 0 0 0 1 0 0 -1.45 0 1.55 0 -0.06" result="purple_only"/>
+                    <feComponentTransfer in="purple_only">
+                        <feFuncA type="linear" slope="1.8" intercept="-0.08"/>
+                    </feComponentTransfer>
+                </filter>
+                <filter id="vfl_cover_enamel" x="-8%" y="-8%" width="116%" height="116%" color-interpolation-filters="sRGB">
+                    <feColorMatrix in="SourceGraphic" type="matrix" values="0 0 0 0 0.42 0 0 0 0 0.24 0 0 0 0 0.95 -0.38 -0.38 -0.38 0 1" result="vfl_mark"/>
+                    <feComponentTransfer in="vfl_mark" result="vfl_alpha">
+                        <feFuncA type="linear" slope="1.2" intercept="-0.04"/>
+                    </feComponentTransfer>
+                    <feDropShadow in="vfl_alpha" dx="0" dy="-2" stdDeviation="1" flood-color="#FFFFFF" flood-opacity="0.34" result="top_light"/>
+                    <feDropShadow in="vfl_alpha" dx="0" dy="4" stdDeviation="2.2" flood-color="#32106F" flood-opacity="0.2" result="relief_shadow"/>
+                    <feMerge>
+                        <feMergeNode in="relief_shadow"/>
+                        <feMergeNode in="vfl_alpha"/>
+                        <feMergeNode in="top_light"/>
+                    </feMerge>
+                </filter>
+                <filter id="production_icon_depth" x="-10%" y="-12%" width="120%" height="126%">
+                    <feDropShadow dx="0" dy="11" stdDeviation="8" flood-color="#1A063F" flood-opacity="0.18"/>
+                </filter>
+            </defs>
+            <g id="master_shield_v1">
+                <g id="shield_shadow" filter="url(#shield_drop_shadow)">
+                    <path d="M217 72H807C847 72 879 104 879 144V184C879 193 886 200 895 200H936C972 200 1000 228 1000 264V360C1000 402 966 436 924 436H914C902 436 892 446 892 458V752C892 786 872 816 841 829L543 956C523 965 501 965 481 956L183 829C152 816 132 786 132 752V458C132 446 122 436 110 436H100C58 436 24 402 24 360V264C24 228 52 200 88 200H129C138 200 145 193 145 184V144C145 104 177 72 217 72Z" fill="#1A063F" opacity="0.155"/>
+                </g>
+                <g id="shield_outer" filter="url(#shield_soft_depth)">
+                    <path d="M217 72H807C847 72 879 104 879 144V184C879 193 886 200 895 200H936C972 200 1000 228 1000 264V360C1000 402 966 436 924 436H914C902 436 892 446 892 458V752C892 786 872 816 841 829L543 956C523 965 501 965 481 956L183 829C152 816 132 786 132 752V458C132 446 122 436 110 436H100C58 436 24 402 24 360V264C24 228 52 200 88 200H129C138 200 145 193 145 184V144C145 104 177 72 217 72Z" fill="url(#shield_edge)"/>
+                </g>
+                <path d="M225 100H799C823 100 843 120 843 144V200C843 221 860 238 881 238H932C947 238 960 251 960 266V358C960 381 941 400 918 400H892C868 400 848 420 848 444V744C848 763 837 781 819 789L529 913C518 918 506 918 495 913L205 789C187 781 176 763 176 744V444C176 420 156 400 132 400H106C83 400 64 381 64 358V266C64 251 77 238 92 238H143C164 238 181 221 181 200V144C181 120 201 100 225 100Z" fill="url(#shield_surface)" filter="url(#paper_texture)"/>
+                <path d="M229 164H795C812 164 826 178 826 195V219C826 238 841 253 860 253H919C929 253 937 261 937 271V361C937 371 929 379 919 379H891C856 379 828 407 828 442V727C828 747 816 765 798 773L528 888C518 892 506 892 496 888L226 773C208 765 196 747 196 727V442C196 407 168 379 133 379H105C95 379 87 371 87 361V271C87 261 95 253 105 253H164C183 253 198 238 198 219V195C198 178 212 164 229 164Z" fill="none" stroke="url(#shield_inner_line)" stroke-width="12" stroke-linejoin="round" stroke-linecap="round"/>
+                <path d="M226 100H798C822 100 842 120 842 144" fill="none" stroke="#FFFFFF" stroke-width="10" stroke-linecap="round" opacity="0.2"/>
+                <path d="M176 456V733C176 754 187 774 206 783" fill="none" stroke="#FFFFFF" stroke-width="8" stroke-linecap="round" opacity="0.12"/>
+            </g>
+            {center_icon}
+            <g id="master_header_v1" transform="translate(143 86) scale(0.36)">
+                {header_lines}
+                <g id="header_text">{header_text}</g>
+            </g>
+            {bottom_branding}
+        </svg>
+    </div>
+    """
+
+
+def trophy_definition_by_name(name, definitions):
+    return next((definition for definition in definitions if definition["name"] == name), None)
+
+
+def album_trophies(album_id, by_code, gesammelt, total):
+    if album_id == "vfl":
+        return vfl_album_award_items(by_code, gesammelt, total)
+    if album_id == "wm26":
+        return wm26_trophy_items(by_code, gesammelt, total)
+    return album_award_items_v1(album_id, by_code, gesammelt, total)
+
+
+def render_album_awards(items, album_id):
+    visible_items = [item for item in items if item["unlocked"]]
 
     if not visible_items:
         return """
         <div class="card trade-empty-card">
-            <h2>Noch keine Auszeichnung in Reichweite.</h2>
-            <p>Sammle weiter, dann tauchen hier die nächsten Ziele auf.</p>
+            <h2>Noch keine Auszeichnung freigeschaltet.</h2>
+            <p>Sammle weiter. Freigeschaltete Trophäen erscheinen automatisch hier.</p>
         </div>
         """
 
-    html = ""
-    category_labels = {
-        "Albumziel": "Albumziel / Abschluss",
-        "Kapitel": "Kapitel",
-        "Spezial": "Spezial",
-    }
+    html = """
+    <section class="album-awards-section">
+        <h2>Album-Trophäen</h2>
+        <div class="trophy-grid album-awards-compact-grid">
+    """
 
-    for category in ("Albumziel", "Kapitel", "Spezial"):
-        category_items = [item for item in visible_items if item.get("category", "Albumziel") == category]
-        if not category_items:
-            continue
+    for item in visible_items:
+        unlocked_at = format_sammlr_date(item.get("unlocked_at"))
+        detail_date = escape(unlocked_at or "Gerade eben")
 
         html += f"""
-        <section class="album-awards-section">
-            <h2>{category_labels[category]}</h2>
-            <div class="trophy-grid album-awards-compact-grid">
+        <button type="button" class="trophy trophy-unlocked trophy-gold trophy-detail-trigger"
+            data-title="{escape(item['title'])}"
+            data-date="{detail_date}"
+            data-description="{escape(item['description'])}">
+            {trophy_icon_svg(item.get('icon_key', 'album_generic'), item['title'], badge_type='album', album_id=album_id)}
+            <h2>{escape(item['title'])}</h2>
+            <span class="trophy-pill gold">Abgestaubt</span>
+        </button>
         """
 
-        for item in category_items:
-            unlocked = item["unlocked"]
-            is_next = item is next_item
-            percent = item["percent"]
-            card_class = "trophy-unlocked trophy-gold" if unlocked else "trophy-locked trophy-gold-muted"
-            pill_class = "gold" if unlocked else "gray"
-            pill_text = "Abgestaubt" if unlocked else ("Nächstes Ziel" if is_next else "Fast geschafft")
-            status_text = "Abgestaubt" if unlocked else f"{item['current']} / {item['target']}"
+    html += "</div></section>"
 
-            html += f"""
-            <div class="trophy {card_class}">
-                <span class="trophy-pill {pill_class}">{pill_text}</span>
-                <h2>{item['title']}</h2>
-                <p>{item['description']}</p>
-                <div class="progress trophy-progress" data-progress="{percent}%">
-                    <div class="progress-bar" style="width:{percent}%;"></div>
-                </div>
-                <p class="subline">{status_text}</p>
-            </div>
-            """
-
-        html += "</div></section>"
-
+    html += """
+    <div class="quick-action-modal trophy-detail-modal" id="trophyDetailModal" style="display:none;">
+        <div class="quick-action-card trophy-detail-card">
+            <h2 id="trophyDetailTitle"></h2>
+            <p class="subline" id="trophyDetailDate"></p>
+            <p id="trophyDetailDescription"></p>
+            <button type="button" class="popup-button" onclick="document.getElementById('trophyDetailModal').style.display='none'">Schließen</button>
+        </div>
+    </div>
+    <script>
+    document.querySelectorAll('.trophy-detail-trigger').forEach(function(card){
+        card.addEventListener('click', function(){
+            document.getElementById('trophyDetailTitle').textContent = card.dataset.title || '';
+            document.getElementById('trophyDetailDate').textContent = card.dataset.date || '';
+            document.getElementById('trophyDetailDescription').textContent = card.dataset.description || '';
+            document.getElementById('trophyDetailModal').style.display = 'flex';
+        });
+    });
+    </script>
+    """
     return html
 
 
@@ -1156,45 +1730,7 @@ def wm26_album_trophy_progress(title, description, current, target, category="Al
 
 
 def wm26_trophy_items(by_code, gesammelt, total):
-    intro_codes = [f"FWC{i}" for i in range(1, 9)]
-    history_codes = [f"FWC{i}" for i in range(9, 20)]
-    cc_codes = [f"CC{i}" for i in range(1, 13)]
-    wappen_codes = [team + "1" for team in WM26_TEAM_ORDER]
-    teamfoto_codes = [team + "13" for team in WM26_TEAM_ORDER]
-    last_dance_codes = ["ARG20", "POR20"]
-
-    items = [
-        wm26_album_trophy_progress("Erster Sticker", "Sammle deinen ersten Sticker in diesem Album.", gesammelt, 1),
-        wm26_album_trophy_progress("Halbzeit", "Erreiche die Hälfte dieses Albums.", gesammelt, total // 2),
-        wm26_album_trophy_progress("Endspurt", "Dir fehlen nur noch 10 Sticker bis zur Vollendung.", gesammelt, max(total - 10, 1)),
-        wm26_album_trophy_progress("WM 2026 vollendet", "Sammle alle Sticker dieses Albums.", gesammelt, total),
-        wm26_trophy_progress("Intro", "Sammle alle World-Cup-Intro-Sticker FWC1 bis FWC8.", intro_codes, by_code),
-    ]
-
-    for group_index, group_name in enumerate(WM26_GROUP_NAMES):
-        group_teams = WM26_TEAM_ORDER[group_index * 4:(group_index + 1) * 4]
-        group_codes = []
-        for team in group_teams:
-            group_codes.extend([f"{team}{i}" for i in range(1, 21)])
-
-        items.append(
-            wm26_trophy_progress(
-                f"{group_name} gemeistert",
-                f"Sammle alle Sticker aus {group_name}.",
-                group_codes,
-                by_code
-            )
-        )
-
-    items.extend([
-        wm26_trophy_progress("Wappenkunde", "Sammle alle Nummer-1-Sticker der Teams.", wappen_codes, by_code, "Spezial"),
-        wm26_trophy_progress("Teamfotograf", "Sammle alle Teamfotos, also alle Nummer-13-Sticker.", teamfoto_codes, by_code, "Spezial"),
-        wm26_trophy_progress("Historiker", "Sammle alle World-Cup-History-Sticker FWC9 bis FWC19.", history_codes, by_code, "Spezial"),
-        wm26_trophy_progress("Etikettenknibbler", "Sammle alle Coca-Cola-Sticker CC1 bis CC12.", cc_codes, by_code, "Spezial"),
-        wm26_trophy_progress("Last Dance", "Sammle Messi und Ronaldo.", last_dance_codes, by_code, "Spezial"),
-    ])
-
-    return items
+    return album_award_items_v1("wm26", by_code, gesammelt, total)
 
 
 def render_wm26_trophy_items(items):
@@ -1237,19 +1773,11 @@ def erreichte_trophaeen(album_id):
 
 def erreichte_trophaeen_for_user(album_id, user_id):
     album, by_code, gesammelt, doppelte, prozent, total = lade_album_for_user(album_id, user_id)
-    last, next_trophy, trophies = trophy_status(album_id, gesammelt, total)
-
-    erreicht = [titel for ziel, titel in trophies if gesammelt >= ziel]
-
-    if album_id == "em24":
-        for titel, beschreibung, ok in em24_spezial_trophaeen(by_code):
-            if ok:
-                erreicht.append(titel)
-
-    if album_id == "wm26":
-        for item in wm26_trophy_items(by_code, gesammelt, total):
-            if item["unlocked"]:
-                erreicht.append(item["title"])
+    erreicht = [
+        item["title"]
+        for item in album_trophies(album_id, by_code, gesammelt, total)
+        if item["unlocked"]
+    ]
 
     return list(dict.fromkeys(erreicht))
 
@@ -1287,16 +1815,60 @@ def record_trophy_unlocks(album_id, newly_reached, user_id=None, silent_reached=
     return visible_new
 
 
+def erreichte_globale_trophaeen_for_user(user_id):
+    con = get_db()
+    stickers = con.execute(
+        "SELECT quantity, duplicates FROM stickers WHERE user_id=?",
+        (user_id,)
+    ).fetchall()
+    completed_trades = con.execute(
+        """
+        SELECT COUNT(*) AS count
+        FROM trade_requests
+        WHERE status='completed' AND (from_user_id=? OR to_user_id=?)
+        """,
+        (user_id, user_id)
+    ).fetchone()["count"]
+    con.close()
+
+    values = {
+        "global_stickers": sum(row["quantity"] for row in stickers),
+        "global_duplicates": sum(row["duplicates"] for row in stickers),
+        "global_trades": completed_trades,
+    }
+    return [
+        definition["name"]
+        for definition in global_trophy_definitions()
+        if values.get(definition["trigger_type"], 0) >= definition["trigger_value"]
+    ]
+
+
+def check_global_trophy_unlocks(user_id=None):
+    user_id = user_id or current_user_id()
+    reached = erreichte_globale_trophaeen_for_user(user_id)
+    return record_trophy_unlocks(GLOBAL_SCOPE, reached, user_id=user_id)
+
+
 def queue_trophy_popup(album_id, trophy_titles):
     trophy_titles = [title for title in dict.fromkeys(trophy_titles) if title]
-    if not trophy_titles:
+    global_titles = []
+    if album_id != GLOBAL_SCOPE:
+        global_titles = check_global_trophy_unlocks()
+
+    if not trophy_titles and not global_titles:
         return
 
     popups = session.get("pending_trophy_popups", [])
-    popups.append({
-        "album_id": album_id,
-        "titles": trophy_titles
-    })
+    if trophy_titles:
+        popups.append({
+            "album_id": album_id,
+            "titles": trophy_titles
+        })
+    if global_titles:
+        popups.append({
+            "album_id": GLOBAL_SCOPE,
+            "titles": global_titles
+        })
     session["pending_trophy_popups"] = popups
 
 
@@ -1307,15 +1879,22 @@ def trophy_popup_html(album_id, trophy_titles):
 
     trophy_text = "Neue Trophäe freigeschaltet!" if len(trophy_titles) == 1 else f"{len(trophy_titles)} neue Trophäen freigeschaltet!"
     trophy_lines = "<br>".join(escape(title) for title in trophy_titles)
+    is_global_popup = album_id == GLOBAL_SCOPE
+    trophy_link = "/trophaeen" if is_global_popup else f"/album/{album_id}/trophaeen"
+    popup_icon = trophy_icon_svg(
+        "album_generic",
+        badge_type="sammlr" if is_global_popup else "album",
+        album_id=None if is_global_popup else album_id
+    )
     return f"""
     <div class="trophy-popup-overlay">
         <div class="trophy-popup">
-            <div class="trophy-popup-patch">🏆</div>
+            <div class="trophy-popup-patch">{popup_icon}</div>
             <h2>Neuer Patch erhalten</h2>
             <p><strong>{trophy_text}</strong><br>{trophy_lines}</p>
             <div class="popup-actions">
                 <button type="button" class="popup-button popup-secondary" onclick="this.closest('.trophy-popup-overlay').remove()">Okay</button>
-                <a href="/album/{album_id}/trophaeen" class="popup-button">Trophäenschrank</a>
+                <a href="{trophy_link}" class="popup-button">Trophäenschrank</a>
             </div>
         </div>
     </div>
@@ -1339,12 +1918,11 @@ def consume_trophy_popup_html(fallback_album_id=None):
 
 
 def trophy_status(album_id, gesammelt, total):
-    if album_id == "vfl":
-        trophies = vfl_trophaeen()
-    elif album_id == "em24":
-        trophies = em24_trophaeen(total)
-    else:
-        trophies = generische_album_trophaeen(total)
+    trophies = [
+        (definition["trigger_value"], definition["name"])
+        for definition in album_trophy_definitions(album_id, total)
+        if definition["trigger_type"] in ("album_count", "album_complete")
+    ]
 
     reached = [t for t in trophies if gesammelt >= t[0]]
     next_one = next((t for t in trophies if gesammelt < t[0]), None)
@@ -2139,32 +2717,7 @@ def vfl_wall_chapters():
 
 
 def vfl_album_award_items(by_code, gesammelt, total):
-    items = [
-        award_item("Erster Sticker", "Sammle deinen ersten Sticker in diesem Album.", gesammelt, 1, "Albumziel"),
-        award_item("Halbzeit", "Erreiche die Hälfte dieses Albums.", gesammelt, 125, "Albumziel"),
-        award_item("Endspurt", "Sammle 240 Sticker in diesem Album.", gesammelt, 240, "Albumziel"),
-        award_item("VfL Album vollendet", "Sammle alle Sticker dieses Albums.", gesammelt, total, "Albumziel"),
-    ]
-
-    for chapter in vfl_wall_chapters():
-        title = chapter["title"]
-        codes = chapter["codes"]
-        items.append(
-            award_item_for_codes(
-                title,
-                f"Sammle alle Sticker aus {title}.",
-                codes,
-                by_code
-            )
-        )
-
-    items.extend([
-        award_item_for_codes("DJ Matze", "Sammle Sticker 124.", ["124"], by_code, "Spezial"),
-        award_item_for_codes("Legendenelf", "Sammle alle Sticker 184 bis 195.", vfl_chapter_codes(184, 195), by_code, "Spezial"),
-        award_item_for_codes("90+6", "Sammle alle Sticker 199 bis 213.", vfl_chapter_codes(199, 213), by_code, "Spezial"),
-    ])
-
-    return items
+    return album_award_items_v1("vfl", by_code, gesammelt, total)
 
 @app.route("/album/<album_id>", methods=["GET", "POST"])
 def albumseite(album_id):
@@ -6386,28 +6939,32 @@ def mark_notification_read(notification_id):
 @app.route("/album/<album_id>/trophaeen")
 def album_trophaeen(album_id):
     album, by_code, gesammelt, doppelte, prozent, total = lade_album(album_id)
+    award_items = album_trophies(album_id, by_code, gesammelt, total)
 
-    if album_id == "vfl":
-        award_items = vfl_album_award_items(by_code, gesammelt, total)
-    elif album_id == "wm26":
-        award_items = wm26_trophy_items(by_code, gesammelt, total)
-    else:
-        _, _, trophies = trophy_status(album_id, gesammelt, total)
-        award_items = [
-            award_item(title, f"Sammle {target} Sticker in diesem Album.", gesammelt, target)
-            for target, title in trophies
-        ]
+    reached_titles = [item["title"] for item in award_items if item["unlocked"]]
+    if reached_titles:
+        record_trophy_unlocks(album_id, [], silent_reached=reached_titles)
+
+    con = get_db()
+    unlocked_rows = con.execute(
+        "SELECT trophy_name, unlocked_at FROM unlocked_trophies WHERE user_id=? AND album_id=?",
+        (current_user_id(), album_id)
+    ).fetchall()
+    con.close()
+    unlocked_dates = {row["trophy_name"]: row["unlocked_at"] for row in unlocked_rows}
+    for item in award_items:
+        item["unlocked_at"] = unlocked_dates.get(item["title"])
 
     html = f"""
     <html><head>{style()}</head><body><div class="container">
-    {app_header("Albumauszeichnungen", "Trophäen und Kapitel dieses Albums.")}
+    {app_header("Albumauszeichnungen", f"Auszeichnungen: {len([item for item in award_items if item['unlocked']])}")}
     <div class="trophy-nav-links">
         <a class="sammlr-back-link" href="/album/{album_id}">Zurück zum Album</a>
         <a class="sammlr-back-link" href="/trophaeen">Zum Sammlr-Schrank</a>
     </div>
     """
 
-    html += render_album_awards(award_items)
+    html += render_album_awards(award_items, album_id)
 
     html += bottom_nav("trophaeen")
     html += "</div></body></html>"
@@ -6436,16 +6993,28 @@ def globale_trophaeen():
 
     sticker_gesamt = sum(s["quantity"] for s in stickers)
     doppelte_gesamt = sum(s["duplicates"] for s in stickers)
+    global_award_count = (
+        len([t for t in global_sticker_trophaeen() if sticker_gesamt >= t[0]]) +
+        len([t for t in global_duplicate_trophaeen() if doppelte_gesamt >= t[0]]) +
+        len([t for t in global_trade_trophaeen() if completed_trades >= t[0]])
+    )
+    global_reached = erreichte_globale_trophaeen_for_user(current_user_id())
+    if global_reached:
+        record_trophy_unlocks(GLOBAL_SCOPE, [], silent_reached=global_reached)
 
     html = f"""
     <html><head>{style()}</head><body><div class="container">
-    {app_header("Sammlr-Schrank", "Deine abgestaubten Sammlr-Ziele.")}
+    {app_header("Sammlr-Schrank", f"Auszeichnungen: {global_award_count}")}
     """
 
-    html += render_global_album_completion_trophies()
-    html += render_global_trophy_grid("Gesamtsticker-Trophäen", global_sticker_trophaeen(), sticker_gesamt, "gesammelte Sticker")
-    html += render_global_trophy_grid("Doppelte-Trophäen", global_duplicate_trophaeen(), doppelte_gesamt, "doppelte Sticker")
-    html += render_global_trophy_grid("Trade-Trophäen", global_trade_trophaeen(), completed_trades, "abgeschlossene Tausche")
+    html += render_album_portal_cards(album_portal_cards())
+    for section in global_trophies(sticker_gesamt, doppelte_gesamt, completed_trades):
+        html += render_global_trophy_grid(
+            section["section_title"],
+            section["trophies"],
+            section["current_value"],
+            section["unit_text"],
+        )
 
     html += bottom_nav("trophaeen")
     html += "</div></body></html>"
@@ -6565,7 +7134,7 @@ def statistik():
     {app_header("Meine Statistik", "Dein Sammlr-Zwischenstand.")}
 
     <a class="statistics-trophy-card album-quick-card" href="/trophaeen">
-        <span class="statistics-trophy-icon">🏆</span>
+        <span class="statistics-trophy-icon">{trophy_icon_svg('album_generic')}</span>
         <strong>Trophäenschrank</strong>
         <span>Zuletzt: {latest_trophy}</span>
         <span>Nächste: {next_trophy_line}</span>

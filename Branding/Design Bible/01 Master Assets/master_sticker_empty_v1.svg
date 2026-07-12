@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 500 700" role="img" aria-labelledby="title desc">
+  <title id="title">Master Sticker Empty V1</title>
+  <desc id="desc">Leerer Sammlr-Master-Sticker im Seitenverhältnis 5:7 mit weißer Fläche und lila Outline.</desc>
+  <g id="master_sticker_empty_v1">
+    <rect
+      id="sticker_shape"
+      x="6.25"
+      y="6.25"
+      width="487.5"
+      height="687.5"
+      rx="60"
+      ry="60"
+      fill="#FFFFFF"
+      stroke="#6B3DF2"
+      stroke-width="12.5"
+      vector-effect="non-scaling-stroke"
+    />
+  </g>
+</svg>

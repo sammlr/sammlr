@@ -1,0 +1,91 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024" role="img" aria-labelledby="title desc">
+  <title id="title">Master Shield V1</title>
+  <desc id="desc">Leere Sammlr-Schildform als Master Asset fuer Achievement-Patches mit cremeweisser Materialflaeche und durchgaengiger lila Innenlinie.</desc>
+  <defs>
+    <linearGradient id="shield_surface" x1="0.18" y1="0.04" x2="0.82" y2="0.96">
+      <stop offset="0" stop-color="#FFFDF9"/>
+      <stop offset="0.48" stop-color="#FBF7F0"/>
+      <stop offset="0.84" stop-color="#F5EFE6"/>
+      <stop offset="1" stop-color="#FFFDF8"/>
+    </linearGradient>
+    <linearGradient id="shield_edge" x1="0.16" y1="0.06" x2="0.9" y2="0.96">
+      <stop offset="0" stop-color="#FFFFFF"/>
+      <stop offset="0.5" stop-color="#F4EFE8"/>
+      <stop offset="0.74" stop-color="#FFFDF8"/>
+      <stop offset="1" stop-color="#E8DFD6"/>
+    </linearGradient>
+    <linearGradient id="shield_inner_line" x1="0.2" y1="0.08" x2="0.8" y2="0.92">
+      <stop offset="0" stop-color="#9B72FF"/>
+      <stop offset="0.5" stop-color="#6B3DF2"/>
+      <stop offset="1" stop-color="#4C1EC8"/>
+    </linearGradient>
+    <filter id="shield_drop_shadow" x="-12%" y="-10%" width="124%" height="124%">
+      <feDropShadow dx="0" dy="22" stdDeviation="18.5" flood-color="#160536" flood-opacity="0.28"/>
+    </filter>
+    <filter id="shield_soft_depth" x="-3%" y="-3%" width="106%" height="106%">
+      <feDropShadow dx="0" dy="2.6" stdDeviation="3" flood-color="#FFFFFF" flood-opacity="0.32"/>
+      <feDropShadow dx="0" dy="-2.4" stdDeviation="3.6" flood-color="#D8D0C7" flood-opacity="0.06"/>
+    </filter>
+    <filter id="paper_texture" x="-2%" y="-2%" width="104%" height="104%">
+      <feTurbulence type="fractalNoise" baseFrequency="1.85" numOctaves="2" seed="27" result="paper_noise"/>
+      <feColorMatrix in="paper_noise" type="matrix" values="0 0 0 0 0.985 0 0 0 0 0.965 0 0 0 0 0.925 0 0 0 0.026 0" result="paper_fibers"/>
+      <feBlend in="SourceGraphic" in2="paper_fibers" mode="multiply"/>
+    </filter>
+  </defs>
+  <g id="master_shield_v1">
+    <g id="shield_shadow" filter="url(#shield_drop_shadow)">
+      <path
+        id="shield_shadow_shape"
+        d="M217 72H807C847 72 879 104 879 144V184C879 193 886 200 895 200H936C972 200 1000 228 1000 264V360C1000 402 966 436 924 436H914C902 436 892 446 892 458V752C892 786 872 816 841 829L543 956C523 965 501 965 481 956L183 829C152 816 132 786 132 752V458C132 446 122 436 110 436H100C58 436 24 402 24 360V264C24 228 52 200 88 200H129C138 200 145 193 145 184V144C145 104 177 72 217 72Z"
+        fill="#1A063F"
+        opacity="0.155"
+      />
+    </g>
+    <g id="shield_outer" filter="url(#shield_soft_depth)">
+      <path
+        id="shield_outer_edge"
+        d="M217 72H807C847 72 879 104 879 144V184C879 193 886 200 895 200H936C972 200 1000 228 1000 264V360C1000 402 966 436 924 436H914C902 436 892 446 892 458V752C892 786 872 816 841 829L543 956C523 965 501 965 481 956L183 829C152 816 132 786 132 752V458C132 446 122 436 110 436H100C58 436 24 402 24 360V264C24 228 52 200 88 200H129C138 200 145 193 145 184V144C145 104 177 72 217 72Z"
+        fill="url(#shield_edge)"
+      />
+    </g>
+    <g id="shield_inner_fill">
+      <path
+        id="shield_surface"
+        d="M225 100H799C823 100 843 120 843 144V200C843 221 860 238 881 238H932C947 238 960 251 960 266V358C960 381 941 400 918 400H892C868 400 848 420 848 444V744C848 763 837 781 819 789L529 913C518 918 506 918 495 913L205 789C187 781 176 763 176 744V444C176 420 156 400 132 400H106C83 400 64 381 64 358V266C64 251 77 238 92 238H143C164 238 181 221 181 200V144C181 120 201 100 225 100Z"
+        fill="url(#shield_surface)"
+        filter="url(#paper_texture)"
+      />
+    </g>
+    <g id="shield_inner_outline">
+      <path
+        id="shield_inner_outline_path"
+        d="M229 164H795C812 164 826 178 826 195V219C826 238 841 253 860 253H919C929 253 937 261 937 271V361C937 371 929 379 919 379H891C856 379 828 407 828 442V727C828 747 816 765 798 773L528 888C518 892 506 892 496 888L226 773C208 765 196 747 196 727V442C196 407 168 379 133 379H105C95 379 87 371 87 361V271C87 261 95 253 105 253H164C183 253 198 238 198 219V195C198 178 212 164 229 164Z"
+        fill="none"
+        stroke="url(#shield_inner_line)"
+        stroke-width="12"
+        stroke-linejoin="round"
+        stroke-linecap="round"
+      />
+    </g>
+    <g id="shield_highlights">
+      <path
+        id="shield_top_highlight"
+        d="M226 100H798C822 100 842 120 842 144"
+        fill="none"
+        stroke="#FFFFFF"
+        stroke-width="10"
+        stroke-linecap="round"
+        opacity="0.2"
+      />
+      <path
+        id="shield_left_surface_highlight"
+        d="M176 456V733C176 754 187 774 206 783"
+        fill="none"
+        stroke="#FFFFFF"
+        stroke-width="8"
+        stroke-linecap="round"
+        opacity="0.12"
+      />
+    </g>
+  </g>
+</svg>

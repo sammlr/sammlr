@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024" role="img" aria-labelledby="title desc">
+  <title id="title">Master Logo Monochrome</title>
+  <desc id="desc">Einfarbige Sammlr-Logo-Variante ohne lila Punkt.</desc>
+  <g id="master_logo_monochrome">
+    <g id="back_card" transform="translate(-92 -82) rotate(-8 555 535)">
+      <rect x="300" y="300" width="470" height="470" rx="46" ry="46" fill="#FFFFFF" stroke="#000000" stroke-width="26"/>
+    </g>
+    <g id="front_card">
+      <rect x="320" y="300" width="470" height="470" rx="46" ry="46" fill="#FFFFFF" stroke="#000000" stroke-width="26"/>
+    </g>
+    <g id="letter_s" transform="matrix(0.975 0 0 0.975 3 6)">
+      <path
+        d="M637 389C594 349 501 348 462 405C427 456 467 503 545 520C637 540 676 586 647 640C608 711 487 713 407 641"
+        fill="none"
+        stroke="#000000"
+        stroke-width="88"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      />
+    </g>
+    <g id="purple_dot">
+      <circle cx="720" cy="668" r="38" fill="#000000"/>
+    </g>
+  </g>
+</svg>

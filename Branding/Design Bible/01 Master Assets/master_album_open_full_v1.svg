@@ -1,0 +1,92 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 800" role="img" aria-labelledby="title desc">
+  <title id="title">Master Album Open Full V1</title>
+  <desc id="desc">Geöffnetes Sammlr-Master-Album mit 18 Spieler-Stickern, aufgebaut aus dem Master Sticker Player V1.</desc>
+  <defs>
+    <linearGradient id="page_left_light" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#FFFFFF"/>
+      <stop offset="0.56" stop-color="#F7F2FF"/>
+      <stop offset="1" stop-color="#E9DEF9"/>
+    </linearGradient>
+    <linearGradient id="page_right_light" x1="1" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#FFFFFF"/>
+      <stop offset="0.58" stop-color="#F8F3FF"/>
+      <stop offset="1" stop-color="#E7DBF7"/>
+    </linearGradient>
+    <linearGradient id="edge_purple" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#8D5BFF"/>
+      <stop offset="0.48" stop-color="#6B3DF2"/>
+      <stop offset="1" stop-color="#35107E"/>
+    </linearGradient>
+    <radialGradient id="binding_shadow" cx="50%" cy="54%" r="63%">
+      <stop offset="0" stop-color="#1A063F" stop-opacity="0.58"/>
+      <stop offset="0.55" stop-color="#6B3DF2" stop-opacity="0.18"/>
+      <stop offset="1" stop-color="#6B3DF2" stop-opacity="0"/>
+    </radialGradient>
+    <filter id="album_shadow" x="-12%" y="-18%" width="124%" height="140%">
+      <feDropShadow dx="0" dy="24" stdDeviation="22" flood-color="#1A063F" flood-opacity="0.34"/>
+    </filter>
+    <symbol id="master_sticker_player_v1_symbol" viewBox="0 0 500 700">
+      <g id="sticker_base">
+        <rect
+          id="sticker_shape"
+          x="6.25"
+          y="6.25"
+          width="487.5"
+          height="687.5"
+          rx="60"
+          ry="60"
+          fill="#FFFFFF"
+          stroke="#6B3DF2"
+          stroke-width="12.5"
+        />
+      </g>
+      <g id="player_silhouette" fill="#6B3DF2">
+        <circle id="player_head" cx="250" cy="268" r="70"/>
+        <path
+          id="player_body"
+          d="M105 545V510C105 431.023 164.202 382 250 382C335.798 382 395 431.023 395 510V545C395 556.046 386.046 565 375 565H125C113.954 565 105 556.046 105 545Z"
+        />
+      </g>
+    </symbol>
+  </defs>
+  <g id="master_album_open_full_v1" filter="url(#album_shadow)">
+    <g id="album_book_body">
+      <path id="back_cover_left" d="M154 248C158 219 178 202 208 204L559 227C585 229 600 248 600 276V611C586 628 566 637 540 635L178 611C148 609 132 590 137 562Z" fill="url(#edge_purple)"/>
+      <path id="back_cover_right" d="M1046 248C1042 219 1022 202 992 204L641 227C615 229 600 248 600 276V611C614 628 634 637 660 635L1022 611C1052 609 1068 590 1063 562Z" fill="url(#edge_purple)"/>
+      <path id="page_stack_left_3" d="M160 566C276 579 430 590 570 590C585 590 596 596 600 607C592 624 574 632 545 631L179 607C155 605 143 591 147 570Z" fill="#3F1595"/>
+      <path id="page_stack_right_3" d="M1040 566C924 579 770 590 630 590C615 590 604 596 600 607C608 624 626 632 655 631L1021 607C1045 605 1057 591 1053 570Z" fill="#3F1595"/>
+      <path id="page_stack_left_2" d="M160 542C279 554 432 563 570 564C586 564 596 571 600 583C592 599 574 606 545 605L176 581C154 580 143 567 147 546Z" fill="#5B2CD0"/>
+      <path id="page_stack_right_2" d="M1040 542C921 554 768 563 630 564C614 564 604 571 600 583C608 599 626 606 655 605L1024 581C1046 580 1057 567 1053 546Z" fill="#5B2CD0"/>
+      <path id="page_stack_left_1" d="M162 520C278 532 430 541 570 542C586 542 597 548 600 558C590 573 572 580 544 579L178 555C156 554 145 541 149 523Z" fill="#7C50F8"/>
+      <path id="page_stack_right_1" d="M1038 520C922 532 770 541 630 542C614 542 603 548 600 558C610 573 628 580 656 579L1022 555C1044 554 1055 541 1051 523Z" fill="#7C50F8"/>
+      <path id="left_page" d="M183 195C188 166 207 151 237 153L552 174C582 176 600 196 600 226V568C586 585 565 593 537 590L207 569C174 567 156 545 160 514Z" fill="url(#page_left_light)" stroke="#CDBDF7" stroke-width="2"/>
+      <path id="right_page" d="M1017 195C1012 166 993 151 963 153L648 174C618 176 600 196 600 226V568C614 585 635 593 663 590L993 569C1026 567 1044 545 1040 514Z" fill="url(#page_right_light)" stroke="#CDBDF7" stroke-width="2"/>
+      <path id="center_binding" d="M585 184C595 196 600 210 600 226V575C596 594 586 607 570 615C587 612 597 617 600 630C603 617 613 612 630 615C614 607 604 594 600 575V226C600 210 605 196 615 184C609 177 604 174 600 174C596 174 591 177 585 184Z" fill="url(#binding_shadow)"/>
+      <path id="binding_ridge" d="M600 223V589" fill="none" stroke="#2E0D71" stroke-width="5" stroke-linecap="round" opacity="0.42"/>
+      <path id="page_highlight_left" d="M222 178L533 198C560 200 577 217 577 244V531" fill="none" stroke="#FFFFFF" stroke-width="8" stroke-linecap="round" opacity="0.62"/>
+      <path id="page_highlight_right" d="M978 178L667 198C640 200 623 217 623 244V531" fill="none" stroke="#FFFFFF" stroke-width="8" stroke-linecap="round" opacity="0.62"/>
+    </g>
+    <g id="sticker_slots_left" transform="translate(235 208) rotate(2.8)">
+      <use href="#master_sticker_player_v1_symbol" x="0" y="0" width="72" height="100.8"/>
+      <use href="#master_sticker_player_v1_symbol" x="95" y="0" width="72" height="100.8"/>
+      <use href="#master_sticker_player_v1_symbol" x="190" y="0" width="72" height="100.8"/>
+      <use href="#master_sticker_player_v1_symbol" x="0" y="128" width="72" height="100.8"/>
+      <use href="#master_sticker_player_v1_symbol" x="95" y="128" width="72" height="100.8"/>
+      <use href="#master_sticker_player_v1_symbol" x="190" y="128" width="72" height="100.8"/>
+      <use href="#master_sticker_player_v1_symbol" x="0" y="256" width="72" height="100.8"/>
+      <use href="#master_sticker_player_v1_symbol" x="95" y="256" width="72" height="100.8"/>
+      <use href="#master_sticker_player_v1_symbol" x="190" y="256" width="72" height="100.8"/>
+    </g>
+    <g id="sticker_slots_right" transform="translate(690 220) rotate(-2.8)">
+      <use href="#master_sticker_player_v1_symbol" x="0" y="0" width="72" height="100.8"/>
+      <use href="#master_sticker_player_v1_symbol" x="95" y="0" width="72" height="100.8"/>
+      <use href="#master_sticker_player_v1_symbol" x="190" y="0" width="72" height="100.8"/>
+      <use href="#master_sticker_player_v1_symbol" x="0" y="128" width="72" height="100.8"/>
+      <use href="#master_sticker_player_v1_symbol" x="95" y="128" width="72" height="100.8"/>
+      <use href="#master_sticker_player_v1_symbol" x="190" y="128" width="72" height="100.8"/>
+      <use href="#master_sticker_player_v1_symbol" x="0" y="256" width="72" height="100.8"/>
+      <use href="#master_sticker_player_v1_symbol" x="95" y="256" width="72" height="100.8"/>
+      <use href="#master_sticker_player_v1_symbol" x="190" y="256" width="72" height="100.8"/>
+    </g>
+  </g>
+</svg>

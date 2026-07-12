@@ -1,0 +1,168 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024" role="img" aria-labelledby="title desc">
+  <title id="title">Trophy Album First Sticker V1</title>
+  <desc id="desc">Sammlr-Trophäe Erster Sticker, zusammengesetzt aus Master Shield V1, Master Header V1, Master Album Open Empty V1, Master Sticker Player V1 und Master Logo Emboss.</desc>
+  <defs>
+    <linearGradient id="shield_surface" x1="0.18" y1="0.04" x2="0.82" y2="0.96">
+      <stop offset="0" stop-color="#FFFFFF"/>
+      <stop offset="0.44" stop-color="#F8F5FA"/>
+      <stop offset="0.76" stop-color="#EEE8F1"/>
+      <stop offset="1" stop-color="#FFFFFF"/>
+    </linearGradient>
+    <linearGradient id="shield_edge" x1="0.16" y1="0.06" x2="0.9" y2="0.96">
+      <stop offset="0" stop-color="#FFFFFF"/>
+      <stop offset="0.48" stop-color="#E7E0EA"/>
+      <stop offset="0.7" stop-color="#FFFFFF"/>
+      <stop offset="1" stop-color="#CFC5D9"/>
+    </linearGradient>
+    <linearGradient id="shield_inner_line" x1="0.2" y1="0.08" x2="0.8" y2="0.92">
+      <stop offset="0" stop-color="#9B72FF"/>
+      <stop offset="0.5" stop-color="#6B3DF2"/>
+      <stop offset="1" stop-color="#4C1EC8"/>
+    </linearGradient>
+    <filter id="shield_drop_shadow" x="-12%" y="-10%" width="124%" height="124%">
+      <feDropShadow dx="0" dy="24" stdDeviation="20" flood-color="#160536" flood-opacity="0.32"/>
+    </filter>
+    <filter id="shield_soft_depth" x="-3%" y="-3%" width="106%" height="106%">
+      <feDropShadow dx="0" dy="5" stdDeviation="4" flood-color="#FFFFFF" flood-opacity="0.7"/>
+      <feDropShadow dx="0" dy="-5" stdDeviation="5" flood-color="#6B3DF2" flood-opacity="0.14"/>
+    </filter>
+    <linearGradient id="album_page_left_light" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#FFFFFF"/>
+      <stop offset="0.56" stop-color="#F7F2FF"/>
+      <stop offset="1" stop-color="#E9DEF9"/>
+    </linearGradient>
+    <linearGradient id="album_page_right_light" x1="1" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#FFFFFF"/>
+      <stop offset="0.58" stop-color="#F8F3FF"/>
+      <stop offset="1" stop-color="#E7DBF7"/>
+    </linearGradient>
+    <linearGradient id="album_edge_purple" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#8D5BFF"/>
+      <stop offset="0.48" stop-color="#6B3DF2"/>
+      <stop offset="1" stop-color="#35107E"/>
+    </linearGradient>
+    <radialGradient id="album_binding_shadow" cx="50%" cy="54%" r="63%">
+      <stop offset="0" stop-color="#1A063F" stop-opacity="0.58"/>
+      <stop offset="0.55" stop-color="#6B3DF2" stop-opacity="0.18"/>
+      <stop offset="1" stop-color="#6B3DF2" stop-opacity="0"/>
+    </radialGradient>
+    <filter id="album_shadow" x="-12%" y="-18%" width="124%" height="140%">
+      <feDropShadow dx="0" dy="24" stdDeviation="22" flood-color="#1A063F" flood-opacity="0.34"/>
+    </filter>
+    <linearGradient id="emboss_line" x1="0.16" y1="0.08" x2="0.86" y2="0.92">
+      <stop offset="0" stop-color="#FFFFFF"/>
+      <stop offset="0.52" stop-color="#EDE7F2"/>
+      <stop offset="1" stop-color="#FFFFFF"/>
+    </linearGradient>
+    <style>
+      .header-text {
+        fill: #6B3DF2;
+        font-family: Inter, "Inter ExtraBold", Arial, sans-serif;
+        font-weight: 800;
+        letter-spacing: 10px;
+        text-anchor: middle;
+        dominant-baseline: middle;
+      }
+      .header-line {
+        fill: none;
+        stroke: #6B3DF2;
+        stroke-width: 12;
+        stroke-linecap: square;
+      }
+    </style>
+    <symbol id="master_sticker_empty_v1_symbol" viewBox="0 0 500 700">
+      <rect x="6.25" y="6.25" width="487.5" height="687.5" rx="60" ry="60" fill="#FFFFFF" stroke="#6B3DF2" stroke-width="12.5"/>
+    </symbol>
+    <symbol id="master_sticker_player_v1_symbol" viewBox="0 0 500 700">
+      <g id="sticker_base">
+        <rect x="6.25" y="6.25" width="487.5" height="687.5" rx="60" ry="60" fill="#FFFFFF" stroke="#6B3DF2" stroke-width="12.5"/>
+      </g>
+      <g id="player_silhouette" fill="#6B3DF2">
+        <circle cx="250" cy="268" r="70"/>
+        <path d="M105 545V510C105 431.023 164.202 382 250 382C335.798 382 395 431.023 395 510V545C395 556.046 386.046 565 375 565H125C113.954 565 105 556.046 105 545Z"/>
+      </g>
+    </symbol>
+  </defs>
+  <g id="trophy_album_first_sticker_v1">
+    <g id="master_shield_v1">
+      <g id="shield_shadow" filter="url(#shield_drop_shadow)">
+        <path d="M217 72H807C847 72 879 104 879 144V184C879 193 886 200 895 200H936C972 200 1000 228 1000 264V360C1000 402 966 436 924 436H914C902 436 892 446 892 458V752C892 786 872 816 841 829L543 956C523 965 501 965 481 956L183 829C152 816 132 786 132 752V458C132 446 122 436 110 436H100C58 436 24 402 24 360V264C24 228 52 200 88 200H129C138 200 145 193 145 184V144C145 104 177 72 217 72Z" fill="#1A063F" opacity="0.18"/>
+      </g>
+      <g id="shield_outer" filter="url(#shield_soft_depth)">
+        <path d="M217 72H807C847 72 879 104 879 144V184C879 193 886 200 895 200H936C972 200 1000 228 1000 264V360C1000 402 966 436 924 436H914C902 436 892 446 892 458V752C892 786 872 816 841 829L543 956C523 965 501 965 481 956L183 829C152 816 132 786 132 752V458C132 446 122 436 110 436H100C58 436 24 402 24 360V264C24 228 52 200 88 200H129C138 200 145 193 145 184V144C145 104 177 72 217 72Z" fill="url(#shield_edge)"/>
+      </g>
+      <g id="shield_inner_fill">
+        <path d="M225 100H799C823 100 843 120 843 144V200C843 221 860 238 881 238H932C947 238 960 251 960 266V358C960 381 941 400 918 400H892C868 400 848 420 848 444V744C848 763 837 781 819 789L529 913C518 918 506 918 495 913L205 789C187 781 176 763 176 744V444C176 420 156 400 132 400H106C83 400 64 381 64 358V266C64 251 77 238 92 238H143C164 238 181 221 181 200V144C181 120 201 100 225 100Z" fill="url(#shield_surface)"/>
+      </g>
+      <g id="shield_inner_outline">
+        <path d="M229 164H795C812 164 826 178 826 195V219C826 238 841 253 860 253H919C929 253 937 261 937 271V361C937 371 929 379 919 379H891C856 379 828 407 828 442V727C828 747 816 765 798 773L528 888C518 892 506 892 496 888L226 773C208 765 196 747 196 727V442C196 407 168 379 133 379H105C95 379 87 371 87 361V271C87 261 95 253 105 253H164C183 253 198 238 198 219V195C198 178 212 164 229 164Z" fill="none" stroke="url(#shield_inner_line)" stroke-width="12" stroke-linejoin="round" stroke-linecap="round"/>
+      </g>
+      <g id="shield_highlights">
+        <path d="M226 100H798C822 100 842 120 842 144" fill="none" stroke="#FFFFFF" stroke-width="10" stroke-linecap="round" opacity="0.62"/>
+        <path d="M176 456V733C176 754 187 774 206 783" fill="none" stroke="#FFFFFF" stroke-width="8" stroke-linecap="round" opacity="0.42"/>
+      </g>
+    </g>
+    <g id="master_header_v1" transform="translate(143 118) scale(0.36)">
+      <g id="header_lines" transform="translate(0 256)">
+        <path id="header_line_left" class="header-line" d="M282 0H430"/>
+        <path id="header_line_right" class="header-line" d="M1618 0H1766"/>
+      </g>
+      <g id="header_text">
+        <text id="header_text_two_line_top" class="header-text" x="1024" y="204" font-size="118">ERSTER</text>
+        <text id="header_text_two_line_bottom" class="header-text" x="1024" y="318" font-size="118">STICKER</text>
+      </g>
+    </g>
+    <g id="master_album_open_empty_v1" transform="translate(252 352) scale(0.43)" filter="url(#album_shadow)">
+      <g id="album_book_body">
+        <path d="M154 248C158 219 178 202 208 204L559 227C585 229 600 248 600 276V611C586 628 566 637 540 635L178 611C148 609 132 590 137 562Z" fill="url(#album_edge_purple)"/>
+        <path d="M1046 248C1042 219 1022 202 992 204L641 227C615 229 600 248 600 276V611C614 628 634 637 660 635L1022 611C1052 609 1068 590 1063 562Z" fill="url(#album_edge_purple)"/>
+        <path d="M160 566C276 579 430 590 570 590C585 590 596 596 600 607C592 624 574 632 545 631L179 607C155 605 143 591 147 570Z" fill="#3F1595"/>
+        <path d="M1040 566C924 579 770 590 630 590C615 590 604 596 600 607C608 624 626 632 655 631L1021 607C1045 605 1057 591 1053 570Z" fill="#3F1595"/>
+        <path d="M160 542C279 554 432 563 570 564C586 564 596 571 600 583C592 599 574 606 545 605L176 581C154 580 143 567 147 546Z" fill="#5B2CD0"/>
+        <path d="M1040 542C921 554 768 563 630 564C614 564 604 571 600 583C608 599 626 606 655 605L1024 581C1046 580 1057 567 1053 546Z" fill="#5B2CD0"/>
+        <path d="M162 520C278 532 430 541 570 542C586 542 597 548 600 558C590 573 572 580 544 579L178 555C156 554 145 541 149 523Z" fill="#7C50F8"/>
+        <path d="M1038 520C922 532 770 541 630 542C614 542 603 548 600 558C610 573 628 580 656 579L1022 555C1044 554 1055 541 1051 523Z" fill="#7C50F8"/>
+        <path d="M183 195C188 166 207 151 237 153L552 174C582 176 600 196 600 226V568C586 585 565 593 537 590L207 569C174 567 156 545 160 514Z" fill="url(#album_page_left_light)" stroke="#CDBDF7" stroke-width="2"/>
+        <path d="M1017 195C1012 166 993 151 963 153L648 174C618 176 600 196 600 226V568C614 585 635 593 663 590L993 569C1026 567 1044 545 1040 514Z" fill="url(#album_page_right_light)" stroke="#CDBDF7" stroke-width="2"/>
+        <path d="M585 184C595 196 600 210 600 226V575C596 594 586 607 570 615C587 612 597 617 600 630C603 617 613 612 630 615C614 607 604 594 600 575V226C600 210 605 196 615 184C609 177 604 174 600 174C596 174 591 177 585 184Z" fill="url(#album_binding_shadow)"/>
+        <path d="M600 223V589" fill="none" stroke="#2E0D71" stroke-width="5" stroke-linecap="round" opacity="0.42"/>
+        <path d="M222 178L533 198C560 200 577 217 577 244V531" fill="none" stroke="#FFFFFF" stroke-width="8" stroke-linecap="round" opacity="0.62"/>
+        <path d="M978 178L667 198C640 200 623 217 623 244V531" fill="none" stroke="#FFFFFF" stroke-width="8" stroke-linecap="round" opacity="0.62"/>
+      </g>
+      <g id="sticker_slots_left" transform="translate(235 208) rotate(2.8)">
+        <use href="#master_sticker_empty_v1_symbol" x="0" y="0" width="72" height="100.8"/>
+        <use href="#master_sticker_empty_v1_symbol" x="95" y="0" width="72" height="100.8"/>
+        <use href="#master_sticker_empty_v1_symbol" x="190" y="0" width="72" height="100.8"/>
+        <use href="#master_sticker_empty_v1_symbol" x="0" y="128" width="72" height="100.8"/>
+        <use href="#master_sticker_empty_v1_symbol" x="95" y="128" width="72" height="100.8"/>
+        <use href="#master_sticker_empty_v1_symbol" x="190" y="128" width="72" height="100.8"/>
+        <use href="#master_sticker_empty_v1_symbol" x="0" y="256" width="72" height="100.8"/>
+        <use href="#master_sticker_empty_v1_symbol" x="95" y="256" width="72" height="100.8"/>
+        <use href="#master_sticker_empty_v1_symbol" x="190" y="256" width="72" height="100.8"/>
+        <use id="first_sticker_player" href="#master_sticker_player_v1_symbol" x="0" y="0" width="72" height="100.8"/>
+      </g>
+      <g id="sticker_slots_right" transform="translate(690 220) rotate(-2.8)">
+        <use href="#master_sticker_empty_v1_symbol" x="0" y="0" width="72" height="100.8"/>
+        <use href="#master_sticker_empty_v1_symbol" x="95" y="0" width="72" height="100.8"/>
+        <use href="#master_sticker_empty_v1_symbol" x="190" y="0" width="72" height="100.8"/>
+        <use href="#master_sticker_empty_v1_symbol" x="0" y="128" width="72" height="100.8"/>
+        <use href="#master_sticker_empty_v1_symbol" x="95" y="128" width="72" height="100.8"/>
+        <use href="#master_sticker_empty_v1_symbol" x="190" y="128" width="72" height="100.8"/>
+        <use href="#master_sticker_empty_v1_symbol" x="0" y="256" width="72" height="100.8"/>
+        <use href="#master_sticker_empty_v1_symbol" x="95" y="256" width="72" height="100.8"/>
+        <use href="#master_sticker_empty_v1_symbol" x="190" y="256" width="72" height="100.8"/>
+      </g>
+    </g>
+    <g id="master_logo_emboss" transform="translate(456 720) scale(0.11)" opacity="0.78">
+      <g id="back_card" transform="translate(-92 -82) rotate(-8 555 535)">
+        <rect x="300" y="300" width="470" height="470" rx="46" ry="46" fill="none" stroke="url(#emboss_line)" stroke-width="26"/>
+      </g>
+      <g id="front_card">
+        <rect x="320" y="300" width="470" height="470" rx="46" ry="46" fill="none" stroke="url(#emboss_line)" stroke-width="26"/>
+      </g>
+      <g id="letter_s" transform="matrix(0.975 0 0 0.975 3 6)">
+        <path d="M637 389C594 349 501 348 462 405C427 456 467 503 545 520C637 540 676 586 647 640C608 711 487 713 407 641" fill="none" stroke="url(#emboss_line)" stroke-width="88" stroke-linecap="round" stroke-linejoin="round" opacity="0.74"/>
+      </g>
+    </g>
+  </g>
+</svg>
