@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 600 599" width="600" height="599" role="img" aria-labelledby="title desc">
+  <title id="title">Master Ball Topscorer V1</title>
+  <desc id="desc">Unverändertes Sammlr-Ball-Masterasset mit proportional platzierter Master Cannon V1 im oberen mittleren Segment.</desc>
+  <image id="master_ball_v1_base" href="master_ball_v1.png" xlink:href="master_ball_v1.png" x="0" y="0" width="600" height="599" preserveAspectRatio="none"/>
+  <image id="master_cannon_v1_placement" href="master_cannon_v1.svg" xlink:href="master_cannon_v1.svg" x="156" y="80" width="288" height="192" preserveAspectRatio="xMidYMid meet"/>
+</svg>

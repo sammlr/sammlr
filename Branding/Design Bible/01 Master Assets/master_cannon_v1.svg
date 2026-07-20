@@ -1,0 +1,40 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 400" width="600" height="400" role="img" aria-labelledby="title desc">
+  <title id="title">Master Cannon V1</title>
+  <desc id="desc">Reduzierte weiße Torjägerkanone in Seitenansicht als eigenständiges Sammlr-Masterasset.</desc>
+  <defs>
+    <mask id="cannon_barrel_opening_mask">
+      <rect width="600" height="400" fill="#FFFFFF"/>
+      <ellipse cx="509" cy="119" rx="11" ry="21" transform="rotate(-15 509 119)" fill="#000000"/>
+    </mask>
+  </defs>
+
+  <g id="master_cannon_v1" fill="#FFFFFF">
+    <path
+      id="cannon_rear_trail"
+      d="M194 209L73 286C63 292 61 304 68 312L76 322C83 330 95 331 103 324L226 241Z"
+    />
+
+    <path
+      id="cannon_carriage"
+      d="M177 181L323 151L380 194L357 230L260 247L185 223L159 199Z"
+    />
+
+    <path
+      id="cannon_barrel"
+      mask="url(#cannon_barrel_opening_mask)"
+      d="M198 172C194 159 202 146 216 142L466 87L463 75L495 68C510 65 524 74 528 89L534 111C538 126 529 142 514 146L482 153L479 141L230 207C214 211 200 202 196 187Z"
+    />
+
+    <g id="cannon_front_wheel" fill="none" stroke="#FFFFFF" stroke-linecap="round" stroke-linejoin="round">
+      <circle id="cannon_front_wheel_rim" cx="235" cy="250" r="90" stroke-width="20"/>
+      <path id="cannon_front_wheel_spokes" d="M158 250H312M173 205L297 295M211 177L259 323M259 177L211 323M297 205L173 295" stroke-width="13"/>
+    </g>
+    <circle id="cannon_front_wheel_hub" cx="235" cy="250" r="25"/>
+
+    <g id="cannon_rear_wheel" fill="none" stroke="#FFFFFF" stroke-linecap="round" stroke-linejoin="round">
+      <circle id="cannon_rear_wheel_rim" cx="405" cy="255" r="60" stroke-width="16"/>
+      <path id="cannon_rear_wheel_spokes" d="M405 207V303M357 255H453M371 221L439 289M371 289L439 221" stroke-width="12"/>
+    </g>
+    <circle id="cannon_rear_wheel_hub" cx="405" cy="255" r="20"/>
+  </g>
+</svg>

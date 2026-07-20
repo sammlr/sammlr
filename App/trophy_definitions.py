@@ -1,3 +1,5 @@
+from wm26_data import build_wm26
+
 GLOBAL_SCOPE = "__global__"
 
 GLOBAL_STICKER_THRESHOLDS = [50, 100, 250, 500, 1000, 2500, 5000, 10000, 25000]
@@ -105,8 +107,22 @@ def wm26_group_codes(group_index):
     return codes
 
 
+def wm26_team_section_codes(team_section):
+    return [
+        sticker["id"]
+        for sticker in build_wm26()
+        if sticker.get("section") == team_section
+    ]
+
+
 def wm26_trophy_definitions(total):
     half = max(total // 2, 1)
+    wm_history = make_trophy(
+        "album", "wm26", "WM-Historie",
+        "Sammle alle Historien-Sticker (FWC9–FWC19).",
+        "wm_history", "codes", codes=[f"FWC{i}" for i in range(9, 20)]
+    )
+    wm_history["id"] = trophy_id("wm26", "Historiker")
     trophies = [
         make_trophy("album", "wm26", "Erster Sticker", "Trage deinen ersten Sticker in dieses Album ein.", "first_sticker", "album_count", 1),
         make_trophy("album", "wm26", "Halbzeit", "Sammle die Hälfte aller Sticker dieses Albums.", "half_circle", "album_count", half),
@@ -123,11 +139,12 @@ def wm26_trophy_definitions(total):
         ))
 
     trophies.extend([
-        make_trophy("album", "wm26", "Wappenexperte", "Sammle alle Länderwappen.", "shield_ball", "codes", codes=[f"{team}1" for team in WM26_TEAM_ORDER]),
-        make_trophy("album", "wm26", "Teamfotograf", "Sammle alle Teamfotos.", "camera", "codes", codes=[f"{team}13" for team in WM26_TEAM_ORDER]),
-        make_trophy("album", "wm26", "Historiker", "Sammle alle historischen Seiten.", "book_open", "codes", codes=[f"FWC{i}" for i in range(9, 20)]),
-        make_trophy("album", "wm26", "Etikettenknibbler", "Sammle alle Coca-Cola-Sticker.", "coke_bottle", "codes", codes=[f"CC{i}" for i in range(1, 13)]),
+        make_trophy("album", "wm26", "Wappenexperte", "Sammle alle 48 Wappen-Sticker (#1) der Nationalteams.", "crest_expert", "codes", codes=[f"{team}1" for team in WM26_TEAM_ORDER]),
+        make_trophy("album", "wm26", "Teamfotograf", "Sammle alle Teamfotos.", "wm_teamphoto", "codes", codes=[f"{team}13" for team in WM26_TEAM_ORDER]),
+        wm_history,
+        make_trophy("album", "wm26", "Etikettenknibbler", "Sammle alle Coca-Cola-Sticker.", "bottle_label", "codes", codes=[f"CC{i}" for i in range(1, 13)]),
         make_trophy("album", "wm26", "The Last Dance", "Sammle Messi (ARG17) und Cristiano Ronaldo (POR15).", "last_dance", "codes", codes=["ARG17", "POR15"]),
+        make_trophy("album", "wm26", "Weltmeister", "Vervollständige Argentinien, den amtierenden Weltmeister.", "wm_champion_cup", "codes", codes=wm26_team_section_codes("ARG")),
     ])
     return trophies
 

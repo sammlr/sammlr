@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 500 400" role="img" aria-labelledby="title desc">
+  <title id="title">Master WM Team Photo V1</title>
+  <desc id="desc">Flächige klassische Spiegelreflexkamera in Frontansicht als Sammlr-Masterasset für die Teamfotograf-Trophy.</desc>
+  <g id="master_wm_teamphoto_v1">
+    <g id="camera_silhouette" fill="#6B3DF2">
+      <path id="camera_body" d="M72 132H428C450 132 468 150 468 172V322C468 344 450 362 428 362H68C45 362 27 344 27 321V181C27 155 45 137 72 132Z"/>
+      <path id="camera_prism" d="M188 136L218 73C222 65 230 60 239 60H271C280 60 288 65 292 73L322 136Z"/>
+      <rect id="camera_shutter" x="370" y="101" width="62" height="38" rx="10"/>
+    </g>
+    <g id="camera_white_details" fill="#FFFFFF">
+      <rect id="camera_viewfinder" x="72" y="158" width="72" height="32" rx="8"/>
+    </g>
+    <g id="camera_lens">
+      <circle id="camera_lens_outer" cx="255" cy="246" r="112" fill="#6B3DF2" stroke="#FFFFFF" stroke-width="6"/>
+      <circle id="camera_lens_white_ring" cx="255" cy="246" r="90" fill="#FFFFFF"/>
+      <circle id="camera_lens_inner" cx="255" cy="246" r="58" fill="#6B3DF2"/>
+    </g>
+    <g id="camera_separators" fill="none" stroke="#FFFFFF" stroke-width="6" stroke-linecap="round">
+      <path id="camera_grip_line" d="M108 218V320"/>
+      <path id="camera_top_line_left" d="M158 168H184"/>
+      <path id="camera_top_line_right" d="M326 168H416"/>
+    </g>
+  </g>
+</svg>

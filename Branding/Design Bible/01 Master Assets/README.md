@@ -15,6 +15,23 @@ Regeln:
 - SVG ist die Master-Datei
 - Alle zukünftigen Sticker basieren auf diesem Asset
 
+# Master Ball V1
+
+Status:
+Approved
+
+Beschreibung:
+
+`master_ball_v1` ist ab sofort das verbindliche Sammlr-Masterasset für alle Darstellungen eines klassischen Fußballs.
+
+Regeln:
+
+- Es darf künftig kein anderer Fußball neu gezeichnet, generiert oder aus externen Bildern übernommen werden, solange dieses Masterasset den Anwendungsfall erfüllt.
+- Niemals überschreiben
+- Änderungen ausschließlich über neue Versionen (v2, v3 ...)
+- PNG dient ausschließlich als Vorschau
+- SVG ist die Master-Datei
+
 # Master Sticker Player V1
 
 Status:

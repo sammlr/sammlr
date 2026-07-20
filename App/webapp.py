@@ -36,11 +36,24 @@ ALBUM_COVER_BRANDING_FILENAMES = {
     "vfl": "master_album_branding_vfl_v1.png",
     "wm26": "master_album_branding_wm_v1.png",
 }
+
+
+def preferred_master_asset(svg_filename, png_filename):
+    if os.path.exists(os.path.join(MASTER_ASSET_DIR, svg_filename)):
+        return svg_filename
+    return png_filename
+
+
 MASTER_TROPHY_ASSETS = {
     "album_empty": "master_album_open_empty_v1.svg",
     "album_full": "master_album_open_full_v1.svg",
+    "crest_expert": "master_crest_expert_v2.png",
     "sticker_player": "master_sticker_player_v1.svg",
     "group_table": "master_group_table_v1.svg",
+    "wm_history": preferred_master_asset("master_wm_history_v1.svg", "master_wm_history_v1.png"),
+    "wm_teamphoto": "master_wm_teamphoto_v1.svg",
+    "bottle_label": preferred_master_asset("master_label_v1.svg", "master_label_v1.png"),
+    "wm_champion_cup": preferred_master_asset("master_album_branding_wm_v2.svg", "master_album_branding_wm_v2.png"),
 }
 WM26_GROUP_ASSET_LETTERS = "abcdefghijkl"
 DB = os.environ.get(
@@ -1116,7 +1129,7 @@ def trophy_category(definition):
     trigger_type = definition.get("trigger_type")
     if trigger_type in ("album_count", "album_complete"):
         return "Albumziel"
-    if definition.get("name") in ("Wappenexperte", "Teamfotograf", "Historiker", "Etikettenknibbler", "The Last Dance", "DJ Matze"):
+    if definition.get("name") in ("Wappenexperte", "Teamfotograf", "WM-Historie", "Etikettenknibbler", "The Last Dance", "Weltmeister", "DJ Matze"):
         return "Spezial"
     return "Kapitel"
 
@@ -1171,6 +1184,12 @@ def trophy_header_lines(icon_key="", label="", badge_type="sammlr"):
         return [number, "TRADE" if number == "1" else "TRADES"]
     if icon_key.startswith("group_") and len(icon_key) == len("group_a"):
         return ["GRUPPE", icon_key[-1].upper()]
+    if icon_key == "crest_expert":
+        return ["WAPPEN", "EXPERTE"]
+    if icon_key == "wm_history":
+        return ["WM", "HISTORIE"]
+    if icon_key == "wm_champion_cup":
+        return ["WELT", "MEISTER"]
 
     normalized = (
         upper.replace("STICKERJÄGER ", "")
@@ -1212,6 +1231,58 @@ def trophy_header_text_svg(lines):
         f'<text {text_attrs} x="{header_axis_x}" y="500" font-size="{font_size}">{top}</text>'
         f'<text {text_attrs} x="{header_axis_x}" y="750" font-size="{font_size}">{bottom}</text>'
     )
+
+
+def trophy_header_line_length(lines):
+    safe_lines = [str(line or "").strip().upper() for line in lines[:2] if str(line or "").strip()]
+    if not safe_lines:
+        return 0
+
+    longest = max(len(line) for line in safe_lines)
+    font_size = 188 if longest > 12 else 220
+    letter_spacing = 13
+    glyph_widths = {
+        "A": 0.66, "B": 0.65, "C": 0.65, "D": 0.68, "E": 0.59,
+        "F": 0.55, "G": 0.69, "H": 0.68, "I": 0.29, "J": 0.43,
+        "K": 0.64, "L": 0.53, "M": 0.86, "N": 0.69, "O": 0.71,
+        "P": 0.61, "Q": 0.71, "R": 0.64, "S": 0.61, "T": 0.58,
+        "U": 0.68, "V": 0.66, "W": 0.92, "X": 0.64, "Y": 0.63,
+        "Z": 0.59, " ": 0.33, "-": 0.35,
+    }
+
+    def estimated_width(line):
+        glyph_width = sum(glyph_widths.get(char, 0.62) for char in line) * font_size
+        spacing_width = max(len(line) - 1, 0) * letter_spacing
+        return glyph_width + spacing_width + 4
+
+    widths = sorted((estimated_width(line) for line in safe_lines), reverse=True)
+    effective_width = widths[0]
+    if len(widths) > 1:
+        effective_width += widths[1] * 0.15
+
+    standard_length = 190
+    minimum_length = 70
+    available_length = min(standard_length, 740 - (effective_width / 2))
+    if available_length >= standard_length - 1:
+        return standard_length
+    return round(available_length, 2) if available_length >= minimum_length else 0
+
+
+def trophy_header_lines_svg(lines):
+    line_length = trophy_header_line_length(lines)
+    if not line_length:
+        return ""
+
+    left_outer = 120
+    right_outer = 1930
+    left_inner = left_outer + line_length
+    right_inner = right_outer - line_length
+    return f"""
+                <g id="header_lines" transform="translate(0 625)">
+                    <path d="M{left_outer} 0H{left_inner:g}" fill="none" stroke="#6B3DF2" stroke-width="13.2" stroke-linecap="square"/>
+                    <path d="M{right_inner:g} 0H{right_outer}" fill="none" stroke="#6B3DF2" stroke-width="13.2" stroke-linecap="square"/>
+                </g>
+    """
 
 
 def sammlr_emboss_svg():
@@ -1425,6 +1496,10 @@ def trophy_production_icon_svg(icon_key):
     album_empty = MASTER_TROPHY_ASSETS["album_empty"]
     album_full = MASTER_TROPHY_ASSETS["album_full"]
     group_table = MASTER_TROPHY_ASSETS["group_table"]
+    wm_history = MASTER_TROPHY_ASSETS["wm_history"]
+    wm_teamphoto = MASTER_TROPHY_ASSETS["wm_teamphoto"]
+    bottle_label = MASTER_TROPHY_ASSETS["bottle_label"]
+    wm_champion_cup = MASTER_TROPHY_ASSETS["wm_champion_cup"]
 
     if icon_key == "first_sticker":
         return f"""
@@ -1470,6 +1545,34 @@ def trophy_production_icon_svg(icon_key):
         </g>
         """
 
+    if icon_key == "wm_history":
+        return f"""
+        <g id="production_icon_wm_history">
+            {master_asset_image(wm_history, 337, 393, 350, 280)}
+        </g>
+        """
+
+    if icon_key == "wm_teamphoto":
+        return f"""
+        <g id="production_icon_wm_teamphoto">
+            {master_asset_image(wm_teamphoto, 337, 393, 350, 280)}
+        </g>
+        """
+
+    if icon_key == "bottle_label":
+        return f"""
+        <g id="production_icon_bottle_label">
+            {master_asset_image(bottle_label, 337, 393, 350, 280)}
+        </g>
+        """
+
+    if icon_key == "wm_champion_cup":
+        return f"""
+        <g id="production_icon_wm_champion_cup">
+            {master_asset_image(wm_champion_cup, 337, 393, 350, 280)}
+        </g>
+        """
+
     group_table_asset = wm26_group_table_asset(icon_key)
     if group_table_asset:
         return f"""
@@ -1493,14 +1596,23 @@ def trophy_center_icon_svg(icon_key, label="", album_id=None, badge_type="sammlr
 
 
 def trophy_icon_svg(icon_key, label="", badge_type="sammlr", album_id=None):
-    header_text = trophy_header_text_svg(trophy_header_lines(icon_key, label, badge_type))
+    header_text_lines = trophy_header_lines(icon_key, label, badge_type)
+    header_text = trophy_header_text_svg(header_text_lines)
     center_icon = trophy_center_icon_svg(icon_key, label, album_id, badge_type)
-    header_lines = """
-                <g id="header_lines" transform="translate(0 625)">
-                    <path d="M120 0H310" fill="none" stroke="#6B3DF2" stroke-width="13.2" stroke-linecap="square"/>
-                    <path d="M1740 0H1930" fill="none" stroke="#6B3DF2" stroke-width="13.2" stroke-linecap="square"/>
-                </g>
-    """
+    is_crest_expert = badge_type == "album" and icon_key == "crest_expert"
+    patch_class = " trophy-patch-crest-expert" if is_crest_expert else ""
+    crest_expert_img = ""
+    if is_crest_expert:
+        crest_filename = escape(MASTER_TROPHY_ASSETS["crest_expert"])
+        crest_expert_img = f"""
+        <img
+            class="trophy-crest-expert-img"
+            src="/design-bible/master-assets/{crest_filename}"
+            alt=""
+            draggable="false"
+        />
+        """
+    header_lines = trophy_header_lines_svg(header_text_lines)
     if badge_type == "sammlr":
         bottom_branding = sammlr_emboss_svg()
     elif badge_type == "album":
@@ -1509,7 +1621,7 @@ def trophy_icon_svg(icon_key, label="", badge_type="sammlr", album_id=None):
         bottom_branding = ""
 
     return f"""
-    <div class="trophy-patch trophy-patch-master" aria-hidden="true">
+    <div class="trophy-patch trophy-patch-master{patch_class}" aria-hidden="true">
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024" role="img" focusable="false">
             <defs>
                 <linearGradient id="shield_surface" x1="0.18" y1="0.04" x2="0.82" y2="0.96">
@@ -1622,6 +1734,7 @@ def trophy_icon_svg(icon_key, label="", badge_type="sammlr", album_id=None):
             </g>
             {bottom_branding}
         </svg>
+        {crest_expert_img}
     </div>
     """
 
@@ -1880,9 +1993,10 @@ def trophy_popup_html(album_id, trophy_titles):
     trophy_text = "Neue Trophäe freigeschaltet!" if len(trophy_titles) == 1 else f"{len(trophy_titles)} neue Trophäen freigeschaltet!"
     trophy_lines = "<br>".join(escape(title) for title in trophy_titles)
     is_global_popup = album_id == GLOBAL_SCOPE
+    is_weltmeister_popup = album_id == "wm26" and "Weltmeister" in trophy_titles
     trophy_link = "/trophaeen" if is_global_popup else f"/album/{album_id}/trophaeen"
     popup_icon = trophy_icon_svg(
-        "album_generic",
+        "wm_champion_cup" if is_weltmeister_popup else "album_generic",
         badge_type="sammlr" if is_global_popup else "album",
         album_id=None if is_global_popup else album_id
     )

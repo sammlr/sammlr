@@ -6998,6 +6998,30 @@ body .container{
     object-fit:contain;
 }
 
+.trophy-patch-crest-expert{
+    position:relative;
+}
+
+.trophy-patch-crest-expert > svg{
+    position:relative;
+    z-index:1;
+}
+
+.trophy-crest-expert-img{
+    position:absolute;
+    z-index:2;
+    left:50%;
+    top:41%;
+    width:27%;
+    height:27%;
+    display:block;
+    object-fit:contain;
+    object-position:center;
+    transform:translateX(-50%);
+    pointer-events:none;
+    user-select:none;
+}
+
 .trophy-patch .sammlr-card-back,
 .trophy-patch .sammlr-card-front{
     fill:none;

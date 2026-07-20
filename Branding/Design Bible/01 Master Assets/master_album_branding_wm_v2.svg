@@ -1,5 +1,67 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 208 292" width="208" height="292" role="img" aria-labelledby="title desc">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024" role="img" aria-labelledby="title desc">
   <title id="title">Master Album Branding WM V2</title>
-  <desc id="desc">Freigestelltes unteres rechtes WM-Logo aus der freigegebenen Referenz: 26 und Pokal, schwarz zu Sammlr-Lila.</desc>
-  <image href="master_album_branding_wm_v2.png" x="0" y="0" width="208" height="292" preserveAspectRatio="xMidYMid meet"/>
+  <desc id="desc">Ikonische reduzierte Sammlr-Interpretation einer Weltmeisterschaftstrophäe mit Globus, tragenden Formen und kompaktem Sockel.</desc>
+  <defs>
+    <mask id="wm_trophy_negative_space">
+      <rect width="1024" height="1024" fill="#FFFFFF"/>
+
+      <path
+        id="globe_land_left"
+        d="M405 116C435 91 475 75 514 76C533 91 529 111 508 123C482 137 472 155 477 179C455 190 430 180 422 158C414 139 400 132 405 116Z"
+        fill="#000000"
+      />
+      <path
+        id="globe_land_right"
+        d="M600 108C631 129 651 158 658 190C638 195 627 211 631 232C636 254 625 274 603 279C583 261 584 238 597 219C610 199 606 183 586 170C574 151 579 125 600 108Z"
+        fill="#000000"
+      />
+
+      <path
+        id="support_separation_left"
+        d="M385 261C405 283 422 316 429 354C440 414 463 469 500 518"
+        fill="none"
+        stroke="#000000"
+        stroke-width="24"
+        stroke-linecap="round"
+      />
+      <path
+        id="support_separation_right"
+        d="M638 258C619 286 605 321 599 362C590 427 565 487 523 543"
+        fill="none"
+        stroke="#000000"
+        stroke-width="24"
+        stroke-linecap="round"
+      />
+      <path
+        id="body_sweep"
+        d="M405 430C438 468 470 500 507 525C541 548 551 580 532 610C509 645 485 674 463 698"
+        fill="none"
+        stroke="#000000"
+        stroke-width="25"
+        stroke-linecap="round"
+      />
+
+      <path
+        id="base_separator"
+        d="M391 807C464 818 560 818 633 807"
+        fill="none"
+        stroke="#000000"
+        stroke-width="20"
+        stroke-linecap="round"
+      />
+    </mask>
+  </defs>
+
+  <g id="master_album_branding_wm_v2" fill="#6D3CFF" mask="url(#wm_trophy_negative_space)">
+    <circle id="trophy_globe" cx="512" cy="215" r="165"/>
+
+    <path
+      id="trophy_body"
+      d="M348 203C345 303 358 407 392 505C411 560 426 609 420 657C416 691 401 722 387 751H637C620 718 607 686 604 651C600 605 615 560 634 509C672 409 684 304 676 203C646 234 623 280 613 333C600 405 570 475 512 541C454 475 424 405 411 333C401 280 378 234 348 203Z"
+    />
+
+    <rect id="trophy_collar" x="373" y="735" width="278" height="82" rx="32"/>
+    <path id="trophy_base" d="M346 796H678L718 912C722 925 712 938 698 941C575 965 449 965 326 941C312 938 302 925 306 912Z"/>
+    <rect id="trophy_base_floor" x="292" y="918" width="440" height="58" rx="29"/>
+  </g>
 </svg>
