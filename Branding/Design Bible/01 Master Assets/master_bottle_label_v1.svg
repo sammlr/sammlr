@@ -1,0 +1,51 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 500 600" role="img" aria-labelledby="title desc">
+  <title id="title">Master Bottle Label V1</title>
+  <desc id="desc">Klassische seitliche Glasflaschensilhouette mit gewölbtem weißem Sammlr-S-Etikett und abgeknibbelter Ecke.</desc>
+  <g id="master_bottle_label_v1">
+    <path
+      id="bottle_silhouette"
+      d="M210 25C201 25 198 31 198 42C198 54 201 61 199 75C197 111 188 143 176 175C163 210 153 244 151 278C148 306 151 337 157 365C164 398 169 426 166 453C164 479 152 515 150 542C148 565 158 575 187 581C213 587 277 586 312 582C341 578 351 568 350 550C349 531 341 510 334 489C327 468 327 449 329 428C332 398 339 362 343 330C347 299 347 264 343 235C340 207 333 185 326 165C315 132 305 104 302 74C301 61 303 51 303 41C303 30 296 25 285 25Z"
+      fill="#6B3DF2"
+    />
+
+    <g id="glass_highlights" fill="none" stroke="#FFFFFF" stroke-width="6" stroke-linecap="round" opacity="0.9">
+      <path id="glass_highlight_upper" d="M230 62C230 111 225 163 217 220"/>
+      <path id="glass_highlight_lower" d="M210 370C214 414 221 463 211 526"/>
+    </g>
+
+    <g id="bottle_label">
+      <path
+        id="label_surface"
+        d="M171 260H329C337 266 341 278 342 292C343 307 343 324 342 339C341 352 337 361 329 365H171C163 361 159 352 158 339C157 324 157 307 158 292C159 278 163 266 171 260Z"
+        fill="#FFFFFF"
+      />
+      <g id="sammlr_s" transform="translate(158 222) scale(0.17) matrix(0.975 0 0 0.975 3 6)">
+        <path
+          d="M637 389C594 349 501 348 462 405C427 456 467 503 545 520C637 540 676 586 647 640C608 711 487 713 407 641"
+          fill="none"
+          stroke="#6B3DF2"
+          stroke-width="88"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        />
+      </g>
+      <circle
+        id="sammlr_dot"
+        cx="720"
+        cy="668"
+        r="38"
+        fill="#6B3DF2"
+        transform="translate(158 222) scale(0.17)"
+      />
+      <path id="label_corner_cutout" d="M302 260H342V303Z" fill="#6B3DF2"/>
+      <path
+        id="label_peeled_corner"
+        d="M302 260L342 303L298 310Z"
+        fill="#FFFFFF"
+        stroke="#6B3DF2"
+        stroke-width="7"
+        stroke-linejoin="round"
+      />
+    </g>
+  </g>
+</svg>

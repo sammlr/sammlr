@@ -1,0 +1,34 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 800 900" role="img" aria-labelledby="title desc">
+  <title id="title">Master Crest Expert V2</title>
+  <desc id="desc">Universelles Sammlr-Wappen-Masterasset mit klassischer Schildsilhouette und mittig platziertem Master Ball V1.</desc>
+  <defs>
+    <linearGradient id="paper_surface" x1="0.16" y1="0.05" x2="0.84" y2="0.95">
+      <stop offset="0" stop-color="#FFFDF8"/>
+      <stop offset="0.54" stop-color="#FAF4E8"/>
+      <stop offset="1" stop-color="#F5EDE2"/>
+    </linearGradient>
+    <filter id="paper_texture" x="-2%" y="-2%" width="104%" height="104%">
+      <feTurbulence type="fractalNoise" baseFrequency="0.82" numOctaves="2" seed="31" result="noise"/>
+      <feColorMatrix in="noise" type="matrix" values="0 0 0 0 1  0 0 0 0 0.97  0 0 0 0 0.92  0 0 0 0.018 0" result="fibers"/>
+      <feBlend in="SourceGraphic" in2="fibers" mode="multiply"/>
+    </filter>
+    <filter id="soft_shadow" x="-10%" y="-8%" width="120%" height="120%">
+      <feDropShadow dx="0" dy="9" stdDeviation="12" flood-color="#6B3DF2" flood-opacity="0.13"/>
+    </filter>
+    <clipPath id="shield_clip">
+      <path d="M128 72C106 72 88 90 88 112V398C88 594 196 753 374 836C390 844 410 844 426 836C604 753 712 594 712 398V112C712 90 694 72 672 72Z"/>
+    </clipPath>
+  </defs>
+
+  <g id="master_crest_expert_v2">
+    <path id="crest_shadow" d="M128 72C106 72 88 90 88 112V398C88 594 196 753 374 836C390 844 410 844 426 836C604 753 712 594 712 398V112C712 90 694 72 672 72Z" fill="#6B3DF2" opacity="0.16" filter="url(#soft_shadow)"/>
+
+    <path id="crest_surface" d="M128 72C106 72 88 90 88 112V398C88 594 196 753 374 836C390 844 410 844 426 836C604 753 712 594 712 398V112C712 90 694 72 672 72Z" fill="url(#paper_surface)" stroke="#6B3DF2" stroke-width="16" stroke-linejoin="round" filter="url(#paper_texture)"/>
+
+    <path id="crest_inner_line" d="M137 105C127 105 120 113 120 123V397C120 573 216 718 383 797C394 802 406 802 417 797C584 718 680 573 680 397V123C680 113 673 105 663 105Z" fill="none" stroke="#6B3DF2" stroke-width="4" stroke-linejoin="round" opacity="0.24"/>
+
+    <g id="master_ball_v1_placement" clip-path="url(#shield_clip)">
+      <image href="master_ball_v1.png" xlink:href="master_ball_v1.png" x="220" y="262" width="360" height="359.4" preserveAspectRatio="none"/>
+    </g>
+  </g>
+</svg>
