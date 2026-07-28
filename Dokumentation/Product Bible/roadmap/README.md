@@ -26,3 +26,7 @@ Diese Analyse zeigt Soll-/Ist-Abweichungen und technische Abhängigkeiten. Sie i
 
 - [S00 – Referenzstand und Testdatenstrategie](s00-reference-and-test-data.md),
   Stand 2026-07-28
+- [S01 – Bestands-Regressionstests](s01-inventory-regression-tests.md),
+  Stand 2026-07-28
+- [S02 – Papierlisten- und Tradeflow-Regressionstests](s02-paper-list-tradeflow-regression-tests.md),
+  Stand 2026-07-28
