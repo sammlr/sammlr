@@ -52,7 +52,7 @@ MASTER_TROPHY_ASSETS = {
     "group_table": "master_group_table_v1.svg",
     "wm_history": preferred_master_asset("master_wm_history_v1.svg", "master_wm_history_v1.png"),
     "wm_teamphoto": "master_wm_teamphoto_v1.svg",
-    "bottle_label": preferred_master_asset("master_label_v1.svg", "master_label_v1.png"),
+    "bottle_label": "master_bottle_label_v1.svg",
     "wm_champion_cup": preferred_master_asset("master_album_branding_wm_v2.svg", "master_album_branding_wm_v2.png"),
 }
 WM26_GROUP_ASSET_LETTERS = "abcdefghijkl"
