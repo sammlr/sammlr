@@ -2161,6 +2161,36 @@ def logout():
 
 @app.route("/")
 def startseite():
+    html = f"""
+    <html><head>{style()}</head><body><div class="container">
+
+    {app_header("Home", "Dein Ausgangspunkt bei Sammlr.")}
+
+    <div class="card">
+        <h2>Willkommen bei Sammlr.</h2>
+        <p>Deine Sammlung besitzt einen eigenen, dauerhaft erreichbaren Bereich.</p>
+        <a class="btn" href="/sammlung">Zur Sammlr-Zentrale</a>
+    </div>
+
+    {bottom_nav("sammlr")}
+    </div></body></html>
+    """
+    return html
+
+
+@app.route("/home")
+def home_compatibility_redirect():
+    return redirect("/")
+
+
+@app.route("/zentrale")
+@app.route("/sammlr-zentrale")
+def collection_compatibility_redirect():
+    return redirect("/sammlung")
+
+
+@app.route("/sammlung")
+def sammlung():
     favorite_album_id = current_favorite_album_id()
     con = get_db()
     alben = con.execute(
@@ -2187,7 +2217,7 @@ def startseite():
     html = f"""
     <html><head>{style()}</head><body><div class="container">
 
-    {app_header("Zentrale", "Deine Alben, Fortschritte und nächsten Sammelziele.")}
+    {app_header("Sammlr-Zentrale", "Deine Alben, Fortschritte und nächsten Sammelziele.")}
     {consume_trophy_popup_html(favorite_album_id)}
 
     <div class="home-section-toolbar">
@@ -2521,7 +2551,7 @@ def favorit():
         <div class="card favorite-placeholder">
             <h2>Noch keine Alben</h2>
             <p>Füge zuerst ein Album hinzu, bevor du ein Favoritenalbum setzt.</p>
-            <a class="btn" href="/">Zurück zu Alben</a>
+            <a class="btn" href="/sammlung">Zurück zu Alben</a>
         </div>
         """
 
@@ -2618,7 +2648,7 @@ def alben_hinzufuegen():
 
     html = f"""
     <html><head>{style()}</head><body><div class="container">
-    <a class="btn" href="/">← Zurück</a>
+    <a class="btn" href="/sammlung">← Zurück</a>
     <h1>Album hinzufügen</h1>
     <p class="subline">Wähle ein Album aus der Sammlr-Liste.</p>
     """
@@ -2654,7 +2684,7 @@ def album_hinzufuegen(album_id):
     )
     con.commit()
     con.close()
-    return redirect("/")
+    return redirect("/sammlung")
 
 WM26_TEAM_ORDER = [
     "MEX", "RSA", "KOR", "CZE",
@@ -2978,6 +3008,7 @@ def albumseite(album_id):
     html = f"""
     <html><head>{style()}</head><body><div class="container">
     {app_header()}
+    <a class="sammlr-back-link" href="/sammlung">← Zur Sammlung</a>
     <div class="album-title-progress">
         <i id="albumProgressFill" class="chapter-progress-fill" style="width:{prozent}%;"></i>
         <span>{album['name']}</span>
@@ -4902,7 +4933,7 @@ def undo_last_action():
     data = session.get("last_action")
 
     if not data:
-        return redirect("/")
+        return redirect("/sammlung")
 
     album_id = data["album_id"]
     action = data["action"]
@@ -7321,7 +7352,7 @@ def profil():
     </div>
 
     <div class="profile-link-list">
-        <a class="profile-link-card" href="/">
+        <a class="profile-link-card" href="/sammlung">
             <strong>Meine Alben</strong>
             <span>Zur Sammlr Zentrale</span>
         </a>

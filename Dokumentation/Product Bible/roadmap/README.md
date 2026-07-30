@@ -30,3 +30,11 @@ Diese Analyse zeigt Soll-/Ist-Abweichungen und technische Abhängigkeiten. Sie i
   Stand 2026-07-28
 - [S02 – Papierlisten- und Tradeflow-Regressionstests](s02-paper-list-tradeflow-regression-tests.md),
   Stand 2026-07-28
+- [S03 – Nebenwirkungen, Security-Baseline und Phase-0-Testgate](s03-side-effect-security-test-gate.md),
+  Stand 2026-07-29
+- [S03-Abschlussbericht](sprint-reports/S03-report.md),
+  Stand 2026-07-29
+- [S04 – Home- und Sammlungsrouten trennen](s04-home-collection-routes.md),
+  Stand 2026-07-29
+- [S04-Abschlussbericht](sprint-reports/S04-report.md),
+  Stand 2026-07-29
