@@ -1,0 +1,12 @@
+<!doctype html>
+<html lang="de"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>SammlrPax · {% block title %}Entdecken{% endblock %}</title>
+<link rel="stylesheet" href="{{ url_for('static', filename='sammlrpax_journey_v1.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='pax/components.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='pax/pax.css') }}">
+<script type="module" src="{{ url_for('static', filename='pax/pax.js') }}"></script>
+</head><body class="pj pax-preview"><div class="pj-shell">
+<header class="pj-header"><a class="pj-brand" href="{{ url_for('pax.discovery') }}">sammlr<span>.</span></a><span class="pj-edition">SAMMLRPAX<br>PAX / 04b</span></header>
+<p class="pax-demo-label">Isolierte Demo · Beispieldaten · keine echten Anfragen</p>
+<main>{% block content %}{% endblock %}</main>
+</div></body></html>

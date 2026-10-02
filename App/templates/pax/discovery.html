@@ -1,0 +1,10 @@
+{% extends 'pax/base.html' %}
+{% from 'pax/_pack.html' import pack_content %}
+{% block content %}
+<div class="pj-heading pax-discovery-heading"><p class="pj-kicker">DEIN NÄCHSTER TAUSCH</p><h1>Deine Pax entdecken.</h1><p>Dein Pax antippen & entdecken.</p></div>
+<div class="pax-counter" aria-label="Fünf SammlrPax zur Auswahl">
+{% for candidate in candidates %}
+<a class="pj-pack pax-counter-pack" data-candidate="{{ candidate.id }}" data-size="{% if candidate.receive_count >= 30 %}large{% elif candidate.receive_count >= 20 %}regular{% else %}small{% endif %}" href="{{ url_for('pax.detail', candidate_id=candidate.id) }}" aria-label="SammlrPax mit {{ candidate.partner }}, {{ candidate.receive_count }} Sticker, {{ candidate.album_count }} Alben öffnen">{{ pack_content(candidate, 'Öffnen') }}</a>
+{% endfor %}
+</div>
+{% endblock %}

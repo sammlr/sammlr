@@ -1,0 +1,31 @@
+{
+  "mobile": [
+    {
+      "width": 375,
+      "direct_open": "PASS",
+      "five_visible": "PASS",
+      "overflow": false,
+      "collisions": false,
+      "posts": 0
+    },
+    {
+      "width": 390,
+      "direct_open": "PASS",
+      "five_visible": "PASS",
+      "overflow": false,
+      "collisions": false,
+      "posts": 0
+    },
+    {
+      "width": 430,
+      "direct_open": "PASS",
+      "five_visible": "PASS",
+      "overflow": false,
+      "collisions": false,
+      "posts": 0
+    }
+  ],
+  "touch": "PASS",
+  "keyboard": "PASS",
+  "reduced_motion": "PASS"
+}

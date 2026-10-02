@@ -1,0 +1,67 @@
+<html lang="de"><head><meta charset="utf-8">{{ global_head|safe }}<link rel="stylesheet" href="/static/sticker_list.css"></head><body class="s31-product-page sticker-list-page sticker-list-glassboard-page" data-sticker-list-album-id="{{ album_id }}" data-sticker-list-mixing-seed="{{ mixing_seed }}"><div class="sticker-list-shell">
+    {{ trophy_popup|safe }}
+    {{ notice|safe }}
+
+    <header class="sticker-list-header app-workflow-header s37-context-header">
+        <a class="sticker-list-logo" href="/" aria-label="Sammlr. Startseite"><img class="sticker-list-wordmark" src="/static/ceoklaue-wordmark.svg" alt="sammlr."></a>
+        <a class="sticker-list-back" href="/album/{{ album_id }}" aria-label="← Zurück zum Album"><img src="/static/ceoklaue-ui/back-arrow.svg" alt="">{{ back_label|safe }}</a>
+        <h1>{{ album_name|safe }}</h1>
+        <p class="sticker-list-stats">{{ stats|safe }}</p>
+    </header>
+
+    <main class="sticker-list-paper">
+        <section class="sticker-list-section">
+            <h2>{{ missing_heading|safe }}</h2>
+            <div class="sticker-list-grid">
+                {{ missing_html|safe }}
+                {{ missing_empty|safe }}
+            </div>
+        </section>
+
+        <section class="sticker-list-section">
+            <h2>{{ duplicate_heading|safe }}</h2>
+            <div class="sticker-list-grid">
+                {{ duplicate_html|safe }}
+                {{ duplicate_empty|safe }}
+            </div>
+        </section>
+
+    </main>
+
+    <form method="POST" action="/album/{{ album_id }}/liste/trade" id="stickerListTradeForm">
+        <div id="stickerListHiddenInputs"></div>
+    </form>
+
+    </div>
+
+    <div class="sticker-list-review-layer" id="stickerListReviewModal" data-glassboard-state="list" aria-hidden="true">
+      <div class="sticker-list-review-postits" role="dialog" aria-modal="true" aria-label="Auswahl prüfen">
+        <div class="sticker-list-glass-engraving" aria-hidden="true">{{ wordmark|safe }}</div>
+        <div class="sticker-list-review-note-groups">
+          <div class="sticker-list-review-note-column" id="stickerListReviewGetNotes">
+            <section class="trade-postit trade-postit-content trade-postit-get" id="stickerListReviewGetPostit"><h3 data-postit-heading>{{ review_get|safe }}</h3><img class="postit-underline" src="/static/ceoklaue-ui/underline.svg" alt=""><div class="sticker-list-review-codes" id="stickerListReviewGet"></div></section>
+          </div>
+          <div class="sticker-list-review-note-column" id="stickerListReviewGiveNotes">
+            <section class="trade-postit trade-postit-content trade-postit-give" id="stickerListReviewGivePostit"><h3 data-postit-heading>{{ review_give|safe }}</h3><img class="postit-underline" src="/static/ceoklaue-ui/underline.svg" alt=""><div class="sticker-list-review-codes" id="stickerListReviewGive"></div></section>
+          </div>
+        </div>
+        <section class="trade-postit trade-postit-control">
+          <h3 data-postit-heading>{{ review_title|safe }}</h3><img class="postit-underline" src="/static/ceoklaue-ui/underline.svg" alt="">
+          <p id="stickerListReviewSubtitle"></p>
+          <div class="trade-postit-actions"><button type="button" class="analog-bracket-button" id="stickerListReviewClose">{{ review_edit|safe }}</button><button type="button" class="analog-bracket-button" id="stickerListSubmit" onclick="document.getElementById('stickerListTradeForm').requestSubmit()">{{ review_confirm|safe }}</button></div>
+        </section>
+      </div>
+      <section class="sticker-list-detail-view" id="stickerListDetailView" hidden><button type="button" id="stickerListDetailClose">Zurück</button><h2>Auswahl im Detail</h2><div id="stickerListDetailContent"></div></section>
+      <aside class="sticker-list-tradebar is-idle" hidden>
+        <div class="sticker-list-trade-head">
+            <div class="sticker-list-trade-title"><strong data-postit-heading>{{ trade_heading|safe }}</strong><img class="postit-underline" src="/static/ceoklaue-ui/underline.svg" alt=""></div>
+            <button type="button" class="sticker-list-clear" id="stickerListClear">{{ clear_label|safe }}</button>
+        </div>
+        <p class="sticker-list-transfer-summary" id="stickerListSummary"></p>
+        <button type="button" class="sticker-list-check analog-bracket-button" id="stickerListReviewButton" disabled>{{ review_button|safe }}</button>
+      </aside>
+    </div>
+
+<script src="/static/sticker_list.js"></script>
+    {{ bottom_navigation|safe }}
+    </body></html>

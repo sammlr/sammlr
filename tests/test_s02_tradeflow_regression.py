@@ -192,6 +192,15 @@ class TradeflowRegressionTestCase(unittest.TestCase):
             self.assertEqual(["1"], session["last_action"]["give_codes"])
             self.assertEqual(["3"], session["last_action"]["get_codes"])
 
+        refreshed_html = self.client.get("/album/vfl/liste").get_data(as_text=True)
+        self.assertNotIn('data-list-mode="get" data-code="3"', refreshed_html)
+        self.assertEqual(
+            1,
+            refreshed_html.count('data-list-mode="give" data-code="1"'),
+        )
+        self.assertIn('<a class="sticker-list-back" href="/album/vfl"', refreshed_html)
+        self.assertIn('aria-label="← Zurück zum Album"', refreshed_html)
+
     def test_paper_list_transfer_rejects_more_than_duplicate_supply(self):
         before = self.inventory()
 
@@ -229,7 +238,7 @@ class TradeflowRegressionTestCase(unittest.TestCase):
         notifications_after = self.query_one(
             "SELECT COUNT(*) AS count FROM notifications WHERE user_id=2"
         )["count"]
-        self.assertEqual(notifications_before + 1, notifications_after)
+        self.assertEqual(notifications_before, notifications_after)
 
     def test_invalid_trade_request_is_rejected_without_state_change(self):
         before = self.inventory()
@@ -408,7 +417,8 @@ class TradeflowRegressionTestCase(unittest.TestCase):
         self.assertEqual("failed", self.trade(failed_id)["status"])
         self.assertIn("<strong>2 Trades</strong>", html)
         self.assertEqual(2, html.count("fixture_user_2"))
-        self.assertIn("15.01.2026", html)
+        self.assertIn("Zeitpunkt nicht verfügbar", html)
+        self.assertNotIn("15.01.2026", html)
 
     def test_legacy_cancelled_trade_stays_separate_from_active_and_history(self):
         self.execute(

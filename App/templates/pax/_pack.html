@@ -1,0 +1,5 @@
+{% macro pack_content(candidate, action) -%}
+<span class="pj-seal pj-seal-top" aria-hidden="true"></span>
+<span class="pj-pack-inner"><span class="pj-pack-brand">sammlr.</span><span class="pj-pack-title">Sammlr<span>Pax</span></span><span class="pj-pack-partner">mit {{ candidate.partner }}</span><span class="pj-pack-footer"><span class="pj-open-label">{{ action }} <span aria-hidden="true">↗</span></span><span><strong>{{ candidate.receive_count }} Sticker</strong><small>{{ candidate.album_count }} Alben</small></span></span></span>
+<span class="pj-seal pj-seal-bottom" aria-hidden="true"></span>
+{%- endmacro %}

@@ -1,0 +1,2 @@
+DROP INDEX idx_cb002_inventory_mutations_album_time;
+DROP TABLE historical_inventory_mutations;

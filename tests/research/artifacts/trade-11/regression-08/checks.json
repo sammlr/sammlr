@@ -1,0 +1,39 @@
+{
+  "browser": [
+    {
+      "width": 375,
+      "top3_refill_reload_slots": "PASS",
+      "receive_independent_all_keyboard_touch_motion": "PASS",
+      "whole_package_and_missing_amendment_address": "PASS",
+      "overflow": false
+    },
+    {
+      "width": 390,
+      "top3_refill_reload_slots": "PASS",
+      "receive_independent_all_keyboard_touch_motion": "PASS",
+      "whole_package_and_missing_amendment_address": "PASS",
+      "overflow": false
+    },
+    {
+      "width": 430,
+      "top3_refill_reload_slots": "PASS",
+      "receive_independent_all_keyboard_touch_motion": "PASS",
+      "whole_package_and_missing_amendment_address": "PASS",
+      "overflow": false
+    },
+    {
+      "width": 1280,
+      "top3_refill_reload_slots": "PASS",
+      "receive_independent_all_keyboard_touch_motion": "PASS",
+      "whole_package_and_missing_amendment_address": "PASS",
+      "overflow": false
+    }
+  ],
+  "model": {
+    "assertions": 90,
+    "status": "PASS"
+  },
+  "errors": [],
+  "external_or_write_requests": [],
+  "screenshots": 44
+}

@@ -1,0 +1,130 @@
+{
+  "results": [
+    {
+      "width": 375,
+      "quantity": 1,
+      "stack_parity": "PASS"
+    },
+    {
+      "width": 375,
+      "quantity": 2,
+      "stack_parity": "PASS"
+    },
+    {
+      "width": 375,
+      "quantity": 5,
+      "stack_parity": "PASS"
+    },
+    {
+      "width": 375,
+      "quantity": 6,
+      "stack_parity": "PASS"
+    },
+    {
+      "width": 375,
+      "quantity": 10,
+      "stack_parity": "PASS"
+    },
+    {
+      "width": 375,
+      "quantity": 15,
+      "stack_parity": "PASS"
+    },
+    {
+      "width": 375,
+      "quantity": 37,
+      "stack_parity": "PASS"
+    },
+    {
+      "width": 375,
+      "journeys": "PASS",
+      "overflow": false,
+      "touch_keyboard_mouse": "PASS"
+    },
+    {
+      "width": 390,
+      "quantity": 1,
+      "stack_parity": "PASS"
+    },
+    {
+      "width": 390,
+      "quantity": 2,
+      "stack_parity": "PASS"
+    },
+    {
+      "width": 390,
+      "quantity": 5,
+      "stack_parity": "PASS"
+    },
+    {
+      "width": 390,
+      "quantity": 6,
+      "stack_parity": "PASS"
+    },
+    {
+      "width": 390,
+      "quantity": 10,
+      "stack_parity": "PASS"
+    },
+    {
+      "width": 390,
+      "quantity": 15,
+      "stack_parity": "PASS"
+    },
+    {
+      "width": 390,
+      "quantity": 37,
+      "stack_parity": "PASS"
+    },
+    {
+      "width": 390,
+      "journeys": "PASS",
+      "overflow": false,
+      "touch_keyboard_mouse": "PASS"
+    },
+    {
+      "width": 430,
+      "quantity": 1,
+      "stack_parity": "PASS"
+    },
+    {
+      "width": 430,
+      "quantity": 2,
+      "stack_parity": "PASS"
+    },
+    {
+      "width": 430,
+      "quantity": 5,
+      "stack_parity": "PASS"
+    },
+    {
+      "width": 430,
+      "quantity": 6,
+      "stack_parity": "PASS"
+    },
+    {
+      "width": 430,
+      "quantity": 10,
+      "stack_parity": "PASS"
+    },
+    {
+      "width": 430,
+      "quantity": 15,
+      "stack_parity": "PASS"
+    },
+    {
+      "width": 430,
+      "quantity": 37,
+      "stack_parity": "PASS"
+    },
+    {
+      "width": 430,
+      "journeys": "PASS",
+      "overflow": false,
+      "touch_keyboard_mouse": "PASS"
+    }
+  ],
+  "errors": [],
+  "mutations": [],
+  "external_requests": []
+}

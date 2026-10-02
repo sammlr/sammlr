@@ -1,0 +1,1696 @@
+/*
+ * Stickerliste — accepted/frozen feature surface.
+ * Loaded only by App/templates/sticker_list.html.
+ */
+
+/* Stickerliste: analoger Schmierzettel-Modus */
+.sticker-list-page{
+    min-height:100vh;
+    min-height:100dvh;
+    --sammlr-bottom-layout-gap:var(--sammlr-space-3, 12px);
+    --sammlr-bottom-nav-space:calc(
+        var(--sammlr-navigation-height, 80px)
+        + var(--sammlr-space-6, 24px)
+        + env(safe-area-inset-bottom)
+    );
+    --sammlr-trade-dock-height:38dvh;
+    --sammlr-bottom-content-space:calc(
+        var(--sammlr-bottom-nav-space)
+        + var(--sammlr-trade-dock-height)
+        + var(--sammlr-bottom-layout-gap)
+        + var(--sammlr-bottom-layout-gap)
+    );
+    background:#f5eedf;
+    color:#251f1a;
+}
+
+.sticker-list-shell{
+    position:relative;
+    min-height:100vh;
+    padding:14px 14px 176px;
+    background:
+        radial-gradient(circle at 14px 18px, rgba(37,31,26,.035) 0 1px, transparent 1.5px),
+        linear-gradient(rgba(79,126,161,.16) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(79,126,161,.12) 1px, transparent 1px),
+        #f5eedf;
+    background-size:34px 34px, 28px 28px, 28px 28px, auto;
+}
+
+.sticker-list-back{
+    display:inline-flex;
+    margin:0 0 12px;
+    color:#35606f;
+    font-size:14px;
+    font-weight:900;
+    text-decoration:none;
+}
+
+.sticker-list-notice{
+    margin:0 0 14px;
+    padding:12px 14px;
+    border:2px solid rgba(47,95,71,.24);
+    border-radius:8px;
+    background:rgba(244,255,238,.82);
+    color:#234a34;
+    font-weight:900;
+}
+
+.sticker-list-header{
+    margin-bottom:14px;
+}
+
+.sticker-list-logo{
+    position:relative;
+    display:inline-flex;
+    align-items:flex-end;
+    margin:0 0 8px;
+    color:#17110d;
+    font-family:"Bradley Hand", "Marker Felt", Arial, sans-serif;
+    font-size:46px;
+    font-weight:950;
+    line-height:1;
+    letter-spacing:0;
+    text-decoration:none;
+    transform:rotate(-2deg);
+}
+
+.sticker-list-logo span{
+    width:13px;
+    height:12px;
+    margin:0 0 5px 4px;
+    border-radius:57% 43% 52% 48%;
+    background:#7C3AED;
+    box-shadow:
+        1px 0 0 rgba(93,47,134,.45),
+        -1px 1px 0 rgba(93,47,134,.26);
+    transform:rotate(-11deg);
+}
+
+.sticker-list-header h1{
+    margin:0 0 8px;
+    color:#241c17;
+    font-family:"Bradley Hand", "Marker Felt", Arial, sans-serif;
+    font-size:32px;
+    line-height:1;
+    letter-spacing:0;
+}
+
+.sticker-list-stats{
+    margin:0;
+    color:#3f3931;
+    font-family:"Bradley Hand", "Marker Felt", Arial, sans-serif;
+    font-size:18px;
+    font-weight:950;
+    letter-spacing:.01em;
+}
+
+.sticker-list-paper{
+    display:grid;
+    gap:22px;
+    padding:14px 0;
+    border-top:2px solid rgba(37,31,26,.10);
+    border-bottom:2px solid rgba(37,31,26,.08);
+    transform:rotate(-.15deg);
+}
+
+.sticker-list-section h2{
+    margin:0 0 8px;
+    color:#7b2e34;
+    font-family:"Bradley Hand", "Marker Felt", Arial, sans-serif;
+    font-size:23px;
+    line-height:1;
+    text-transform:uppercase;
+    letter-spacing:0;
+}
+
+.sticker-list-grid{
+    display:flex;
+    flex-wrap:wrap;
+    align-items:baseline;
+    column-gap:8px;
+    row-gap:7px;
+}
+
+.sticker-list-item{
+    position:relative;
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    min-height:0;
+    padding:2px 3px;
+    border:0;
+    border-radius:0;
+    background:transparent;
+    color:#211a15;
+    font-family:"Bradley Hand", "Marker Felt", Arial, sans-serif;
+    font-size:21px;
+    line-height:1.18;
+    font-weight:950;
+    letter-spacing:.025em;
+    text-align:center;
+    touch-action:manipulation;
+    transform:rotate(-.25deg);
+}
+
+.sticker-list-comma{
+    color:rgba(33,26,21,.62);
+    font-family:Arial, sans-serif;
+    font-size:16px;
+    font-weight:800;
+    margin-left:-5px;
+}
+
+.sticker-list-item:nth-of-type(2n){
+    transform:rotate(.2deg);
+}
+
+.sticker-list-item:nth-of-type(3n){
+    transform:rotate(-.45deg);
+}
+
+.sticker-list-item span:first-child{
+    position:relative;
+    z-index:1;
+}
+
+.sticker-list-item[data-list-mode="get"].selected::after{
+    content:"";
+    position:absolute;
+    inset:-5px -7px -4px -6px;
+    border:3px solid rgba(36,138,71,.62);
+    border-radius:48% 54% 46% 56%;
+    transform:rotate(-7deg);
+    pointer-events:none;
+}
+
+.sticker-list-item[data-list-mode="get"].selected::before{
+    content:"";
+    position:absolute;
+    inset:-3px -5px -6px -3px;
+    border:2px solid rgba(36,138,71,.36);
+    border-radius:54% 46% 56% 44%;
+    transform:rotate(5deg);
+    pointer-events:none;
+}
+
+.sticker-list-item[data-list-mode="give"].selected::before,
+.sticker-list-item[data-list-mode="give"].selected::after{
+    content:"";
+    position:absolute;
+    left:-4px;
+    right:-4px;
+    top:50%;
+    height:3px;
+    border-radius:999px;
+    background:rgba(200,52,52,.62);
+    pointer-events:none;
+}
+
+.sticker-list-item[data-list-mode="give"].selected::before{
+    transform:translateY(-50%) rotate(17deg);
+}
+
+.sticker-list-item[data-list-mode="give"].selected::after{
+    transform:translateY(-50%) rotate(-15deg);
+}
+
+.sticker-list-empty{
+    margin:4px 0 0;
+    color:#71665b;
+    font-weight:800;
+}
+
+.sticker-list-tradebar{
+    position:fixed;
+    right:10px;
+    bottom:10px;
+    left:10px;
+    z-index:50;
+    display:flex;
+    flex-direction:column;
+    max-height:38vh;
+    padding:12px;
+    border:2px solid rgba(37,31,26,.16);
+    border-radius:10px;
+    background:rgba(255,250,235,.96);
+    box-shadow:0 16px 38px rgba(46,36,25,.18);
+}
+
+.sticker-list-trade-head{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:12px;
+    margin-bottom:10px;
+}
+
+.sticker-list-trade-head strong{
+    font-size:16px;
+    font-weight:950;
+}
+
+.sticker-list-trade-head button{
+    border:0;
+    background:transparent;
+    color:#6d5f51;
+    font-weight:900;
+}
+
+.sticker-list-trade-columns{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:10px;
+    min-height:0;
+    overflow:hidden;
+    margin-bottom:10px;
+}
+
+.sticker-list-trade-columns > div{
+    min-height:0;
+}
+
+.sticker-list-green,
+.sticker-list-red{
+    display:block;
+    margin-bottom:4px;
+    font-size:13px;
+    font-weight:950;
+}
+
+.sticker-list-green{color:#248a47;}
+.sticker-list-red{color:#c83434;}
+
+.sticker-list-green strong,
+.sticker-list-red strong{
+    color:inherit;
+}
+
+.sticker-list-selection{
+    min-height:38px;
+    max-height:92px;
+    overflow-y:auto;
+    padding:7px 8px;
+    border-radius:6px;
+    background:rgba(255,255,255,.42);
+    font-size:15px;
+    line-height:1.35;
+    font-weight:900;
+}
+
+.sticker-list-check,
+.sticker-list-primary,
+.sticker-list-secondary{
+    width:100%;
+    min-height:44px;
+    border:0;
+    border-radius:8px;
+    font-size:15px;
+    font-weight:950;
+}
+
+.sticker-list-check{
+    position:sticky;
+    bottom:0;
+    flex:0 0 auto;
+}
+
+.sticker-list-check,
+.sticker-list-primary{
+    background:#253f33;
+    color:white;
+}
+
+.sticker-list-check:disabled,
+.sticker-list-primary:disabled{
+    opacity:.45;
+}
+
+.sticker-list-secondary{
+    background:#efe4d2;
+    color:#332820;
+}
+
+.sticker-list-modal{
+    position:fixed;
+    inset:0;
+    z-index:80;
+    align-items:flex-end;
+    justify-content:center;
+    padding:14px;
+    background:rgba(28,22,16,.34);
+}
+
+.sticker-list-modal-card{
+    width:min(560px, 100%);
+    padding:18px;
+    border-radius:12px;
+    background:#fff7e5;
+    box-shadow:0 24px 70px rgba(22,16,10,.28);
+}
+
+.sticker-list-modal-card h2{
+    margin:0 0 14px;
+    font-family:"Bradley Hand", "Marker Felt", Arial, sans-serif;
+    font-size:28px;
+}
+
+.sticker-list-review-grid{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:12px;
+    margin-bottom:14px;
+}
+
+.sticker-list-review-grid h3{
+    margin:0 0 6px;
+    font-size:14px;
+    text-transform:uppercase;
+}
+
+.sticker-list-error{
+    margin:0 0 12px;
+    color:#9d2b2b;
+    font-weight:900;
+}
+
+.sticker-list-modal-actions{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:10px;
+}
+
+@media (min-width:720px){
+    .sticker-list-shell{
+        padding:28px max(24px, calc((100vw - 760px) / 2)) 180px;
+    }
+
+    .sticker-list-tradebar{
+        right:50%;
+        left:auto;
+        width:560px;
+        max-height:320px;
+        transform:translateX(50%);
+    }
+
+    .sticker-list-selection{
+        max-height:180px;
+    }
+}
+
+/* Stickerliste: finaler Papiermodus */
+.sticker-list-shell{
+    padding-bottom:var(--sammlr-bottom-content-space) !important;
+}
+
+.sticker-list-back{
+    display:block !important;
+    width:max-content;
+    margin:-2px 0 14px 4px !important;
+    color:#7C3AED !important;
+    font-family:"Bradley Hand", "Marker Felt", Arial, sans-serif !important;
+    font-size:15px !important;
+    font-weight:950 !important;
+    transform:rotate(-1deg);
+}
+
+.sticker-list-header h1,
+.sticker-list-stats,
+.sticker-list-section h2,
+.sticker-list-trade-head strong,
+.sticker-list-review-grid h3{
+    font-family:"Bradley Hand", "Marker Felt", Arial, sans-serif !important;
+}
+
+.sticker-list-paper{
+    gap:28px !important;
+    border-top:2px solid rgba(93,47,134,.16) !important;
+    border-bottom:0 !important;
+}
+
+.sticker-list-section{
+    padding:0 0 18px;
+    border-bottom:1px dashed rgba(93,47,134,.22);
+}
+
+.sticker-list-section h2{
+    color:#7C3AED !important;
+    font-size:25px !important;
+    text-transform:none !important;
+}
+
+.sticker-list-section h2::before{
+    content:none !important;
+}
+
+.sticker-list-tradebar{
+    position:fixed !important;
+    right:12px !important;
+    bottom:calc(
+        var(--sammlr-bottom-nav-space)
+        + var(--sammlr-bottom-layout-gap)
+    ) !important;
+    left:12px !important;
+    z-index:50 !important;
+    max-height:min(
+        38vh,
+        calc(100vh - var(--sammlr-bottom-nav-space) - var(--sammlr-bottom-layout-gap) - var(--sammlr-bottom-layout-gap))
+    ) !important;
+    max-height:min(
+        38dvh,
+        calc(100dvh - var(--sammlr-bottom-nav-space) - var(--sammlr-bottom-layout-gap) - var(--sammlr-bottom-layout-gap))
+    ) !important;
+    overflow-y:auto !important;
+    width:auto !important;
+    transform:none !important;
+    padding:12px !important;
+    border:1px dashed rgba(93,47,134,.34) !important;
+    border-radius:10px !important;
+    background:rgba(255,250,235,.94) !important;
+    box-shadow:0 12px 28px rgba(46,36,25,.12) !important;
+    backdrop-filter:blur(8px);
+}
+
+.sticker-list-trade-head{
+    margin-bottom:8px !important;
+}
+
+.sticker-list-trade-head strong{
+    color:#7C3AED;
+    font-size:25px !important;
+    line-height:1;
+    transform:rotate(-.3deg);
+}
+
+.sticker-list-trade-head strong::before{
+    content:none !important;
+}
+
+.sticker-list-trade-head button{
+    color:#7C3AED !important;
+    font-family:"Bradley Hand", "Marker Felt", Arial, sans-serif !important;
+    font-size:16px;
+}
+
+.sticker-list-trade-columns{
+    gap:18px !important;
+    margin-bottom:12px !important;
+    overflow:hidden !important;
+    min-height:0;
+}
+
+.sticker-list-green,
+.sticker-list-red{
+    color:#7C3AED !important;
+    font-family:"Bradley Hand", "Marker Felt", Arial, sans-serif;
+    font-size:16px !important;
+}
+
+.sticker-list-selection{
+    min-height:28px !important;
+    max-height:96px !important;
+    padding:5px 0 !important;
+    border-radius:0 !important;
+    background:transparent !important;
+    border-top:1px solid rgba(93,47,134,.16);
+    color:#251f1a;
+    font-family:"Bradley Hand", "Marker Felt", Arial, sans-serif;
+}
+
+.sticker-list-check,
+.sticker-list-primary{
+    background:#7C3AED !important;
+}
+
+.sticker-list-secondary{
+    color:#7C3AED !important;
+}
+
+.sticker-list-item[data-list-mode="get"].selected::after,
+.sticker-list-item[data-list-mode="get"].selected::before{
+    border-color:rgba(93,47,134,.56) !important;
+}
+
+.sticker-list-item[data-list-mode="give"].selected::before,
+.sticker-list-item[data-list-mode="give"].selected::after{
+    background:rgba(93,47,134,.62) !important;
+}
+
+@media (max-width:640px){
+    .sticker-list-trade-columns{
+        grid-template-columns:1fr !important;
+        gap:12px !important;
+    }
+}
+
+@media (min-width:720px){
+    .sticker-list-tradebar{
+        right:50% !important;
+        left:auto !important;
+        width:560px !important;
+        transform:translateX(50%) !important;
+        max-height:min(
+            320px,
+            calc(100dvh - var(--sammlr-bottom-nav-space) - var(--sammlr-bottom-layout-gap) - var(--sammlr-bottom-layout-gap))
+        ) !important;
+    }
+}
+
+.sticker-list-paper::after{
+    content:"sammlr.";
+    position:absolute;
+    right:18px;
+    bottom:22px;
+    color:#17110d;
+    font-family:"Bradley Hand", "Marker Felt", Arial, sans-serif;
+    font-size:54px;
+    font-weight:950;
+    line-height:1;
+    opacity:.035;
+    transform:rotate(-8deg);
+    pointer-events:none;
+}
+
+.sticker-list-paper{
+    position:relative;
+}
+
+.sticker-list-team-break{
+    flex-basis:100%;
+    height:13px;
+}
+
+.sticker-list-transfer-summary{
+    margin:0 0 12px;
+    color:#7C3AED;
+    font-family:"Bradley Hand", "Marker Felt", Arial, sans-serif;
+    font-size:18px;
+    line-height:1.1;
+    font-weight:950;
+}
+
+.sticker-list-page .sammlr-feedback{
+    border-radius:12px;
+    background:
+        radial-gradient(circle at 14px 18px, rgba(37,31,26,.026) 0 1px, transparent 1.5px),
+        linear-gradient(rgba(79,126,161,.10) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(79,126,161,.08) 1px, transparent 1px),
+        rgba(255,250,235,.96);
+    background-size:34px 34px, 28px 28px, 28px 28px, auto;
+    box-shadow:0 12px 26px rgba(46,36,25,.11);
+}
+
+.sticker-list-page .sammlr-feedback strong,
+.sticker-list-page .sammlr-confirm-title,
+.sticker-list-page .sammlr-confirm-subtitle,
+.sticker-list-page .sammlr-confirm-panel h3,
+.sticker-list-page .sammlr-confirm-content .pending-review-row > strong{
+    font-family:"Bradley Hand", "Marker Felt", Arial, sans-serif !important;
+}
+
+.sticker-list-page .sammlr-feedback strong{
+    font-size:20px;
+    line-height:1;
+}
+
+.sticker-list-page .sammlr-confirm-card{
+    background:#fffaf0 !important;
+    box-shadow:0 24px 70px rgba(22,16,10,.26) !important;
+}
+
+.sticker-list-page .sammlr-confirm-title{
+    font-size:28px !important;
+    line-height:1 !important;
+}
+
+.sticker-list-page .sammlr-confirm-subtitle{
+    color:#7C3AED !important;
+    font-size:18px !important;
+    line-height:1 !important;
+    font-weight:950 !important;
+}
+
+.sticker-list-page .sammlr-confirm-panel{
+    border-style:dashed;
+    background:rgba(255,255,255,.36);
+}
+
+.sticker-list-page .sammlr-confirm-panel h3{
+    font-size:18px !important;
+    line-height:1 !important;
+}
+
+.sticker-list-page .sammlr-confirm-content .pending-review-row > strong{
+    font-size:17px;
+}
+
+.sticker-list-page .sammlr-confirm-actions{
+    background:#fffaf0 !important;
+}
+
+/* Stickerliste: digitaler Sammlr-Tauschzettel */
+.sticker-list-page{
+    background:#fcfaf6;
+    color:#18151b;
+}
+
+.sticker-list-page .sticker-list-shell{
+    box-sizing:border-box;
+    width:100%;
+    overflow-x:hidden;
+    padding:18px 14px var(--sammlr-bottom-content-space) !important;
+    background:
+        linear-gradient(rgba(93,47,134,.13) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(93,47,134,.13) 1px, transparent 1px),
+        linear-gradient(rgba(93,47,134,.075) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(93,47,134,.075) 1px, transparent 1px),
+        #fcfaf6;
+    background-size:140px 140px, 140px 140px, 28px 28px, 28px 28px, auto;
+}
+
+.sticker-list-page .sticker-list-header{
+    display:block !important;
+    margin:0 0 12px !important;
+    padding:0 !important;
+    border:0 !important;
+    border-radius:0 !important;
+    background:transparent !important;
+    box-shadow:none !important;
+    color:#18151b !important;
+}
+
+.sticker-list-page .sticker-list-logo{
+    margin:0 0 9px !important;
+    color:#18151b;
+}
+
+.sticker-list-page .sticker-list-back{
+    display:inline-flex !important;
+    align-items:center;
+    gap:9px;
+    margin:0 0 13px 3px !important;
+}
+
+.sticker-list-page .sticker-list-back>img{
+    width:34px;
+    height:24px;
+    object-fit:contain;
+}
+
+.sticker-list-page .sticker-list-header h1{
+    margin:0 0 7px !important;
+    color:#7C3AED !important;
+    font-size:31px !important;
+    line-height:1.02 !important;
+}
+
+.sticker-list-page .sticker-list-stats{
+    display:flex;
+    flex-wrap:wrap;
+    align-items:center;
+    gap:7px;
+    color:#27222b !important;
+    font-size:17px !important;
+}
+
+.sticker-list-page .ceoklaue-middle-dot{
+    display:inline-block;
+    width:8px;
+    height:8px;
+    object-fit:contain;
+    flex:0 0 auto;
+}
+
+.sticker-list-page .sticker-list-paper{
+    gap:30px !important;
+    padding:16px 0 0 !important;
+    border-top:2px solid rgba(93,47,134,.22) !important;
+    background:transparent !important;
+    transform:none !important;
+}
+
+.sticker-list-page .sticker-list-section{
+    padding-bottom:20px;
+    border-bottom:1px dashed rgba(93,47,134,.26);
+}
+
+.sticker-list-page .sticker-list-section h2{
+    margin-bottom:11px !important;
+    font-size:24px !important;
+}
+
+.sticker-list-page .sticker-list-grid{
+    column-gap:8px;
+    row-gap:8px;
+}
+
+.sticker-list-page .sticker-list-item{
+    color:#171419;
+    font-size:21px;
+    font-weight:950;
+    text-shadow:.25px .35px 0 rgba(0,0,0,.34);
+}
+
+.sticker-list-page .sticker-list-comma{
+    color:rgba(23,20,25,.66);
+}
+
+.sticker-list-page .sticker-list-item[data-list-mode="get"].selected::before,
+.sticker-list-page .sticker-list-item[data-list-mode="get"].selected::after,
+.sticker-list-page .sticker-list-item[data-list-mode="give"].selected::before,
+.sticker-list-page .sticker-list-item[data-list-mode="give"].selected::after{
+    animation:stickerListInkDraw 150ms ease-out both;
+}
+
+.sticker-list-page .sticker-list-item[data-list-mode="give"].selected::after{
+    animation-delay:24ms;
+}
+
+@keyframes stickerListInkDraw{
+    from{
+        opacity:.28;
+        clip-path:inset(0 100% 0 0);
+    }
+    to{
+        opacity:1;
+        clip-path:inset(-10px -10px -10px -10px);
+    }
+}
+
+.sticker-list-page .sticker-list-tradebar{
+    border:1px solid rgba(93,47,134,.25) !important;
+    border-radius:12px !important;
+    background:
+        linear-gradient(rgba(93,47,134,.055) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(93,47,134,.055) 1px, transparent 1px),
+        rgba(253,250,244,.97) !important;
+    background-size:28px 28px, 28px 28px, auto !important;
+    box-shadow:0 10px 26px rgba(49,32,62,.12) !important;
+    transition:border-color 140ms ease, box-shadow 140ms ease, padding 140ms ease;
+}
+.sticker-list-page .sticker-list-tradebar[hidden],
+.sticker-list-page .trade-postit[hidden],
+.sticker-list-page .sticker-list-detail-view[hidden],
+.sticker-list-page .sticker-list-review-postits[hidden]{display:none !important}
+
+.sticker-list-page .sticker-list-tradebar.is-idle{
+    padding:9px 12px !important;
+    border-style:dashed !important;
+    box-shadow:0 7px 18px rgba(49,32,62,.08) !important;
+}
+
+.sticker-list-page .sticker-list-tradebar.is-active{
+    border-color:rgba(124,58,237,.48) !important;
+    box-shadow:0 14px 34px rgba(93,47,134,.18) !important;
+}
+
+.sticker-list-page .sticker-list-trade-head{
+    margin-bottom:5px !important;
+}
+
+.sticker-list-page .sticker-list-trade-head strong{
+    font-size:20px !important;
+}
+
+.sticker-list-page .sticker-list-tradebar.is-idle .sticker-list-trade-head strong{
+    color:#655c69;
+    font-size:17px !important;
+}
+
+.sticker-list-page .sticker-list-tradebar.is-idle .sticker-list-trade-head button{
+    opacity:.52;
+}
+
+.sticker-list-page .sticker-list-transfer-summary{
+    margin:0 0 9px;
+    font-size:17px;
+}
+
+.sticker-list-page .sticker-list-tradebar.is-idle .sticker-list-transfer-summary{
+    margin-bottom:0;
+    color:#655c69;
+    font-size:14px;
+}
+
+.sticker-list-page .sticker-list-check{
+    max-height:52px;
+    overflow:hidden;
+    transition:max-height 140ms ease, min-height 140ms ease, opacity 120ms ease;
+}
+
+.sticker-list-page .sticker-list-tradebar.is-idle .sticker-list-check{
+    min-height:0 !important;
+    max-height:0;
+    padding-block:0;
+    opacity:0;
+    pointer-events:none;
+}
+
+.sticker-list-page .sticker-list-modal{
+    background:rgba(28,22,32,.48) !important;
+}
+
+.sticker-list-page .sticker-list-modal .sammlr-confirm-card{
+    border:1px solid rgba(93,47,134,.18) !important;
+    background:#ffffff !important;
+    box-shadow:0 24px 70px rgba(24,14,32,.28) !important;
+}
+
+.sticker-list-page .sticker-list-modal .sammlr-confirm-title,
+.sticker-list-page .sticker-list-modal .sammlr-confirm-subtitle,
+.sticker-list-page .sticker-list-modal .sammlr-confirm-panel h3,
+.sticker-list-page .sticker-list-modal .sammlr-confirm-content .pending-review-row > strong{
+    font-family:Arial, sans-serif !important;
+    transform:none !important;
+}
+
+.sticker-list-page .sticker-list-modal .sammlr-confirm-title{
+    font-size:22px !important;
+    line-height:1.1 !important;
+}
+
+.sticker-list-page .sticker-list-modal .sammlr-confirm-subtitle{
+    color:#6b6274 !important;
+    font-size:14px !important;
+    line-height:1.2 !important;
+}
+
+.sticker-list-page .sticker-list-modal .sammlr-confirm-panel{
+    border-style:solid;
+    background:#faf8fc;
+}
+
+.sticker-list-page .sticker-list-modal .sammlr-confirm-actions{
+    background:#ffffff !important;
+}
+
+@media (prefers-reduced-motion:reduce){
+    .sticker-list-page .sticker-list-item.selected::before,
+    .sticker-list-page .sticker-list-item.selected::after,
+    .sticker-list-page .sticker-list-tradebar,
+    .sticker-list-page .sticker-list-check{
+        animation:none !important;
+        transition:none !important;
+    }
+}
+
+@media (min-width:720px){
+    .sticker-list-page .sticker-list-shell{
+        padding:28px max(24px, calc((100vw - 760px) / 2)) var(--sammlr-bottom-content-space) !important;
+    }
+}
+
+/* CEOKlaue Final — drei lokale Alternates nur auf dem digitalen Tauschzettel */
+@font-face{
+    font-family:"CEOKlaue Final Alt 1";
+    src:url("/static/fonts/ceoklaue-final-alt1.woff2") format("woff2");
+    font-style:normal;
+    font-weight:400;
+    font-display:swap;
+}
+@font-face{
+    font-family:"CEOKlaue Final Alt 2";
+    src:url("/static/fonts/ceoklaue-final-alt2.woff2") format("woff2");
+    font-style:normal;
+    font-weight:400;
+    font-display:swap;
+}
+@font-face{
+    font-family:"CEOKlaue Final Alt 3";
+    src:url("/static/fonts/ceoklaue-final-alt3.woff2") format("woff2");
+    font-style:normal;
+    font-weight:400;
+    font-display:swap;
+}
+
+.sticker-list-page{
+    --ceoklaue-grid-size:24px;
+    --ceoklaue-paper:#f5f3ed;
+    --ceoklaue-grid:rgba(105,91,115,.19);
+    margin:0 !important;
+    padding:0 !important;
+    background:var(--ceoklaue-paper) !important;
+}
+
+.sticker-list-page .sticker-list-shell{
+    padding-top:48px !important;
+    background:
+        linear-gradient(var(--ceoklaue-grid) 1px, transparent 1px),
+        linear-gradient(90deg, var(--ceoklaue-grid) 1px, transparent 1px),
+        var(--ceoklaue-paper) !important;
+    background-size:var(--ceoklaue-grid-size) var(--ceoklaue-grid-size) !important;
+    background-position:0 0 !important;
+}
+
+.sticker-list-page .sticker-list-header,
+.sticker-list-page .sticker-list-paper,
+.sticker-list-page .sticker-list-tradebar{
+    font-family:"CEOKlaue Final Alt 1", Arial, sans-serif;
+    font-weight:400;
+}
+
+.sticker-list-page .sticker-list-header{
+    position:static !important;
+    top:auto !important;
+    margin-bottom:0 !important;
+    padding:0 !important;
+    background:transparent !important;
+    box-shadow:none !important;
+    -webkit-backdrop-filter:none !important;
+    backdrop-filter:none !important;
+}
+
+.sticker-list-page .sticker-list-logo,
+.sticker-list-page .sticker-list-back,
+.sticker-list-page .sticker-list-header h1,
+.sticker-list-page .sticker-list-stats,
+.sticker-list-page .sticker-list-section h2,
+.sticker-list-page .sticker-list-item,
+.sticker-list-page .sticker-list-empty,
+.sticker-list-page .sticker-list-trade-head strong,
+.sticker-list-page .sticker-list-trade-head button,
+.sticker-list-page .sticker-list-transfer-summary{
+    font-family:"CEOKlaue Final Alt 1", Arial, sans-serif !important;
+    font-weight:400 !important;
+    letter-spacing:.015em;
+}
+
+.sticker-list-page .ceoklaue-run{
+    white-space:normal;
+}
+
+.sticker-list-page .ceoklaue-glyph,
+.sticker-list-page .ceoklaue-space,
+.sticker-list-page .ceoklaue-fallback{
+    display:inline;
+    font-style:normal;
+    font-weight:400;
+    letter-spacing:0;
+}
+
+.sticker-list-page .ceoklaue-alt-1{font-family:"CEOKlaue Final Alt 1", Arial, sans-serif !important;}
+.sticker-list-page .ceoklaue-alt-2{font-family:"CEOKlaue Final Alt 2", Arial, sans-serif !important;}
+.sticker-list-page .ceoklaue-alt-3{font-family:"CEOKlaue Final Alt 3", Arial, sans-serif !important;}
+.sticker-list-page .ceoklaue-fallback{font-family:Arial, sans-serif !important;}
+
+.sticker-list-page .sticker-list-logo{
+    display:block;
+    width:max-content;
+    margin:0 0 24px !important;
+    line-height:0;
+    transform:none !important;
+}
+
+.sticker-list-page .sticker-list-wordmark{
+    display:block;
+    width:200px;
+    max-width:52vw;
+    height:auto;
+    margin:0;
+    border-radius:0;
+    color:#171419;
+    background:transparent;
+    box-shadow:none;
+    transform:none;
+}
+
+.sticker-list-page .sticker-list-logo span{
+    width:auto;
+    height:auto;
+    margin:0;
+    border-radius:0;
+    background:transparent;
+    box-shadow:none;
+    transform:none;
+}
+
+.sticker-list-page .sticker-list-back{
+    margin:0 0 24px !important;
+    color:#34273e !important;
+    font-size:20px !important;
+    line-height:24px;
+    transform:none !important;
+}
+
+.sticker-list-page .sticker-list-header h1{
+    color:#7C3AED !important;
+    font-size:34px !important;
+    line-height:48px !important;
+    margin-bottom:0 !important;
+    overflow-wrap:anywhere;
+}
+
+.sticker-list-page .sticker-list-stats{
+    color:#2b2530 !important;
+    font-size:19px !important;
+    line-height:24px;
+    margin-bottom:24px !important;
+}
+
+.sticker-list-page .sticker-list-paper{
+    gap:48px !important;
+    padding-top:0 !important;
+    border:0 !important;
+}
+
+.sticker-list-page .sticker-list-paper::after{
+    content:none !important;
+}
+
+.sticker-list-page .sticker-list-section{
+    padding-bottom:0 !important;
+    border:0 !important;
+}
+
+.sticker-list-page .sticker-list-section:last-child{
+    border-bottom:0 !important;
+}
+
+.sticker-list-page .sticker-list-section h2{
+    color:#7C3AED !important;
+    font-size:28px !important;
+    line-height:48px;
+    margin-bottom:0 !important;
+}
+
+.sticker-list-page .sticker-list-grid{
+    align-items:baseline;
+    column-gap:7px;
+    row-gap:0;
+}
+
+.sticker-list-page .sticker-list-entry{
+    display:inline-flex;
+    flex:0 0 auto;
+    align-items:baseline;
+    min-width:0;
+    white-space:nowrap;
+}
+
+.sticker-list-page .sticker-list-item{
+    max-width:100%;
+    color:#171419;
+    font-size:23px;
+    line-height:24px;
+    text-shadow:none;
+    transform:none !important;
+    overflow-wrap:anywhere;
+}
+
+.sticker-list-page .sticker-list-comma{
+    display:inline-flex;
+    align-items:baseline;
+    color:#171419;
+    font-family:"CEOKlaue Final Alt 1", Arial, sans-serif;
+    font-size:30px;
+    font-weight:400;
+    line-height:24px;
+    opacity:1;
+    transform:translateY(2px);
+}
+
+.sticker-list-page .sticker-list-item.selected::before,
+.sticker-list-page .sticker-list-item.selected::after{
+    content:none !important;
+    animation:none !important;
+}
+
+.sticker-list-page .sticker-list-item .ceoklaue-run{
+    position:relative;
+    z-index:2;
+    white-space:nowrap;
+}
+
+.sticker-list-page .sticker-selection-marker{
+    position:absolute;
+    top:50%;
+    left:50%;
+    z-index:1;
+    display:block;
+    width:clamp(48px, calc(100% + 20px), 104px);
+    height:auto;
+    max-width:none;
+    opacity:0;
+    translate:-50% -50%;
+    pointer-events:none;
+    transition:none;
+}
+
+.sticker-list-page .sticker-selection-marker .marker-draw{
+    fill:none;
+    stroke:#fff;
+    stroke-width:250;
+    stroke-linecap:round;
+    stroke-linejoin:round;
+    stroke-dasharray:1;
+    stroke-dashoffset:1;
+}
+
+.sticker-list-page .sticker-selection-marker .marker-draw-cross{stroke-width:230}
+.sticker-list-page .sticker-list-item.selected:not(.is-restored) .marker-draw-one{
+    animation:ceoklaue-marker-draw .17s linear forwards;
+}
+.sticker-list-page .sticker-list-item.selected:not(.is-restored) .marker-draw-two{
+    animation:ceoklaue-marker-draw .17s linear .17s forwards;
+}
+.sticker-list-page .sticker-list-item.selected.is-restored .marker-draw{stroke-dashoffset:0}
+@keyframes ceoklaue-marker-draw{to{stroke-dashoffset:0}}
+
+.sticker-list-page .sticker-list-item[data-list-mode="get"] .sticker-selection-marker{
+    width:clamp(51px, calc(100% + 25px), 111px);
+    opacity:0;
+}
+
+.sticker-list-page .sticker-list-item[data-list-mode="give"] .sticker-selection-marker{
+    width:clamp(46px, calc(100% + 16px), 98px);
+}
+
+.sticker-list-page .sticker-list-item.selected .sticker-selection-marker{
+    opacity:.72;
+}
+
+.sticker-list-page .sticker-list-item[data-list-mode="get"].selected .sticker-selection-marker{
+    opacity:.45;
+}
+
+.sticker-list-glassboard-page .sticker-list-tradebar{
+    position:absolute !important;
+    top:calc(100% - 24px) !important;
+    left:69% !important;
+    right:auto !important;
+    bottom:auto !important;
+    z-index:4 !important;
+    width:224px !important;
+    height:224px !important;
+    min-width:224px;
+    min-height:224px;
+    max-width:224px;
+    max-height:224px;
+    box-sizing:border-box;
+    padding:10px 12px 8px !important;
+    transform:translateX(-50%) rotate(-1.05deg) !important;
+    border:0 !important;
+    border-radius:0 !important;
+    background:transparent !important;
+    box-shadow:0 8px 18px rgba(42,32,22,.16) !important;
+    animation:none !important;
+    isolation:isolate;
+    pointer-events:auto;
+    transition:top 400ms cubic-bezier(.22,.76,.28,1);
+}
+
+.sticker-list-glassboard-page .sticker-list-review-layer.is-review .sticker-list-tradebar{
+    top:calc(100% + 2px) !important;
+}
+
+.sticker-list-glassboard-page .sticker-list-tradebar::before,
+.sticker-list-glassboard-page .sticker-list-tradebar::after{
+    content:"";
+    position:absolute;
+    left:0;
+    right:0;
+    z-index:-1;
+    pointer-events:none;
+}
+
+.sticker-list-glassboard-page .sticker-list-tradebar::before{
+    top:0;
+    height:24px;
+    background:rgba(245,221,98,.99);
+}
+
+.sticker-list-glassboard-page .sticker-list-tradebar::after{
+    top:24px;
+    bottom:0;
+    background:rgba(245,221,98,.95);
+}
+
+.sticker-list-glassboard-page .sticker-list-tradebar.is-idle{
+    padding:9px 12px !important;
+    border-style:solid !important;
+}
+
+.sticker-list-glassboard-page .sticker-list-tradebar.is-idle,
+.sticker-list-glassboard-page .sticker-list-tradebar.is-active{
+    box-shadow:0 7px 17px rgba(42,32,22,.14) !important;
+}
+
+.sticker-list-glassboard-page .sticker-list-tradebar,
+.sticker-list-glassboard-page .sticker-list-tradebar strong,
+.sticker-list-glassboard-page .sticker-list-tradebar button,
+.sticker-list-glassboard-page .sticker-list-tradebar .sticker-list-transfer-summary{
+    color:#211d22 !important;
+    font-size:20px !important;
+    line-height:24px !important;
+    font-weight:400 !important;
+}
+
+.sticker-list-glassboard-page .sticker-list-trade-head strong{
+    display:table;
+    transform:none !important;
+}
+
+.sticker-list-glassboard-page .sticker-list-trade-head{
+    align-items:flex-start;
+}
+.sticker-list-glassboard-page .sticker-list-trade-title{
+    min-width:0;
+}
+.sticker-list-glassboard-page .sticker-list-trade-title .postit-underline{
+    display:block;
+    height:8px;
+    margin:1px 0 3px !important;
+    margin-left:0 !important;
+    object-fit:fill;
+    transform:none !important;
+}
+.sticker-list-glassboard-page .sticker-list-trade-title strong{
+    font-size:20px !important;
+    line-height:24px !important;
+}
+.sticker-list-glassboard-page .sticker-list-trade-head button{
+    padding:0 !important;
+    border:0 !important;
+    background:transparent !important;
+    color:rgba(63,56,67,.68) !important;
+}
+.sticker-list-glassboard-page .sticker-list-clear{
+    align-self:flex-start;
+    margin:-5px -3px 0 5px;
+    font-size:14px !important;
+    line-height:18px !important;
+    letter-spacing:.025em;
+    text-shadow:.25px .25px 0 rgba(33,29,34,.15);
+    transform:rotate(.35deg) !important;
+}
+
+.sticker-list-glassboard-page .sticker-list-transfer-summary{
+    display:flex;
+    flex-wrap:wrap;
+    align-items:center;
+    gap:7px;
+    line-height:24px;
+    margin:2px 0 0;
+}
+.sticker-list-glassboard-page #stickerListReviewSubtitle{display:flex;flex-wrap:wrap;align-items:center;gap:7px}
+
+.sticker-list-glassboard-page .sticker-list-check{
+    position:relative;
+    width:100%;
+    align-self:center;
+    margin-top:auto;
+    min-height:36px !important;
+    max-height:none;
+    padding:6px 10px !important;
+    border:0 !important;
+    border-radius:0 !important;
+    background:transparent !important;
+    font-family:"CEOKlaue Final Alt 1",Arial,sans-serif !important;
+    font-size:20px !important;
+    line-height:24px !important;
+    font-weight:400 !important;
+}
+.sticker-list-glassboard-page .sticker-list-check span{position:relative;z-index:2}
+
+.sticker-list-page .analog-bracket-button{
+    border:0 !important;
+    border-radius:0 !important;
+    padding:3px 0 !important;
+    background:transparent !important;
+    box-shadow:none !important;
+}
+.sticker-list-page .analog-bracket-content{
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    gap:7px;
+    max-width:100%;
+    color:#211d22;
+}
+.sticker-list-page .analog-bracket{
+    position:static !important;
+    inset:auto !important;
+    display:block;
+    flex:0 0 auto;
+    width:auto !important;
+    height:1.55em !important;
+    max-width:22px;
+    object-fit:contain !important;
+    overflow:visible;
+    pointer-events:none;
+}
+.sticker-list-page .analog-bracket-label{
+    display:inline-flex;
+    align-items:center;
+    min-width:0;
+    white-space:nowrap;
+}
+
+.sticker-list-page .sticker-list-review-layer{
+    --sticker-list-review-safe-bottom:calc(var(--sammlr-bottom-nav-space, 92px) + 10px);
+    position:fixed;
+    top:0;
+    left:0;
+    right:0;
+    z-index:9000;
+    display:block !important;
+    height:100vh;
+    height:100dvh;
+    padding:0;
+    overflow:visible;
+    overscroll-behavior:none;
+    touch-action:pan-y;
+    background:rgba(245,243,237,.50);
+    border-bottom:1px solid rgba(255,255,255,.88);
+    -webkit-backdrop-filter:blur(11px) saturate(.92);
+    backdrop-filter:blur(11px) saturate(.92);
+    box-shadow:0 5px 18px rgba(42,32,52,.12);
+    transform:translate3d(0,calc(-100% + 32px),0);
+    transition:transform 400ms cubic-bezier(.22,.76,.28,1);
+    will-change:transform;
+    animation:none !important;
+    pointer-events:none;
+}
+.sticker-list-page .sticker-list-review-layer.is-review{
+    transform:translate3d(0,0,0);
+    pointer-events:auto;
+    touch-action:pan-y;
+}
+
+html.sticker-list-glassboard-locked,
+body.sticker-list-glassboard-locked{
+    overflow:hidden !important;
+    overscroll-behavior:none !important;
+}
+.sticker-list-page .sticker-list-review-layer.is-closing{
+    pointer-events:none;
+}
+.sticker-list-page .sticker-list-glass-engraving{
+    position:absolute;
+    top:16px;
+    left:16px;
+    z-index:3;
+    color:rgba(65,70,78,.24);
+    text-shadow:0 1px 0 rgba(255,255,255,.72),0 -1px 0 rgba(47,52,59,.08);
+    opacity:0;
+    transition:opacity 150ms ease-out 110ms;
+    pointer-events:none;
+}
+.sticker-list-page .sticker-list-glass-engraving .app-header-brand-word{
+    color:inherit;
+}
+.sticker-list-page .sticker-list-glass-engraving .app-header-brand-dot{
+    color:rgba(124,58,237,.30);
+}
+.sticker-list-page .sticker-list-review-layer.is-review .sticker-list-glass-engraving,
+.sticker-list-page .sticker-list-review-layer.is-closing .sticker-list-glass-engraving{
+    opacity:1;
+}
+.sticker-list-page .sticker-list-review-postits{
+    position:relative;
+    z-index:2;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    width:100%;
+    height:calc(100% - var(--sticker-list-review-safe-bottom));
+    min-height:0;
+    box-sizing:border-box;
+    padding:64px 14px 24px;
+    overflow-y:auto;
+    overscroll-behavior:contain;
+    -webkit-overflow-scrolling:touch;
+    opacity:0;
+    visibility:hidden;
+    pointer-events:none;
+}
+.sticker-list-page .sticker-list-review-layer.is-review .sticker-list-review-postits,
+.sticker-list-page .sticker-list-review-layer.is-closing .sticker-list-review-postits{
+    opacity:1;
+    visibility:visible;
+    pointer-events:auto;
+}
+.sticker-list-page .sticker-list-review-note-groups{
+    display:grid;
+    grid-template-columns:224px;
+    align-items:start;
+    gap:24px;
+    width:224px;
+}
+.sticker-list-page .sticker-list-review-note-column{
+    display:grid;
+    gap:24px;
+    width:224px;
+}
+.sticker-list-page .sticker-list-review-note-column[hidden]{display:none !important}
+.sticker-list-page .trade-postit{
+    position:relative;
+    z-index:1;
+    width:224px;
+    height:224px;
+    min-width:224px;
+    min-height:224px;
+    max-width:224px;
+    max-height:224px;
+    box-sizing:border-box;
+    padding:16px;
+    overflow:hidden;
+    color:#211d22 !important;
+    background:transparent;
+    box-shadow:0 11px 25px rgba(40,28,23,.17),0 1px 1px rgba(255,255,255,.28) inset;
+    font-family:"CEOKlaue Final Alt 1",Arial,sans-serif;
+    font-size:20px;
+    line-height:24px;
+    animation:none !important;
+    isolation:isolate;
+}
+.sticker-list-page .trade-postit::before{
+    content:"";
+    position:absolute;
+    inset:0;
+    z-index:-1;
+    background:
+        linear-gradient(176deg,rgba(255,255,255,.035),transparent 28%,rgba(38,31,27,.015) 100%),
+        var(--review-paper-color);
+    pointer-events:none;
+}
+.sticker-list-page .trade-postit-control{display:flex;flex-direction:column;margin-top:30px;padding:12px 16px;--review-paper-color:rgba(245,221,98,.99);transform:translate(0,6px) rotate(-.7deg)}
+.sticker-list-page .trade-postit-get{--review-paper-color:rgba(204,232,189,.99);transform:translate(-5px,0) rotate(-1.35deg)}
+.sticker-list-page .trade-postit-give{--review-paper-color:rgba(239,189,202,.99);transform:translate(6px,3px) rotate(1.25deg)}
+.sticker-list-page .trade-postit-get:nth-child(3n+2){transform:translate(3px,2px) rotate(-.75deg)}
+.sticker-list-page .trade-postit-get:nth-child(3n){transform:translate(-2px,1px) rotate(-1.7deg)}
+.sticker-list-page .trade-postit-give:nth-child(3n+2){transform:translate(-3px,0) rotate(.65deg)}
+.sticker-list-page .trade-postit-give:nth-child(3n){transform:translate(4px,2px) rotate(1.55deg)}
+.sticker-list-page .trade-postit,
+.sticker-list-page .trade-postit h3,
+.sticker-list-page .trade-postit p,
+.sticker-list-page .trade-postit button,
+.sticker-list-page .trade-postit strong,
+.sticker-list-page .trade-postit .sticker-list-review-code,
+.sticker-list-page .trade-postit .sticker-list-more{
+    color:#211d22 !important;
+    font:400 20px/24px "CEOKlaue Final Alt 1",Arial,sans-serif !important;
+}
+.sticker-list-page .trade-postit h3{display:table;margin:0}
+.sticker-list-page .postit-underline{display:block;height:10px;margin:3px 0 12px;object-fit:fill}
+.sticker-list-page .trade-postit-content{padding:12px}
+.sticker-list-page .trade-postit-content .postit-underline{height:8px;margin:0 0 4px}
+.sticker-list-page .trade-postit-control .postit-underline{height:8px;margin:2px 0 4px}
+.sticker-list-page #stickerListReviewSubtitle{display:grid;gap:0;margin:0}
+.sticker-list-page #stickerListReviewSubtitle>span{display:block;min-height:24px}
+.sticker-list-page .trade-postit-actions{display:grid;gap:4px;margin-top:auto}
+.sticker-list-page .trade-postit-actions button{
+    position:relative;
+    min-height:38px;
+    border:0;
+    padding:2px 0;
+    background:transparent;
+    color:#211d22;
+    font:400 20px/1 "CEOKlaue Final Alt 1",Arial,sans-serif;
+}
+.sticker-list-page .trade-postit .pending-review-row{display:block !important;min-width:0 !important;min-height:0 !important;padding:0 !important;background:transparent !important;border:0 !important;overflow:hidden;text-overflow:clip;white-space:nowrap}
+.sticker-list-page .trade-postit .sticker-list-review-code{font:400 20px/20px "CEOKlaue Final Alt 1",Arial,sans-serif !important}
+.sticker-list-page .sticker-list-review-codes{max-height:160px;overflow:hidden}
+.sticker-list-page .sticker-list-review-codes.is-two-column{
+    display:grid;
+    grid-template-columns:repeat(2,minmax(0,1fr));
+    grid-template-rows:repeat(8,20px);
+    grid-auto-flow:column;
+    column-gap:10px;
+}
+.sticker-list-page .trade-postit-content.is-continuation .sticker-list-review-codes{max-height:200px}
+.sticker-list-page .trade-postit-content.is-continuation .sticker-list-review-codes.is-two-column{
+    grid-template-rows:repeat(10,20px);
+}
+.sticker-list-page .sticker-list-detail-view{
+    position:absolute;
+    inset:54px 14px var(--sticker-list-review-safe-bottom);
+    z-index:4;
+    width:min(680px,100%);
+    max-height:none;
+    margin:auto;
+    padding:24px;
+    overflow:auto;
+    border-radius:14px;
+    background:#fff;
+    color:#211d22;
+    font-family:Arial,sans-serif;
+}
+.sticker-list-page .sticker-list-detail-view>button{min-height:42px;padding:8px 14px}
+
+@media(min-width:560px){
+    .sticker-list-page .sticker-list-review-postits{
+        padding:70px 34px 40px;
+    }
+    .sticker-list-page .sticker-list-review-note-groups{
+        grid-template-columns:repeat(2,224px);
+        column-gap:24px;
+        width:472px;
+    }
+    .sticker-list-page .sticker-list-review-note-groups:has(.sticker-list-review-note-column[hidden]){
+        grid-template-columns:224px;
+        justify-content:center;
+        width:224px;
+    }
+}
+
+@media(max-width:430px){
+    .sticker-list-page .sticker-list-glass-engraving{left:14px}
+}
+
+/* Stickerlistenlokales Milchglas; als späteres Sammlr-Overlaymuster isoliert. */
+.sticker-list-page .sticker-list-modal{
+    background:rgba(245,243,237,.60) !important;
+    -webkit-backdrop-filter:blur(8px) saturate(.92);
+    backdrop-filter:blur(8px) saturate(.92);
+}
+
+.sticker-list-page .sticker-list-modal,
+.sticker-list-page .sticker-list-modal *{
+    font-family:Arial, sans-serif;
+}
+
+.sticker-list-page .sticker-list-modal .sammlr-confirm-panel{
+    padding:2px 0 !important;
+    border:0 !important;
+    border-radius:0 !important;
+    background:transparent !important;
+}
+
+.sticker-list-page .sticker-list-modal .sammlr-confirm-card{
+    padding:20px !important;
+    border:0 !important;
+    box-shadow:0 18px 48px rgba(24,14,32,.22) !important;
+}
+
+.sticker-list-page .sticker-list-modal .sammlr-confirm-grid{
+    gap:26px !important;
+    margin-bottom:10px !important;
+}
+
+.sticker-list-page .sticker-list-modal .sammlr-confirm-panel h3{
+    margin-bottom:12px !important;
+}
+
+.sticker-list-page .sticker-list-modal .pending-review-list{
+    gap:4px;
+    margin:0;
+}
+
+.sticker-list-page .sticker-list-modal .pending-review-row{
+    display:grid !important;
+    grid-template-columns:minmax(0,1fr) 36px !important;
+    align-items:center !important;
+    flex-direction:row !important;
+    min-height:38px;
+    gap:8px !important;
+    padding:4px 0 !important;
+    border:0 !important;
+    border-radius:0 !important;
+    background:transparent !important;
+}
+
+.sticker-list-page .sticker-list-modal .sticker-list-review-code{
+    min-width:0;
+    color:#211d22;
+    font-family:"CEOKlaue Final Alt 1", Arial, sans-serif !important;
+    font-size:19px !important;
+    font-weight:400 !important;
+    line-height:24px !important;
+}
+
+.sticker-list-page .sticker-list-modal .sticker-list-review-code .ceoklaue-alt-1{font-family:"CEOKlaue Final Alt 1", Arial, sans-serif !important;}
+.sticker-list-page .sticker-list-modal .sticker-list-review-code .ceoklaue-alt-2{font-family:"CEOKlaue Final Alt 2", Arial, sans-serif !important;}
+.sticker-list-page .sticker-list-modal .sticker-list-review-code .ceoklaue-alt-3{font-family:"CEOKlaue Final Alt 3", Arial, sans-serif !important;}
+
+.sticker-list-page .sticker-list-modal .pending-review-remove{
+    width:36px !important;
+    height:36px !important;
+    padding:0 !important;
+    border:0 !important;
+    border-radius:50% !important;
+    background:transparent !important;
+    color:#7C3AED !important;
+    font-family:Arial, sans-serif !important;
+    font-size:22px !important;
+    font-weight:500 !important;
+}
+
+.sticker-list-page .sticker-list-modal .sammlr-confirm-actions{
+    padding-top:10px !important;
+    background:#fff !important;
+}
+
+@media (max-width:430px){
+    .sticker-list-page .sticker-list-shell{
+        padding-inline:12px !important;
+    }
+
+    .sticker-list-page .sticker-list-logo{
+        width:max-content;
+    }
+
+    .sticker-list-page .sticker-list-header h1{
+        font-size:30px !important;
+    }
+
+    .sticker-list-page .sticker-list-stats{
+        font-size:17px !important;
+    }
+
+    .sticker-list-page .sticker-list-item{
+        font-size:21px;
+    }
+}
+
+@media (max-width:350px){
+    .sticker-list-page .sticker-list-shell{
+        padding-inline:10px !important;
+    }
+
+    .sticker-list-page .sticker-list-logo{
+        width:max-content;
+    }
+
+    .sticker-list-page .sticker-list-header h1{
+        font-size:27px !important;
+    }
+
+    .sticker-list-page .sticker-list-stats{
+        font-size:16px !important;
+    }
+
+    .sticker-list-page .sticker-list-section h2{
+        font-size:24px !important;
+    }
+
+    .sticker-list-page .sticker-list-item{
+        font-size:20px;
+    }
+}
+
+
+@media (min-width:900px){
+    .sticker-list-page{
+        --sammlr-bottom-nav-space:0px;
+    }
+}

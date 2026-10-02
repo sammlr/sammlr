@@ -1,0 +1,345 @@
+{
+  "version": "CEOKlaue final F/H repair source import v1",
+  "policy": {
+    "scope": [
+      "F",
+      "H"
+    ],
+    "automatic_selection": false,
+    "master_changed": false,
+    "harmony_changed": false,
+    "runtime_changed": false,
+    "product_assets_written": []
+  },
+  "source": {
+    "filename": "ceoklaue_final_fh_repair_01.jpg",
+    "original_filename": "IMG_7191.JPG",
+    "sha256": "ca9f18dc2d7903b4f2b10d61009ad106d7f03c9a2d5e0d869f0ab2756d921ad5",
+    "pixel_dimensions": [
+      4032,
+      3024
+    ],
+    "oriented_dimensions": [
+      3024,
+      4032
+    ],
+    "characters": [
+      "F",
+      "H"
+    ]
+  },
+  "extraction": {
+    "exif_orientation_applied_in_memory": true,
+    "detection_threshold": 80,
+    "extraction_threshold": 110,
+    "component_relative_floor": 0.04,
+    "dilation_kernel": [
+      3,
+      3
+    ],
+    "dilation_iterations": 1,
+    "closing_kernel": [
+      5,
+      5
+    ],
+    "safe_margin": 6
+  },
+  "totals": {
+    "characters": 2,
+    "candidates": 10,
+    "F": 5,
+    "H": 5
+  },
+  "characters": [
+    {
+      "character": "F",
+      "glyph_key": "cap_F",
+      "source": "ceoklaue_final_fh_repair_01.jpg",
+      "source_mapping": {
+        "oriented_y_range": [
+          1580,
+          1910
+        ],
+        "oriented_x_range": [
+          500,
+          2400
+        ],
+        "reading_order": "left_to_right"
+      },
+      "new_candidate_ids": [
+        "F01",
+        "F02",
+        "F03",
+        "F04",
+        "F05"
+      ],
+      "outputs": [
+        {
+          "id": "F01",
+          "candidate_key": "cap_F_new_01",
+          "source_region_id": "cap_F-new-01",
+          "oriented_crop": [
+            755,
+            1580,
+            991,
+            1910
+          ],
+          "detected_ink_pixels": 893,
+          "mask_dimensions": [
+            164,
+            192
+          ],
+          "png": {
+            "path": "01_extracted/final_fh_repair/cap_F_new_01.png",
+            "sha256": "32ac7cec57790b0f8fcf95aafe9348da013644b0d6540a6d745f5a31916455d4"
+          },
+          "svg": {
+            "path": "02_vectors/final_fh_repair/cap_F_new_01.svg",
+            "sha256": "5c4226b5c3d76963660c171e1e4859eee1c02e896b0df315dbffd8b9f660d2e5"
+          }
+        },
+        {
+          "id": "F02",
+          "candidate_key": "cap_F_new_02",
+          "source_region_id": "cap_F-new-02",
+          "oriented_crop": [
+            1073,
+            1580,
+            1271,
+            1910
+          ],
+          "detected_ink_pixels": 1609,
+          "mask_dimensions": [
+            124,
+            172
+          ],
+          "png": {
+            "path": "01_extracted/final_fh_repair/cap_F_new_02.png",
+            "sha256": "473afe094ab535f9b27e6e56d20982e9e1b9bcc5e8f18513a71087142f2056f9"
+          },
+          "svg": {
+            "path": "02_vectors/final_fh_repair/cap_F_new_02.svg",
+            "sha256": "3bb08d1b9dddd70c45ea019befc66bf208438fa441af5f4497efd625bc2855d8"
+          }
+        },
+        {
+          "id": "F03",
+          "candidate_key": "cap_F_new_03",
+          "source_region_id": "cap_F-new-03",
+          "oriented_crop": [
+            1328,
+            1580,
+            1530,
+            1910
+          ],
+          "detected_ink_pixels": 2268,
+          "mask_dimensions": [
+            128,
+            190
+          ],
+          "png": {
+            "path": "01_extracted/final_fh_repair/cap_F_new_03.png",
+            "sha256": "8bee6485ed56bfcbf914da6a2499258059b88101d119e8378029bb5e540d9b98"
+          },
+          "svg": {
+            "path": "02_vectors/final_fh_repair/cap_F_new_03.svg",
+            "sha256": "1f7432b9bfcead9de9ce33e0c6e0464d89ecade1fab03236de5b080c3ee5a085"
+          }
+        },
+        {
+          "id": "F04",
+          "candidate_key": "cap_F_new_04",
+          "source_region_id": "cap_F-new-04",
+          "oriented_crop": [
+            1603,
+            1580,
+            1816,
+            1910
+          ],
+          "detected_ink_pixels": 2266,
+          "mask_dimensions": [
+            142,
+            172
+          ],
+          "png": {
+            "path": "01_extracted/final_fh_repair/cap_F_new_04.png",
+            "sha256": "0c2b82447d87cd8f1c641525028418176170c67801459e4b33891e0003cff217"
+          },
+          "svg": {
+            "path": "02_vectors/final_fh_repair/cap_F_new_04.svg",
+            "sha256": "81015e7e2744c15a641d0b0e6c140815b3967d401714f1b9f9a18d404d4a79f7"
+          }
+        },
+        {
+          "id": "F05",
+          "candidate_key": "cap_F_new_05",
+          "source_region_id": "cap_F-new-05",
+          "oriented_crop": [
+            1850,
+            1580,
+            2085,
+            1910
+          ],
+          "detected_ink_pixels": 2795,
+          "mask_dimensions": [
+            162,
+            178
+          ],
+          "png": {
+            "path": "01_extracted/final_fh_repair/cap_F_new_05.png",
+            "sha256": "fab3b793e8c3e41b9acca2de758d108c2408a611a229e5b89781c1adb5e6e94e"
+          },
+          "svg": {
+            "path": "02_vectors/final_fh_repair/cap_F_new_05.svg",
+            "sha256": "aab4febde8f66269ff49044027a029902c1d2f923c76d3de4e30112e0d1d6ce0"
+          }
+        }
+      ]
+    },
+    {
+      "character": "H",
+      "glyph_key": "cap_H",
+      "source": "ceoklaue_final_fh_repair_01.jpg",
+      "source_mapping": {
+        "oriented_y_range": [
+          1900,
+          2290
+        ],
+        "oriented_x_range": [
+          500,
+          2400
+        ],
+        "reading_order": "left_to_right"
+      },
+      "new_candidate_ids": [
+        "H01",
+        "H02",
+        "H03",
+        "H04",
+        "H05"
+      ],
+      "outputs": [
+        {
+          "id": "H01",
+          "candidate_key": "cap_H_new_01",
+          "source_region_id": "cap_H-new-01",
+          "oriented_crop": [
+            795,
+            1900,
+            1046,
+            2290
+          ],
+          "detected_ink_pixels": 1998,
+          "mask_dimensions": [
+            178,
+            228
+          ],
+          "png": {
+            "path": "01_extracted/final_fh_repair/cap_H_new_01.png",
+            "sha256": "14c93cd53fcd5bac2d043a653470db1a1aeed24e0a36ed9cba6e5480016a3308"
+          },
+          "svg": {
+            "path": "02_vectors/final_fh_repair/cap_H_new_01.svg",
+            "sha256": "1eaa8e2440a9a3df85b4eecf6114dc48bc16c7f5ce45b87f41d18de53f3197cd"
+          }
+        },
+        {
+          "id": "H02",
+          "candidate_key": "cap_H_new_02",
+          "source_region_id": "cap_H-new-02",
+          "oriented_crop": [
+            1069,
+            1900,
+            1319,
+            2290
+          ],
+          "detected_ink_pixels": 3074,
+          "mask_dimensions": [
+            176,
+            210
+          ],
+          "png": {
+            "path": "01_extracted/final_fh_repair/cap_H_new_02.png",
+            "sha256": "c3dbead6ff291b876976ff66aaeffa84137d3ba5b866b6990302192bc445bbcf"
+          },
+          "svg": {
+            "path": "02_vectors/final_fh_repair/cap_H_new_02.svg",
+            "sha256": "50881eccc9d6396554092bf11a0fb8cc2a233badc5065ad2ef295101c4223bea"
+          }
+        },
+        {
+          "id": "H03",
+          "candidate_key": "cap_H_new_03",
+          "source_region_id": "cap_H-new-03",
+          "oriented_crop": [
+            1341,
+            1900,
+            1593,
+            2290
+          ],
+          "detected_ink_pixels": 3257,
+          "mask_dimensions": [
+            172,
+            223
+          ],
+          "png": {
+            "path": "01_extracted/final_fh_repair/cap_H_new_03.png",
+            "sha256": "3f7d1932b1049ecdc0014e29a52d83a0ce112ef3831ded5d882af0deb06de332"
+          },
+          "svg": {
+            "path": "02_vectors/final_fh_repair/cap_H_new_03.svg",
+            "sha256": "bc8e151238dbb6c60c35a6c38c91eb541d120eb9a793412589f8c015c030a840"
+          }
+        },
+        {
+          "id": "H04",
+          "candidate_key": "cap_H_new_04",
+          "source_region_id": "cap_H-new-04",
+          "oriented_crop": [
+            1615,
+            1900,
+            1851,
+            2290
+          ],
+          "detected_ink_pixels": 3003,
+          "mask_dimensions": [
+            163,
+            209
+          ],
+          "png": {
+            "path": "01_extracted/final_fh_repair/cap_H_new_04.png",
+            "sha256": "2438784769719e835ef0db615ffbb58aa7a48a69de4cf85e30a53d863bc9edad"
+          },
+          "svg": {
+            "path": "02_vectors/final_fh_repair/cap_H_new_04.svg",
+            "sha256": "12542a26fb43800413537414d6a92e4ea9d22ecf9aa0d71819b89770140252bf"
+          }
+        },
+        {
+          "id": "H05",
+          "candidate_key": "cap_H_new_05",
+          "source_region_id": "cap_H-new-05",
+          "oriented_crop": [
+            1873,
+            1900,
+            2111,
+            2290
+          ],
+          "detected_ink_pixels": 2983,
+          "mask_dimensions": [
+            163,
+            212
+          ],
+          "png": {
+            "path": "01_extracted/final_fh_repair/cap_H_new_05.png",
+            "sha256": "bae92ce0714a7b16fd12170ebf2bc0d0188af67dd7c13801695fdaddd00a09da"
+          },
+          "svg": {
+            "path": "02_vectors/final_fh_repair/cap_H_new_05.svg",
+            "sha256": "4a67df86c039ca27583fd2e6b81ff392513f4a9d26d1f85267dc702d71f239d9"
+          }
+        }
+      ]
+    }
+  ]
+}

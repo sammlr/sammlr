@@ -1,0 +1,81 @@
+<!doctype html>
+<html lang="de"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Sammlr · Tauschen · Preview</title>
+<!-- Read-only reuse of the already audited presentation components. -->
+<link rel="stylesheet" href="/static/pax/components.css">
+<link rel="stylesheet" href="/static/pax/pax.css">
+<link rel="stylesheet" href="{{ url_for('trade_v2.static', filename='preview.css') }}">
+{% if screen == 'next' %}<link rel="stylesheet" href="{{ url_for('trade_v2.static', filename='packing.css') }}">{% endif %}
+{% if screen == 'amendment' %}<link rel="stylesheet" href="{{ url_for('trade_v2.static', filename='amendment.css') }}">{% endif %}
+{% if screen in ['next', 'shipping'] %}<link rel="stylesheet" href="/static/pax/shipping.css"><link rel="stylesheet" href="{{ url_for('trade_v2.static', filename='shipping.css') }}">{% endif %}
+{% if screen in ['receipt', 'home'] %}<link rel="stylesheet" href="{{ url_for('trade_v2.static', filename='receipt.css') }}">{% endif %}
+<link rel="stylesheet" href="{{ url_for('trade_v2.static', filename='ux08.css') }}">
+{% if screen == 'active' %}<link rel="stylesheet" href="{{ url_for('trade_v2.static', filename='overview.css') }}">{% endif %}
+<link rel="stylesheet" href="{{ url_for('trade_v2.static', filename='physics11.css') }}">
+<script type="module" src="{{ url_for('trade_v2.static', filename='preview.js') }}"></script>
+</head><body class="trade-preview pax-preview" data-screen="{{ screen }}">
+<a class="skip" href="#main">Zum Inhalt</a>
+<div class="shell">
+<header><a class="brand" href="/trade-v2/">sammlr<span>.</span></a><nav aria-label="Preview-Navigation"><a href="/trade-v2/" {% if screen == 'home' %}aria-current="page"{% endif %}>Tauschen</a><a href="/trade-v2/partners" {% if screen == 'partners' %}aria-current="page"{% endif %}>Alle Sammlr</a></nav></header>
+{% if screen != 'home' %}<p class="demo-label">PREVIEW · Beispieldaten · keine echten Anfragen</p>{% endif %}
+<main id="main">
+{% if screen == 'home' %}
+<h1>Tauschen</h1>
+<section aria-label="Tauschvorschläge"><p class="intro">3 vielversprechende Tauschvorschläge für dich.</p>
+<div class="pax-board"><div id="top-table" class="top-table s30-album-page"></div></div><p id="discovery-error" role="status"></p></section>
+<nav class="home-nav" aria-label="Tauschen"><a class="action secondary" href="/trade-v2/partners">Alle Sammlr</a><a class="action secondary" href="/trade-v2/active">Laufende Tausche</a></nav>
+{% elif screen == 'active' %}
+<a class="back" href="/trade-v2/">← Tauschen</a><h1>Laufende Tausche</h1><section id="trade-active" aria-live="polite"></section>
+<details class="filter demo-tools"><summary>PREVIEW / DEV</summary><p>Die Beispiele simulieren Rollen je Tausch: Eingänge und Partnerprobleme aus Sicht der Empfängerseite, sonst aus Sicht von Valentin. Keine gemeinsame angemeldete Person und keine aggregierte Slotanzeige.</p><nav aria-label="Übersicht-Demos"><a href="?overview=mixed">Mehrere Zustände</a> · <a href="?overview=incoming">Eingegangen</a> · <a href="?overview=action">Du bist dran</a> · <a href="?overview=waiting">Wartet</a> · <a href="?overview=q2">Empfang ohne Versandklick</a> · <a href="?overview=empty">Leer</a></nav></details>
+{% elif screen == 'partners' %}
+<a class="back" href="/trade-v2/">← Tauschen</a><h1>Alle Sammlr</h1>
+<details class="filter"><summary>Sortieren &amp; Albumfilter</summary><div class="filter-controls"><label>Sortieren<select id="sort"><option value="max_swap">Größter Tausch</option><option value="total_duplicates">Meiste Doppelte</option><option value="for_me">Meiste für mich</option></select></label><label>Album<select id="album"><option value="">Alle Alben</option>{% for id, title in data.albums %}<option value="{{ id }}">{{ title }}</option>{% endfor %}</select></label><p>Der Albumfilter findet Sammler. Das Tauschpotential umfasst weiterhin alle gemeinsamen Alben.</p></div></details>
+<p id="result-count" role="status"></p><div id="partner-list"></div>
+{% elif screen == 'partner' %}
+<a class="back" href="/trade-v2/partners">← Alle Sammlr</a><p class="eyebrow">Sammler</p><h1>{{ data.partner.display_name }}</h1>
+<dl class="match-data"><div><dt>Für dich interessant</dt><dd>{{ data.partner.for_me }} <span>Sticker</span></dd></div><div><dt>Von dir für {{ data.partner.display_name }}</dt><dd>{{ data.partner.from_me }} <span>Sticker</span></dd></div><div><dt>Gemeinsame relevante Alben</dt><dd>{{ data.partner.albums|length }}</dd></div><div><dt>Doppelte insgesamt</dt><dd>{{ '{:,}'.format(data.partner.total_duplicates).replace(',', '.') }}</dd></div></dl>
+<p class="potential">Bis zu <strong>{{ data.partner.max_swap }} ↔ {{ data.partner.max_swap }}</strong> passende Sticker</p>
+<ul class="album-names">{% for album in data.partner.albums %}<li>{{ album.title }}</li>{% endfor %}</ul>
+<div class="partner-actions"><a class="action" href="/trade-v2/partners/{{ data.partner.slug }}/smartdeal">SmartDeal erstellen<span>Sammlr wählt die Sticker.</span></a><a class="action secondary" href="/trade-v2/partners/{{ data.partner.slug }}/manual">Selbst auswählen<span>Du stellst deinen Tausch zusammen.</span></a></div>
+{% elif screen in ['deal', 'manual-review'] %}
+<a class="back" href="{{ data.back }}">← {{ data.back_label }}</a><p class="eyebrow">Fertiger Tauschvorschlag</p><h1>Tausch mit {{ data.deal.partner }}</h1><p class="deal-summary">{{ data.deal.receive_count }} ↔ {{ data.deal.give_count }} <span>· {{ data.deal.album_count }} Alben</span></p>
+<div class="pax-board"><section class="pax-receive s30-album-page"><h2>Du bekommst</h2><div id="pax-receive-albums"></div></section><section class="pax-give sticker-list-page"><h2>Du gibst ab</h2><div id="pax-give-albums"></div></section></div>
+<button class="action" id="request-preview" type="button" aria-describedby="capacity-count capacity-note">Tauschanfrage senden</button>
+{% elif screen == 'waiting' %}
+<a class="back" href="/trade-v2/">← Tauschen</a><p class="eyebrow" id="request-eyebrow">Deine Anfrage</p>
+<h1 id="waiting-title" tabindex="-1">Anfragestatus</h1><p class="deal-summary" id="request-summary"></p>
+<p id="request-status" role="status" aria-live="polite"></p><p id="request-clock"></p><p id="request-deadline" class="intro"></p>
+<div id="request-deal"></div>
+<div id="decision-actions" class="partner-actions" hidden><button class="action" id="accept-request" type="button">Tausch annehmen</button><button class="action secondary" id="decline-request" type="button">Ablehnen</button></div>
+<a class="action" id="next-step" hidden>Zum Packen →</a>
+<a class="action secondary" id="view-request-deal">Vorgeschlagenen Deal ansehen</a>
+<button class="action secondary" id="request-preview" type="button" hidden>Zum Anfragestatus</button>
+{% elif screen == 'next' %}
+<a class="back" id="pack-back-status">← Zum Tausch</a>
+<section id="pack-main"><p class="eyebrow">Dein Paket</p><h1 id="pack-title" tabindex="-1">Packliste</h1><p id="pack-subtitle" class="intro"></p>
+<div class="pax-board"><section class="pax-give sticker-list-page"><h2>Was du verschickst</h2><div id="pax-give-albums"></div></section>
+<p id="pack-progress" class="pack-progress" role="status" aria-live="polite"></p>
+<details class="secondary-receive"><summary>DU BEKOMMST · Sticker ansehen</summary><section class="pax-receive s30-album-page"><div id="pax-receive-albums"></div></section></details></div>
+<div class="pack-actions"><button type="button" class="action" id="pack-finish">Alle Sticker sind bereit – Packfreigabe bestätigen</button><button type="button" class="action secondary" id="pack-review">Ich kann nicht alles einpacken</button></div></section>
+<a class="action" id="pack-amendment" hidden>Änderung ansehen →</a><a class="action secondary" id="pack-completed-list" hidden>Gepackte Sticker ansehen →</a><section id="pack-outcome" hidden><h1 id="pack-outcome-title" tabindex="-1"></h1><p id="pack-outcome-copy" role="status"></p><ul id="pack-missing-list"></ul><div id="pack-missing-options"></div><div id="ship-panel"></div><div class="pack-actions" id="pack-missing-actions"><button type="button" class="action secondary" id="pack-return">Zurück zur Packliste</button><button type="button" class="action" id="pack-report">Die Sticker fehlen wirklich</button></div></section>
+{% elif screen == 'shipping' %}
+<a class="back" id="ship-back">← Zum Tausch</a><p class="eyebrow">Dein Versand</p><h1>Dein Paket</h1><section id="ship-panel" aria-live="polite"></section>
+{% elif screen == 'receipt' %}
+<a class="back" id="receipt-back">← Zum Tausch</a><p class="eyebrow">Empfang &amp; Abschluss</p><h1 id="receipt-title" tabindex="-1">Deine Sendung</h1><section id="receipt-panel" aria-live="polite"></section>
+{% elif screen == 'amendment' %}
+<a class="back" id="amend-back">← Zum Tausch</a><p class="eyebrow" id="amend-eyebrow">Tausch anpassen</p>
+<h1 id="amend-title" tabindex="-1"></h1><p id="amend-copy" role="status" aria-live="polite"></p>
+<section id="amend-diff" hidden><dl class="amend-size"><div><dt>Bisher</dt><dd id="amend-before"></dd></div><div><dt id="amend-after-label">Vorgeschlagen</dt><dd id="amend-after"></dd></div></dl>
+<section class="amend-changes"><h2 id="amend-own-label"></h2><ul id="amend-own-removed"></ul></section><section class="amend-changes"><h2 id="amend-counter-label"></h2><ul id="amend-counter-removed"></ul></section></section>
+<p id="amend-notice" role="status"></p><div id="amend-actions" hidden><button type="button" class="action" id="amend-accept"></button><button type="button" class="action secondary" id="amend-cancel">Tausch beenden</button></div>
+<button type="button" class="action" id="amend-create" hidden>Änderung ansehen →</button><a class="action" id="amend-pack" hidden>Packliste ansehen →</a>
+{% elif screen == 'manual' %}
+<a class="back" href="/trade-v2/partners/{{ data.partner.slug }}">← {{ data.partner.display_name }}</a><p class="eyebrow">Tausch mit {{ data.partner.display_name }}</p><h1>Selbst auswählen</h1><p class="end-note">Manuelle Auswahl folgt in TRADE-02.</p><a class="action secondary" href="/trade-v2/partners/{{ data.partner.slug }}">Zurück zur Partneransicht</a>
+{% endif %}
+{% if screen in ['deal', 'manual-review', 'waiting', 'next', 'amendment', 'shipping', 'receipt'] %}
+<p id="capacity-count" class="intro"></p><p id="capacity-note" role="status"></p>
+<details class="filter demo-tools"><summary>PREVIEW / DEV</summary>{% if screen in ['waiting', 'next', 'amendment', 'shipping', 'receipt'] %}<nav class="role-switch" aria-label="Preview-Rolle"><a class="action secondary" id="role-sender">Valentin</a><a class="action secondary" id="role-recipient">{{ data.deal.partner }}</a></nav>{% endif %}<p>Lokale Demo in diesem Tab. Zurücksetzen verwirft nur Demo-Anfragen.</p>{% if screen == 'next' %}<pre id="pack-dev"></pre>{% endif %}{% if screen == 'amendment' %}<pre id="amend-dev"></pre>{% endif %}{% if screen in ['next', 'shipping'] %}<pre id="ship-dev"></pre>{% endif %}{% if screen == 'receipt' %}<pre id="receipt-dev"></pre>{% endif %}<label for="demo-count">Ausgehende Belegung</label><select id="demo-count"><option value="0">0/3</option><option value="2">2/3</option><option value="3">3/3</option></select><button type="button" class="action secondary" id="demo-reset">Demo zurücksetzen</button></details>
+{% endif %}
+</main><footer>Sammlr · Deine Sticker. Dein Tausch.</footer></div>
+<script type="application/json" id="trade-data">{{ data|tojson }}</script>
+</body></html>

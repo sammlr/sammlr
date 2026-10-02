@@ -1,0 +1,31 @@
+{
+  "browser": [
+    {
+      "width": 375,
+      "journey_versions_marks_slots_races_keyboard_touch": "PASS",
+      "horizontal_overflow": false
+    },
+    {
+      "width": 390,
+      "journey_versions_marks_slots_races_keyboard_touch": "PASS",
+      "horizontal_overflow": false
+    },
+    {
+      "width": 430,
+      "journey_versions_marks_slots_races_keyboard_touch": "PASS",
+      "horizontal_overflow": false
+    },
+    {
+      "width": 1280,
+      "journey_versions_marks_slots_races_keyboard_touch": "PASS",
+      "horizontal_overflow": false
+    }
+  ],
+  "model": {
+    "assertions": 205,
+    "result": "PASS",
+    "coverage": "both roles, all origins, missing IDs, original ordinals, copies, V1/V2, marks, races, slots, shipped, empty, second report, tampered storage"
+  },
+  "errors": [],
+  "external_or_write_requests": []
+}

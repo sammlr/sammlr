@@ -1,0 +1,11 @@
+DROP TRIGGER IF EXISTS s33_unlocked_trophies_validate_update;
+DROP TRIGGER IF EXISTS s33_unlocked_trophies_validate_insert;
+DROP TRIGGER IF EXISTS s33_trade_requests_validate_update;
+DROP TRIGGER IF EXISTS s33_trade_requests_validate_insert;
+DROP TRIGGER IF EXISTS s33_notifications_validate_update;
+DROP TRIGGER IF EXISTS s33_notifications_validate_insert;
+DROP TRIGGER IF EXISTS s33_user_albums_validate_update;
+DROP TRIGGER IF EXISTS s33_user_albums_validate_insert;
+DROP TRIGGER IF EXISTS s33_stickers_validate_update;
+DROP TRIGGER IF EXISTS s33_stickers_validate_insert;
+DROP INDEX IF EXISTS idx_s33_stickers_identity;

@@ -1,0 +1,22 @@
+<section class="profile-sticker-prototype-hero" aria-label="90er Sammlerprofilsticker">
+    <article class="profile-sticker-90s" data-profile-sticker-era="90s" data-country-code="{{ country.code }}" style="--profile-sticker-name-length:{{ name_length }}">
+        <div class="profile-sticker-photo-viewport" data-portrait-source="shared-profile-photo">
+            <img class="profile-sticker-portrait" src="{{ portrait_url }}" alt="Profilfoto von {{ name }}">
+        </div>
+        <div class="profile-sticker-era-design" aria-hidden="true">
+            <span class="profile-sticker-flash profile-sticker-flash-a"></span>
+            <span class="profile-sticker-flash profile-sticker-flash-b"></span>
+        </div>
+        <div class="profile-sticker-name-block {{ name_scale_class }}">
+            <strong class="profile-sticker-name">{{ name }}</strong>
+        </div>
+        <div class="profile-sticker-country">
+            <span class="profile-sticker-flag" role="img" aria-label="Flagge {{ country.label }}">
+                {% for band in country.flag_bands %}<span class="profile-sticker-flag-band is-{{ band }}"></span>{% endfor %}
+            </span>
+            <span class="profile-sticker-country-name">{{ country.label }}</span>
+            {% if club %}<span class="profile-sticker-club">{{ club }}</span>{% endif %}
+        </div>
+        <img class="profile-sticker-series-mark" src="/static/profile-sticker/sammlr-speed-s-03.svg" alt="" aria-hidden="true">
+    </article>
+</section>

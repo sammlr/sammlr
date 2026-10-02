@@ -1,0 +1,19 @@
+/* Context composition only. Inner canonical faces, offsets, layer caps and notes are unchanged. */
+.trade-preview .top-table{grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;padding:22px 0 18px}
+.trade-preview .top-offer:last-child{grid-column:auto;width:auto;justify-self:stretch}
+.trade-preview .top-offer{padding-top:0!important;--pose:0deg!important}
+.trade-preview .top-toggle{min-height:165px}
+.trade-preview .top-name{font-size:12px}.trade-preview .top-meta{font-size:11px}
+.trade-preview .home-nav{display:grid;gap:12px;margin:20px 0}
+.trade-preview #pax-receive-albums{grid-template-columns:repeat(3,minmax(0,1fr));gap:30px 12px;margin-top:24px}
+.trade-preview .pax-receive-album h3{font-size:11px;min-height:30px}
+.trade-preview .pax-receive-album.is-expanded{grid-column:1 / -1;padding:18px 0 26px}
+.trade-preview .pax-fan-grid{gap:16px 12px}
+.trade-preview .receive-all{margin-top:16px}
+#dismiss-proposal{margin-top:12px}#discovery-error{font-size:13px}
+#pack-missing-options label{display:flex;align-items:center;gap:12px;min-height:48px;padding:8px 0}
+#pack-missing-options input{width:20px;height:20px;flex:none;accent-color:var(--color-accent)}
+#pack-missing-options span{overflow-wrap:anywhere}
+#pack-missing-options input:focus-visible{outline:3px solid #ba782b;outline-offset:4px}
+#trade-active .partner-row{overflow-wrap:anywhere}
+@media(prefers-reduced-motion:no-preference){.trade-preview .top-offer{animation:trade-arrive 240ms ease-out}@keyframes trade-arrive{from{opacity:0;translate:0 4px}to{opacity:1;translate:0 0}}}

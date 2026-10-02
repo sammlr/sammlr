@@ -1,4 +1,4 @@
-# Product Decision Records
+ok d# Product Decision Records
 
 Dieser Ordner ist für datierte, nachvollziehbare Produktentscheidungen vorgesehen.
 

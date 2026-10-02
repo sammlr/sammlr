@@ -1,0 +1,4 @@
+/* Preview package depth only. Canonical Stickerwall geometry belongs to style.css. */
+.pax-stack-layer{
+    transform:translateY(calc((var(--stack-index) + 1) * 1px));
+}

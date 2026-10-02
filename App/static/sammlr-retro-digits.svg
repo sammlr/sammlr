@@ -1,0 +1,39 @@
+<svg xmlns="http://www.w3.org/2000/svg">
+  <title>Sammlr Retro-Ziffern 0–9</title>
+  <metadata>
+    Originale, manuell konstruierte Sammlr-Vektorformen. Keine Schriftdatei,
+    keine automatisch vektorisierte oder nachgezeichnete Fremdglyphe.
+  </metadata>
+  <defs>
+    <symbol id="sammlr-digit-0" viewBox="0 0 64 104">
+      <path fill-rule="evenodd" d="M14 2H46L56 12V86L46 96H14L4 86V12ZM21 20V78H39V20Z"/>
+    </symbol>
+    <symbol id="sammlr-digit-1" viewBox="0 0 64 104">
+      <path d="M8 20L23 2H45V77H52L58 83V96H6V81L12 77H20V28H8Z"/>
+    </symbol>
+    <symbol id="sammlr-digit-2" viewBox="0 0 64 104">
+      <path d="M5 12L15 2H46L56 12V39L20 78H56V96H4V76L40 37V20H21V31H5Z"/>
+    </symbol>
+    <symbol id="sammlr-digit-3" viewBox="0 0 64 104">
+      <path d="M5 2H46L56 12V38L47 47L56 56V86L46 96H5V78H39V58H20V40H39V20H5Z"/>
+    </symbol>
+    <symbol id="sammlr-digit-4" viewBox="0 0 64 104">
+      <path fill-rule="evenodd" d="M33 2H51V57H59V76H51V96H31V76H4V58L28 2ZM31 29L18 57H31Z"/>
+    </symbol>
+    <symbol id="sammlr-digit-5" viewBox="0 0 64 104">
+      <path d="M5 2H56V20H21V38H46L56 48V86L46 96H5V78H39V57H5Z"/>
+    </symbol>
+    <symbol id="sammlr-digit-6" viewBox="0 0 64 104">
+      <path fill-rule="evenodd" d="M15 2H53V20H22V38H46L56 48V86L46 96H14L4 86V12ZM21 56V78H39V56Z"/>
+    </symbol>
+    <symbol id="sammlr-digit-7" viewBox="0 0 64 104">
+      <path d="M4 2H58V21L31 96H9L36 20H4Z"/>
+    </symbol>
+    <symbol id="sammlr-digit-8" viewBox="0 0 64 104">
+      <path fill-rule="evenodd" d="M14 2H46L56 12V38L47 47L56 56V86L46 96H14L4 86V56L13 47L4 38V12ZM21 19V38H39V19ZM21 56V79H39V56Z"/>
+    </symbol>
+    <symbol id="sammlr-digit-9" viewBox="0 0 64 104">
+      <path fill-rule="evenodd" d="M14 2H46L56 12V86L46 96H8V78H39V60H14L4 50V12ZM21 20V42H39V20Z"/>
+    </symbol>
+  </defs>
+</svg>

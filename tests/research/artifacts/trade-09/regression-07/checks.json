@@ -1,0 +1,47 @@
+{
+  "browser": [
+    {
+      "width": 375,
+      "full_ui_e2e": "PASS",
+      "problem_e2e": "PASS",
+      "q2_without_shipping": "PASS",
+      "snapshot_slots_immutable": "PASS",
+      "responsive_touch_keyboard_reduced_motion": "PASS"
+    },
+    {
+      "width": 390,
+      "full_ui_e2e": "PASS",
+      "problem_e2e": "PASS",
+      "q2_without_shipping": "PASS",
+      "snapshot_slots_immutable": "PASS",
+      "responsive_touch_keyboard_reduced_motion": "PASS"
+    },
+    {
+      "width": 430,
+      "full_ui_e2e": "PASS",
+      "problem_e2e": "PASS",
+      "q2_without_shipping": "PASS",
+      "snapshot_slots_immutable": "PASS",
+      "responsive_touch_keyboard_reduced_motion": "PASS"
+    },
+    {
+      "width": 1280,
+      "full_ui_e2e": "PASS",
+      "problem_e2e": "PASS",
+      "q2_without_shipping": "PASS",
+      "snapshot_slots_immutable": "PASS",
+      "responsive_touch_keyboard_reduced_motion": "PASS"
+    }
+  ],
+  "model": {
+    "assertions": 1047,
+    "origins": 3,
+    "versions": 2,
+    "roles": 2,
+    "q2_shipping_and_slots": "PASS",
+    "problem_races_ratings_validation": "PASS"
+  },
+  "errors": [],
+  "external_or_write_requests": [],
+  "screenshots": 81
+}

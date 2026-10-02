@@ -1,0 +1,42 @@
+{
+  "results": [
+    {
+      "width": 375,
+      "model": {
+        "assertions": 172
+      },
+      "groups_links_terminal_q2": "PASS",
+      "touch_mouse_keyboard_reduced_motion": "PASS",
+      "overflow": false
+    },
+    {
+      "width": 390,
+      "model": {
+        "assertions": 172
+      },
+      "groups_links_terminal_q2": "PASS",
+      "touch_mouse_keyboard_reduced_motion": "PASS",
+      "overflow": false
+    },
+    {
+      "width": 430,
+      "model": {
+        "assertions": 172
+      },
+      "groups_links_terminal_q2": "PASS",
+      "touch_mouse_keyboard_reduced_motion": "PASS",
+      "overflow": false
+    },
+    {
+      "width": 1280,
+      "model": {
+        "assertions": 172
+      },
+      "groups_links_terminal_q2": "PASS",
+      "touch_mouse_keyboard_reduced_motion": "PASS",
+      "overflow": false
+    }
+  ],
+  "errors": [],
+  "network_mutations": []
+}

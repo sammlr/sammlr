@@ -1,0 +1,58 @@
+{
+  "changed": [
+    "App/templates/pax/detail.html",
+    "App/static/pax/journey.js",
+    "App/static/pax/lifecycle.js",
+    "tests/research/check_pax_05.py",
+    "tests/research/artifacts/pax-04c/08-cta-390.png",
+    "tests/research/artifacts/pax-05/07-missing.png",
+    "tests/research/artifacts/pax-05/05-packing-zero.png",
+    "tests/research/artifacts/pax-05/02-opened.png",
+    "tests/research/artifacts/pax-05/04-recipient.png",
+    "tests/research/artifacts/pax-05/08-packing-complete.png",
+    "tests/research/artifacts/pax-05/09-pack-endpoint.png",
+    "tests/research/artifacts/pax-05/03-waiting.png",
+    "tests/research/artifacts/pax-05/06-packing-partial.png"
+  ],
+  "new": [
+    "App/static/pax/shipping.css",
+    "App/static/pax/shipping.js",
+    "docs/PAX_06_AUDIT.md",
+    "tests/research/artifacts/pax-06/01-packed-23.png",
+    "tests/research/artifacts/pax-06/02-finish-packing.png",
+    "tests/research/artifacts/pax-06/03-address.png",
+    "tests/research/artifacts/pax-06/04-shipping.png",
+    "tests/research/artifacts/pax-06/05-portal-demo.png",
+    "tests/research/artifacts/pax-06/06-before-confirmation.png",
+    "tests/research/artifacts/pax-06/07-own-shipped.png",
+    "tests/research/artifacts/pax-06/08-both-shipped.png",
+    "tests/research/artifacts/pax-06/09-dev-before.png",
+    "tests/research/artifacts/pax-06/10-dev-after.png",
+    "tests/research/artifacts/pax-06/11-recipient-address.png",
+    "tests/research/artifacts/pax-06/checks.json",
+    "tests/research/artifacts/pax-06/index.html",
+    "tests/research/artifacts/pax-06/scope-check.json",
+    "tests/research/check_pax_06.py"
+  ],
+  "protected_files": {
+    "App/webapp.py": "266ccb319b2e415076787fad2d8d46f6bf0dca8c5d61603670e131efc191cff4",
+    "App/services/trade_shipping.py": "a61657e6dc5d712d96025b7b55a48322db1a50cb8c2ccdd979d5996cfaea66f4",
+    "App/static/style.css": "5dff8ff51a91dbdab7439745c802da7d32bbf83bd39b3db460cf06b6a88c3440",
+    "App/static/sticker_wall_read_only.js": "eda776efb53bbe3cdef679b05c83a4d082295f7101085b8a7506d0f1983b9451",
+    "App/static/sticker_list.css": "810bdd9c8aaa349c17edddea35db7b7b5673467c0aec55af7acd356a10724129",
+    "App/static/sticker_list.js": "dc3a174045c9c3119f8aaabbbff14cffb9fa370b108558a634b7a28edbc52665",
+    "App/static/pax/pax.js": "58a18306b85a5dd7cee870b0a858cd16659b76d46e0e635ddee543ad993f33fd",
+    "App/static/pax/pax.css": "82fda58029b306b7885a7ca830e9fa842309153ccddd91c4d564fbc2b1465245",
+    "App/static/pax/components.css": "c27c6b1712aaa56b83d55cc843c31a8915fc2b1ccdf049ed7f2b9af7a0b2e48d",
+    "App/static/pax/journey.css": "83028e857b36ebfc0bd25309565b12755a2b4b4b7afda28b67064f85bd205c58",
+    "App/pax/fixtures.py": "58ddcdcce52fbb9284aa345e29e61957fccc7308e10628449161d54e983f96c1",
+    "docs/SAMMLRPAX_CONTRACT_V1.md": "a4e4f208fc6e0492a1c2499669c5d190a92ec6b28b0289244e3bffd730fd273d"
+  },
+  "all_existing_databases_unchanged": true,
+  "production_files_unchanged": true,
+  "discovery_pixel_identical": [
+    375,
+    390,
+    430
+  ]
+}

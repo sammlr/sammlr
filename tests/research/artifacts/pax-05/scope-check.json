@@ -1,0 +1,36 @@
+{
+  "changed": [
+    "App/templates/pax/detail.html",
+    "App/static/pax/pax.js",
+    "tests/research/check_pax_04c.py",
+    "tests/research/artifacts/pax-04c/layer-comparison-375.png",
+    "tests/research/artifacts/pax-04c/08-cta-390.png"
+  ],
+  "new": [
+    "App/static/pax/journey.css",
+    "App/static/pax/journey.js",
+    "App/static/pax/lifecycle.js",
+    "docs/PAX_05_AUDIT.md",
+    "tests/research/artifacts/pax-05/01-discovery.png",
+    "tests/research/artifacts/pax-05/02-opened.png",
+    "tests/research/artifacts/pax-05/03-waiting.png",
+    "tests/research/artifacts/pax-05/04-recipient.png",
+    "tests/research/artifacts/pax-05/05-packing-zero.png",
+    "tests/research/artifacts/pax-05/06-packing-partial.png",
+    "tests/research/artifacts/pax-05/07-missing.png",
+    "tests/research/artifacts/pax-05/08-packing-complete.png",
+    "tests/research/artifacts/pax-05/09-pack-endpoint.png",
+    "tests/research/artifacts/pax-05/checks.json",
+    "tests/research/artifacts/pax-05/index.html",
+    "tests/research/artifacts/pax-05/scope-check.json",
+    "tests/research/check_pax_05.py"
+  ],
+  "protected_existing_files_byte_unchanged": true,
+  "production_db_unchanged": true,
+  "discovery_pixel_identical": [
+    375,
+    390,
+    430
+  ],
+  "baseline": "SHA-256 snapshot immediately before PAX-05"
+}

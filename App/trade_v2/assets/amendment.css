@@ -1,0 +1,11 @@
+/* Local correction sheet; canonical stacks, post-its and pack marker untouched. */
+.amend-size{display:flex;gap:32px;flex-wrap:wrap;margin:24px 0}
+.amend-size div{display:grid;gap:6px}
+.amend-size dt{font-size:12px;color:var(--pj-muted)}
+.amend-size dd{margin:0;font-weight:700;font-size:24px}
+.amend-changes{margin:24px 0}
+.amend-changes h2{font-size:14px;margin-bottom:12px}
+.amend-changes ul{padding-left:20px;font-size:14px;line-height:1.8;overflow-wrap:anywhere}
+#amend-actions{display:grid;gap:12px;margin:28px 0}
+#amend-dev{font-size:11px;white-space:pre-wrap;overflow-wrap:anywhere}
+#amend-copy,#amend-notice{line-height:1.6}

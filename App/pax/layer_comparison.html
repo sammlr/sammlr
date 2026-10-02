@@ -1,0 +1,17 @@
+{% extends 'pax/base.html' %}
+{% block title %}PAX-04c · Layer-Vergleich{% endblock %}
+{% block content %}
+<a class="pax-back" href="{{ url_for('pax.discovery') }}">← Alle Pax</a>
+<div class="pj-heading"><h1>Pax-Layer im Vergleich</h1><p>Mengen 1 / 2 / 5 / 6 / 10 / 15 / 37. Pax-Cap: 10 sichtbare Karten inklusive Front.</p><p>Kanonischer Versatz: 2 px nach links/oben je Layer. Gleiche Frontgröße in allen Beispielen.</p></div>
+<div class="pax-board"><section class="s30-album-page pax-cap-grid" id="pax-cap-grid"></section></div>
+<script type="module">
+import {card} from '/static/pax/pax.js';
+for (const count of [1,2,5,6,10,15,37]) {
+ const sample=document.createElement('figure');sample.className='pax-cap-sample';sample.dataset.layers=count;
+ const stage=document.createElement('div');stage.className='pax-cap-stage';
+ stage.append(card(Array.from({length:count},(_,i)=>({key:'comparison-'+count+'-'+i,code:'BRA 3'})),true));
+ const label=document.createElement('figcaption');label.textContent=count+' Sticker · '+Math.min(count,10)+' Layer';
+ sample.append(stage,label);document.querySelector('#pax-cap-grid').append(sample);
+}
+</script>
+{% endblock %}

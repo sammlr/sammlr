@@ -1,0 +1,42 @@
+{% extends 'pax/base.html' %}
+{% block title %}Mit {{ candidate.partner }}{% endblock %}
+{% block content %}
+<a class="pax-back" href="{{ url_for('pax.discovery') }}">← Alle Pax</a>
+<section data-screen="board">
+<div class="pj-heading"><p class="pj-kicker">DEIN SAMMLRPAX</p><h1 tabindex="-1">Mit {{ candidate.partner }} tauschen.</h1><p>{{ candidate.receive_count }} für dich. {{ candidate.give_count }} für {{ candidate.partner }}.</p></div>
+<div class="pj-glass pax-board">
+<section class="s30-album-page pax-receive" aria-labelledby="receive-title"><h2 id="receive-title">DU BEKOMMST</h2><div id="pax-receive-albums"></div></section>
+<section class="sticker-list-page pax-give" aria-labelledby="give-title"><h2 id="give-title">DU GIBST AB</h2><div id="pax-give-albums"></div></section>
+</div>
+<div class="pj-action"><button type="button" class="pj-primary" id="pax-request">Pax anfragen <span aria-hidden="true">→</span></button></div>
+</section>
+<section data-screen="waiting" hidden>
+<div class="pj-heading"><p class="pj-kicker">SAMMLRPAX</p><h1 tabindex="-1">Pax angefragt.</h1><p id="pax-wait-copy"></p><p id="pax-wait-counts"></p></div>
+<p class="pax-status">Anfrage gesendet</p><p id="pax-time" class="pax-quiet"></p>
+<button type="button" class="pj-simulation" id="pax-withdraw">Anfrage zurückziehen</button>
+</section>
+<section data-screen="terminal" hidden><div class="pj-heading"><p class="pj-kicker">SAMMLRPAX</p><h1 tabindex="-1" id="pax-terminal-title"></h1><p id="pax-terminal-copy"></p></div><a class="pax-back" href="{{ url_for('pax.discovery') }}">Pax entdecken →</a></section>
+<section data-screen="missing" hidden><div class="pj-heading"><p class="pj-kicker">DEIN PAKET</p><h1 tabindex="-1" id="pax-missing-title"></h1><p>Noch nicht markiert:</p></div><ul id="pax-missing-list"></ul><button class="pj-primary" type="button" id="pax-return">Zur Packliste</button><button class="pj-simulation" type="button" id="pax-really-missing">Sticker fehlen wirklich</button></section>
+<section data-screen="endpoint" hidden><div class="pj-heading"><p class="pj-kicker">SAMMLRPAX · PREVIEW</p><h1 tabindex="-1" id="pax-end-title"></h1><p id="pax-end-copy"></p></div><button class="pj-simulation" type="button" id="pax-end-back">Zur Packliste</button></section>
+<section data-screen="address" hidden>
+<div class="pj-heading"><p class="pj-kicker">ALLES GEPACKT</p><h1 tabindex="-1">Hier geht dein Pax hin.</h1><p>Deine Packprüfung ist bestätigt.</p></div>
+<div class="pax-address-note"><p class="pj-kicker">VERSENDEN AN</p><address data-pax-address></address><p class="pax-quiet">Fiktive Demo-Adresse</p></div>
+<button type="button" class="pj-primary" id="pax-prepare-shipping">Versand vorbereiten →</button><button type="button" class="pj-simulation" id="pax-reopen-pack">Zur Packliste</button>
+</section>
+<section data-screen="shipping" hidden>
+<div class="pj-heading"><p class="pj-kicker">DEIN PAKET IST BEREIT</p><h1 tabindex="-1">Auf den Weg bringen.</h1></div>
+<div class="pax-address-note"><p class="pj-kicker">VERSENDEN AN</p><address data-pax-address></address><p class="pax-quiet">Fiktive Demo-Adresse</p></div>
+<label class="pax-shipping-label" for="pax-shipping-method">Versand</label><select id="pax-shipping-method"><option value="">Bitte wählen</option><option value="brief">Brief</option></select>
+<button type="button" class="pj-simulation" id="pax-portal">Versandportal ansehen ↗</button><p class="pax-quiet">Nur eine lokale Vorschau. Kein Kauf, keine Datenübertragung.</p>
+<p>Bestätige erst, wenn du dein Paket tatsächlich aufgegeben hast.</p><button type="button" class="pj-primary" id="pax-confirm-shipment">Versand bestätigen</button>
+</section>
+<section data-screen="portal" hidden><div class="pj-heading"><p class="pj-kicker">VERSANDPORTAL · DEMO</p><h1 tabindex="-1">Versand vorbereiten.</h1><p>Hier würdest du deinen Versand außerhalb von Sammlr vorbereiten.</p><p>Diese Vorschau öffnet keinen Anbieter, kauft keine Marke und überträgt keine Adresse. Dein Versand ist noch nicht bestätigt.</p></div><button type="button" class="pj-primary" id="pax-portal-back">Zurück zum Versand</button></section>
+<section data-screen="shipped" hidden><div class="pj-heading"><p class="pj-kicker">SAMMLRPAX</p><h1 tabindex="-1">Dein Teil ist erledigt.</h1><p id="pax-shipped-copy"></p></div><div class="pax-shipping-status"><p class="pj-kicker">DEIN PAKET</p><p>Versendet ✓</p><p class="pj-kicker" id="pax-partner-package"></p><p id="pax-partner-shipping"></p></div><p class="pax-quiet">Empfang folgt im nächsten Schritt. Der Tausch bleibt aktiv.</p></section>
+<link rel="stylesheet" href="{{ url_for('static', filename='pax/shipping.css') }}">
+<details class="pax-dev"><summary>PREVIEW / DEV · PAX-06</summary><p>Lokale Demo in diesem Tab. Rollen wechseln zeigt denselben Deal. Szenarien starten eine neue Demo.</p><div class="pax-dev-controls">
+<button type="button" data-role="sender">Als Valentin</button><button type="button" data-role="recipient">Als {{ candidate.partner }}</button>
+<label>Szenario <select id="pax-scenario"><option value="opened">B · Pax geöffnet</option><option value="waiting">C · Anfrage wartet</option><option value="received">D · Anfrage erhalten</option><option value="packing-sender">E · Sender packt</option><option value="packing-recipient">F · Empfänger packt</option><option value="partial">G · Unvollständig</option><option value="complete">H · Vollständig</option><option value="address">I · Adresse</option><option value="shipping">J · Versand vorbereiten</option><option value="shipped-me">K · Eigener Versand</option><option value="shipped-partner">L · Partner versendet</option><option value="both-shipped">M · Beide versendet</option></select></label><button type="button" id="pax-load-scenario">Demo starten</button>
+<button type="button" id="pax-advance">Zeit +24 Stunden</button><a href="{{ url_for('pax.discovery') }}">A · Discovery</a></div><p id="pax-demo-state"></p><pre id="pax-shipping-dev"></pre><p id="pax-storage-note" hidden>Browser-Speicher nicht verfügbar; Demo gilt bis zum Neuladen.</p></details>
+<link rel="stylesheet" href="{{ url_for('static', filename='pax/journey.css') }}">
+<script id="pax-data" type="application/json">{{ candidate|tojson }}</script>
+{% endblock %}

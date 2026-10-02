@@ -1,0 +1,13 @@
+{
+  "changed": [
+    "App/pax/layer_comparison.html",
+    "App/static/pax/pax.js",
+    "tests/research/check_pax_04c.py",
+    "tests/research/artifacts/pax-04c/layer-comparison-375.png",
+    "tests/research/artifacts/pax-04c/layer-comparison-390.png",
+    "tests/research/artifacts/pax-04c/04-fatima-receive-390.png",
+    "tests/research/artifacts/pax-04c/layer-comparison-430.png",
+    "tests/research/artifacts/pax-04c/03-large-receive-390.png"
+  ],
+  "production_wall_and_database_unchanged": true
+}

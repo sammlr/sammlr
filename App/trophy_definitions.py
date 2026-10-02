@@ -44,6 +44,48 @@ VFL_CHAPTERS = [
     ("Fanshop", 245, 250, "vfl_bag"),
 ]
 
+# Stable CB-005 identities. These values are explicit contract keys and do not
+# derive from mutable display names. Generic progress trophies are deliberately
+# absent; EM24 has no approved individual catalog yet.
+WM26_CANONICAL_TROPHY_IDS = {
+    "Album vollendet": "wm26.completion.v1",
+    "Intro": "wm26.chapter.intro.v1",
+    **{
+        f"Gruppe {letter}": f"wm26.chapter.group_{letter.lower()}.v1"
+        for letter in "ABCDEFGHIJKL"
+    },
+    "Wappenexperte": "wm26.series.crests.v1",
+    "Teamfotograf": "wm26.series.team_photos.v1",
+    "WM-Historie": "wm26.series.history.v1",
+    "Etikettenknibbler": "wm26.series.coca_cola.v1",
+    "The Last Dance": "wm26.special.last_dance.v1",
+    "Weltmeister": "wm26.special.argentina_champion.v1",
+}
+
+VFL_CANONICAL_TROPHY_IDS = {
+    "Album vollendet": "vfl.completion.v1",
+    **{
+        name: f"vfl.chapter.{key}.v1"
+        for name, key in (
+            ("Intro", "intro"),
+            ("Kader & Staff", "squad"),
+            ("Rückblick", "review"),
+            ("Schönste Tore", "goals"),
+            ("Bremer Brücke", "bremer_bruecke"),
+            ("Trikots", "shirts"),
+            ("Choreos", "choreographies"),
+            ("Historie", "history"),
+            ("Legenden 11", "legends_11"),
+            ("Große Spieler", "great_players"),
+            ("90+6", "ninety_plus_six"),
+            ("Eules letzter Flug", "eules_last_flight"),
+            ("Spiele für die Ewigkeit", "eternal_matches"),
+            ("Fanshop", "fan_shop"),
+        )
+    },
+    "DJ Matze": "vfl.special.dj_matze.v1",
+}
+
 
 def trophy_id(scope, name, value=None):
     slug = (
@@ -187,3 +229,30 @@ def album_trophy_definitions(album_id, total):
         make_trophy("album", album_id, "Endspurt", "Es fehlen nur noch 10 Sticker bis zum vollständigen Album.", "finish_line", "album_count", max(total - 10, 1)),
         make_trophy("album", album_id, "Album vollendet", "Sammle alle Sticker dieses Albums.", "album_generic", "album_complete", total),
     ]
+
+
+def canonical_album_trophy_definitions(album_id, total):
+    """Return only explicitly curated Closed-Beta album trophies."""
+
+    identity_by_name = {
+        "wm26": WM26_CANONICAL_TROPHY_IDS,
+        "vfl": VFL_CANONICAL_TROPHY_IDS,
+    }.get(album_id)
+    if identity_by_name is None:
+        return ()
+
+    legacy_by_name = {
+        definition["name"]: definition
+        for definition in album_trophy_definitions(album_id, total)
+    }
+    definitions = []
+    for name, definition_id in identity_by_name.items():
+        definition = legacy_by_name.get(name)
+        if definition is None:
+            raise RuntimeError(
+                f"canonical trophy definition is missing: {album_id}/{name}"
+            )
+        canonical = dict(definition)
+        canonical["id"] = definition_id
+        definitions.append(canonical)
+    return tuple(definitions)

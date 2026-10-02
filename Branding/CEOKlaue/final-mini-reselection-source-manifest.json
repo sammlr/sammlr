@@ -1,0 +1,937 @@
+{
+  "version": "CEOKlaue final mini reselection source import v1",
+  "open_characters": "vwxVX:",
+  "marker_groups": [
+    "receive_circle",
+    "give_cross"
+  ],
+  "policy": {
+    "existing_variants_replaced": false,
+    "accepted_triple_sets_changed": false,
+    "automatic_selection": false,
+    "harmony_assets_changed": false,
+    "runtime_fonts_changed": false,
+    "productive_sticker_assets_changed": false,
+    "product_assets_written": []
+  },
+  "sources": [
+    {
+      "key": "glyphs_01",
+      "filename": "ceoklaue_final_mini_reselection_glyphs_01.jpg",
+      "original_filename": "IMG_7176.JPG",
+      "sha256": "4558e07c32715f40da6ff301ba7eef14f3c866f53aaee44f6b4af6dc8521431f",
+      "format": "JPEG",
+      "pixel_dimensions": [
+        4032,
+        3024
+      ],
+      "oriented_dimensions": [
+        3024,
+        4032
+      ],
+      "content": "font_glyph_candidates"
+    },
+    {
+      "key": "marks_01",
+      "filename": "ceoklaue_final_mini_reselection_marks_01.jpg",
+      "original_filename": "IMG_7177.JPG",
+      "sha256": "b568ea40244c1a0852097837172ffbcb1e1bf4abf6ed2b8db15517cdab3bf9d7",
+      "format": "JPEG",
+      "pixel_dimensions": [
+        4032,
+        3024
+      ],
+      "oriented_dimensions": [
+        3024,
+        4032
+      ],
+      "content": "selection_mark_candidates"
+    }
+  ],
+  "extraction": {
+    "exif_orientation_applied_in_memory": true,
+    "detection_threshold": 80,
+    "extraction_threshold": 90,
+    "component_relative_floor": 0.035,
+    "safe_transparent_margin_pixels": 6,
+    "dilation_kernel": [
+      3,
+      3
+    ],
+    "dilation_iterations": 1,
+    "closing_kernel": [
+      5,
+      5
+    ]
+  },
+  "preexisting_inventory": {
+    "png_count": 598,
+    "svg_count": 598,
+    "selection_mark_png_count": 0,
+    "selection_mark_svg_count": 0,
+    "sha256": "c19c95d5686c93cc004c27762e566d4515ba96c85a87ec9e518b090eb2073e65"
+  },
+  "totals": {
+    "font_characters": 6,
+    "font_glyph_candidates": 30,
+    "selection_mark_groups": 2,
+    "selection_mark_candidates": 10,
+    "extracted_pngs": 40,
+    "generated_svgs": 40,
+    "discarded_sources": 0
+  },
+  "characters": [
+    {
+      "character": "v",
+      "glyph_key": "lower_v",
+      "source": "ceoklaue_final_mini_reselection_glyphs_01.jpg",
+      "source_mapping": {
+        "oriented_y_range": [
+          850,
+          1120
+        ],
+        "reading_order": "left_to_right"
+      },
+      "new_variant_ids": [
+        "06",
+        "07",
+        "08",
+        "09",
+        "10"
+      ],
+      "outputs": [
+        {
+          "id": "06",
+          "detected_ink_pixels": 2299,
+          "mask_dimensions": [
+            179,
+            181
+          ],
+          "png": {
+            "path": "01_extracted/glyphs/lower_v/lower_v_06.png",
+            "sha256": "acf0e73a5b45e364a2bb8dc385f580fdbe10762944e66a459c1cad63042aca38"
+          },
+          "svg": {
+            "path": "02_vectors/glyphs/lower_v/lower_v_06.svg",
+            "sha256": "b1415903a264159cf806e6cca05504fcd044b094368a79a52085703583f2b873"
+          }
+        },
+        {
+          "id": "07",
+          "detected_ink_pixels": 3856,
+          "mask_dimensions": [
+            153,
+            182
+          ],
+          "png": {
+            "path": "01_extracted/glyphs/lower_v/lower_v_07.png",
+            "sha256": "ac628fe760b761cf30dbf8e82479f09e677022faaaaf54c619b511b34a6293c7"
+          },
+          "svg": {
+            "path": "02_vectors/glyphs/lower_v/lower_v_07.svg",
+            "sha256": "1b4fc09b1352954951338d849c7a79c8e8cc482a158c121c52095f208879f720"
+          }
+        },
+        {
+          "id": "08",
+          "detected_ink_pixels": 3312,
+          "mask_dimensions": [
+            151,
+            155
+          ],
+          "png": {
+            "path": "01_extracted/glyphs/lower_v/lower_v_08.png",
+            "sha256": "63669482a2255614f6aabbe1da3b9e615dd114183a6d1e8c0136c90e50c19a69"
+          },
+          "svg": {
+            "path": "02_vectors/glyphs/lower_v/lower_v_08.svg",
+            "sha256": "0031bff3ed541b5bce4d0e91f87f6c6521e09b821a1401011ccb35a6a004855b"
+          }
+        },
+        {
+          "id": "09",
+          "detected_ink_pixels": 3490,
+          "mask_dimensions": [
+            151,
+            149
+          ],
+          "png": {
+            "path": "01_extracted/glyphs/lower_v/lower_v_09.png",
+            "sha256": "33ca4f96583f34f933b2a86d4bc6a9247ccdeb618cc12b656de55c1530d45771"
+          },
+          "svg": {
+            "path": "02_vectors/glyphs/lower_v/lower_v_09.svg",
+            "sha256": "f5bb925a58555ba8407c12f052d79022f262b8413abf53cb93afb7331fe9aea2"
+          }
+        },
+        {
+          "id": "10",
+          "detected_ink_pixels": 3445,
+          "mask_dimensions": [
+            164,
+            142
+          ],
+          "png": {
+            "path": "01_extracted/glyphs/lower_v/lower_v_10.png",
+            "sha256": "d401ee5406bfd39d6839906fc743232705242116143d7e01aea97ff6474ad307"
+          },
+          "svg": {
+            "path": "02_vectors/glyphs/lower_v/lower_v_10.svg",
+            "sha256": "60017c780a1a22714a525cd22dfd8ae3bdda7a59a47c37d67249319fd239fe90"
+          }
+        }
+      ]
+    },
+    {
+      "character": "w",
+      "glyph_key": "lower_w",
+      "source": "ceoklaue_final_mini_reselection_glyphs_01.jpg",
+      "source_mapping": {
+        "oriented_y_range": [
+          1280,
+          1600
+        ],
+        "reading_order": "left_to_right"
+      },
+      "new_variant_ids": [
+        "06",
+        "07",
+        "08",
+        "09",
+        "10"
+      ],
+      "outputs": [
+        {
+          "id": "06",
+          "detected_ink_pixels": 7407,
+          "mask_dimensions": [
+            293,
+            230
+          ],
+          "png": {
+            "path": "01_extracted/glyphs/lower_w/lower_w_06.png",
+            "sha256": "2e427bc6c11deaedc0cdc53f530f56c8397810331787df61442f315a4faff7d7"
+          },
+          "svg": {
+            "path": "02_vectors/glyphs/lower_w/lower_w_06.svg",
+            "sha256": "bc347c8b071fccd5aab5ca8eac11c87893d878801495401f069183cb2238c532"
+          }
+        },
+        {
+          "id": "07",
+          "detected_ink_pixels": 5279,
+          "mask_dimensions": [
+            208,
+            171
+          ],
+          "png": {
+            "path": "01_extracted/glyphs/lower_w/lower_w_07.png",
+            "sha256": "8e198aa85c9db65f01e1cd8e5110823743a7c1eb2447986e264fe605b4d8d18c"
+          },
+          "svg": {
+            "path": "02_vectors/glyphs/lower_w/lower_w_07.svg",
+            "sha256": "48ad2de2e163fb5fbecc485581f58c4e5921ad76e98d6f2259a945fdd8d76549"
+          }
+        },
+        {
+          "id": "08",
+          "detected_ink_pixels": 5096,
+          "mask_dimensions": [
+            202,
+            175
+          ],
+          "png": {
+            "path": "01_extracted/glyphs/lower_w/lower_w_08.png",
+            "sha256": "8e58af7c3301fdeae07bed49d8c08420df4c1ad03cfc76a3048083e9afc68c85"
+          },
+          "svg": {
+            "path": "02_vectors/glyphs/lower_w/lower_w_08.svg",
+            "sha256": "11245547da5cfce9d6aa05bdbb038f24744c8a3282d6724876959e25a932d901"
+          }
+        },
+        {
+          "id": "09",
+          "detected_ink_pixels": 5706,
+          "mask_dimensions": [
+            201,
+            172
+          ],
+          "png": {
+            "path": "01_extracted/glyphs/lower_w/lower_w_09.png",
+            "sha256": "011a9baa480147ffd926dec594ac8865285b31c200acf2acbb7547c43b42239c"
+          },
+          "svg": {
+            "path": "02_vectors/glyphs/lower_w/lower_w_09.svg",
+            "sha256": "4b2fd35bbc45dc6103b423f797764bdb9826c31d2b303def7ab391069958132e"
+          }
+        },
+        {
+          "id": "10",
+          "detected_ink_pixels": 5337,
+          "mask_dimensions": [
+            226,
+            147
+          ],
+          "png": {
+            "path": "01_extracted/glyphs/lower_w/lower_w_10.png",
+            "sha256": "b8264a563d3ad854526b17801a7595592281744c63b270b65cecd8ccb30942f2"
+          },
+          "svg": {
+            "path": "02_vectors/glyphs/lower_w/lower_w_10.svg",
+            "sha256": "27d357b6457e81317b5e0ef0cd4000687856d62ac13a73e3034abbb11a4012f3"
+          }
+        }
+      ]
+    },
+    {
+      "character": "x",
+      "glyph_key": "lower_x",
+      "source": "ceoklaue_final_mini_reselection_glyphs_01.jpg",
+      "source_mapping": {
+        "oriented_y_range": [
+          1760,
+          2190
+        ],
+        "reading_order": "left_to_right"
+      },
+      "new_variant_ids": [
+        "11",
+        "12",
+        "13",
+        "14",
+        "15"
+      ],
+      "outputs": [
+        {
+          "id": "11",
+          "detected_ink_pixels": 3593,
+          "mask_dimensions": [
+            143,
+            143
+          ],
+          "png": {
+            "path": "01_extracted/glyphs/lower_x/lower_x_11.png",
+            "sha256": "e8632bb4f766bf3de26a9be6dd9814f0f7da73c5d973ba70d244f793e6ad0dcf"
+          },
+          "svg": {
+            "path": "02_vectors/glyphs/lower_x/lower_x_11.svg",
+            "sha256": "a52ba16b32cb347cb7b2cbf978c5e712e88d2236feccc4ad91128163bdf2a406"
+          }
+        },
+        {
+          "id": "12",
+          "detected_ink_pixels": 3566,
+          "mask_dimensions": [
+            129,
+            151
+          ],
+          "png": {
+            "path": "01_extracted/glyphs/lower_x/lower_x_12.png",
+            "sha256": "e03c5baf7fcf2f20cfc5921d992d7ae3a9dd84cf41e2bfdb1b832b08774ce837"
+          },
+          "svg": {
+            "path": "02_vectors/glyphs/lower_x/lower_x_12.svg",
+            "sha256": "789ee2ac5c5ba98f9f2060037cf2b547e38ee82323f77d0dc21d42e6df46ed3c"
+          }
+        },
+        {
+          "id": "13",
+          "detected_ink_pixels": 3723,
+          "mask_dimensions": [
+            142,
+            149
+          ],
+          "png": {
+            "path": "01_extracted/glyphs/lower_x/lower_x_13.png",
+            "sha256": "671fb125362184e3eed4e151fd4eaa7551635b5ecb475503172a1981be21d46c"
+          },
+          "svg": {
+            "path": "02_vectors/glyphs/lower_x/lower_x_13.svg",
+            "sha256": "acc82aac965e33f19fb9b9fb47516e084d801f2a44f5a0adb4ed9794e0728a13"
+          }
+        },
+        {
+          "id": "14",
+          "detected_ink_pixels": 4421,
+          "mask_dimensions": [
+            148,
+            162
+          ],
+          "png": {
+            "path": "01_extracted/glyphs/lower_x/lower_x_14.png",
+            "sha256": "b5dd3e973649a9c1699019f664f6a4639e769647adfb5eef435d1431d202ad9c"
+          },
+          "svg": {
+            "path": "02_vectors/glyphs/lower_x/lower_x_14.svg",
+            "sha256": "7a8c7f52b0af35e30c4bc0b419b51ad3b63a7f5ca4f4f390add90ab6638ff1d2"
+          }
+        },
+        {
+          "id": "15",
+          "detected_ink_pixels": 4395,
+          "mask_dimensions": [
+            150,
+            172
+          ],
+          "png": {
+            "path": "01_extracted/glyphs/lower_x/lower_x_15.png",
+            "sha256": "2621cefa1eff2a802e679f53cc14a372c95af871d1bfe1bd72bfb1b1a460d70d"
+          },
+          "svg": {
+            "path": "02_vectors/glyphs/lower_x/lower_x_15.svg",
+            "sha256": "5a1839c000b30a1dc529aa61b5d9522cbcdb21ce38f6c5a9063460ecae22f21f"
+          }
+        }
+      ]
+    },
+    {
+      "character": "V",
+      "glyph_key": "cap_V",
+      "source": "ceoklaue_final_mini_reselection_glyphs_01.jpg",
+      "source_mapping": {
+        "oriented_y_range": [
+          2200,
+          2620
+        ],
+        "reading_order": "left_to_right"
+      },
+      "new_variant_ids": [
+        "06",
+        "07",
+        "08",
+        "09",
+        "10"
+      ],
+      "outputs": [
+        {
+          "id": "06",
+          "detected_ink_pixels": 6599,
+          "mask_dimensions": [
+            223,
+            329
+          ],
+          "png": {
+            "path": "01_extracted/glyphs/cap_V/cap_V_06.png",
+            "sha256": "65ebe1dd2bb27a83170b6ca9a898de0452aacbd301ee2b1575c28b25b380c9cf"
+          },
+          "svg": {
+            "path": "02_vectors/glyphs/cap_V/cap_V_06.svg",
+            "sha256": "faf5d2232e0a6fa1329fe890c11e441bbfc7d8840ba3632fe8d62d440907c4e0"
+          }
+        },
+        {
+          "id": "07",
+          "detected_ink_pixels": 5153,
+          "mask_dimensions": [
+            178,
+            255
+          ],
+          "png": {
+            "path": "01_extracted/glyphs/cap_V/cap_V_07.png",
+            "sha256": "07b2cd9a943629f5b6585d77e0411c42e0c3a1e718946869bff763106e7261ad"
+          },
+          "svg": {
+            "path": "02_vectors/glyphs/cap_V/cap_V_07.svg",
+            "sha256": "aad751e1797061e6628c445e40c9f6f9a970cb8289a368e541f2731ea0a96317"
+          }
+        },
+        {
+          "id": "08",
+          "detected_ink_pixels": 5750,
+          "mask_dimensions": [
+            210,
+            268
+          ],
+          "png": {
+            "path": "01_extracted/glyphs/cap_V/cap_V_08.png",
+            "sha256": "bd9475a165b7ca4fd91be2a95d29f105a60800128435b9ffbd8c8daba16b6fe8"
+          },
+          "svg": {
+            "path": "02_vectors/glyphs/cap_V/cap_V_08.svg",
+            "sha256": "05b69d274eca216a36ffc5a75cbb1097aea2051b012d90503835977a2bcc7b7c"
+          }
+        },
+        {
+          "id": "09",
+          "detected_ink_pixels": 5083,
+          "mask_dimensions": [
+            195,
+            235
+          ],
+          "png": {
+            "path": "01_extracted/glyphs/cap_V/cap_V_09.png",
+            "sha256": "2681ee81390a3b8b02ac1367f2ad9cc68d7ca9904424fc2ed4da47b98dc1b4f7"
+          },
+          "svg": {
+            "path": "02_vectors/glyphs/cap_V/cap_V_09.svg",
+            "sha256": "0ccce532134811daaaed60ee2280e83f474cc996142000e292793a20b383b037"
+          }
+        },
+        {
+          "id": "10",
+          "detected_ink_pixels": 4496,
+          "mask_dimensions": [
+            178,
+            244
+          ],
+          "png": {
+            "path": "01_extracted/glyphs/cap_V/cap_V_10.png",
+            "sha256": "b4798ba1c2acd1a5ade5b494d81be38f13f9c6cce982b568c199117711a8320f"
+          },
+          "svg": {
+            "path": "02_vectors/glyphs/cap_V/cap_V_10.svg",
+            "sha256": "4cb4973c0929b350a77ee2406eb6d0789c9073b3d8b5171adde802e02df06618"
+          }
+        }
+      ]
+    },
+    {
+      "character": "X",
+      "glyph_key": "cap_X",
+      "source": "ceoklaue_final_mini_reselection_glyphs_01.jpg",
+      "source_mapping": {
+        "oriented_y_range": [
+          2680,
+          3230
+        ],
+        "reading_order": "left_to_right"
+      },
+      "new_variant_ids": [
+        "06",
+        "07",
+        "08",
+        "09",
+        "10"
+      ],
+      "outputs": [
+        {
+          "id": "06",
+          "detected_ink_pixels": 7525,
+          "mask_dimensions": [
+            219,
+            320
+          ],
+          "png": {
+            "path": "01_extracted/glyphs/cap_X/cap_X_06.png",
+            "sha256": "b0fb3bc7027937d6d0f2e0d206d39c69e66dc1f127477ca62735ae2fe8431cbf"
+          },
+          "svg": {
+            "path": "02_vectors/glyphs/cap_X/cap_X_06.svg",
+            "sha256": "01f5cde246c6f5eb59ae453909ee9e1b3e7a091b601f31567967001b46a29fe0"
+          }
+        },
+        {
+          "id": "07",
+          "detected_ink_pixels": 6324,
+          "mask_dimensions": [
+            139,
+            292
+          ],
+          "png": {
+            "path": "01_extracted/glyphs/cap_X/cap_X_07.png",
+            "sha256": "a56e983089d6d36f80947dc629687160579ebc233d36fb0fca432fceaaa7de88"
+          },
+          "svg": {
+            "path": "02_vectors/glyphs/cap_X/cap_X_07.svg",
+            "sha256": "468ac85da78b724ddbc521ca4c887520eb4caad6c7f872b590b583b0c4732c9c"
+          }
+        },
+        {
+          "id": "08",
+          "detected_ink_pixels": 5188,
+          "mask_dimensions": [
+            153,
+            245
+          ],
+          "png": {
+            "path": "01_extracted/glyphs/cap_X/cap_X_08.png",
+            "sha256": "a463fe75096432d8a3b3a14bf58a6d9fe0bb73b288c98c1e6fcb8a3a3b6a1e22"
+          },
+          "svg": {
+            "path": "02_vectors/glyphs/cap_X/cap_X_08.svg",
+            "sha256": "72e9fa0d92e642e3cfc73a146feed01c466b5b865f1329308ac9c0231743bec9"
+          }
+        },
+        {
+          "id": "09",
+          "detected_ink_pixels": 6207,
+          "mask_dimensions": [
+            210,
+            244
+          ],
+          "png": {
+            "path": "01_extracted/glyphs/cap_X/cap_X_09.png",
+            "sha256": "8fe033b15cbdb7072fb9b6ff490f65fa399a45fecefa0d3ca32236fbac5e5cd3"
+          },
+          "svg": {
+            "path": "02_vectors/glyphs/cap_X/cap_X_09.svg",
+            "sha256": "d71b0dbb3e3f5071f86b9c7504fc37184f72fcef4b1b7b3b4ddcd86b8ccbbad1"
+          }
+        },
+        {
+          "id": "10",
+          "detected_ink_pixels": 5853,
+          "mask_dimensions": [
+            178,
+            273
+          ],
+          "png": {
+            "path": "01_extracted/glyphs/cap_X/cap_X_10.png",
+            "sha256": "d4226c5c05374c226b3a0f2548b3f471c42fbee7846983a998a8896de54e0794"
+          },
+          "svg": {
+            "path": "02_vectors/glyphs/cap_X/cap_X_10.svg",
+            "sha256": "106f0d8e363b3a39796f19a070c34c8d97e408f65bd8a2e7b17f33504e4aa6b3"
+          }
+        }
+      ]
+    },
+    {
+      "character": ":",
+      "glyph_key": "colon",
+      "source": "ceoklaue_final_mini_reselection_glyphs_01.jpg",
+      "source_mapping": {
+        "oriented_y_range": [
+          3230,
+          3750
+        ],
+        "reading_order": "left_to_right"
+      },
+      "new_variant_ids": [
+        "06",
+        "07",
+        "08",
+        "09",
+        "10"
+      ],
+      "outputs": [
+        {
+          "id": "06",
+          "detected_ink_pixels": 1781,
+          "mask_dimensions": [
+            54,
+            221
+          ],
+          "png": {
+            "path": "01_extracted/glyphs/colon/colon_06.png",
+            "sha256": "f49a49b237de444b523f1ea5589ae076739c8006050a0caed8fe7e89a3ef73e5"
+          },
+          "svg": {
+            "path": "02_vectors/glyphs/colon/colon_06.svg",
+            "sha256": "cf0826e4888e0f0efa70f04a16bc6ddd0dd17bf4a87ed241064f9bd364da5800"
+          }
+        },
+        {
+          "id": "07",
+          "detected_ink_pixels": 2712,
+          "mask_dimensions": [
+            58,
+            159
+          ],
+          "png": {
+            "path": "01_extracted/glyphs/colon/colon_07.png",
+            "sha256": "8c752a8e8ca276136dc513aa2cea92e1e7c05de9bfb2188c0ec762f38862262c"
+          },
+          "svg": {
+            "path": "02_vectors/glyphs/colon/colon_07.svg",
+            "sha256": "240bb6fff1b1095b8d03e2b65883a81d1df684bce60304ad2ea893a9a2b056f5"
+          }
+        },
+        {
+          "id": "08",
+          "detected_ink_pixels": 1773,
+          "mask_dimensions": [
+            51,
+            174
+          ],
+          "png": {
+            "path": "01_extracted/glyphs/colon/colon_08.png",
+            "sha256": "37336fabe3082de622692315d4876446cde4da34db515733506643d425c69e89"
+          },
+          "svg": {
+            "path": "02_vectors/glyphs/colon/colon_08.svg",
+            "sha256": "69b7e49e517aceadc5ce924eaf0b78e99958bfcb9b178483228cb4095f2563bd"
+          }
+        },
+        {
+          "id": "09",
+          "detected_ink_pixels": 2963,
+          "mask_dimensions": [
+            64,
+            212
+          ],
+          "png": {
+            "path": "01_extracted/glyphs/colon/colon_09.png",
+            "sha256": "8077bdcc7a204957da871abf27eb3b6223048bfa8a6ffa59cccd62db96c6f95d"
+          },
+          "svg": {
+            "path": "02_vectors/glyphs/colon/colon_09.svg",
+            "sha256": "de60c35c6ad5eb619d1ac6ebcf94e91f85369bc3c0073fe177190b4dec0fe40b"
+          }
+        },
+        {
+          "id": "10",
+          "detected_ink_pixels": 2731,
+          "mask_dimensions": [
+            67,
+            177
+          ],
+          "png": {
+            "path": "01_extracted/glyphs/colon/colon_10.png",
+            "sha256": "6c04f1d075f7c8070a95f80f6b77a2aa66304536f7f77b8b32e576ad7c73f07a"
+          },
+          "svg": {
+            "path": "02_vectors/glyphs/colon/colon_10.svg",
+            "sha256": "be53cd6cb200b10b34a16d3eb923e746d9a6d7b14c7059f489a5fdd153ddf168"
+          }
+        }
+      ]
+    }
+  ],
+  "selection_marks": [
+    {
+      "mark_key": "receive_circle",
+      "source": "ceoklaue_final_mini_reselection_marks_01.jpg",
+      "source_mapping": {
+        "oriented_x_range": [
+          1650,
+          2350
+        ],
+        "oriented_y_ranges": [
+          [
+            270,
+            900
+          ],
+          [
+            1000,
+            1580
+          ],
+          [
+            1700,
+            2260
+          ],
+          [
+            2450,
+            2950
+          ],
+          [
+            3000,
+            3600
+          ]
+        ],
+        "reading_order": "top_to_bottom"
+      },
+      "new_variant_ids": [
+        "01",
+        "02",
+        "03",
+        "04",
+        "05"
+      ],
+      "outputs": [
+        {
+          "id": "01",
+          "detected_ink_pixels": 14506,
+          "mask_dimensions": [
+            375,
+            535
+          ],
+          "png": {
+            "path": "01_extracted/selection_marks/receive_circle/receive_circle_01.png",
+            "sha256": "a63f901f57bd035f749dbef097cd6bf76fe7b31e2bde8ffbef5fce579f143157"
+          },
+          "svg": {
+            "path": "02_vectors/selection_marks/receive_circle/receive_circle_01.svg",
+            "sha256": "014d23cad186545795bf0932066e3f2ed6fe4abcce1c8d7e0a9f4651aae70702"
+          }
+        },
+        {
+          "id": "02",
+          "detected_ink_pixels": 12638,
+          "mask_dimensions": [
+            334,
+            485
+          ],
+          "png": {
+            "path": "01_extracted/selection_marks/receive_circle/receive_circle_02.png",
+            "sha256": "62ea2df51acba4f79aa21364c860728711b41f05d888c683225879ee80dfd6b9"
+          },
+          "svg": {
+            "path": "02_vectors/selection_marks/receive_circle/receive_circle_02.svg",
+            "sha256": "2f781d310a88e7b4b6e91c1baa2a3f491cd192eac15591f8a6dc09b60d481417"
+          }
+        },
+        {
+          "id": "03",
+          "detected_ink_pixels": 12884,
+          "mask_dimensions": [
+            390,
+            469
+          ],
+          "png": {
+            "path": "01_extracted/selection_marks/receive_circle/receive_circle_03.png",
+            "sha256": "882df85717dfc2ae9eef17a0d38b78151c39449235838b85a3554c5cb4932d90"
+          },
+          "svg": {
+            "path": "02_vectors/selection_marks/receive_circle/receive_circle_03.svg",
+            "sha256": "56053bf1fdddb2fbeeaaf3742ba91a0eb9506932dce77d388b1421ae963efb0b"
+          }
+        },
+        {
+          "id": "04",
+          "detected_ink_pixels": 11189,
+          "mask_dimensions": [
+            363,
+            400
+          ],
+          "png": {
+            "path": "01_extracted/selection_marks/receive_circle/receive_circle_04.png",
+            "sha256": "8040b8c9830e6b581c03fedbbb06c1aaaac498d048ca0eb58461e130f8867304"
+          },
+          "svg": {
+            "path": "02_vectors/selection_marks/receive_circle/receive_circle_04.svg",
+            "sha256": "e1832c81dde7ef207d862acdbeaf7a1eabae1693b760cfe8c83f7114ff844918"
+          }
+        },
+        {
+          "id": "05",
+          "detected_ink_pixels": 11856,
+          "mask_dimensions": [
+            412,
+            495
+          ],
+          "png": {
+            "path": "01_extracted/selection_marks/receive_circle/receive_circle_05.png",
+            "sha256": "fb9c716d614bb88b08b8f0f60d36a1681b4cb79ea9d1aa3dc33c09dde1984e10"
+          },
+          "svg": {
+            "path": "02_vectors/selection_marks/receive_circle/receive_circle_05.svg",
+            "sha256": "8fa7b1ba6be17faa8c8c3ebe8b9cf06aeab90383cec162990e3432e2cce839fc"
+          }
+        }
+      ]
+    },
+    {
+      "mark_key": "give_cross",
+      "source": "ceoklaue_final_mini_reselection_marks_01.jpg",
+      "source_mapping": {
+        "oriented_x_range": [
+          850,
+          1600
+        ],
+        "oriented_y_ranges": [
+          [
+            300,
+            770
+          ],
+          [
+            1190,
+            1540
+          ],
+          [
+            1770,
+            2140
+          ],
+          [
+            2390,
+            2840
+          ],
+          [
+            3020,
+            3490
+          ]
+        ],
+        "reading_order": "top_to_bottom"
+      },
+      "new_variant_ids": [
+        "01",
+        "02",
+        "03",
+        "04",
+        "05"
+      ],
+      "outputs": [
+        {
+          "id": "01",
+          "detected_ink_pixels": 10437,
+          "mask_dimensions": [
+            471,
+            381
+          ],
+          "png": {
+            "path": "01_extracted/selection_marks/give_cross/give_cross_01.png",
+            "sha256": "a6f1cfbe607f60301275a150894ddf0a9db53fab6ccec14ede55ecc87e4e04cf"
+          },
+          "svg": {
+            "path": "02_vectors/selection_marks/give_cross/give_cross_01.svg",
+            "sha256": "24991d75eb6dc9c9d65627168b81ae9c44e95c6a0692bbcce2945538ae55f2bd"
+          }
+        },
+        {
+          "id": "02",
+          "detected_ink_pixels": 9160,
+          "mask_dimensions": [
+            446,
+            253
+          ],
+          "png": {
+            "path": "01_extracted/selection_marks/give_cross/give_cross_02.png",
+            "sha256": "04d64a44c8c08823a30ded8c067fb008bde2c04e1c63fbaa578807e8b9799f8e"
+          },
+          "svg": {
+            "path": "02_vectors/selection_marks/give_cross/give_cross_02.svg",
+            "sha256": "eabafda6cc00946ad08e0541cbfbc6550848a425d24e9e863f53e2dbeb2fafcb"
+          }
+        },
+        {
+          "id": "03",
+          "detected_ink_pixels": 8255,
+          "mask_dimensions": [
+            414,
+            286
+          ],
+          "png": {
+            "path": "01_extracted/selection_marks/give_cross/give_cross_03.png",
+            "sha256": "14affcec2a217802b3ba843c258d42cbe2065d451bec02fe3ca2975e3e234d31"
+          },
+          "svg": {
+            "path": "02_vectors/selection_marks/give_cross/give_cross_03.svg",
+            "sha256": "ce1c905255c848046fdda32a5c34d42102631355d91d9dc65bd3dfe1dd3ef729"
+          }
+        },
+        {
+          "id": "04",
+          "detected_ink_pixels": 8024,
+          "mask_dimensions": [
+            321,
+            342
+          ],
+          "png": {
+            "path": "01_extracted/selection_marks/give_cross/give_cross_04.png",
+            "sha256": "b025637f69b504256d9615363e2825cac0022da3def716677e7d00a11b595cf4"
+          },
+          "svg": {
+            "path": "02_vectors/selection_marks/give_cross/give_cross_04.svg",
+            "sha256": "1e96db4182710fa285fcdec1f98f3a3b1f0dc66b8c92c607479c9d7954769d6e"
+          }
+        },
+        {
+          "id": "05",
+          "detected_ink_pixels": 8729,
+          "mask_dimensions": [
+            348,
+            356
+          ],
+          "png": {
+            "path": "01_extracted/selection_marks/give_cross/give_cross_05.png",
+            "sha256": "434ff3da4dcbfad183d70140e965451b641127cb90eed2f15b7c4f4317f27ffe"
+          },
+          "svg": {
+            "path": "02_vectors/selection_marks/give_cross/give_cross_05.svg",
+            "sha256": "41d0c8abce5835ee57439beab5ac23f49bcfea460ef50d3835c6839c3001a582"
+          }
+        }
+      ]
+    }
+  ]
+}

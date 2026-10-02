@@ -1,0 +1,31 @@
+{
+  "browser": [
+    {
+      "width": 375,
+      "address_direction_dom_slots_shipping_v1_v2_input_motion": "PASS",
+      "qa_scenarios": 15
+    },
+    {
+      "width": 390,
+      "address_direction_dom_slots_shipping_v1_v2_input_motion": "PASS",
+      "qa_scenarios": 15
+    },
+    {
+      "width": 430,
+      "address_direction_dom_slots_shipping_v1_v2_input_motion": "PASS",
+      "qa_scenarios": 15
+    },
+    {
+      "width": 1280,
+      "address_direction_dom_slots_shipping_v1_v2_input_motion": "PASS",
+      "qa_scenarios": 15
+    }
+  ],
+  "model": {
+    "assertions": 259,
+    "result": "PASS",
+    "coverage": "V1/V2, both roles/origins, own approval + owner consent, directional shipping, frozen own packing, independent partner, derived slots, idempotency, version invalidation, amendment lock, no completion"
+  },
+  "errors": [],
+  "external_or_write_requests": []
+}

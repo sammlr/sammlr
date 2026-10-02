@@ -1,0 +1,23 @@
+<article class="profile-sticker-70 {{ name_scale_class }}" data-profile-sticker-era="70s" data-country-code="{{ country.code }}" data-accent="{{ color.code }}" style="--sticker-accent:{{ color.hex_value }};--crop-x:{{ settings.crop_x }}%;--crop-y:{{ settings.crop_y }}%;--crop-zoom:{{ settings.crop_zoom }}">
+    <div class="profile-sticker-photo-viewport" data-portrait-source="shared-master-portrait">
+        <img class="profile-sticker-portrait" src="{{ portrait_url }}" alt="Profilfoto von {{ settings.display_name }}">
+    </div>
+    <div class="profile-sticker-top-corner" aria-hidden="true">
+        <img class="profile-sticker-series-mark" src="/static/profile-sticker/sammlr-70-signet-final.png" alt="">
+    </div>
+    <div class="profile-sticker-nation-corner" role="img" aria-label="Nationalfarben {{ country.label }}">
+        <svg class="profile-sticker-nation-bands" viewBox="0 0 84 84" preserveAspectRatio="none" aria-hidden="true">
+            <path class="profile-sticker-nation-color" style="--nation-band:{{ country.flag_bands[0] }}" d="M84 0V21L21 84H0Z"></path>
+            <path class="profile-sticker-nation-separator" d="M84 21V26L26 84H21Z"></path>
+            <path class="profile-sticker-nation-color" style="--nation-band:{{ country.flag_bands[1] }}" d="M84 26V47L47 84H26Z"></path>
+            <path class="profile-sticker-nation-separator" d="M84 47V52L52 84H47Z"></path>
+            <path class="profile-sticker-nation-color" style="--nation-band:{{ country.flag_bands[2] }}" d="M84 52V84H52Z"></path>
+        </svg>
+    </div>
+    <div class="profile-sticker-info">
+        <strong class="profile-sticker-name">{{ settings.display_name|upper }}</strong>
+        <span class="profile-sticker-club{% if not settings.club_name %} is-empty{% endif %} contrast-{{ color.contrast }}">{{ settings.club_name|upper }}</span>
+        <span class="profile-sticker-country-name">{{ country.label }}</span>
+    </div>
+</article>
+{% if not editor %}<a class="profile-sticker-edit-link" href="/profil/sticker/bearbeiten">Sticker bearbeiten</a>{% endif %}

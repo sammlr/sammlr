@@ -1,0 +1,3431 @@
+{
+  "trade_v2_files": [
+    {
+      "path": "App/trade_v2/__init__.py",
+      "tracked": false,
+      "sha256": "1b4638d58b370a32f4e9367dc2846d115d38f9748a073d3e40211f386c1e0ff9",
+      "bytes": 405,
+      "exports_or_functions": [
+        [
+          "",
+          "create_app"
+        ]
+      ],
+      "imports": [
+        "from pathlib import Path",
+        "from flask import Flask"
+      ],
+      "query_parameters": [],
+      "evidence": [
+        {
+          "line": 6,
+          "text": "def create_app():"
+        }
+      ],
+      "purpose": "Isolierte Flask-Factory ohne produktiven Auth-/DB-Kontext",
+      "demo_data": false,
+      "simulated_state": false,
+      "domain_logic": false,
+      "projection_ui": false,
+      "preview_url_dependency": false,
+      "decision": "Research behalten; nicht produktiv übernehmen"
+    },
+    {
+      "path": "App/trade_v2/__main__.py",
+      "tracked": false,
+      "sha256": "8c70ab9d6d437906df62baefef30a08c8dad83e4be51fe32774e9d96f39cd824",
+      "bytes": 183,
+      "exports_or_functions": [],
+      "imports": [
+        "from . import create_app"
+      ],
+      "query_parameters": [],
+      "evidence": [],
+      "purpose": "Lokaler Preview-Start auf Port 8095",
+      "demo_data": false,
+      "simulated_state": false,
+      "domain_logic": false,
+      "projection_ui": false,
+      "preview_url_dependency": false,
+      "decision": "Research behalten; nicht produktiv übernehmen"
+    },
+    {
+      "path": "App/trade_v2/assets/amendment.css",
+      "tracked": false,
+      "sha256": "ae45b7c605c935ce0b5933c9340484f484cf76d513eacd58a4720e3808325a31",
+      "bytes": 635,
+      "exports_or_functions": [],
+      "imports": [],
+      "query_parameters": [],
+      "evidence": [],
+      "purpose": "Screen-/Responsive-CSS; Geometrie und Zustandsdarstellung, keine persistente Domain",
+      "demo_data": false,
+      "simulated_state": false,
+      "domain_logic": false,
+      "projection_ui": true,
+      "preview_url_dependency": false,
+      "decision": "Adaptieren; kanonische UI bewahren, Fixture-/Session-/Query-Kopplung entfernen"
+    },
+    {
+      "path": "App/trade_v2/assets/amendment_demo.js",
+      "tracked": false,
+      "sha256": "7a3e0700ba470731801e378234d6dc39518a7f719a23cbb2a6a2962036f4ff9d",
+      "bytes": 1572,
+      "exports_or_functions": [
+        [
+          "amendmentDemo",
+          ""
+        ]
+      ],
+      "imports": [
+        "import {initialState, send, decide} from './requests.js';",
+        "import {enterPacking, pieces, togglePiece, packAction} from './packing.js';",
+        "import {proposeAmendment, decideAmendment} from './amendments.js';"
+      ],
+      "query_parameters": [],
+      "evidence": [
+        {
+          "line": 5,
+          "text": "export const DEMOS=['missing','waiting','proposal','accepted','cancelled','partial-before','partial-after','shipped','empty','second'];"
+        },
+        {
+          "line": 6,
+          "text": "export function amendmentDemo(deal, scenario, now=Date.now()) {"
+        }
+      ],
+      "purpose": "Synthetische Änderungszustände",
+      "demo_data": true,
+      "simulated_state": true,
+      "domain_logic": false,
+      "projection_ui": false,
+      "preview_url_dependency": false,
+      "decision": "Research behalten; nicht produktiv übernehmen"
+    },
+    {
+      "path": "App/trade_v2/assets/amendment_view.js",
+      "tracked": false,
+      "sha256": "881129357b331e04c1f7189db2f45b023d554a65e76eea9a8690a8830e785e73",
+      "bytes": 9104,
+      "exports_or_functions": [
+        [
+          "startAmendment",
+          ""
+        ],
+        [
+          "fail",
+          ""
+        ],
+        [
+          "list",
+          ""
+        ],
+        [
+          "render",
+          ""
+        ]
+      ],
+      "imports": [
+        "import {hasReceipt} from './receipt_state.js';",
+        "import {initialState, readState, saveState, slots, incomingSlots, perspective} from './requests.js';",
+        "import {loadSession} from './session.js';",
+        "import {version, shipped, opposite, positions} from './deal_versions.js';",
+        "import {packSide} from './packing.js';",
+        "import {proposeAmendment, decideAmendment, proposalBlock} from './amendments.js';",
+        "import {DEMOS, amendmentDemo} from './amendment_demo.js';"
+      ],
+      "query_parameters": [
+        "amend",
+        "role"
+      ],
+      "evidence": [
+        {
+          "line": 9,
+          "text": "export function startAmendment(data) {"
+        },
+        {
+          "line": 10,
+          "text": "const $=id=>document.getElementById(id),url=new URL(location.href);"
+        },
+        {
+          "line": 21,
+          "text": "state=amendmentDemo(data.deal,scenario);saveState(sessionStorage,state);"
+        },
+        {
+          "line": 81,
+          "text": "const next=readState(sessionStorage),r=next.requests[data.deal.id];"
+        },
+        {
+          "line": 83,
+          "text": "const outcome=action==='create'?proposeAmendment(r,role):decideAmendment(next,r.id,role,action,Date.now(),request.amendment?.id);"
+        },
+        {
+          "line": 84,
+          "text": "saveState(sessionStorage,next);state=next;request=next.requests[r.id];blocked=outcome;"
+        },
+        {
+          "line": 95,
+          "text": "$('demo-reset').addEventListener('click',()=>{try {saveState(sessionStorage,initialState(Number($('demo-count').value)));location.assign(base);}catch(_){fail();}});"
+        }
+      ],
+      "purpose": "Amendment-Projektion mit lokalen Commands und Rollenwechsel",
+      "demo_data": false,
+      "simulated_state": true,
+      "domain_logic": false,
+      "projection_ui": true,
+      "preview_url_dependency": true,
+      "decision": "Adaptieren; kanonische UI bewahren, Fixture-/Session-/Query-Kopplung entfernen"
+    },
+    {
+      "path": "App/trade_v2/assets/amendments.js",
+      "tracked": false,
+      "sha256": "a93ac429c3ed306bb4f2fff43d57f69b65a44126068125297c212dd981c5d6e3",
+      "bytes": 3859,
+      "exports_or_functions": [
+        [
+          "proposalBlock",
+          ""
+        ],
+        [
+          "proposeAmendment",
+          ""
+        ],
+        [
+          "decideAmendment",
+          ""
+        ]
+      ],
+      "imports": [
+        "import {hasReceipt} from './receipt_state.js';",
+        "import {freezeSnapshot, positions, opposite, ROLES, version, shipped, reduction, validVersions} from './deal_versions.js';",
+        "import {packSide, validPacking} from './packing.js';"
+      ],
+      "query_parameters": [],
+      "evidence": [
+        {
+          "line": 5,
+          "text": "export function proposalBlock(request, role) {"
+        },
+        {
+          "line": 15,
+          "text": "export function proposeAmendment(request, role, now=Date.now()) {"
+        },
+        {
+          "line": 32,
+          "text": "export function decideAmendment(state, id, role, action, now=Date.now(), expectedId=null) {"
+        },
+        {
+          "line": 61,
+          "text": "state.requests[id]=next; // One synchronous replacement, one subsequent sessionStorage write."
+        }
+      ],
+      "purpose": "Lokale Vorschlags-/Zustimmungs- und Abbruchguards",
+      "demo_data": false,
+      "simulated_state": true,
+      "domain_logic": true,
+      "projection_ui": false,
+      "preview_url_dependency": false,
+      "decision": "Serververtrag neu implementieren; JS höchstens Vorprüfung/Projektion"
+    },
+    {
+      "path": "App/trade_v2/assets/deal_versions.js",
+      "tracked": false,
+      "sha256": "3dc5d96aef1ca039f5f9332aed97e929dadba70e359452d2deb9b40692c6f442",
+      "bytes": 3527,
+      "exports_or_functions": [
+        [
+          "freezeSnapshot",
+          ""
+        ],
+        [
+          "positions",
+          ""
+        ],
+        [
+          "reduction",
+          ""
+        ],
+        [
+          "validVersions",
+          ""
+        ]
+      ],
+      "imports": [],
+      "query_parameters": [],
+      "evidence": [
+        {
+          "line": 2,
+          "text": "export const ROLES = ['sender', 'recipient'];"
+        },
+        {
+          "line": 3,
+          "text": "export const opposite = role => role === 'sender' ? 'recipient' : 'sender';"
+        },
+        {
+          "line": 4,
+          "text": "export const version = request => request.deal_version ?? 1;"
+        },
+        {
+          "line": 5,
+          "text": "export const shipped = request => Boolean(request.ownShipped || request.recipientShipped);"
+        },
+        {
+          "line": 6,
+          "text": "export function freezeSnapshot(value) {"
+        },
+        {
+          "line": 12,
+          "text": "export function positions(snapshot, role) {"
+        },
+        {
+          "line": 17,
+          "text": "export function reduction(snapshot, proposer, keys) {"
+        },
+        {
+          "line": 34,
+          "text": "export function validVersions(r) {"
+        }
+      ],
+      "purpose": "Eingefrorene Paketversionen; indexbasierte symmetrische Reduktion",
+      "demo_data": false,
+      "simulated_state": false,
+      "domain_logic": true,
+      "projection_ui": false,
+      "preview_url_dependency": false,
+      "decision": "Serververtrag neu implementieren; JS höchstens Vorprüfung/Projektion"
+    },
+    {
+      "path": "App/trade_v2/assets/discovery.js",
+      "tracked": false,
+      "sha256": "3451a39aefe952e24daebc8f8b57904fc850b75ec8733d0ee8ec4e15d2651e95",
+      "bytes": 635,
+      "exports_or_functions": [
+        [
+          "dismissed",
+          ""
+        ],
+        [
+          "dismiss",
+          ""
+        ],
+        [
+          "visibleDeals",
+          ""
+        ]
+      ],
+      "imports": [],
+      "query_parameters": [],
+      "evidence": [
+        {
+          "line": 2,
+          "text": "export const DISMISS_KEY='sammlr-trade-08-dismissed';"
+        },
+        {
+          "line": 3,
+          "text": "export function dismissed(storage){const raw=storage.getItem(DISMISS_KEY);if(!raw)return [];const ids=JSON.parse(raw);if(!Array.isArray(ids)||!ids.every(id=>typeof id==='string'))throw Error('Invalid dismiss state');return ids;}"
+        },
+        {
+          "line": 4,
+          "text": "export function dismiss(storage,id){const ids=dismissed(storage);if(!ids.includes(id))storage.setItem(DISMISS_KEY,JSON.stringify([...ids,id]));}"
+        },
+        {
+          "line": 5,
+          "text": "export function visibleDeals(deals,state,ids){return deals.filter(d=>!ids.includes(d.id)&&!state.requests[d.id]).slice(0,3);}"
+        }
+      ],
+      "purpose": "Lokale Dismiss-Auswahl und Nachrücken auf drei sichtbare Vorschläge",
+      "demo_data": false,
+      "simulated_state": false,
+      "domain_logic": false,
+      "projection_ui": false,
+      "preview_url_dependency": false,
+      "decision": "Adaptieren; kanonische UI bewahren, Fixture-/Session-/Query-Kopplung entfernen"
+    },
+    {
+      "path": "App/trade_v2/assets/manual.css",
+      "tracked": false,
+      "sha256": "1e74d275309fa8ab17bc021badabcec3afcc9c331103776fa4a3412e037f46ca",
+      "bytes": 1370,
+      "exports_or_functions": [],
+      "imports": [],
+      "query_parameters": [],
+      "evidence": [],
+      "purpose": "Screen-/Responsive-CSS; Geometrie und Zustandsdarstellung, keine persistente Domain",
+      "demo_data": false,
+      "simulated_state": false,
+      "domain_logic": false,
+      "projection_ui": true,
+      "preview_url_dependency": false,
+      "decision": "Adaptieren; kanonische UI bewahren, Fixture-/Session-/Query-Kopplung entfernen"
+    },
+    {
+      "path": "App/trade_v2/assets/manual_ink.js",
+      "tracked": false,
+      "sha256": "a94305cf551699cb97408d5bd835d7d974f226494ff014ea27f67cfbf346ad37",
+      "bytes": 6145,
+      "exports_or_functions": [
+        [
+          "stickerListCeoklaueIndex",
+          ""
+        ],
+        [
+          "stickerListWriteCeoklaue",
+          ""
+        ],
+        [
+          "listItem",
+          ""
+        ],
+        [
+          "bracket",
+          ""
+        ]
+      ],
+      "imports": [],
+      "query_parameters": [],
+      "evidence": [
+        {
+          "line": 17,
+          "text": "export function stickerListWriteCeoklaue(target, text, context){"
+        },
+        {
+          "line": 47,
+          "text": "export const MARKERS={\"receive_circle\": [{\"variant\": \"01\", \"url\": \"/static/ceoklaue-markers/receive_circle/receive_circle_01.svg\"}, {\"variant\": \"02\", \"url\": \"/static/ceoklaue-markers/receive_circle/receive_circle_02.svg\"}, {\"variant\": \"04\", \"url\": \"/static/ceoklaue-markers/receive_circle/receive_circle_04.svg\"}, {\"variant\": \"03\", \"url\": \"/static/ceoklaue-markers/receive_circle/receive_circle_03.svg\"}, {\"variant\": \"05\", \"url\": \"/static/ceoklaue-markers/receive_circle/receive_circle_05.svg\"}], \"give_cross\": [{\"variant\": \"05\", \"url\": \"/static/ceoklaue-markers/give_cross/give_cross_05.svg\"}, {\"variant\": \"03\", \"url\": \"/static/ceoklaue-markers/give_cross/give_cross_03.svg\"}, {\"variant\": \"04\", \"url\": \"/static/ceoklaue-markers/give_cross/give_cross_04.svg\"}, {\"variant\": \"01\", \"url\": \"/static/ceoklaue-markers/give_cross/give_cross_01.svg\"}, {\"variant\": \"02\", \"url\": \"/static/ceoklaue-markers/give_cross/give_cross_02.svg\"}]};"
+        },
+        {
+          "line": 50,
+          "text": "export function listItem(item,mode,album,separator){"
+        },
+        {
+          "line": 69,
+          "text": "export function bracket(target,label){"
+        }
+      ],
+      "purpose": "DOM-/Glyphenadapter der kanonischen Handschrift",
+      "demo_data": false,
+      "simulated_state": false,
+      "domain_logic": false,
+      "projection_ui": true,
+      "preview_url_dependency": false,
+      "decision": "Adaptieren; kanonische UI bewahren, Fixture-/Session-/Query-Kopplung entfernen"
+    },
+    {
+      "path": "App/trade_v2/assets/manual_review.js",
+      "tracked": false,
+      "sha256": "c023291b16cc0dd769a5b264f2eb05982bf66f85b505f79cdea7d90e5bffd7eb",
+      "bytes": 2318,
+      "exports_or_functions": [
+        [
+          "startManualReview",
+          ""
+        ],
+        [
+          "current",
+          ""
+        ],
+        [
+          "fail",
+          ""
+        ]
+      ],
+      "imports": [
+        "import {readDraft,buildDeal,validate} from './manual_rules.js';",
+        "import {readState,saveState,send,slots,initialState} from './requests.js';",
+        "import {renderReceive} from './receive.js';",
+        "import {renderGive} from '/static/pax/pax.js';"
+      ],
+      "query_parameters": [],
+      "evidence": [
+        {
+          "line": 5,
+          "text": "export function startManualReview(data){"
+        },
+        {
+          "line": 8,
+          "text": "const state=readState(sessionStorage),existing=state.requests['manual-'+slug];"
+        },
+        {
+          "line": 10,
+          "text": "const draft=readDraft(sessionStorage,slug,data.contexts),context=data.contexts[draft.scenario];"
+        },
+        {
+          "line": 30,
+          "text": "const result=send(latest.state,latest.deal,Date.now());"
+        },
+        {
+          "line": 32,
+          "text": "saveState(sessionStorage,latest.state);location.assign('/trade-v2/requests/'+latest.deal.partner_slug);"
+        },
+        {
+          "line": 35,
+          "text": "$('demo-reset').addEventListener('click',()=>{saveState(sessionStorage,initialState(Number($('demo-count').value)));location.reload();});"
+        }
+      ],
+      "purpose": "Review und lokales Absenden des manuellen Drafts",
+      "demo_data": false,
+      "simulated_state": true,
+      "domain_logic": false,
+      "projection_ui": false,
+      "preview_url_dependency": true,
+      "decision": "Adaptieren; kanonische UI bewahren, Fixture-/Session-/Query-Kopplung entfernen"
+    },
+    {
+      "path": "App/trade_v2/assets/manual_rules.js",
+      "tracked": false,
+      "sha256": "6d9b40baba2b41d43d43b775f4c098d86425c3917a0482a0b859498fc351939c",
+      "bytes": 4653,
+      "exports_or_functions": [
+        [
+          "readDraft",
+          ""
+        ],
+        [
+          "saveDraft",
+          ""
+        ],
+        [
+          "validKeys",
+          ""
+        ],
+        [
+          "validate",
+          ""
+        ],
+        [
+          "selectionBlock",
+          ""
+        ],
+        [
+          "toggle",
+          ""
+        ],
+        [
+          "buildDeal",
+          ""
+        ]
+      ],
+      "imports": [],
+      "query_parameters": [],
+      "evidence": [
+        {
+          "line": 2,
+          "text": "export const CONTRACT='trade-v2-manual-09';"
+        },
+        {
+          "line": 3,
+          "text": "export const allowedAlbum=a=>a.me?.tradeEnabled===true&&a.partner?.tradeEnabled===true;"
+        },
+        {
+          "line": 4,
+          "text": "export const crossAlbum=a=>a.me?.crossAlbum===true&&a.partner?.crossAlbum===true;"
+        },
+        {
+          "line": 5,
+          "text": "export const group=a=>crossAlbum(a)?'open':a.id;"
+        },
+        {
+          "line": 6,
+          "text": "export const eligible=i=>Number.isInteger(i.supply)&&i.supply>0&&Number.isInteger(i.need)&&i.need>0&&Number.isInteger(i.instance)&&i.instance>0;"
+        },
+        {
+          "line": 7,
+          "text": "export const items=(context,side)=>context.albums.filter(allowedAlbum).flatMap(a=>a[side].filter(eligible).map(i=>({...i,albumId:a.id,album:a.title,group:group(a)})));"
+        },
+        {
+          "line": 8,
+          "text": "export const emptyDraft=scenario=>({scenario,receive:[],give:[]});"
+        },
+        {
+          "line": 9,
+          "text": "export const storageKey=slug=>'sammlr-trade-09-draft/'+slug;"
+        },
+        {
+          "line": 10,
+          "text": "export function readDraft(storage,slug,contexts){"
+        },
+        {
+          "line": 14,
+          "text": "export function saveDraft(storage,slug,d){storage.setItem(storageKey(slug),JSON.stringify(d));}"
+        },
+        {
+          "line": 22,
+          "text": "export function validate(c,d){"
+        },
+        {
+          "line": 31,
+          "text": "export function selectionBlock(c,d,side,key){"
+        },
+        {
+          "line": 45,
+          "text": "export function toggle(c,d,side,key){"
+        },
+        {
+          "line": 49,
+          "text": "export function buildDeal(c,d){"
+        }
+      ],
+      "purpose": "Bilaterale Album-/Mengenvalidierung und gespeicherter Draft",
+      "demo_data": false,
+      "simulated_state": false,
+      "domain_logic": true,
+      "projection_ui": false,
+      "preview_url_dependency": false,
+      "decision": "Serververtrag neu implementieren; JS höchstens Vorprüfung/Projektion"
+    },
+    {
+      "path": "App/trade_v2/assets/manual_view.js",
+      "tracked": false,
+      "sha256": "253e9b232fd4e7161f2068b91ba90d7c155e8f2ddc61eb51fa54456489119e54",
+      "bytes": 4270,
+      "exports_or_functions": [
+        [
+          "update",
+          ""
+        ]
+      ],
+      "imports": [
+        "import {stickerListWriteCeoklaue as ink,listItem,bracket} from './manual_ink.js';",
+        "import {allowedAlbum,items,emptyDraft,readDraft,saveDraft,toggle,selectionBlock,validate} from './manual_rules.js';",
+        "import {readState} from './requests.js';"
+      ],
+      "query_parameters": [
+        "manual"
+      ],
+      "evidence": [
+        {
+          "line": 4,
+          "text": "const data=JSON.parse(document.getElementById('trade-data').textContent),slug=data.partner.slug,$=id=>document.getElementById(id),url=new URL(location.href);"
+        },
+        {
+          "line": 10,
+          "text": "if(Object.hasOwn(data.contexts,scenario)){draft=emptyDraft(scenario);saveDraft(sessionStorage,slug,draft);url.searchParams.delete('manual');history.replaceState(null,'',url);}else draft=readDraft(sessionStorage,slug,data.contexts);"
+        },
+        {
+          "line": 12,
+          "text": "const existing=readState(sessionStorage).requests['manual-'+slug];"
+        },
+        {
+          "line": 22,
+          "text": "try{const latest=readDraft(sessionStorage,slug,data.contexts);if(latest.scenario!==draft.scenario){$('manual-status').textContent='Die Auswahl wurde geändert. Bitte lade die Seite neu.';return;}"
+        },
+        {
+          "line": 23,
+          "text": "const error=toggle(context,latest,side,item.key);if(!error){saveDraft(sessionStorage,slug,latest);draft=latest;}update(error);if(error){button.closest('.sticker-list-grid').after($('manual-status'));$('manual-status').scrollIntoView({block:'nearest'});}"
+        },
+        {
+          "line": 35,
+          "text": "$('manual-clear').addEventListener('click',()=>{try{draft=emptyDraft(draft.scenario);saveDraft(sessionStorage,slug,draft);update();}catch(_){$('manual-status').textContent='Die Auswahl konnte nicht geleert werden.';}});"
+        },
+        {
+          "line": 36,
+          "text": "$('manual-review').addEventListener('click',()=>{try{draft=readDraft(sessionStorage,slug,data.contexts);if(validate(data.contexts[draft.scenario],draft).ok&&!readState(sessionStorage).requests['manual-'+slug])location.assign(`/trade-v2/partners/${slug}/manual/review`);else update();}catch(_){$('manual-status').textContent='Bitte prüfe deine Auswahl erneut.';}});"
+        }
+      ],
+      "purpose": "Stickerlisten-Auswahl, Limits und lokale Draft-Interaktion",
+      "demo_data": false,
+      "simulated_state": true,
+      "domain_logic": false,
+      "projection_ui": true,
+      "preview_url_dependency": true,
+      "decision": "Adaptieren; kanonische UI bewahren, Fixture-/Session-/Query-Kopplung entfernen"
+    },
+    {
+      "path": "App/trade_v2/assets/marker.svg",
+      "tracked": false,
+      "sha256": "fe6d4b862966eebcc443ee026ffa11f6dde87e4babda226d34fe733bd8560498",
+      "bytes": 392,
+      "exports_or_functions": [],
+      "imports": [],
+      "query_parameters": [],
+      "evidence": [],
+      "purpose": "Altes isoliertes Markerasset; keine neue kanonische Ressource",
+      "demo_data": false,
+      "simulated_state": false,
+      "domain_logic": false,
+      "projection_ui": true,
+      "preview_url_dependency": false,
+      "decision": "Research behalten; nicht produktiv übernehmen"
+    },
+    {
+      "path": "App/trade_v2/assets/overview.css",
+      "tracked": false,
+      "sha256": "026049a183036c349ef57ae89e447f36c535c5a5ab7b6513811d378b17d1d130",
+      "bytes": 1046,
+      "exports_or_functions": [],
+      "imports": [],
+      "query_parameters": [],
+      "evidence": [],
+      "purpose": "Screen-/Responsive-CSS; Geometrie und Zustandsdarstellung, keine persistente Domain",
+      "demo_data": false,
+      "simulated_state": false,
+      "domain_logic": false,
+      "projection_ui": true,
+      "preview_url_dependency": false,
+      "decision": "Adaptieren; kanonische UI bewahren, Fixture-/Session-/Query-Kopplung entfernen"
+    },
+    {
+      "path": "App/trade_v2/assets/overview.js",
+      "tracked": false,
+      "sha256": "e1fd87511438d17f2a984b3269dc7ec0cbf7c76638a3e12982f1f7d80dc0fd9e",
+      "bytes": 3490,
+      "exports_or_functions": [
+        [
+          "projectTrade",
+          ""
+        ],
+        [
+          "projectOverview",
+          ""
+        ]
+      ],
+      "imports": [
+        "import {targetAddress} from './shipping.js';",
+        "import {perspective} from './requests.js';",
+        "import {opposite} from './deal_versions.js';",
+        "import {completed,receiptSide} from './receipt_state.js';",
+        "import {ownShipped,shippingState,shippingSide,shippingAllowed} from './shipping_state.js';"
+      ],
+      "query_parameters": [],
+      "evidence": [
+        {
+          "line": 7,
+          "text": "export const GROUPS=[['incoming','Eingegangen'],['action','Du bist dran'],['waiting','Wartet']];"
+        },
+        {
+          "line": 8,
+          "text": "export function projectTrade(r,role,now=Date.now()){"
+        },
+        {
+          "line": 37,
+          "text": "export function projectOverview(state,roles={},now=Date.now()){"
+        }
+      ],
+      "purpose": "Rollenbezogene Gruppen-/Handlungsprojektion",
+      "demo_data": false,
+      "simulated_state": false,
+      "domain_logic": true,
+      "projection_ui": false,
+      "preview_url_dependency": true,
+      "decision": "Serververtrag neu implementieren; JS höchstens Vorprüfung/Projektion"
+    },
+    {
+      "path": "App/trade_v2/assets/overview_demo.js",
+      "tracked": false,
+      "sha256": "804b50156a303b2f47e645f75dc457ddccebf5c591cc4438bdfacd6d485ee3c3",
+      "bytes": 1762,
+      "exports_or_functions": [
+        [
+          "overviewDemo",
+          ""
+        ]
+      ],
+      "imports": [
+        "import {initialState,send,decide} from './requests.js';",
+        "import {shippingDemo} from './shipping_demo.js';",
+        "import {receiptDemo} from './receipt_demo.js';",
+        "import {amendmentDemo} from './amendment_demo.js';"
+      ],
+      "query_parameters": [],
+      "evidence": [
+        {
+          "line": 6,
+          "text": "export const ROLE_KEY='sammlr-trade-10-preview-roles';"
+        },
+        {
+          "line": 7,
+          "text": "export const SCENARIOS=['mixed','incoming','action','waiting','amendment','amendment-wait','shipping','receipt','problem','problem-wait','q2','empty'];"
+        },
+        {
+          "line": 8,
+          "text": "export function overviewDemo(deals,scenario,now=Date.now()){"
+        }
+      ],
+      "purpose": "Synthetische Übersichts-Szenarien",
+      "demo_data": true,
+      "simulated_state": true,
+      "domain_logic": false,
+      "projection_ui": false,
+      "preview_url_dependency": false,
+      "decision": "Research behalten; nicht produktiv übernehmen"
+    },
+    {
+      "path": "App/trade_v2/assets/overview_view.js",
+      "tracked": false,
+      "sha256": "a2d6049f7c56c79e0a003cf28639c91850541b47208f745185dc72fcfcad126c",
+      "bytes": 3072,
+      "exports_or_functions": [
+        [
+          "startOverview",
+          ""
+        ],
+        [
+          "render",
+          ""
+        ]
+      ],
+      "imports": [
+        "import {readState,saveState} from './requests.js';",
+        "import {GROUPS,projectOverview} from './overview.js';",
+        "import {ROLE_KEY,SCENARIOS,overviewDemo} from './overview_demo.js';"
+      ],
+      "query_parameters": [
+        "overview"
+      ],
+      "evidence": [
+        {
+          "line": 5,
+          "text": "export function startOverview(data){"
+        },
+        {
+          "line": 6,
+          "text": "const root=document.getElementById('trade-active'),url=new URL(location.href),scenario=url.searchParams.get('overview');"
+        },
+        {
+          "line": 8,
+          "text": "const {state,roles}=overviewDemo(data.deals,scenario);saveState(sessionStorage,state);sessionStorage.setItem(ROLE_KEY,JSON.stringify({roles,bindings:Object.fromEntries(Object.values(state.requests).map(r=>[r.id,r.bindingCreatedAt]))}));"
+        },
+        {
+          "line": 14,
+          "text": "const now=Date.now(),state=readState(sessionStorage),meta=JSON.parse(sessionStorage.getItem(ROLE_KEY)||'{}'),roles=Object.fromEntries(Object.entries(meta.roles||{}).filter(([id])=>state.requests[id]?.bindingCreatedAt===meta.bindings?.[id]));"
+        }
+      ],
+      "purpose": "Übersicht mit Sessiondaten, Demo-Seeding und lokalen Zeitgebern",
+      "demo_data": false,
+      "simulated_state": true,
+      "domain_logic": false,
+      "projection_ui": true,
+      "preview_url_dependency": true,
+      "decision": "Adaptieren; kanonische UI bewahren, Fixture-/Session-/Query-Kopplung entfernen"
+    },
+    {
+      "path": "App/trade_v2/assets/packing.css",
+      "tracked": false,
+      "sha256": "bfc87faa4c9a09c7b0c43b06b6d2c7c32580397b206c5d0af68328b92678286f",
+      "bytes": 699,
+      "exports_or_functions": [],
+      "imports": [],
+      "query_parameters": [],
+      "evidence": [],
+      "purpose": "Screen-/Responsive-CSS; Geometrie und Zustandsdarstellung, keine persistente Domain",
+      "demo_data": false,
+      "simulated_state": false,
+      "domain_logic": false,
+      "projection_ui": true,
+      "preview_url_dependency": false,
+      "decision": "Adaptieren; kanonische UI bewahren, Fixture-/Session-/Query-Kopplung entfernen"
+    },
+    {
+      "path": "App/trade_v2/assets/packing.js",
+      "tracked": false,
+      "sha256": "19cb892acba1bb73646ffb181bd516da70d2bb9688031edf2c01c04d4c277799",
+      "bytes": 3532,
+      "exports_or_functions": [
+        [
+          "pieces",
+          ""
+        ],
+        [
+          "packSide",
+          ""
+        ],
+        [
+          "validPacking",
+          ""
+        ],
+        [
+          "enterPacking",
+          ""
+        ],
+        [
+          "missing",
+          ""
+        ],
+        [
+          "canFinish",
+          ""
+        ],
+        [
+          "togglePiece",
+          ""
+        ],
+        [
+          "packAction",
+          ""
+        ]
+      ],
+      "imports": [
+        "import {ownShipped} from './shipping_state.js';",
+        "import {perspective} from './requests.js';"
+      ],
+      "query_parameters": [],
+      "evidence": [
+        {
+          "line": 7,
+          "text": "export function pieces(request, role) {"
+        },
+        {
+          "line": 10,
+          "text": "export function packSide(request, role) {"
+        },
+        {
+          "line": 13,
+          "text": "export function validPacking(request) {"
+        },
+        {
+          "line": 26,
+          "text": "export function enterPacking(request, role) {"
+        },
+        {
+          "line": 32,
+          "text": "export function missing(request, role) {"
+        },
+        {
+          "line": 35,
+          "text": "export function canFinish(request, role) {"
+        },
+        {
+          "line": 38,
+          "text": "export function togglePiece(request, role, key) {"
+        },
+        {
+          "line": 45,
+          "text": "export function packAction(request, role, action) {"
+        }
+      ],
+      "purpose": "Lokaler Packzustand und Fehlmengencommands",
+      "demo_data": false,
+      "simulated_state": false,
+      "domain_logic": true,
+      "projection_ui": false,
+      "preview_url_dependency": false,
+      "decision": "Serververtrag neu implementieren; JS höchstens Vorprüfung/Projektion"
+    },
+    {
+      "path": "App/trade_v2/assets/packing_confirmation.js",
+      "tracked": false,
+      "sha256": "ffafea4d8508a23edd56c5f1c4bfb315a7e7b6f1d21e007b2dd26daeec815615",
+      "bytes": 1095,
+      "exports_or_functions": [
+        [
+          "confirmPackage",
+          ""
+        ],
+        [
+          "reportMissing",
+          ""
+        ]
+      ],
+      "imports": [
+        "import {pieces,packSide,packAction,validPacking} from './packing.js';",
+        "import {ownShipped} from './shipping_state.js';",
+        "import {releasePacking} from './shipping.js';"
+      ],
+      "query_parameters": [],
+      "evidence": [
+        {
+          "line": 7,
+          "text": "export function confirmPackage(r,role){"
+        },
+        {
+          "line": 12,
+          "text": "export function reportMissing(r,role,keys){"
+        }
+      ],
+      "purpose": "Packprüfungsdialog und lokale Freigabe",
+      "demo_data": false,
+      "simulated_state": false,
+      "domain_logic": false,
+      "projection_ui": false,
+      "preview_url_dependency": false,
+      "decision": "Adaptieren; kanonische UI bewahren, Fixture-/Session-/Query-Kopplung entfernen"
+    },
+    {
+      "path": "App/trade_v2/assets/packing_view.js",
+      "tracked": false,
+      "sha256": "733db2dab0ed6c39df285f014f1edf106be12eb7dd88e0e763768d2f0a9984c0",
+      "bytes": 9321,
+      "exports_or_functions": [
+        [
+          "startPacking",
+          ""
+        ],
+        [
+          "fail",
+          ""
+        ],
+        [
+          "command",
+          ""
+        ],
+        [
+          "showOutcome",
+          ""
+        ],
+        [
+          "render",
+          ""
+        ]
+      ],
+      "imports": [
+        "import {releasePacking} from './shipping.js';",
+        "import {ownShipped,shippingSide,bothShipped} from './shipping_state.js';",
+        "import {createShippingPanel,shippingDev} from './shipping_panel.js';",
+        "import {proposeAmendment} from './amendments.js';",
+        "import {version} from './deal_versions.js';",
+        "import {renderGive} from '/static/pax/pax.js';",
+        "import {renderReceive} from './receive.js';",
+        "import {confirmPackage,reportMissing} from './packing_confirmation.js';",
+        "import {readState, saveState, initialState, send, decide, perspective, slots, incomingSlots} from './requests.js';",
+        "import {loadSession} from './session.js';",
+        "import {pieces, packSide, validPacking, enterPacking, togglePiece, missing, canFinish, packAction} from './packing.js';"
+      ],
+      "query_parameters": [
+        "pack",
+        "role",
+        "view"
+      ],
+      "evidence": [
+        {
+          "line": 13,
+          "text": "export function startPacking(data) {"
+        },
+        {
+          "line": 15,
+          "text": "const url = new URL(location.href), role = url.searchParams.get('role') === 'recipient' ? 'recipient' : 'sender';"
+        },
+        {
+          "line": 35,
+          "text": "state=initialState(2);request=send(state,data.deal,Date.now()).request;"
+        },
+        {
+          "line": 36,
+          "text": "decide(state,request.id,'recipient','accept',Date.now());enterPacking(request,role);"
+        },
+        {
+          "line": 42,
+          "text": "saveState(sessionStorage,state);url.searchParams.delete('pack');history.replaceState(null,'',url);"
+        },
+        {
+          "line": 45,
+          "text": "if (request?.status==='cancelled' || (request?.amendment?.status==='pending' && packSide(request,role).phase!=='missing_reported')) {location.replace(`${base}/amendment?role=${role}`);return;}"
+        },
+        {
+          "line": 50,
+          "text": "saveState(sessionStorage,state);view=perspective(request,role);"
+        },
+        {
+          "line": 58,
+          "text": "const next=readState(sessionStorage), r=next.requests[data.deal.id];"
+        },
+        {
+          "line": 62,
+          "text": "saveState(sessionStorage,next);state=next;request=r;render();"
+        },
+        {
+          "line": 111,
+          "text": "$('demo-reset').addEventListener('click',()=>{try{saveState(sessionStorage,initialState(Number($('demo-count').value)));location.assign(`${base}?role=${role}`);}catch(_){fail();}});"
+        }
+      ],
+      "purpose": "Packliste, Query-Demos und Rollenprojektion",
+      "demo_data": false,
+      "simulated_state": true,
+      "domain_logic": false,
+      "projection_ui": true,
+      "preview_url_dependency": true,
+      "decision": "Adaptieren; kanonische UI bewahren, Fixture-/Session-/Query-Kopplung entfernen"
+    },
+    {
+      "path": "App/trade_v2/assets/physics11.css",
+      "tracked": false,
+      "sha256": "e503666776e7151b8d1ef72b7fd51560ece18a621e6e1e7f718e634deaf17e4e",
+      "bytes": 2079,
+      "exports_or_functions": [],
+      "imports": [],
+      "query_parameters": [],
+      "evidence": [],
+      "purpose": "Screen-/Responsive-CSS; Geometrie und Zustandsdarstellung, keine persistente Domain",
+      "demo_data": false,
+      "simulated_state": false,
+      "domain_logic": false,
+      "projection_ui": true,
+      "preview_url_dependency": false,
+      "decision": "Adaptieren; kanonische UI bewahren, Fixture-/Session-/Query-Kopplung entfernen"
+    },
+    {
+      "path": "App/trade_v2/assets/preview.css",
+      "tracked": false,
+      "sha256": "49c8f17823905311e8314b1984663dc004fdb753f49dd804b23db5e86fd3e644",
+      "bytes": 6203,
+      "exports_or_functions": [],
+      "imports": [],
+      "query_parameters": [],
+      "evidence": [],
+      "purpose": "Screen-/Responsive-CSS; Geometrie und Zustandsdarstellung, keine persistente Domain",
+      "demo_data": false,
+      "simulated_state": false,
+      "domain_logic": false,
+      "projection_ui": true,
+      "preview_url_dependency": false,
+      "decision": "Adaptieren; kanonische UI bewahren, Fixture-/Session-/Query-Kopplung entfernen"
+    },
+    {
+      "path": "App/trade_v2/assets/preview.js",
+      "tracked": false,
+      "sha256": "14706a4d17a9d059f9c0c8c69553adbc07aa8b0061562bb4f2b18ce8af99912d",
+      "bytes": 5022,
+      "exports_or_functions": [
+        [
+          "sortedPartners",
+          ""
+        ],
+        [
+          "partnerRows",
+          ""
+        ]
+      ],
+      "imports": [
+        "import {prepareStickerPhysics} from './sticker_physics.js';",
+        "import {renderReceive} from './receive.js';",
+        "import {dismissed,visibleDeals} from './discovery.js';",
+        "import {readState} from './requests.js';",
+        "import {completed} from './receipt_state.js';",
+        "import {card, renderGive} from '/static/pax/pax.js';"
+      ],
+      "query_parameters": [],
+      "evidence": [
+        {
+          "line": 16,
+          "text": "export function sortedPartners(partners, key = 'max_swap', album = '') {"
+        },
+        {
+          "line": 33,
+          "text": "let local;try{local=readState(sessionStorage);}catch(_){local={requests:{}};}"
+        },
+        {
+          "line": 34,
+          "text": "let offers=[];try{offers=visibleDeals(data.deals,local,dismissed(sessionStorage));}catch(_){document.getElementById('discovery-error').textContent='Der lokale Vorschlagsstand ist nicht verfügbar.';}"
+        }
+      ],
+      "purpose": "Screen-Dispatcher; Fixture-Sortierung und Pax-Komponentenadapter",
+      "demo_data": false,
+      "simulated_state": true,
+      "domain_logic": false,
+      "projection_ui": true,
+      "preview_url_dependency": true,
+      "decision": "Adaptieren; kanonische UI bewahren, Fixture-/Session-/Query-Kopplung entfernen"
+    },
+    {
+      "path": "App/trade_v2/assets/proposal_dismiss.js",
+      "tracked": false,
+      "sha256": "4cfe9a2ce6b724bd9668d64c52038145ef3e220fbb4ee3bba8e27e210c07aae5",
+      "bytes": 728,
+      "exports_or_functions": [
+        [
+          "proposalDismiss",
+          ""
+        ]
+      ],
+      "imports": [
+        "import {readState} from './requests.js';",
+        "import {dismiss} from './discovery.js';"
+      ],
+      "query_parameters": [],
+      "evidence": [
+        {
+          "line": 3,
+          "text": "export function proposalDismiss(deal){"
+        },
+        {
+          "line": 5,
+          "text": "try{if(readState(sessionStorage).requests[deal.id])return;}catch(_){return;}"
+        },
+        {
+          "line": 7,
+          "text": "b.addEventListener('click',()=>{try{if(readState(sessionStorage).requests[deal.id])return;dismiss(sessionStorage,deal.id);location.assign('/trade-v2/');}catch(_){document.getElementById('capacity-note').textContent='Der Vorschlag konnte nicht lokal ausgeblendet werden.';}});"
+        }
+      ],
+      "purpose": "Dismiss-UI auf lokalem Discovery-Speicher",
+      "demo_data": false,
+      "simulated_state": true,
+      "domain_logic": false,
+      "projection_ui": true,
+      "preview_url_dependency": true,
+      "decision": "Adaptieren; kanonische UI bewahren, Fixture-/Session-/Query-Kopplung entfernen"
+    },
+    {
+      "path": "App/trade_v2/assets/receipt.css",
+      "tracked": false,
+      "sha256": "44d2acf5ab162a95f2fea56ef916cb4a50c9c7ff123d4ab731728a41174c3c84",
+      "bytes": 1148,
+      "exports_or_functions": [],
+      "imports": [],
+      "query_parameters": [],
+      "evidence": [],
+      "purpose": "Screen-/Responsive-CSS; Geometrie und Zustandsdarstellung, keine persistente Domain",
+      "demo_data": false,
+      "simulated_state": false,
+      "domain_logic": false,
+      "projection_ui": true,
+      "preview_url_dependency": false,
+      "decision": "Adaptieren; kanonische UI bewahren, Fixture-/Session-/Query-Kopplung entfernen"
+    },
+    {
+      "path": "App/trade_v2/assets/receipt_demo.js",
+      "tracked": false,
+      "sha256": "df67c743206d9c8deb2154a632ed1b8c9e41c39c378634c3896ed11e43aed16c",
+      "bytes": 2366,
+      "exports_or_functions": [
+        [
+          "receiptDemo",
+          ""
+        ]
+      ],
+      "imports": [
+        "import {shippingDemo} from './shipping_demo.js';",
+        "import {amendmentDemo} from './amendment_demo.js';",
+        "import {receive,allReceived,reportProblem,proposeResolution,confirmResolution,rate} from './receipts.js';",
+        "import {expectedPositions} from './receipt_state.js';",
+        "import {enterPacking,pieces,packSide,togglePiece,packAction} from './packing.js';",
+        "import {releasePacking,chooseMethod,confirmShipment} from './shipping.js';"
+      ],
+      "query_parameters": [],
+      "evidence": [
+        {
+          "line": 7,
+          "text": "export const RECEIPT_DEMOS=['waiting','unchecked','all-ok','problem-form','positions','problem','partner-problem','resolution-pending','confirm-resolution','resolved','one-final','both-ok','completed-v1','completed-v2','rating-empty','rating-1','rating-2','rating-3','rated','one-rated','history','cancelled','q2-waiting','q2-received','q2-ok','q2-ready-received','q2-problem','q2-completed'];"
+        },
+        {
+          "line": 8,
+          "text": "export function receiptDemo(deal,scenario,now=Date.now()) {"
+        }
+      ],
+      "purpose": "Synthetische Empfangs-/Problem-/Ratingzustände",
+      "demo_data": true,
+      "simulated_state": false,
+      "domain_logic": false,
+      "projection_ui": false,
+      "preview_url_dependency": false,
+      "decision": "Research behalten; nicht produktiv übernehmen"
+    },
+    {
+      "path": "App/trade_v2/assets/receipt_history.js",
+      "tracked": false,
+      "sha256": "b4447f98fbb337c3eae719a63bad0edbf9c2dde809a6b8451ebafd362c971891",
+      "bytes": 2348,
+      "exports_or_functions": [
+        [
+          "renderHistory",
+          ""
+        ],
+        [
+          "receiptLink",
+          ""
+        ],
+        [
+          "renderActive",
+          ""
+        ]
+      ],
+      "imports": [
+        "import {readState,expire,saveState} from './requests.js';",
+        "import {completed} from './receipt_state.js';"
+      ],
+      "query_parameters": [
+        "role"
+      ],
+      "evidence": [
+        {
+          "line": 4,
+          "text": "export function renderHistory(state) {"
+        },
+        {
+          "line": 12,
+          "text": "export function receiptLink(deal) {"
+        },
+        {
+          "line": 15,
+          "text": "const r=readState(sessionStorage).requests[deal.id];if(r?.status!=='accepted')return;"
+        },
+        {
+          "line": 16,
+          "text": "const role=new URL(location.href).searchParams.get('role')==='recipient'?'recipient':'sender';"
+        },
+        {
+          "line": 22,
+          "text": "export function renderActive(){"
+        },
+        {
+          "line": 24,
+          "text": "try{const state=readState(sessionStorage),before=JSON.stringify(state);expire(state,Date.now());if(JSON.stringify(state)!==before)saveState(sessionStorage,state);const records=Object.values(state.requests).filter(r=>r.snapshot&&['pending','accepted'].includes(r.status)&&!completed(r));"
+        }
+      ],
+      "purpose": "History-Projektion; enthält älteren renderActive-Pfad",
+      "demo_data": false,
+      "simulated_state": true,
+      "domain_logic": false,
+      "projection_ui": true,
+      "preview_url_dependency": true,
+      "decision": "Adaptieren; kanonische UI bewahren, Fixture-/Session-/Query-Kopplung entfernen"
+    },
+    {
+      "path": "App/trade_v2/assets/receipt_state.js",
+      "tracked": false,
+      "sha256": "d75830988c8806b551c685df0b4d75cf7de94b507ca2d4c1df6f3eb0139bd090",
+      "bytes": 3019,
+      "exports_or_functions": [
+        [
+          "validProblem",
+          ""
+        ],
+        [
+          "validReceipt",
+          ""
+        ]
+      ],
+      "imports": [
+        "import {ROLES,opposite,positions,version} from './deal_versions.js';"
+      ],
+      "query_parameters": [],
+      "evidence": [
+        {
+          "line": 3,
+          "text": "export const RECEIPT_STATES=['WAITING','RECEIVED_UNCHECKED','RECEIVED_OK','PROBLEM_REPORTED','RESOLUTION_PENDING','RESOLVED'];"
+        },
+        {
+          "line": 4,
+          "text": "export const PROBLEM_TYPES={missing:'Sticker fehlt',wrong:'Falscher Sticker',damaged:'Sticker beschädigt',incomplete:'Sendung sonst unvollständig'};"
+        },
+        {
+          "line": 5,
+          "text": "export const receiptSide=(r,role)=>r?.receipts?.[role] || {state:'WAITING',receivedAt:null,version:null,problem:null};"
+        },
+        {
+          "line": 6,
+          "text": "export const finalReceipt=s=>['RECEIVED_OK','RESOLVED'].includes(s.state);"
+        },
+        {
+          "line": 7,
+          "text": "export const hasReceipt=r=>ROLES.some(role=>receiptSide(r,role).state!=='WAITING');"
+        },
+        {
+          "line": 8,
+          "text": "export const completed=r=>r?.status==='accepted' && ROLES.every(role=>finalReceipt(receiptSide(r,role)));"
+        },
+        {
+          "line": 9,
+          "text": "export const tradeState=r=>r?.status==='cancelled'?'CANCELLED':completed(r)?'COMPLETED':'ACTIVE';"
+        },
+        {
+          "line": 10,
+          "text": "export const expectedPositions=(r,role)=>ROLES.includes(role)&&r?.snapshot?positions(r.snapshot,opposite(role)):[];"
+        },
+        {
+          "line": 12,
+          "text": "export function validProblem(r,role,p) {"
+        },
+        {
+          "line": 18,
+          "text": "export function validReceipt(r) {"
+        }
+      ],
+      "purpose": "Empfangs-, Problem- und Abschlussprojektion/Guards",
+      "demo_data": false,
+      "simulated_state": false,
+      "domain_logic": true,
+      "projection_ui": false,
+      "preview_url_dependency": false,
+      "decision": "Serververtrag neu implementieren; JS höchstens Vorprüfung/Projektion"
+    },
+    {
+      "path": "App/trade_v2/assets/receipt_view.js",
+      "tracked": false,
+      "sha256": "7b2b1cf4bb4a96261bda5f930782cdc3a2ba9bb582f2f9707405fc8b53fb1d27",
+      "bytes": 10544,
+      "exports_or_functions": [
+        [
+          "startReceipt",
+          ""
+        ],
+        [
+          "fail",
+          ""
+        ],
+        [
+          "command",
+          ""
+        ],
+        [
+          "problemBlock",
+          ""
+        ],
+        [
+          "problemForm",
+          ""
+        ],
+        [
+          "rating",
+          ""
+        ],
+        [
+          "render",
+          ""
+        ]
+      ],
+      "imports": [
+        "import {readState,saveState,slots,incomingSlots,initialState,perspective} from './requests.js';",
+        "import {loadSession} from './session.js';",
+        "import {ROLES,opposite,version} from './deal_versions.js';",
+        "import {ownShipped,shippingState} from './shipping_state.js';",
+        "import {receiptSide,completed,tradeState,expectedPositions,PROBLEM_TYPES} from './receipt_state.js';",
+        "import {receive,allReceived,reportProblem,proposeResolution,confirmResolution,rate} from './receipts.js';",
+        "import {RECEIPT_DEMOS,receiptDemo} from './receipt_demo.js';"
+      ],
+      "query_parameters": [
+        "receipt",
+        "role",
+        "view"
+      ],
+      "evidence": [
+        {
+          "line": 9,
+          "text": "export function startReceipt(data) {"
+        },
+        {
+          "line": 10,
+          "text": "const $=id=>document.getElementById(id),url=new URL(location.href),role=url.searchParams.get('role')==='recipient'?'recipient':'sender',other=opposite(role);"
+        },
+        {
+          "line": 18,
+          "text": "state=receiptDemo(data.deal,scenario);saveState(sessionStorage,state);"
+        },
+        {
+          "line": 28,
+          "text": "try {const next=readState(sessionStorage),current=next.requests[data.deal.id];if(!current){fail();return;}action(current);saveState(sessionStorage,next);state=next;r=current;form=false;url.searchParams.delete('view');history.replaceState(null,'',url);render();$('receipt-title').focus();}"
+        },
+        {
+          "line": 104,
+          "text": "$('demo-reset').addEventListener('click',()=>{try{saveState(sessionStorage,initialState(Number($('demo-count').value)));location.assign('/trade-v2/');}catch(_){fail();}});"
+        }
+      ],
+      "purpose": "Empfangs-/Problem-/Bewertungsansicht mit lokalen Commands",
+      "demo_data": false,
+      "simulated_state": true,
+      "domain_logic": false,
+      "projection_ui": true,
+      "preview_url_dependency": true,
+      "decision": "Adaptieren; kanonische UI bewahren, Fixture-/Session-/Query-Kopplung entfernen"
+    },
+    {
+      "path": "App/trade_v2/assets/receipts.js",
+      "tracked": false,
+      "sha256": "eae623690654ea99f0c48d5c495273066f86f4dc91be65cc74625ce20065c656",
+      "bytes": 2808,
+      "exports_or_functions": [
+        [
+          "finish",
+          ""
+        ],
+        [
+          "receive",
+          ""
+        ],
+        [
+          "allReceived",
+          ""
+        ],
+        [
+          "reportProblem",
+          ""
+        ],
+        [
+          "proposeResolution",
+          ""
+        ],
+        [
+          "confirmResolution",
+          ""
+        ],
+        [
+          "rate",
+          ""
+        ]
+      ],
+      "imports": [
+        "import {ROLES,opposite,validVersions,version} from './deal_versions.js';",
+        "import {validPacking} from './packing.js';",
+        "import {validShipping} from './shipping_state.js';",
+        "import {receiptSide,completed,validReceipt,validProblem} from './receipt_state.js';"
+      ],
+      "query_parameters": [],
+      "evidence": [
+        {
+          "line": 9,
+          "text": "export function receive(r,role,now=Date.now()) {"
+        },
+        {
+          "line": 14,
+          "text": "export function allReceived(r,role,now=Date.now()) {"
+        },
+        {
+          "line": 18,
+          "text": "export function reportProblem(r,role,types,positionIds,now=Date.now()) {"
+        },
+        {
+          "line": 24,
+          "text": "export function proposeResolution(r,actor,reporter,now=Date.now()) {"
+        },
+        {
+          "line": 30,
+          "text": "export function confirmResolution(r,actor,now=Date.now()) {"
+        },
+        {
+          "line": 36,
+          "text": "export function rate(r,role,stars,now=Date.now()) {"
+        }
+      ],
+      "purpose": "Lokale Empfangs-, Problemlösungs-, Abschluss- und Ratingmutation",
+      "demo_data": false,
+      "simulated_state": false,
+      "domain_logic": true,
+      "projection_ui": false,
+      "preview_url_dependency": false,
+      "decision": "Serververtrag neu implementieren; JS höchstens Vorprüfung/Projektion"
+    },
+    {
+      "path": "App/trade_v2/assets/receive.js",
+      "tracked": false,
+      "sha256": "796cea9b749e85c57f708a5569331013b0dae69a54f9ff88b578192f5a7ad39d",
+      "bytes": 961,
+      "exports_or_functions": [
+        [
+          "renderReceive",
+          ""
+        ]
+      ],
+      "imports": [
+        "import {renderReceive as canonicalReceive} from '/static/pax/pax.js';",
+        "import {installReceiveMotion,clearReceiveMotion} from './receive_motion.js';"
+      ],
+      "query_parameters": [],
+      "evidence": [
+        {
+          "line": 4,
+          "text": "export function renderReceive(albums){"
+        }
+      ],
+      "purpose": "Pax-Receive-Adapter mit kanonischer Stackdarstellung",
+      "demo_data": false,
+      "simulated_state": false,
+      "domain_logic": false,
+      "projection_ui": true,
+      "preview_url_dependency": false,
+      "decision": "Adaptieren; kanonische UI bewahren, Fixture-/Session-/Query-Kopplung entfernen"
+    },
+    {
+      "path": "App/trade_v2/assets/receive_motion.js",
+      "tracked": false,
+      "sha256": "2974b222462382420f6ed390e1269156f0dca674af624cac7472c7e9059ae85e",
+      "bytes": 4317,
+      "exports_or_functions": [
+        [
+          "installReceiveMotion",
+          ""
+        ],
+        [
+          "move",
+          ""
+        ],
+        [
+          "clearReceiveMotion",
+          ""
+        ]
+      ],
+      "imports": [],
+      "query_parameters": [],
+      "evidence": [
+        {
+          "line": 2,
+          "text": "export const MOVE_MS=440;"
+        },
+        {
+          "line": 8,
+          "text": "export function installReceiveMotion(root,all){"
+        },
+        {
+          "line": 57,
+          "text": "export function clearReceiveMotion(){finishCurrent();}"
+        }
+      ],
+      "purpose": "FLIP-Auffächerung, 440 ms, keine Kartenskalierung",
+      "demo_data": false,
+      "simulated_state": false,
+      "domain_logic": false,
+      "projection_ui": true,
+      "preview_url_dependency": false,
+      "decision": "Adaptieren; kanonische UI bewahren, Fixture-/Session-/Query-Kopplung entfernen"
+    },
+    {
+      "path": "App/trade_v2/assets/request_view.js",
+      "tracked": false,
+      "sha256": "f1a16b75c2999718e3d3e6f5ac026c6a435e3ee74971f7bdaf66c7f5b8ced531",
+      "bytes": 9490,
+      "exports_or_functions": [
+        [
+          "startRequestView",
+          ""
+        ],
+        [
+          "fail",
+          ""
+        ],
+        [
+          "renderDeal",
+          ""
+        ],
+        [
+          "update",
+          ""
+        ]
+      ],
+      "imports": [
+        "import {completed} from './receipt_state.js';",
+        "import {receiptLink} from './receipt_history.js';",
+        "import {ownShipped,bothShipped,fullyPacked} from './shipping_state.js';",
+        "import {renderGive} from '/static/pax/pax.js';",
+        "import {renderReceive} from './receive.js';",
+        "import {loadSession} from './session.js';",
+        "import {initialState, expire, slots, incomingSlots, decide, perspective, readState, saveState} from './requests.js';"
+      ],
+      "query_parameters": [
+        "role",
+        "view"
+      ],
+      "evidence": [
+        {
+          "line": 9,
+          "text": "export function startRequestView(data, screen) {"
+        },
+        {
+          "line": 11,
+          "text": "const params = new URL(location.href).searchParams;"
+        },
+        {
+          "line": 31,
+          "text": "byId('request-preview').addEventListener('click', () => location.assign(statusURL));"
+        },
+        {
+          "line": 40,
+          "text": "state = readState(sessionStorage);"
+        },
+        {
+          "line": 41,
+          "text": "const before = JSON.stringify(state);expire(state, Date.now());"
+        },
+        {
+          "line": 42,
+          "text": "if (JSON.stringify(state) !== before) saveState(sessionStorage, state);"
+        },
+        {
+          "line": 80,
+          "text": "const minutes = Math.ceil(Math.max(0, request.expiresAt-Date.now())/60000);"
+        },
+        {
+          "line": 119,
+          "text": "state = readState(sessionStorage);"
+        },
+        {
+          "line": 120,
+          "text": "decide(state, fallback.id, role, action, Date.now());"
+        },
+        {
+          "line": 121,
+          "text": "saveState(sessionStorage, state);update();"
+        },
+        {
+          "line": 128,
+          "text": "try {saveState(sessionStorage, initialState(Number(byId('demo-count').value)));location.assign(`/trade-v2/partners/${fallback.profile_slug||fallback.partner_slug}/smartdeal`);} catch (_) {fail();}"
+        }
+      ],
+      "purpose": "Anfrageprojektion mit lokaler Entscheidung und Rollen-/View-Query",
+      "demo_data": false,
+      "simulated_state": true,
+      "domain_logic": false,
+      "projection_ui": true,
+      "preview_url_dependency": true,
+      "decision": "Adaptieren; kanonische UI bewahren, Fixture-/Session-/Query-Kopplung entfernen"
+    },
+    {
+      "path": "App/trade_v2/assets/requests.js",
+      "tracked": false,
+      "sha256": "667ea1ea220e77f956be3411375ff49f14dcc3c9750b5d905d075dab207b5de2",
+      "bytes": 4653,
+      "exports_or_functions": [
+        [
+          "initialState",
+          ""
+        ],
+        [
+          "expire",
+          ""
+        ],
+        [
+          "slots",
+          ""
+        ],
+        [
+          "send",
+          ""
+        ],
+        [
+          "readState",
+          ""
+        ],
+        [
+          "saveState",
+          ""
+        ],
+        [
+          "perspective",
+          ""
+        ],
+        [
+          "decide",
+          ""
+        ],
+        [
+          "incomingSlots",
+          ""
+        ]
+      ],
+      "imports": [
+        "import {validReceipt} from './receipt_state.js';",
+        "import {validShipping} from './shipping_state.js';",
+        "import {freezeSnapshot, validVersions} from './deal_versions.js';"
+      ],
+      "query_parameters": [],
+      "evidence": [
+        {
+          "line": 6,
+          "text": "export const DAY = 24 * 60 * 60 * 1000;"
+        },
+        {
+          "line": 7,
+          "text": "export const STORAGE_KEY = 'sammlr-trade-02';"
+        },
+        {
+          "line": 8,
+          "text": "export function initialState(count = 0, now = Date.now()) {"
+        },
+        {
+          "line": 17,
+          "text": "export function expire(state, now) {"
+        },
+        {
+          "line": 23,
+          "text": "export function slots(state, direction = 'outgoing', now = Date.now()) {"
+        },
+        {
+          "line": 27,
+          "text": "export function send(state, deal, now) {"
+        },
+        {
+          "line": 39,
+          "text": "export function readState(storage) {"
+        },
+        {
+          "line": 57,
+          "text": "export function saveState(storage, state) {storage.setItem(STORAGE_KEY, JSON.stringify(state));}"
+        },
+        {
+          "line": 60,
+          "text": "export function perspective(request, role) {"
+        },
+        {
+          "line": 74,
+          "text": "export function decide(state, id, role, action, now) {"
+        },
+        {
+          "line": 83,
+          "text": "export function incomingSlots(state, partnerId, now = Date.now()) {"
+        }
+      ],
+      "purpose": "Session-State, Snapshot, Versand-unabhängige Slots, Send/Decide/Expiry",
+      "demo_data": false,
+      "simulated_state": true,
+      "domain_logic": true,
+      "projection_ui": false,
+      "preview_url_dependency": false,
+      "decision": "Serververtrag neu implementieren; JS höchstens Vorprüfung/Projektion"
+    },
+    {
+      "path": "App/trade_v2/assets/sender.js",
+      "tracked": false,
+      "sha256": "b0e90b49f0b0dce34ec36a4cb7272e6f03690835e16f5cc0e6f663cd87f80502",
+      "bytes": 2799,
+      "exports_or_functions": [
+        [
+          "startSender",
+          ""
+        ],
+        [
+          "update",
+          ""
+        ]
+      ],
+      "imports": [
+        "import {loadSession} from './session.js';",
+        "import {initialState, expire, slots, send, readState, saveState} from './requests.js';"
+      ],
+      "query_parameters": [],
+      "evidence": [
+        {
+          "line": 4,
+          "text": "export function startSender(data, screen) {"
+        },
+        {
+          "line": 18,
+          "text": "if (state.requests[deal.id]?.status==='cancelled') {location.replace(waitingURL);return state.requests[deal.id].snapshot;}"
+        },
+        {
+          "line": 21,
+          "text": "const before = JSON.stringify(state);expire(state, Date.now());"
+        },
+        {
+          "line": 22,
+          "text": "if (JSON.stringify(state) !== before) saveState(sessionStorage, state);"
+        },
+        {
+          "line": 39,
+          "text": "// Re-read before each command. Synchronous sessionStorage makes same-tab retries atomic."
+        },
+        {
+          "line": 40,
+          "text": "state = readState(sessionStorage);"
+        },
+        {
+          "line": 41,
+          "text": "const result = send(state, deal, Date.now());"
+        },
+        {
+          "line": 42,
+          "text": "saveState(sessionStorage, state);"
+        },
+        {
+          "line": 43,
+          "text": "if (result.status !== 'full') location.assign(waitingURL);"
+        },
+        {
+          "line": 53,
+          "text": "saveState(sessionStorage, initialState(Number(document.getElementById('demo-count').value)));"
+        },
+        {
+          "line": 54,
+          "text": "location.assign(`/trade-v2/partners/${deal.profile_slug||deal.partner_slug}/smartdeal`);"
+        }
+      ],
+      "purpose": "Lokales Absenden, Reset und Zeitgeber",
+      "demo_data": false,
+      "simulated_state": true,
+      "domain_logic": false,
+      "projection_ui": false,
+      "preview_url_dependency": true,
+      "decision": "Adaptieren; kanonische UI bewahren, Fixture-/Session-/Query-Kopplung entfernen"
+    },
+    {
+      "path": "App/trade_v2/assets/session.js",
+      "tracked": false,
+      "sha256": "58244c0686c8472c2357cadb93729336c60a8e0283a32e307da078b5ea93bcc9",
+      "bytes": 1264,
+      "exports_or_functions": [
+        [
+          "loadSession",
+          ""
+        ]
+      ],
+      "imports": [
+        "import {DAY, initialState, send, decide, expire, readState, saveState} from './requests.js';"
+      ],
+      "query_parameters": [
+        "demo",
+        "scenario"
+      ],
+      "evidence": [
+        {
+          "line": 3,
+          "text": "export function loadSession(deal) {"
+        },
+        {
+          "line": 4,
+          "text": "const query = new URL(location.href);"
+        },
+        {
+          "line": 9,
+          "text": "const now = Date.now();"
+        },
+        {
+          "line": 15,
+          "text": "saveState(sessionStorage, state);query.searchParams.delete('scenario');"
+        },
+        {
+          "line": 18,
+          "text": "if (demo === 'sent') send(state, deal, Date.now());"
+        },
+        {
+          "line": 19,
+          "text": "saveState(sessionStorage, state);"
+        },
+        {
+          "line": 20,
+          "text": "} else state = readState(sessionStorage);"
+        },
+        {
+          "line": 22,
+          "text": "if (query.href !== location.href) history.replaceState(null, '', query);"
+        }
+      ],
+      "purpose": "Session-Laden und querygesteuerte Demo-Resets",
+      "demo_data": false,
+      "simulated_state": true,
+      "domain_logic": false,
+      "projection_ui": false,
+      "preview_url_dependency": true,
+      "decision": "Research behalten; nicht produktiv übernehmen"
+    },
+    {
+      "path": "App/trade_v2/assets/shipping.css",
+      "tracked": false,
+      "sha256": "9d05b30401d62afb3524f11e4687d9f8dd9af4cfd5f717b5b92b58a53f57d74a",
+      "bytes": 681,
+      "exports_or_functions": [],
+      "imports": [],
+      "query_parameters": [],
+      "evidence": [],
+      "purpose": "Screen-/Responsive-CSS; Geometrie und Zustandsdarstellung, keine persistente Domain",
+      "demo_data": false,
+      "simulated_state": false,
+      "domain_logic": false,
+      "projection_ui": true,
+      "preview_url_dependency": false,
+      "decision": "Adaptieren; kanonische UI bewahren, Fixture-/Session-/Query-Kopplung entfernen"
+    },
+    {
+      "path": "App/trade_v2/assets/shipping.js",
+      "tracked": false,
+      "sha256": "7c1c9f7fcdf70484a673290be97eaaaef10436f06d5467b8e85e74ae91d80126",
+      "bytes": 2640,
+      "exports_or_functions": [
+        [
+          "demoAddress",
+          ""
+        ],
+        [
+          "targetAddress",
+          ""
+        ],
+        [
+          "releasePacking",
+          ""
+        ],
+        [
+          "chooseMethod",
+          ""
+        ],
+        [
+          "confirmShipment",
+          ""
+        ],
+        [
+          "reopenPacking",
+          ""
+        ]
+      ],
+      "imports": [
+        "import {ROLES, opposite, version, validVersions} from './deal_versions.js';",
+        "import {validPacking} from './packing.js';",
+        "import {ownShipped, shippingSide, shippingAllowed, validShipping} from './shipping_state.js';"
+      ],
+      "query_parameters": [],
+      "evidence": [
+        {
+          "line": 7,
+          "text": "export function demoAddress(r,owner) {"
+        },
+        {
+          "line": 18,
+          "text": "export function targetAddress(r,role) {"
+        },
+        {
+          "line": 22,
+          "text": "export function releasePacking(r,role) {"
+        },
+        {
+          "line": 28,
+          "text": "export function chooseMethod(r,role,method) {"
+        },
+        {
+          "line": 32,
+          "text": "export function confirmShipment(r,role,now=Date.now()) {"
+        },
+        {
+          "line": 40,
+          "text": "export function reopenPacking(r,role) {"
+        }
+      ],
+      "purpose": "Lokale Adress-/Freigabe-/Versandcommands einschließlich Demo-Adresse",
+      "demo_data": true,
+      "simulated_state": false,
+      "domain_logic": true,
+      "projection_ui": false,
+      "preview_url_dependency": false,
+      "decision": "Serververtrag neu implementieren; JS höchstens Vorprüfung/Projektion"
+    },
+    {
+      "path": "App/trade_v2/assets/shipping_demo.js",
+      "tracked": false,
+      "sha256": "03bd0b8432dacec27ddb8aaf51b4bff6b111909891b8eac5a0acab656645b4e9",
+      "bytes": 2334,
+      "exports_or_functions": [
+        [
+          "shippingDemo",
+          ""
+        ]
+      ],
+      "imports": [
+        "import {initialState,send,decide} from './requests.js';",
+        "import {enterPacking,pieces,togglePiece,packAction,packSide} from './packing.js';",
+        "import {amendmentDemo} from './amendment_demo.js';",
+        "import {releasePacking,chooseMethod,confirmShipment} from './shipping.js';"
+      ],
+      "query_parameters": [],
+      "evidence": [
+        {
+          "line": 6,
+          "text": "export const SHIPPING_DEMOS=['address','ready','me-packing','me-complete','me-ready','both','partner-first','v2-address','v2-ready','v2-shipped','locked','amendment-blocked','long','consent-blocked','full-unreleased'];"
+        },
+        {
+          "line": 7,
+          "text": "export function shippingDemo(deal,scenario,now=Date.now()) {"
+        }
+      ],
+      "purpose": "Synthetische Versandzustände",
+      "demo_data": true,
+      "simulated_state": true,
+      "domain_logic": false,
+      "projection_ui": false,
+      "preview_url_dependency": false,
+      "decision": "Research behalten; nicht produktiv übernehmen"
+    },
+    {
+      "path": "App/trade_v2/assets/shipping_panel.js",
+      "tracked": false,
+      "sha256": "4cf0f592065fb9f0fa58be6e556c2c1652f8d684dcf29fa9ce9247e33d1fec43",
+      "bytes": 6743,
+      "exports_or_functions": [
+        [
+          "createShippingPanel",
+          ""
+        ],
+        [
+          "move",
+          ""
+        ],
+        [
+          "addressNote",
+          ""
+        ],
+        [
+          "render",
+          ""
+        ],
+        [
+          "shippingDev",
+          ""
+        ]
+      ],
+      "imports": [
+        "import {completed} from './receipt_state.js';",
+        "import {perspective} from './requests.js';",
+        "import {opposite, version} from './deal_versions.js';",
+        "import {packSide} from './packing.js';",
+        "import {ownShipped, shippingSide, shippingState, bothShipped, fullyPacked} from './shipping_state.js';",
+        "import {targetAddress, releasePacking, chooseMethod, confirmShipment, reopenPacking} from './shipping.js';"
+      ],
+      "query_parameters": [],
+      "evidence": [
+        {
+          "line": 9,
+          "text": "export function createShippingPanel(root,role,base,command,initialView='address') {"
+        },
+        {
+          "line": 76,
+          "text": "export function shippingDev(r,role) {"
+        }
+      ],
+      "purpose": "Versand-/Adress-UI mit lokalen Aktionen und Demo-Einstiegen",
+      "demo_data": false,
+      "simulated_state": false,
+      "domain_logic": false,
+      "projection_ui": false,
+      "preview_url_dependency": false,
+      "decision": "Adaptieren; kanonische UI bewahren, Fixture-/Session-/Query-Kopplung entfernen"
+    },
+    {
+      "path": "App/trade_v2/assets/shipping_state.js",
+      "tracked": false,
+      "sha256": "31493d15c3afb50e75c90844b6fc92d7888d47f6a0d95c2bb5dfe2c98d76e0d0",
+      "bytes": 1979,
+      "exports_or_functions": [
+        [
+          "fullyPacked",
+          ""
+        ],
+        [
+          "shippingAllowed",
+          ""
+        ],
+        [
+          "shippingState",
+          ""
+        ],
+        [
+          "validShipping",
+          ""
+        ]
+      ],
+      "imports": [
+        "import {ROLES, version} from './deal_versions.js';"
+      ],
+      "query_parameters": [],
+      "evidence": [
+        {
+          "line": 3,
+          "text": "export const ownShipped=(r,role)=>ROLES.includes(role) && Boolean(role==='sender'?r.ownShipped:r.recipientShipped);"
+        },
+        {
+          "line": 4,
+          "text": "export const shippingSide=(r,role)=>r.shipping?.[role] || {releasedVersion:null,method:null,shippedAt:null};"
+        },
+        {
+          "line": 5,
+          "text": "export function fullyPacked(r,role) {"
+        },
+        {
+          "line": 11,
+          "text": "export function shippingAllowed(r,role) {"
+        },
+        {
+          "line": 15,
+          "text": "export function shippingState(r,role) {"
+        },
+        {
+          "line": 20,
+          "text": "export const bothShipped=r=>ownShipped(r,'sender') && ownShipped(r,'recipient');"
+        },
+        {
+          "line": 21,
+          "text": "export function validShipping(r) {"
+        }
+      ],
+      "purpose": "Richtungsbezogene Versand-/Freigabeprojektion",
+      "demo_data": false,
+      "simulated_state": false,
+      "domain_logic": true,
+      "projection_ui": false,
+      "preview_url_dependency": false,
+      "decision": "Serververtrag neu implementieren; JS höchstens Vorprüfung/Projektion"
+    },
+    {
+      "path": "App/trade_v2/assets/shipping_view.js",
+      "tracked": false,
+      "sha256": "0f17c6eaddb02f8b1d375304ceedd77fc1bcc3d2cfa0894c562d1743ab72d4d5",
+      "bytes": 2381,
+      "exports_or_functions": [
+        [
+          "startShipping",
+          ""
+        ],
+        [
+          "fail",
+          ""
+        ],
+        [
+          "render",
+          ""
+        ],
+        [
+          "command",
+          ""
+        ]
+      ],
+      "imports": [
+        "import {readState,saveState,slots,incomingSlots,initialState} from './requests.js';",
+        "import {loadSession} from './session.js';",
+        "import {createShippingPanel,shippingDev} from './shipping_panel.js';",
+        "import {SHIPPING_DEMOS,shippingDemo} from './shipping_demo.js';"
+      ],
+      "query_parameters": [
+        "role",
+        "ship",
+        "view"
+      ],
+      "evidence": [
+        {
+          "line": 5,
+          "text": "export function startShipping(data) {"
+        },
+        {
+          "line": 6,
+          "text": "const $=id=>document.getElementById(id),url=new URL(location.href),role=url.searchParams.get('role')==='recipient'?'recipient':'sender';"
+        },
+        {
+          "line": 17,
+          "text": "state=shippingDemo(data.deal,scenario);saveState(sessionStorage,state);"
+        },
+        {
+          "line": 20,
+          "text": "if (scenario==='amendment-blocked') {location.replace(`${base}/amendment?role=${role}`);return;}"
+        },
+        {
+          "line": 29,
+          "text": "try {const next=readState(sessionStorage),r=next.requests[data.deal.id];if(!r){fail();return;}action(r);saveState(sessionStorage,next);state=next;request=r;render();$('ship-heading')?.focus();}"
+        },
+        {
+          "line": 32,
+          "text": "$('demo-reset').addEventListener('click',()=>{try{saveState(sessionStorage,initialState(Number($('demo-count').value)));location.assign(base);}catch(_){fail();}});"
+        }
+      ],
+      "purpose": "Versandansicht mit Query-Rolle und Demos",
+      "demo_data": false,
+      "simulated_state": true,
+      "domain_logic": false,
+      "projection_ui": true,
+      "preview_url_dependency": true,
+      "decision": "Adaptieren; kanonische UI bewahren, Fixture-/Session-/Query-Kopplung entfernen"
+    },
+    {
+      "path": "App/trade_v2/assets/sticker_physics.js",
+      "tracked": false,
+      "sha256": "9282c2751d1f39103f475c46f681dd06e2e8af798e2d1edeb51068a783dd8675",
+      "bytes": 1625,
+      "exports_or_functions": [
+        [
+          "prepareStickerPhysics",
+          ""
+        ]
+      ],
+      "imports": [
+        "import {card} from '/static/pax/pax.js';"
+      ],
+      "query_parameters": [],
+      "evidence": [
+        {
+          "line": 5,
+          "text": "export function prepareStickerPhysics(){"
+        }
+      ],
+      "purpose": "Versteckter iframe misst echte kanonische Sticker-CSS",
+      "demo_data": false,
+      "simulated_state": false,
+      "domain_logic": false,
+      "projection_ui": true,
+      "preview_url_dependency": false,
+      "decision": "Adaptieren; kanonische UI bewahren, Fixture-/Session-/Query-Kopplung entfernen"
+    },
+    {
+      "path": "App/trade_v2/assets/ux08.css",
+      "tracked": false,
+      "sha256": "48c1e8b98c23bdd698d78dcfbdc0418bc8a64a503d8de449c074ddb3a55e889c",
+      "bytes": 1551,
+      "exports_or_functions": [],
+      "imports": [],
+      "query_parameters": [],
+      "evidence": [],
+      "purpose": "Screen-/Responsive-CSS; Geometrie und Zustandsdarstellung, keine persistente Domain",
+      "demo_data": false,
+      "simulated_state": false,
+      "domain_logic": false,
+      "projection_ui": true,
+      "preview_url_dependency": false,
+      "decision": "Adaptieren; kanonische UI bewahren, Fixture-/Session-/Query-Kopplung entfernen"
+    },
+    {
+      "path": "App/trade_v2/fixtures.py",
+      "tracked": false,
+      "sha256": "43b56ae860a7f46bd2073d695a9e8ead1a17ee406ac8cc69eb770dcb0fd97e3e",
+      "bytes": 3317,
+      "exports_or_functions": [
+        [
+          "",
+          "pieces"
+        ],
+        [
+          "",
+          "groups"
+        ],
+        [
+          "",
+          "partner_by_slug"
+        ],
+        [
+          "",
+          "deal_for"
+        ],
+        [
+          "",
+          "top_deals"
+        ]
+      ],
+      "imports": [
+        "from copy import deepcopy"
+      ],
+      "query_parameters": [],
+      "evidence": [
+        {
+          "line": 31,
+          "text": "def pieces(album_id, prefix, count, start):"
+        },
+        {
+          "line": 36,
+          "text": "def groups(count, album_count, prefix, start, deep=False):"
+        },
+        {
+          "line": 61,
+          "text": "def partner_by_slug(slug):"
+        },
+        {
+          "line": 65,
+          "text": "def deal_for(slug, origin):"
+        },
+        {
+          "line": 76,
+          "text": "def top_deals():"
+        }
+      ],
+      "purpose": "Synthetische Partner, Alben, Angebote und Top-Reihenfolge",
+      "demo_data": true,
+      "simulated_state": false,
+      "domain_logic": false,
+      "projection_ui": false,
+      "preview_url_dependency": false,
+      "decision": "Research behalten; nicht produktiv übernehmen"
+    },
+    {
+      "path": "App/trade_v2/manual_fixtures.py",
+      "tracked": false,
+      "sha256": "c42e330fad3b0dc8a350eed9c635979a672f00aa45accaaf522c0e6edb09f54e",
+      "bytes": 1647,
+      "exports_or_functions": [
+        [
+          "",
+          "manual_contexts"
+        ],
+        [
+          "",
+          "manual_lifecycle_stub"
+        ]
+      ],
+      "imports": [
+        "from copy import deepcopy"
+      ],
+      "query_parameters": [],
+      "evidence": [
+        {
+          "line": 5,
+          "text": "def manual_contexts(partner):"
+        },
+        {
+          "line": 29,
+          "text": "def manual_lifecycle_stub(partner):"
+        }
+      ],
+      "purpose": "Vier manuelle Präferenz-/Supply-Szenarien und Lifecycle-Stubs",
+      "demo_data": true,
+      "simulated_state": false,
+      "domain_logic": false,
+      "projection_ui": false,
+      "preview_url_dependency": false,
+      "decision": "Research behalten; nicht produktiv übernehmen"
+    },
+    {
+      "path": "App/trade_v2/routes.py",
+      "tracked": false,
+      "sha256": "08892f317373a69f7c008b2c35800714ad16eab805c83c3a482923c5a474893b",
+      "bytes": 3216,
+      "exports_or_functions": [
+        [
+          "",
+          "page"
+        ],
+        [
+          "",
+          "home"
+        ],
+        [
+          "",
+          "partners"
+        ],
+        [
+          "",
+          "partner"
+        ],
+        [
+          "",
+          "top_detail"
+        ],
+        [
+          "",
+          "smartdeal"
+        ],
+        [
+          "",
+          "manual"
+        ],
+        [
+          "",
+          "waiting"
+        ],
+        [
+          "",
+          "next_step"
+        ],
+        [
+          "",
+          "amendment"
+        ],
+        [
+          "",
+          "shipping"
+        ],
+        [
+          "",
+          "receipt"
+        ],
+        [
+          "",
+          "active"
+        ],
+        [
+          "",
+          "lifecycle_deal"
+        ],
+        [
+          "",
+          "manual_review"
+        ]
+      ],
+      "imports": [
+        "from flask import Blueprint, abort, render_template",
+        "from .manual_fixtures import manual_contexts, manual_lifecycle_stub",
+        "from .fixtures import ALBUMS, PARTNERS, TOP_IDS, partner_by_slug, deal_for, top_deals"
+      ],
+      "query_parameters": [],
+      "evidence": [
+        {
+          "line": 10,
+          "text": "def page(screen, **data):"
+        },
+        {
+          "line": 15,
+          "text": "def home():"
+        },
+        {
+          "line": 20,
+          "text": "def partners():"
+        },
+        {
+          "line": 25,
+          "text": "def partner(slug):"
+        },
+        {
+          "line": 33,
+          "text": "def top_detail(slug):"
+        },
+        {
+          "line": 41,
+          "text": "def smartdeal(slug):"
+        },
+        {
+          "line": 49,
+          "text": "def manual(slug):"
+        },
+        {
+          "line": 57,
+          "text": "def waiting(slug):"
+        },
+        {
+          "line": 65,
+          "text": "def next_step(slug):"
+        },
+        {
+          "line": 73,
+          "text": "def amendment(slug):"
+        },
+        {
+          "line": 81,
+          "text": "def shipping(slug):"
+        },
+        {
+          "line": 89,
+          "text": "def receipt(slug):"
+        },
+        {
+          "line": 97,
+          "text": "def active():"
+        },
+        {
+          "line": 101,
+          "text": "def lifecycle_deal(slug):"
+        },
+        {
+          "line": 109,
+          "text": "def manual_review(slug):"
+        }
+      ],
+      "purpose": "GET-Fixture-Router; Slugs ersetzen keine persistenten Trade-IDs",
+      "demo_data": false,
+      "simulated_state": false,
+      "domain_logic": false,
+      "projection_ui": false,
+      "preview_url_dependency": true,
+      "decision": "Adaptieren; kanonische UI bewahren, Fixture-/Session-/Query-Kopplung entfernen"
+    },
+    {
+      "path": "App/trade_v2/templates/manual.html",
+      "tracked": false,
+      "sha256": "c08dada3e315db7ea45a350f4ee198420c578385b7f4ff12c4004e8a0c129a10",
+      "bytes": 1783,
+      "exports_or_functions": [],
+      "imports": [],
+      "query_parameters": [],
+      "evidence": [],
+      "purpose": "Preview-Template für manuelle kanonische Stickerliste",
+      "demo_data": false,
+      "simulated_state": false,
+      "domain_logic": false,
+      "projection_ui": true,
+      "preview_url_dependency": true,
+      "decision": "Adaptieren; kanonische UI bewahren, Fixture-/Session-/Query-Kopplung entfernen"
+    },
+    {
+      "path": "App/trade_v2/templates/preview.html",
+      "tracked": false,
+      "sha256": "ba771265b5ca7f1f7f4ae6dbcb8ef1912685ed39e0d1d49300ec13fe80f33b75",
+      "bytes": 11545,
+      "exports_or_functions": [],
+      "imports": [],
+      "query_parameters": [],
+      "evidence": [],
+      "purpose": "Gemeinsames Screen-Template mit Preview-/Entwicklersteuerung",
+      "demo_data": false,
+      "simulated_state": false,
+      "domain_logic": false,
+      "projection_ui": true,
+      "preview_url_dependency": true,
+      "decision": "Adaptieren; kanonische UI bewahren, Fixture-/Session-/Query-Kopplung entfernen"
+    }
+  ],
+  "production_sources": [
+    "App/services/_smartdeal_flow.py",
+    "App/services/account_lifecycle.py",
+    "App/services/album_completion.py",
+    "App/services/album_privacy.py",
+    "App/services/albums.py",
+    "App/services/auth_security.py",
+    "App/services/collection_projection.py",
+    "App/services/collector_profiles.py",
+    "App/services/community.py",
+    "App/services/executable_trade_matches.py",
+    "App/services/feed_events.py",
+    "App/services/historical_collection.py",
+    "App/services/history_cutover.py",
+    "App/services/inventory.py",
+    "App/services/inventory_availability.py",
+    "App/services/inventory_guard.py",
+    "App/services/inventory_write.py",
+    "App/services/legacy_trophy_backfill.py",
+    "App/services/notification_history.py",
+    "App/services/observability.py",
+    "App/services/profile_privacy.py",
+    "App/services/runtime_operations.py",
+    "App/services/smart_trade_requests.py",
+    "App/services/smartdeal_acceptance.py",
+    "App/services/smartdeal_expiry.py",
+    "App/services/smartdeal_identity.py",
+    "App/services/smartdeal_optimizer.py",
+    "App/services/smartdeal_pairwise.py",
+    "App/services/smartdeal_planning.py",
+    "App/services/smartdeal_release.py",
+    "App/services/smartdeal_requests.py",
+    "App/services/smartdeal_runtime.py",
+    "App/services/smartdeal_suggestions.py",
+    "App/services/statistics_projection.py",
+    "App/services/successful_trade_projection.py",
+    "App/services/top_match_optimization.py",
+    "App/services/trade_contracts.py",
+    "App/services/trade_coverage.py",
+    "App/services/trade_problems.py",
+    "App/services/trade_ratings.py",
+    "App/services/trade_receipt.py",
+    "App/services/trade_reservations.py",
+    "App/services/trade_shipping.py",
+    "App/services/trophy_service.py",
+    "App/services/trophy_unlocks.py",
+    "App/services/typed_notifications.py",
+    "App/services/user_data_export.py"
+  ],
+  "contract_and_audit_sources": [
+    "docs/MANUAL_OFFER_DOMAIN_CONTRACT_V1.md",
+    "docs/PAX_01_03_AUDIT.md",
+    "docs/PAX_04B_AUDIT.md",
+    "docs/PAX_04C_AUDIT.md",
+    "docs/PAX_04_AUDIT.md",
+    "docs/PAX_05_AUDIT.md",
+    "docs/PAX_06_AUDIT.md",
+    "docs/PAX_CAP10_AUDIT.md",
+    "docs/SAMMLRPAX_CONTRACT_V1.md",
+    "docs/SMARTDEAL_ALGORITHM_CONTRACT_V1.md",
+    "docs/SMARTDEAL_CORE_GATE_AUDIT.md",
+    "docs/SMARTDEAL_CORE_GATE_FIX_CG1.md",
+    "docs/SMARTDEAL_CORE_GATE_REAUDIT_CG1.md",
+    "docs/SMARTDEAL_PRODUCT_BIBLE_V1.md",
+    "docs/SMARTDEAL_T3A_OPTIMIZATION_PROOF.md",
+    "docs/SMARTDEAL_T3B1_PERFORMANCE_INVESTIGATION.md",
+    "docs/SMARTDEAL_T3B_OPTIMIZER_REPORT.md",
+    "docs/SMARTDEAL_T4_SUGGESTION_REVALIDATION.md",
+    "docs/SMARTDEAL_T5A_ATOMIC_BINDING.md",
+    "docs/SMARTDEAL_T5B_RELEASE_EXPIRY.md",
+    "docs/SMARTDEAL_T6A_OPPORTUNITY_IDENTITY.md",
+    "docs/SMARTDEAL_T6B_ACCEPT_MUTUAL_GO.md",
+    "docs/SMARTDEAL_TECHNICAL_ROADMAP_V1.md",
+    "docs/SMARTDEAL_V1_IST_AUDIT.md",
+    "docs/TRADE_00_RESET_AUDIT.md",
+    "docs/TRADE_01_AUDIT.md",
+    "docs/TRADE_02_AUDIT.md",
+    "docs/TRADE_03_AUDIT.md",
+    "docs/TRADE_04_AUDIT.md",
+    "docs/TRADE_05_AUDIT.md",
+    "docs/TRADE_06_AUDIT.md",
+    "docs/TRADE_07_AUDIT.md",
+    "docs/TRADE_08_AUDIT.md",
+    "docs/TRADE_09_AUDIT.md",
+    "docs/TRADE_10_AUDIT.md",
+    "docs/TRADE_11_AUDIT.md",
+    "docs/TRADE_NEXT_BLOCKS_TECH_PREP.md",
+    "docs/TRADE_PRODUCT_CONTRACT_V2.md",
+    "docs/TRADE_TECH_DEBT_AUDIT_TD1.md",
+    "docs/TRADE_UX_PO_DECISIONS_Q1_Q8.md",
+    "docs/TRADE_UX_SOLL_V1.md",
+    "docs/TRADE_V2_END_TO_END_AUDIT.md",
+    "docs/TRADE_V2_MANUAL_SELECTION_CONTRACT.md",
+    "docs/TRADE_V2_WALKTHROUGH_CHECKLIST.md"
+  ],
+  "source_evidence": [
+    {
+      "path": "docs/MANUAL_OFFER_DOMAIN_CONTRACT_V1.md",
+      "sha256": "2161a20f3b0a2f9dcd9fd33e9ea536acaf49bba6f35e7cf1baa5fcf4a94a527a",
+      "headings": [
+        "# Manual Offer Domain Contract V1",
+        "## 1. Abgrenzung und Inputs",
+        "## 2. Draft",
+        "## 3. Mengen und Präferenzen",
+        "## 4. Submit und Frozen Package",
+        "## 5. Zeit und Zustandsautomat",
+        "## 6. Accept, Release und physischer Anschluss",
+        "## 7. Cross-Flow und Privacy",
+        "## 8. Idempotenz und Races",
+        "## 9. Notifications",
+        "## 10. IST-Audit",
+        "## 11. Technische Empfehlung",
+        "## 12. Phase-B-Abschluss"
+      ]
+    },
+    {
+      "path": "docs/PAX_01_03_AUDIT.md",
+      "sha256": "38b8d1f60073cb81a758a0dc005ccb54e4b2e3e8e7b7e66fb8b4fd972191ed8d",
+      "headings": [
+        "# PAX-01–03 — isolierter klickbarer Pfad",
+        "## Audit vor Implementierung",
+        "## Geplanter isolierter Scope",
+        "## Abnahme",
+        "### Ausgeführte Prüfungen",
+        "### Vollständiges Manifest neuer Dateien"
+      ]
+    },
+    {
+      "path": "docs/PAX_04B_AUDIT.md",
+      "sha256": "7ead59706ac96251b447c6fc3197e1db4cc0468d2e33c45cffb3e165adb005db",
+      "headings": [
+        "# PAX-04b — Kiosktresen und Mengentiefe",
+        "## Umsetzung",
+        "## Geänderte und neue Dateien",
+        "## Prüfungen",
+        "## Abgrenzung"
+      ]
+    },
+    {
+      "path": "docs/PAX_04C_AUDIT.md",
+      "sha256": "1d4c8cbe960ac8fa59f2b33d5b9fce10ab7baf8f519dfa3ad339e5ecca5b77d1",
+      "headings": [
+        "# PAX-04c Audit",
+        "## Umsetzung",
+        "## Ausgeführte Tests",
+        "## Exakte Dateiliste"
+      ]
+    },
+    {
+      "path": "docs/PAX_04_AUDIT.md",
+      "sha256": "d4c3b08db0a0cc260b60e8eeb4f1c040558d4f938111682d402b0616af35255f",
+      "headings": [
+        "# PAX-04 — Kioskbox / Register-Browsing",
+        "## Umsetzung",
+        "## Prüfungen",
+        "## Geänderte bestehende Dateien",
+        "## Neue Dateien",
+        "## Öffnen"
+      ]
+    },
+    {
+      "path": "docs/PAX_05_AUDIT.md",
+      "sha256": "facedcca3b17230829bfa205ac6615c4179591f611477e62130a621ad8cd8a5e",
+      "headings": [
+        "# PAX-05 — Anfrage, Annahme und Packphase",
+        "## Grundlagen und Abgleich",
+        "## Lokaler Demo-Vertrag",
+        "## Demo-Navigation",
+        "## Tests und Ergebnisse",
+        "## Explizite Abgrenzung",
+        "## Exakte Dateiliste"
+      ]
+    },
+    {
+      "path": "docs/PAX_06_AUDIT.md",
+      "sha256": "031db4e56bc178b05f1a5439f19b0d2edcff51af2da62f1f03e523fd16b8733d",
+      "headings": [
+        "# PAX-06 — Packfreigabe, Adresse und eigener Versand",
+        "## Quellen und bestehender Versandflow",
+        "## State und Grenzen",
+        "## Direkte Demo-URLs",
+        "## Tests und Responsive-Ergebnis",
+        "## TODO — ausdrücklich nicht umgesetzt",
+        "## Bestätigung",
+        "## Exakte Dateiliste"
+      ]
+    },
+    {
+      "path": "docs/PAX_CAP10_AUDIT.md",
+      "sha256": "05feb1d531a8d06beeeeab63534133e4d2a978a097c201f7be483c5d8f5cb2b0",
+      "headings": [
+        "# Pax Receive: kanonischer Stack, Cap 10"
+      ]
+    },
+    {
+      "path": "docs/SAMMLRPAX_CONTRACT_V1.md",
+      "sha256": "a4e4f208fc6e0492a1c2499669c5d190a92ec6b28b0289244e3bffd730fd273d",
+      "headings": [
+        "# PAX-00 — SammlrPax Product/UX Contract V1",
+        "## 1. Geltungsbereich und Legacy-Grenze",
+        "## 2. Discovery und Kandidaten",
+        "## 3. Operative Kapazität: gemeinsam 3 ausgehend / 3 eingehend",
+        "## 4. Anfragephase: öffnen, ansehen, anfragen",
+        "### 4.1 Du bekommst: Albumstapel",
+        "### 4.2 Du gibst ab: informative Post-its",
+        "## 5. Kanonische Komponenten- und Mengenreferenzen",
+        "### 5.1 Post-it-Kapazität und Fortsetzung",
+        "### 5.2 Stickerwall und LOCKED Stack",
+        "### 5.3 Preview-Einordnung",
+        "## 6. Gespiegelte Partneransicht",
+        "## 7. Packphase erst nach Annahme",
+        "## 8. Explizites Pre-Shipment Amendment",
+        "### 8.1 Deterministische Größenanpassung",
+        "### 8.2 Unveränderte Sicherheitsgrenzen",
+        "## 9. Adresse und Versandübergang",
+        "## 10. Nach Versand, Empfang, Probleme und Abschluss",
+        "## 11. Manuelle Trades und Navigation",
+        "## 12. Zeitvertrag und offene PO-Reviews",
+        "## 13. Architekturziel für spätere Blöcke",
+        "## 14. Audit und ausdrückliche Supersession",
+        "### 14.1 Domainentscheidungen — durch PO ausdrücklich aufgelöst",
+        "### 14.2 Ersetzte ältere UX-Entscheidungen",
+        "### 14.3 Konfliktstatus",
+        "## 15. Dokumentationsabschluss"
+      ]
+    },
+    {
+      "path": "docs/SMARTDEAL_ALGORITHM_CONTRACT_V1.md",
+      "sha256": "232ff9983d87288a03a7a58e870d0df6f0f0179c4982e6cd45a354be24d919b3",
+      "headings": [
+        "# SmartDeal Algorithm Contract V1",
+        "## 1. Grundziel und Geltungsbereich",
+        "## 2. Kanonische Inputs und Identitäten",
+        "## 3. Eligible Partner und tradefähige Positionen",
+        "## 4. Pairwise Opportunity und Need-Cap",
+        "## 5. 1:1-Invariante und zulässige Allokation",
+        "## 6. Partner-Zusammenführung",
+        "## 7. Globale Ressourcen- und Bedarfsconstraints",
+        "## 8. Maximale Planlänge",
+        "## 9. Mindestgröße und fehlende Maximalgröße",
+        "## 10. Hauptnutzen",
+        "## 11. Versand-Effizienzregel und exakte Grenze",
+        "## 12. Deterministischer Planvergleich",
+        "## 13. Deterministische Partner-Tie-Breaks",
+        "## 14. Kanonische Stickerauswahl",
+        "## 15. Outgoing-Zuteilung im Gesamtplan",
+        "## 16. Keine Albumgewichtung",
+        "## 17. Keine Partnerqualitätsgewichtung",
+        "## 18. Live-State und Reservations",
+        "## 19. Vorschläge reservieren nichts",
+        "## 20. GO Validation",
+        "## 21. Atomare Request-Erzeugung",
+        "## 22. Drei offene eigene ausgehende Anfragen",
+        "## 23. 24h Expiry",
+        "## 24. Mutual GO und semantische Deal-Identität",
+        "## 25. Request Freeze",
+        "## 26. Unfulfillable: beenden statt reparieren",
+        "### AC26: Deterministische Priorität bei Mehrfachunterdeckung",
+        "### AC26: Kanonischer Bindungszeitpunkt — Schemaabgleich",
+        "## 27. Altvorgänge und Vertragsgrenze",
+        "## 28. Logisches Ausgabeformat",
+        "## 29. Stabile Ausgabeordnung",
+        "## 30. Edge-Case-Matrix",
+        "## 31. Komplexität und Technikfreiheit",
+        "## 32. Performance-Anforderung",
+        "## 33. Validierbare Invarianten",
+        "## 34. Spezifikationsvalidierung und Scope",
+        "## Open Product Questions"
+      ]
+    },
+    {
+      "path": "docs/SMARTDEAL_CORE_GATE_AUDIT.md",
+      "sha256": "53c895f628a09a9d8d85fefb1be3fccf1061f9c0ed37615470921c16b5d5be91",
+      "headings": [
+        "# SmartDeal Core Gate Audit",
+        "## 1. Executive Summary",
+        "## 2. End-to-End Core Trace",
+        "## 3. Canonical State Machine",
+        "## 4. Invariant Matrix",
+        "## 5. Race / Atomicity Review",
+        "## 6. Legacy Boundary Review",
+        "## 7. Inventory / Reservation / Need Consistency",
+        "## 8. Performance Summary",
+        "## 9. Remaining Technical Blocks",
+        "## 10. Design-Gate Decision",
+        "## 11. Risks / Blockers",
+        "## 12. Test Gap",
+        "## 13. Final Recommendation"
+      ]
+    },
+    {
+      "path": "docs/SMARTDEAL_CORE_GATE_FIX_CG1.md",
+      "sha256": "5d7ebba0555e29260cdf53219af1323385789e3a1ed9237aa19ab36ffa6a687a",
+      "headings": [
+        "# SmartDeal Core Gate Fix CG-1",
+        "## Vorprüfung und Mutationsinventar",
+        "## Operativer Expiry-Anschluss",
+        "## Composite Golden Paths und Grenzen",
+        "## Races und Rollback",
+        "## Performance",
+        "## Release und Dateischutz"
+      ]
+    },
+    {
+      "path": "docs/SMARTDEAL_CORE_GATE_REAUDIT_CG1.md",
+      "sha256": "01e01e9e441695b5edabd00feb980404f08984929c9ae6b0371cefd47562bceb",
+      "headings": [
+        "# SmartDeal Core Gate Reaudit CG-1",
+        "## Findings und Gate",
+        "## 26 Invarianten erneut geprüft",
+        "## Anschlussvertrag für PO-SOLL",
+        "## Nachweis und Freigabegrenze"
+      ]
+    },
+    {
+      "path": "docs/SMARTDEAL_PRODUCT_BIBLE_V1.md",
+      "sha256": "9001190159f963d8cd5c7139b61d4d1059f4c59b901bab7a13a374d15c708349",
+      "headings": [
+        "# sammlr. SmartDeal Product Bible V1",
+        "## 1. Die Idee",
+        "## 2. Oberstes Produktziel",
+        "## 3. Albumübergreifend by default",
+        "## 4. SmartDeals sind grundsätzlich 1:1",
+        "## 5. Keine künstliche Maximalgröße",
+        "## 6. SmartDeal optimiert global, nicht Partner für Partner",
+        "## 7. Ein SmartDeal-Plan muss gleichzeitig ausführbar sein",
+        "## 8. Optimierungsreihenfolge",
+        "## 9. Top-SmartDeals",
+        "## 10. Ein Partner, ein SmartDeal",
+        "## 11. Vorschlag und Anfrage sind fundamental verschieden",
+        "## 12. SmartDeals sind uneditierbar",
+        "## 13. Determinismus",
+        "## 14. Live-Berechnung",
+        "## 15. Mengen sind echte Mengen",
+        "## 16. Das letzte Exemplar bleibt geschützt",
+        "## 17. Anfrage reserviert beide Seiten",
+        "## 18. Maximal drei offene eigene SmartDeal-Anfragen",
+        "## 19. Anfragefrist",
+        "## 20. Gegenseitiges GO",
+        "## 21. Bestandsänderungen bleiben immer erlaubt",
+        "## 22. SmartDeals mutieren niemals heimlich",
+        "## 23. Physische Bestandsbuchung",
+        "## 24. SmartDeals sind Zukunft, laufende Trades sind Realität",
+        "## 25. Alle Tauschpartner",
+        "## 26. Albumfilter findet Menschen, keine isolierten Albumdeals",
+        "## 27. Manueller Deal",
+        "## 28. Die normale SmartDeal-Reise",
+        "## 29. Versand & Kontakt",
+        "## 30. Laufende Trades",
+        "## 31. Verlauf",
+        "## 32. SmartDeal braucht eine eigene visuelle Identität",
+        "## 33. Was V1 ausdrücklich NICHT braucht",
+        "## 34. Noch offene technische Spezifikation",
+        "## 35. Was wir ausdrücklich noch NICHT tun",
+        "## 36. Nächster Schritt",
+        "## Dokumenteinordnung und geschützte bestehende Verträge",
+        "## Separater Folgeauftrag: SMARTDEAL V1 IST-AUDIT",
+        "## R5 / Release-Scope und Umsetzungsgrenze",
+        "## 37. PO-Entscheidungen vom 2026-09-10",
+        "### 37.1 A1 – Mehrfachbedarf",
+        "### 37.2 A2 – Altvorgänge",
+        "### 37.3 A3 – Versandkontakt, Adresse und optionale Nachrichten",
+        "### 37.4 A4 – Unfulfillable beendet den Vorgang",
+        "### 37.5 A5 – Top-N",
+        "## 38. PO-Präzisierungen zum Algorithm Contract vom 2026-09-10",
+        "## 39. Night-Prep: gezielte Vertragspräzisierungen"
+      ]
+    },
+    {
+      "path": "docs/SMARTDEAL_T3A_OPTIMIZATION_PROOF.md",
+      "sha256": "b0424266b0740248e0bbc8fa7b90402a60873cb2174dcbb631aed748c3c907e2",
+      "headings": [
+        "# SmartDeal SD-T3a — Exakte Optimierungsmethode und Referenznachweis",
+        "## 1. Extrahierter Vertrag",
+        "## 2. Formales Modell",
+        "## 3. Warum isoliertes Greedy nicht reicht",
+        "## 4. Methodenvergleich",
+        "## 5. Netzwerk für eine feste Partnerteilmenge S",
+        "## 6. Exakte Such- und Tie-Break-Schritte",
+        "## 7. Optimalitätsargument und Determinismus",
+        "## 8. Unabhängiges Referenz-Oracle",
+        "## 9. Adversariale Klassen und Versandgrenzen",
+        "## 10. Komplexität und synthetische Größen",
+        "## 11. Dependency-Entscheidung",
+        "## 12. Failure Modes und konkrete Empfehlung für T3b",
+        "## 13. Regression und Schutz"
+      ]
+    },
+    {
+      "path": "docs/SMARTDEAL_T3B1_PERFORMANCE_INVESTIGATION.md",
+      "sha256": "e443e773aca88d10589d846fdc0885bde82c0defd5632247f051ee26a9fc0c61",
+      "headings": [
+        "# SD-T3b Acceptance Fix 3b.1",
+        "## Nachgewiesene Ursache",
+        "## Genau eine produktive Optimierung: vollständige Branch-Reihenfolge",
+        "## Messzahlen vor / nach",
+        "## Benchmarks",
+        "## Correctness und Regression",
+        "## Dateiumfang und Schutz"
+      ]
+    },
+    {
+      "path": "docs/SMARTDEAL_T3B_OPTIMIZER_REPORT.md",
+      "sha256": "3c0252381d4e986e3212e92a169dcb92e0bd1f669e7e6477349d17799456cb7d",
+      "headings": [
+        "# SmartDeal SD-T3b — Runtime-Optimierer und Performance-Abnahme",
+        "## 1. Architektur und Scope",
+        "## 2. Exakte Zielhierarchie und Allokationsvertrag",
+        "## 3. Übernahme der T3a-Methode",
+        "## 4. Sichere Optimierungen und Pruning-Beweise",
+        "## 5. Oracle- und Contract-Gate",
+        "## 6. Performance-Gate A–F",
+        "## 7. Worst Case und bekannte Grenzen",
+        "## 8. Tests, Release und Dateischutz"
+      ]
+    },
+    {
+      "path": "docs/SMARTDEAL_T4_SUGGESTION_REVALIDATION.md",
+      "sha256": "a4fca599087de681a9a99481d254549b4e8f40faf32bb22a5ebaddf0021e7a95",
+      "headings": [
+        "# SD-T4 — Suggestion-Payload und exakte Revalidierung",
+        "## Payload und Adapter",
+        "## Zentraler Validator und serverseitige Wahrheit",
+        "## Ergebnisvertrag",
+        "## Exaktheit, Rang und Atomaritätsgrenze",
+        "## Tests und Performance",
+        "## Acceptance, Regression und Dateischutz"
+      ]
+    },
+    {
+      "path": "docs/SMARTDEAL_T5A_ATOMIC_BINDING.md",
+      "sha256": "77c5a04a7de161df2305d680107dcd35da5079baf280c4c45cedcca49f7fac9b",
+      "headings": [
+        "# SD-T5a – Atomare SmartDeal-V1-Anlage",
+        "## Write-Vertrag",
+        "## Identität, Supply und Needs",
+        "## Idempotenz und Transaktionen",
+        "## Testnachweis",
+        "## Performance",
+        "## Umfang und Abschlussnachweis"
+      ]
+    },
+    {
+      "path": "docs/SMARTDEAL_T5B_RELEASE_EXPIRY.md",
+      "sha256": "9e0a394dc8d692fb5f299a5e35533990bc83d054082292ec68be0eccad12b0d2",
+      "headings": [
+        "# SD-T5b – Fristen, Rückzug und vollständige Freigaben",
+        "## Korrigierter Arbeitsauftrag und Frist",
+        "## Domain-API und atomarer Übergang",
+        "## Persistenz, vollständige Freigabe und Nachvollziehbarkeit",
+        "## Idempotenz, Fristablauf und Konkurrenz",
+        "## Sweep, Read-Vertrag und Block-Integration",
+        "## Notifications",
+        "## Tests und Integration",
+        "## Performance des finalen Codes",
+        "## Änderungen und Schutzumfang",
+        "## Abschließender Acceptance- und Release-Nachweis"
+      ]
+    },
+    {
+      "path": "docs/SMARTDEAL_T6A_OPPORTUNITY_IDENTITY.md",
+      "sha256": "512029a72b8877138d050b2d282ab6ec3ba187b79c1d19090e06cc66a970db18",
+      "headings": [
+        "# SD-T6a — Kanonische Opportunity-Identität",
+        "## Fachlicher Vertrag und API",
+        "## Serialisierung, Version und Kollisionsschutz",
+        "## Invarianten und spätere Verwendung",
+        "## Tests und Performance",
+        "## Acceptance und Schutzprüfung",
+        "# Im isolierten Export, mit dem Repository-Interpreter und PYTHONDONTWRITEBYTECODE=1:",
+        "# Benchmark, PYTHONPATH=App:"
+      ]
+    },
+    {
+      "path": "docs/SMARTDEAL_T6B_ACCEPT_MUTUAL_GO.md",
+      "sha256": "701194da055ce87103f7c4c803c9b9e751851de7c87425ddc1864f3fdbe4ecbd",
+      "headings": [
+        "# SD-T6b – Accept, Mutual GO und konkurrierende Requests",
+        "## Einstieg und Transaktionsgrenze",
+        "## Explizites Accept",
+        "## Opportunity Lookup, Mutual GO und Dedupe",
+        "## Persistenz, Zeit und Bindungen",
+        "## Lifecycle und Notifications",
+        "## Tests",
+        "## Performance",
+        "## Geänderte Dateien und Grenzen",
+        "## Abschließender Acceptance- und Release-Nachweis"
+      ]
+    },
+    {
+      "path": "docs/SMARTDEAL_TECHNICAL_ROADMAP_V1.md",
+      "sha256": "bc3cdff78fa008fdae083f65833ba0da0aef0907ca21599acbd589094ad4e125",
+      "headings": [
+        "# SmartDeal Technical Roadmap V1",
+        "## Begründung der Aufteilung",
+        "## SD-T1 — Domain Contract und Legacy-Separation",
+        "### SD-T1 Implementierungsnotiz — 2026-09-10",
+        "## SD-T2a — Kanonischer Planungszustand",
+        "### SD-T2a Implementierungsnotiz — 2026-09-10",
+        "## SD-T2b — Globale Pairwise Opportunities",
+        "### SD-T2b Implementierungsnotiz — 2026-09-11",
+        "## SD-T3a — Exakte Optimierungsmethode und Referenznachweis",
+        "### SD-T3a Researchnotiz — 2026-09-11",
+        "## SD-T3b — Globaler deterministischer Optimierer",
+        "### SD-T3b Implementierungsnotiz — 2026-09-11",
+        "### SD-T3b Acceptance Fix 3b.1 — 2026-09-11",
+        "## SD-T6a — Kanonische Opportunity-Identität",
+        "### SD-T6a Implementierungsnotiz — 2026-09-11",
+        "## SD-T4 — Suggestion-Payload und GO-Revalidierung",
+        "### SD-T4 Implementierungsnotiz — 2026-09-11",
+        "## SD-T5a — Atomare V1-Anlage und beidseitige Reservation",
+        "## SD-T5b — Fristen, Rückzug und vollständige Freigaben",
+        "## SD-T6b — Accept, Mutual GO und konkurrierende Requests",
+        "## SD-T7a — Physischer Lifecycle, History und Notifications",
+        "## SD-T7b — Bestandskorrektur und Unfulfillable nach Versandphase",
+        "## SD-T8a — Geschützter Versandkontakt",
+        "## SD-T8b — Optionaler minimaler Tradechat",
+        "## SD-T9 — Vollständiger Route-/IA-Audit und PO-SOLL",
+        "## SD-T10 — Technische UI-/Design-Integration",
+        "## SD-T11 — Golden Path, Regression und Performance-Gate",
+        "## Reihenfolge und Gates",
+        "## Migrationen und ausdrücklich geschützte KEEP-Verträge",
+        "## R5-Abgrenzung und Dokumentationsprüfung"
+      ]
+    },
+    {
+      "path": "docs/SMARTDEAL_V1_IST_AUDIT.md",
+      "sha256": "f27c9c2e6d8d1c547daaef3953f6a7ca68bc143bd3aa0b755b5008bf23254a94",
+      "headings": [
+        "# SmartDeal V1 IST Audit",
+        "## 1. Executive Summary",
+        "## 2. Current Trade Architecture",
+        "### Weitere geschützte Eingänge / physischer Papiertransfer",
+        "### IST-Flows und echte Businessgrenzen",
+        "## 3. SmartDeal Requirement Matrix",
+        "## 4. Inventory & Availability",
+        "## 5. Reservations",
+        "## 6. Request Lifecycle",
+        "## 7. SmartMatch",
+        "## 8. Global Optimization Gap",
+        "## 9. Quantities",
+        "## 10. Mutual GO / Deal Identity",
+        "## 11. Unfulfillable",
+        "## 12. Inventory Booking Lifecycle",
+        "## 13. Tradepool / Privacy / Blocks",
+        "## 14. Manual Composer",
+        "## 15. Active Trades / Trade Detail",
+        "## 16. Shipping & Contact",
+        "## 17. Notifications",
+        "## 18. Test Protection Map",
+        "## 19. Performance Implications",
+        "## 20. Migration / Schema Implications",
+        "## 21. Reuse Map",
+        "### KEEP",
+        "### ADAPT",
+        "### BUILD",
+        "## 22. Product Decisions Still Required",
+        "## 23. Recommended Technical Sequencing",
+        "### Auftragsvalidierung"
+      ]
+    },
+    {
+      "path": "docs/TRADE_00_RESET_AUDIT.md",
+      "sha256": "6ae8454af90ec54f053ff1999b9440e1646eebc24c230c47e22b2a58c552a27c",
+      "headings": [
+        "# TRADE-00 — Reset Audit",
+        "## Geprüfte Quellen",
+        "## A — Weiterhin gültig",
+        "## B — Zukünftig ersetzt",
+        "## C — Nur Pax-Prototyp",
+        "## D — Domainkollisionen und Gates vor Implementierung",
+        "## Umfang und Prüfung"
+      ]
+    },
+    {
+      "path": "docs/TRADE_01_AUDIT.md",
+      "sha256": "fdfe6271eee1b9d54fc2277f99defd5437577f87865736021c0d570847d75e7f",
+      "headings": [
+        "# TRADE-01 — Isolierte Tauschhalle",
+        "## Start und Preview",
+        "## Quellen und Scope",
+        "## Umsetzung",
+        "## Komponenten und Stack-Parität",
+        "## Tests und Responsive",
+        "## Unverändert / Abschluss",
+        "## Exakte neue Dateiliste"
+      ]
+    },
+    {
+      "path": "docs/TRADE_02_AUDIT.md",
+      "sha256": "13bd938b21b400a5790615311f4966f50ba4d804c769f84a623c7fc577ff4e19",
+      "headings": [
+        "# TRADE-02 — Direkt zum Deal, Anfrage und Wartezustand",
+        "## Ergebnis und Preview",
+        "## Grundlage und Ausgangszustand",
+        "## Direktklick und Darstellung",
+        "## Request-State und Persistenz",
+        "## Kapazität und 24 Stunden",
+        "## Tests",
+        "## Geschützte Grenzen",
+        "## Vollständige Dateiliste"
+      ]
+    },
+    {
+      "path": "docs/TRADE_03_AUDIT.md",
+      "sha256": "24c215725a937af7942316e2486a3a321c0b0a7196a987e50f74b5e15cf38f77",
+      "headings": [
+        "# TRADE-03 — Ein Request, zwei Perspektiven",
+        "## Ergebnis und Start",
+        "## Grundlage und Ausgangszustand",
+        "## Ein Request und eine Snapshotquelle",
+        "## Zustände und Transitionen",
+        "## Empfänger- und Senderansicht",
+        "## Slots und Zeit",
+        "## Komponenten und Bedienbarkeit",
+        "## Ausgeführte Prüfungen",
+        "## Negative Nachweise und Schutzgrenzen",
+        "## Vollständige Dateiliste"
+      ]
+    },
+    {
+      "path": "docs/TRADE_04_AUDIT.md",
+      "sha256": "40fed29ea55e9f460595dce422990b9a7cabb2ea615a5c106a2475ae6d5d4a67",
+      "headings": [
+        "# TRADE-04 — Packphase und Fehlmengen-Ausgang",
+        "## Ergebnis und Start",
+        "## Gelesene Grundlagen / übernommene Mechanik",
+        "## Modell und Lifecycle",
+        "## Ausgeführte Tests",
+        "## Sichtprüfung und Artefakte",
+        "## Exakte Quelländerungen",
+        "## Geschützte Grenzen / negative Assertions",
+        "## Vollständige Liste neuer Research-Artefakte"
+      ]
+    },
+    {
+      "path": "docs/TRADE_05_AUDIT.md",
+      "sha256": "ae5b335f612ed3da4d6b19f62e2987aff749470d92886f14cb6ff326286a158e",
+      "headings": [
+        "# TRADE-05 — Fehlmenge, reduzierter Tausch und Partnerzustimmung",
+        "## Ergebnis / Start",
+        "## Ausgangszustand und Vertragsabgleich",
+        "## Deterministische Positionen und Vorschlag",
+        "## Versions- und Zustandsmodell",
+        "## Packfortschritt und Spiegelung",
+        "## Entscheidung, Slots und Schutzregeln",
+        "## UI / Accessibility / Responsive",
+        "## Tests und Artefakte",
+        "## Geänderte / neue Quelldateien",
+        "## Schutzgrenzen / negative Assertions",
+        "## Vollständige Liste neuer Research-Artefakte"
+      ]
+    },
+    {
+      "path": "docs/TRADE_06_AUDIT.md",
+      "sha256": "644b8d96c2b8e13359d23dc1ae3ea05ec776844f9e110a8d4fd0b0b9b974d65f",
+      "headings": [
+        "# TRADE-06 — Packfreigabe, Adresse und eigener Versand",
+        "## Ergebnis und Start",
+        "## Grundlagen / Referenzprüfung",
+        "## Wiederverwendung / Darstellung",
+        "## Adressgate und Datensparsamkeit",
+        "## Richtungsbezogenes Modell und Versionen",
+        "## Operative Slots / BOTH_SHIPPED",
+        "## Freeze und Amendment-Sperre",
+        "## Tests / Browser / Sichtprüfung",
+        "## Exakte Quelländerungen",
+        "## Geschützte Grenzen / negative Assertions",
+        "## Vollständige Liste neuer Research-Artefakte"
+      ]
+    },
+    {
+      "path": "docs/TRADE_07_AUDIT.md",
+      "sha256": "5411722ad9e6a6b31ee39de9b38204f12582b0cf72b6289c1f5f9054f6b5e031",
+      "headings": [
+        "# TRADE-07 — Empfang, Problemklärung, Abschluss und Bewertung",
+        "## Ergebnis und Einstieg",
+        "## Verbindliche Q2-Klärung",
+        "## Gelesene Grundlagen und Domainabgrenzung",
+        "## State-Modell und Schutzregeln",
+        "## Problem und unveränderliches Paket",
+        "## Rating und Historie",
+        "## Prüfungen und Evidenz",
+        "## Dateien und geschützte Bereiche"
+      ]
+    },
+    {
+      "path": "docs/TRADE_08_AUDIT.md",
+      "sha256": "f6746b143bbf408471bba1bf2ea7bacc8678999f23483345bb5f4f9415245369",
+      "headings": [
+        "# TRADE-08 — Tauschbörse UX konsolidieren",
+        "## Ergebnis und Preview",
+        "## Top 3 und Navigation",
+        "## Nachrücken und Dismiss",
+        "## Kanonische Receive-Darstellung",
+        "## Packphase ohne Einzelabhaken",
+        "## Erhaltene Domain und Grenzen",
+        "## Regressionen und Abnahme",
+        "## Dateien und Evidenz"
+      ]
+    },
+    {
+      "path": "docs/TRADE_09_AUDIT.md",
+      "sha256": "b62841a8f55879120b6054bafc21dc26cddfa7cec5bcadace2817c48690859ea",
+      "headings": [
+        "# TRADE-09 — Manuelle Auswahl, Abschlussaudit",
+        "## Einstiege",
+        "## Umsetzung und begrenzte Vertragsänderung",
+        "## Nachweise",
+        "## Artefakte, Scope und spätere Hooks"
+      ]
+    },
+    {
+      "path": "docs/TRADE_10_AUDIT.md",
+      "sha256": "4199ca6e8992d03c58b6ac1de3608ad6519338ea47bfcd4f1a63de8194255664",
+      "headings": [
+        "# TRADE-10 — Laufende Tausche & Anfragen",
+        "## Ergebnis und Einstiege",
+        "## Projektion statt neuer Domain",
+        "## Rollen und Kapazität",
+        "## Zeit, Sortierung und UI",
+        "## Prüfung und Evidenz",
+        "## Endaudit und Integration"
+      ]
+    },
+    {
+      "path": "docs/TRADE_11_AUDIT.md",
+      "sha256": "2baf26bcabd05056d9555f7586a61377cca41d83de1d3b776fa3cda61a436842",
+      "headings": [
+        "# TRADE-11 — Kanonische Stickerphysik und gezielter UI-Feinschliff",
+        "## Ergebnis",
+        "## Unveränderte Quelle und Schutz gegen zweite Größenwahrheit",
+        "## Präsentationsänderungen",
+        "## Auffächern und Zusammenlegen",
+        "## Prüfungen",
+        "## Links und vollständiger Scope"
+      ]
+    },
+    {
+      "path": "docs/TRADE_NEXT_BLOCKS_TECH_PREP.md",
+      "sha256": "8bed1b9bf4b57159b9ccd83d4254e1bf2a8682bc28968cd7215a7291f6d6d5ee",
+      "headings": [
+        "# Trade Next Blocks — Technical Prep",
+        "## C1. T7a Shipping / Receipt / Completion",
+        "### Reale Anschlussstellen",
+        "### Konkreter technischer Vorschlag zu Q2, keine Implementierungsentscheidung",
+        "## C2. T7b Unfulfillable / Problems",
+        "## C3. T8a Shipping Contact — GREEN (Tech Prep)",
+        "### Anschlussstellen und vorgeschlagener technischer Vertrag",
+        "### Spätere T8a-Abnahmefälle (nur dokumentiert)",
+        "## C4. T9 Route-/IA-Audit — abgeschlossen, statisch",
+        "### Umfang und Zählweise",
+        "### Routeninventar und SOLL-Klassifikation",
+        "### Eingänge, Zielauflösung, Forms, Redirects und Kontext",
+        "### Technische Abweichungen und spätere Abnahme",
+        "### Kantenregister (167 geprüfte Quellstellen)",
+        "## C5. Design-Bereitschaft nach abgeschlossenem Phase-C-Audit",
+        "## Abschlussstatus"
+      ]
+    },
+    {
+      "path": "docs/TRADE_PRODUCT_CONTRACT_V2.md",
+      "sha256": "7f5fcf4b66d6305f81908534057ddfb3c380234ee801418e2d901d25e9ff7b74",
+      "headings": [
+        "# TRADE-00 — Sammlr Trade Product Contract V2",
+        "## 1. Zielbild und Geltungsbereich",
+        "## 2. Begriffe",
+        "## 3. Deine Top-Tauschvorschläge",
+        "## 4. Alle Tauschpartner",
+        "## 5. Partneransicht",
+        "## 6. SmartDeal und Algorithmus",
+        "## 7. Manueller Trade",
+        "## 8. Gemeinsamer Lifecycle",
+        "## 9. Gemeinsame operative Kapazität 3/3",
+        "## 10. Snapshot, Fehlmengen und Fristen",
+        "## 11. Kanonische Sticker und Pax-Beziehung",
+        "## 12. Ausdrückliche Supersessions",
+        "## 13. Offene Fragen und Integrationsgates",
+        "## 14. Nicht-Ziele",
+        "## 15. Integrationsstrategie",
+        "## 16. Quellen und Audit"
+      ]
+    },
+    {
+      "path": "docs/TRADE_TECH_DEBT_AUDIT_TD1.md",
+      "sha256": "d43c71d07387e946b2340ed9f79fa3e9086ed764612c01688eecb6b6dede6b01",
+      "headings": [
+        "# TD-1 — Trade Area / Pre-Design Technical Debt Audit",
+        "## Grundlage, Methode und Grenzen",
+        "## Register",
+        "## Einzelbefunde",
+        "### TD-001 — Verwaister Versandstatus-Renderer",
+        "### TD-002 — Aktuelle Lesewege enthalten noch historische Offen-/Zeitangaben",
+        "### TD-003 — V1-Handlergrenzen noch nicht als vollständige HTTP-Matrix abgesichert",
+        "### TD-004 — Legacy-Mutatoren verlassen sich auf äußere Contract-Gates",
+        "### TD-005 — Rücknavigation verteilt, Kontextverlust und ungeprüfter Referrer",
+        "### TD-006 — Gleich aussehende Pluralpfade haben unterschiedliche Commandwirkung",
+        "### TD-007 — Mehrfache Status-/Cardprojektion in großen Viewfunktionen",
+        "### TD-008 — Manueller Alt-Submit enthält Domainorchestrierung im Webhandler",
+        "### TD-009 — Uneinheitliche Ownership von Transaktionen und Fehlerursachen",
+        "### TD-010 — Zweigleisiger V20-Releasebetrieb und V21-Core erfordern expliziten Cutover",
+        "### TD-011 — Historische UI-Assertions sind teilweise Implementierungssnapshots",
+        "### TD-012 — Gesamtlast des künftigen Nutzerwegs noch nicht nachgewiesen",
+        "## Abdeckung aller Auditbereiche und bewusste Nicht-Findings",
+        "## Priorisierung",
+        "### Die höchstens drei heutigen Kandidaten konkret",
+        "## Abschluss und Dateischutz"
+      ]
+    },
+    {
+      "path": "docs/TRADE_UX_PO_DECISIONS_Q1_Q8.md",
+      "sha256": "a113fb4eb4e73ea8fde1aa9b082ba8794cd3300d367808919f3ee0d66ffb6c04",
+      "headings": [
+        "# Trade UX — PO Decisions Q1–Q8",
+        "## NP-C3-1 — Versandkontakt, PO-Entscheidung 2026-09-13"
+      ]
+    },
+    {
+      "path": "docs/TRADE_UX_SOLL_V1.md",
+      "sha256": "4d0183a63b644128b72868692efb29b4b0735539f22f648968c723921ff0f183",
+      "headings": [
+        "# Trade UX SOLL V1",
+        "## 1. Product Intent",
+        "## 2. Navigation Principle",
+        "## 3. Tauschen Home",
+        "## 4. Handlungsbedarf",
+        "## 5. SmartDeals",
+        "## 6. Requests",
+        "## 7. Laufende Tausche",
+        "## 8. Versand / Empfang",
+        "## 9. Adresse",
+        "## 10. Abschluss / Bewertung",
+        "## 11. Alle Tauschpartner",
+        "## 12. Partnerdetail",
+        "## 13. Manueller Composer",
+        "## 14. Trade Preferences",
+        "## 15. Vergangene Tausche",
+        "## 16. Future QR Personal Trade",
+        "## 17. Canonical Screen Tree",
+        "## 18. State / Action Matrix",
+        "## 19. IST → SOLL Gap Matrix",
+        "## 20. Roadmap Mapping",
+        "## 21. Contract Conflicts",
+        "## 22. Open Design Questions",
+        "## 23. PO Decisions Captured",
+        "## Night-Prep: verbindlicher Closure-Status",
+        "## 24. Recommendation for Design Phase"
+      ]
+    },
+    {
+      "path": "docs/TRADE_V2_END_TO_END_AUDIT.md",
+      "sha256": "755f52577d892b6d6d7e794ab5e6838e64b7167353316e3027c099eddd0044d3",
+      "headings": [
+        "# Trade-v2 — End-to-End-Audit",
+        "## Gemeinsame Grundlagen",
+        "## Lifecycle-Matrix",
+        "## Q2 ist kein Versand-Shortcut",
+        "## End-to-End-Nachweise",
+        "## Grenzen der Aussage",
+        "## Vollständiger funktionaler Preview-Stand nach TRADE-10",
+        "## Nachweise nach TRADE-10",
+        "## Bewusst spätere Gestaltung und Funktionen",
+        "## Vor Integration zu ersetzende Demo-Daten",
+        "## Kanonisierung und technische Integrationsgates"
+      ]
+    },
+    {
+      "path": "docs/TRADE_V2_MANUAL_SELECTION_CONTRACT.md",
+      "sha256": "a964704cb7f8665f2a0a1ac9f69a3101c0778f9807a06e524f4b3ea96c64acc0",
+      "headings": [
+        "# Trade-v2 — Manuelle Auswahl / TRADE-09",
+        "## Explizite begrenzte Supersession",
+        "## Albumregeln",
+        "## Draft und Überprüfung",
+        "## Spätere Integration"
+      ]
+    },
+    {
+      "path": "docs/TRADE_V2_WALKTHROUGH_CHECKLIST.md",
+      "sha256": "1b1d4127f9c43968ae66cecfa2ad688f9a03fa2773ac7cf4fe5bb5895e7935c0",
+      "headings": [
+        "# Trade-v2 — Manuelle Walkthrough-Checkliste",
+        "## 1. Einstieg / Tauschhalle",
+        "## 2. Top-Vorschläge",
+        "## 3. Alle Partner",
+        "## 4. Deal",
+        "## 5. Anfrage",
+        "## 6. Empfänger",
+        "## 7. Packen",
+        "## 8. Fehlmenge",
+        "## 9. Amendment",
+        "## 10. Adresse",
+        "## 11. Versand",
+        "## 12. Empfang",
+        "## 13. Problem",
+        "## 14. Abschluss",
+        "## 15. Bewertung",
+        "## 16. Erledigt",
+        "## 17. Navigation",
+        "## 18. Mobile Gesamtgefühl",
+        "## 19. Desktop Gesamtgefühl",
+        "## 20. Wording / visuelle Polish-TODOs"
+      ]
+    }
+  ]
+}

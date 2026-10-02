@@ -1,0 +1,35 @@
+{
+  "results": [
+    {
+      "width": 375,
+      "sender": "PASS",
+      "capacity": "PASS",
+      "retries_reload_expiry": "PASS",
+      "overflow": false
+    },
+    {
+      "width": 390,
+      "sender": "PASS",
+      "capacity": "PASS",
+      "retries_reload_expiry": "PASS",
+      "overflow": false
+    },
+    {
+      "width": 430,
+      "sender": "PASS",
+      "capacity": "PASS",
+      "retries_reload_expiry": "PASS",
+      "overflow": false
+    },
+    {
+      "width": 1280,
+      "sender": "PASS",
+      "capacity": "PASS",
+      "retries_reload_expiry": "PASS",
+      "overflow": false
+    }
+  ],
+  "model": "PASS",
+  "errors": [],
+  "writes_or_external": []
+}

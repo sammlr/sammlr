@@ -1,0 +1,14 @@
+/* Only the new receipt/history controls; canonical stack, paper and shipping stay untouched. */
+#receipt-panel>.action,#receipt-panel form>.action,.receipt-problem>.action{margin:12px 0}
+#receipt-panel .deal-summary{font-size:20px;margin:0 0 22px}
+#receipt-panel fieldset{min-width:0;border:0;padding:0;margin:24px 0}
+#receipt-panel legend{font-size:18px;font-weight:650;margin-bottom:12px}
+.receipt-choice{display:flex;align-items:center;gap:12px;min-height:48px;padding:8px 0}
+.receipt-choice input{flex:none;width:20px;height:20px;accent-color:var(--color-accent)}
+.receipt-choice span{overflow-wrap:anywhere}
+.receipt-problem{margin:28px 0}.receipt-problem li{overflow-wrap:anywhere}
+.receipt-stars{display:flex;gap:16px}.receipt-stars label{display:flex;align-items:center;gap:4px;min-width:60px;min-height:48px;cursor:pointer}.receipt-stars span{font-size:34px;color:var(--color-accent)}
+#receipt-panel input:focus-visible{outline:3px solid #ba782b;outline-offset:5px}
+#receipt-dev{white-space:pre-wrap;overflow-wrap:anywhere}
+#trade-history{margin-top:32px}#trade-history .partner-row{overflow-wrap:anywhere}
+#receipt-link{margin-top:18px}

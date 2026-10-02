@@ -1,0 +1,24 @@
+/* Layout glue only. Cards/locked stacks: style.css; notes/markers: sticker_list.css;
+   pack, opening animation and envelope: unchanged Journey V1 stylesheet. */
+body.pj-v2{padding:0}
+.pj-v2 h2{font:400 25px/1.2 PaxNotes,cursive;margin:0}
+.pj-v2 .v2-receive{text-align:center;padding:8px 0 30px;background:transparent}
+.pj-v2 #v2-stack-toggle{display:block;width:100px;margin:0 auto;padding:0;border:0;background:none;color:inherit}
+.pj-v2 #v2-stack{display:block}
+.pj-v2 .v2-give{min-height:0;background:transparent;color:inherit;padding-top:20px}
+.pj-v2 .v2-give>h2,.pj-v2 .v2-hint{text-align:center}
+.pj-v2 .v2-hint{font-size:10px;color:var(--pj-muted);margin:8px 0 24px}
+.pj-v2 #v2-notes{display:grid;justify-content:center;gap:28px;padding:0 8px 20px}
+/* Preserve the original 224px note; six touch rows fit without shrinking the handwriting. */
+.pj-v2 .trade-postit .v2-todo{display:flex;width:max-content;min-height:28px;padding:2px 3px}
+.pj-v2 .v2-cards-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px 12px;text-align:center;padding:12px 0}
+.pj-v2 .v2-card-group h3{font-size:11px;text-align:left;font-weight:500;margin:24px 0 8px}
+.pj-v2 #v2-collapse{margin-top:0}
+.pj-v2 .v2-envelope{height:auto;min-height:255px;padding-top:78px;transform:rotate(-2deg)}
+.pj-v2 .v2-envelope p{font:23px PaxNotes,cursive;margin:0 0 8px}
+.pj-v2 .v2-envelope address{font-style:normal;font-size:14px;line-height:1.6}
+.pj-v2 .v2-envelope small{display:block;margin-top:12px;font-size:10px}
+@media(prefers-reduced-motion:reduce){.pj-v2 .marker-draw{animation:none!important;stroke-dashoffset:0!important}}
+
+.pj-v2 .v2-receive{font-family:var(--sammlr-font-family);font-size:16px}
+.pj-v2 .pj-action{position:static}

@@ -1,0 +1,14 @@
+.trade-preview[data-screen=active] main{max-width:760px;margin-inline:auto}
+.overview-group{margin:30px 0}
+.overview-group h2{font:600 18px/1.4 system-ui,sans-serif;margin:0 0 10px}
+.overview-group ul{list-style:none;padding:0;margin:0;display:grid;gap:10px}
+.overview-row{border:1px solid #d8d4cb;border-radius:8px;background:#ffffffa8;overflow:hidden}
+.overview-primary{display:grid;gap:5px;padding:16px;color:inherit;text-decoration:none}
+.overview-head{display:flex;justify-content:space-between;gap:16px;font-size:18px}
+.overview-head strong{overflow-wrap:anywhere;min-width:0}
+.overview-head>span{white-space:nowrap}
+.overview-meta,.overview-deadline{font-size:13px;color:#625e56}
+.overview-status{font-size:16px;font-weight:600;margin-top:5px}
+.overview-primary:hover{background:#f1efe9}
+.overview-receipt{display:block;width:fit-content;max-width:100%;padding:10px 16px 14px;box-sizing:border-box;color:inherit;font-size:14px}
+.overview-primary:focus-visible,.overview-receipt:focus-visible{outline:3px solid #7144ae;outline-offset:-3px}

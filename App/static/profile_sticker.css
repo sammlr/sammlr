@@ -1,0 +1,42 @@
+/* Isolated profile-sticker feature styles. */
+.profile-sticker-hero{display:flex;flex-direction:column;align-items:center;margin:2px 0 22px}
+.profile-sticker-70{position:relative;width:min(244px,72vw);aspect-ratio:2/3;overflow:hidden;box-sizing:border-box;border:7px solid #f9f7f1;border-radius:3px;background:#ded9ca;box-shadow:0 0 0 2px #292724,0 12px 25px rgba(35,29,24,.22);isolation:isolate}
+.profile-sticker-photo-viewport{position:absolute;inset:0 0 calc(25% - 1px);overflow:hidden;background:#9a9a84}
+.profile-sticker-portrait{display:block;width:100%;height:100%;object-fit:cover;object-position:50% 50%;transform:translate(var(--crop-x),var(--crop-y)) scale(var(--crop-zoom));transform-origin:50% 50%;filter:saturate(.82) contrast(.98);will-change:transform}
+.profile-sticker-photo-viewport:after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(246,228,188,.07),rgba(39,30,18,.12));pointer-events:none}
+.profile-sticker-top-corner{position:absolute;z-index:3;top:0;left:0;width:84px;height:84px;background:#faf9f4;clip-path:polygon(0 0,100% 0,0 100%)}
+.profile-sticker-series-mark{position:absolute;top:4px;left:8px;display:block;width:40px;height:40px}
+.profile-sticker-nation-corner{position:absolute;z-index:4;right:0;bottom:25%;width:84px;height:84px;clip-path:polygon(100% 0,100% 100%,0 100%);overflow:hidden;transform:translateY(1px)}
+.profile-sticker-nation-bands{display:block;width:100%;height:100%}
+.profile-sticker-nation-color{fill:var(--nation-band)}
+.profile-sticker-nation-separator{fill:#f9f7f1}
+.profile-sticker-info{position:absolute;z-index:5;right:0;bottom:0;left:0;display:grid;height:25%;box-sizing:border-box;grid-template-rows:minmax(43px,1fr) 27px 20px;background:#f9f7f1;border-top:2px solid #292724;color:#171615}
+.profile-sticker-name{display:flex;align-items:center;min-width:0;padding:4px 10px 2px;overflow:hidden;font-family:"Arial Narrow",Arial,sans-serif;font-size:31px;line-height:.92;font-stretch:condensed;font-weight:900;letter-spacing:-.035em;text-transform:uppercase;white-space:nowrap}
+.profile-sticker-70.is-medium .profile-sticker-name{font-size:25px;letter-spacing:-.045em}
+.profile-sticker-70.is-long .profile-sticker-name{font-size:19px;letter-spacing:-.055em}
+.profile-sticker-70.is-extra-long .profile-sticker-name{font-size:15px;letter-spacing:-.06em}
+.profile-sticker-club{display:flex;align-items:center;min-width:0;padding:2px 10px;background:var(--sticker-accent);overflow:hidden;font:800 12px/1 Arial,sans-serif;letter-spacing:.045em;text-overflow:ellipsis;white-space:nowrap}
+.profile-sticker-club.contrast-light{color:#fff}.profile-sticker-club.contrast-dark{color:#1d1b19}
+.profile-sticker-club.is-empty{color:transparent}
+.profile-sticker-country-name{padding:4px 10px 2px;overflow:hidden;font:700 9px/1 Arial,sans-serif;letter-spacing:.14em;white-space:nowrap}
+.profile-sticker-edit-link{display:inline-flex;margin-top:13px;color:#5e327e;font:800 13px/1.2 Arial,sans-serif;text-underline-offset:3px}
+
+.profile-sticker-editor{max-width:800px;padding-bottom:110px}.profile-sticker-editor>.app-header{margin-bottom:8px}.profile-sticker-editor>.sammlr-back-link{margin-top:0;margin-bottom:2px}.profile-sticker-editor main{display:grid;gap:18px}
+.profile-sticker-editor-preview{display:flex;flex-direction:column;align-items:center;padding:6px 0 9px}.profile-sticker-editor-preview .profile-sticker-70{width:min(286px,78vw)}
+.profile-sticker-editor-kicker{margin:0 0 12px;color:#625d57;font-size:12px;font-weight:850;letter-spacing:.14em;text-transform:uppercase}
+.profile-sticker-editor form{display:grid;gap:10px;padding:20px;border:1px solid #d8d2c8;border-radius:14px;background:#fff;box-shadow:0 8px 24px rgba(40,32,26,.08)}
+.profile-sticker-label,.profile-sticker-fieldset legend{color:#25221f;font-size:13px;font-weight:900;letter-spacing:.07em;text-transform:uppercase}.profile-sticker-label span{color:#77716a;font-size:10px}
+.profile-sticker-editor input[type="text"],.profile-sticker-editor input:not([type]),.profile-sticker-editor select{box-sizing:border-box;width:100%;min-height:46px;padding:10px 12px;border:1px solid #aaa39a;border-radius:8px;background:#fff;color:#211f1c;font:700 16px Arial,sans-serif}
+.profile-sticker-fieldset{min-width:0;margin:0;padding:0 0 8px;border:0}.profile-sticker-fieldset legend{margin-bottom:9px;padding:0}.profile-sticker-photo-actions{display:flex;flex-wrap:wrap;gap:8px}.profile-sticker-photo-actions input[type=file]{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0,0,0,0)}
+.profile-sticker-secondary,.profile-sticker-save,.profile-sticker-cancel{display:inline-flex;align-items:center;justify-content:center;box-sizing:border-box;min-height:43px;padding:10px 15px;border-radius:8px;font:800 14px/1 Arial,sans-serif;cursor:pointer;text-decoration:none}
+.profile-sticker-secondary,.profile-sticker-cancel{border:1px solid #777169;background:#fff;color:#292623}.profile-sticker-save{border:1px solid #5f2e86;background:#6f35a5;color:#fff}
+.profile-sticker-help{margin:8px 0 0;color:#6b655e;font-size:12px}.profile-sticker-help.is-error,.profile-sticker-editor-error{color:#a3232b}.profile-sticker-editor-error{margin:0;padding:10px 12px;border-radius:7px;background:#fff0f0;font-weight:700}
+.profile-sticker-color-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px}.profile-sticker-color-grid label{display:grid;justify-items:center;gap:4px;cursor:pointer}.profile-sticker-color-grid input{position:absolute;opacity:0}.profile-sticker-color-grid span{display:block;width:38px;height:38px;box-sizing:border-box;border:3px solid #fff;border-radius:50%;background:var(--swatch);box-shadow:0 0 0 1px #817b74}.profile-sticker-color-grid input:checked+span{box-shadow:0 0 0 3px #25221f}.profile-sticker-color-grid b{font-size:10px;text-align:center}
+.profile-sticker-form-actions{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:5px}
+.profile-sticker-modal[hidden]{display:none}.profile-sticker-modal{position:fixed;z-index:100000;inset:0;display:grid;place-items:center;padding:16px;background:rgba(20,18,17,.78)}.profile-sticker-modal>section{width:min(430px,100%);max-height:calc(100dvh - 32px);box-sizing:border-box;overflow:auto;padding:18px;border-radius:14px;background:#f8f5ee}.profile-sticker-modal h1{margin:0 0 8px;font-size:21px}.profile-sticker-modal p{font-size:13px}.profile-sticker-modal-actions{display:flex;gap:8px;margin-top:14px}
+.profile-sticker-camera-frame,.profile-sticker-crop-stage{position:relative;overflow:hidden;width:100%;aspect-ratio:2/3;background:#252525}.profile-sticker-camera-frame video,.profile-sticker-crop-stage img{display:block;width:100%;height:100%;object-fit:cover}.profile-sticker-camera-frame video{transform:scaleX(-1)}.profile-sticker-camera-guide{position:absolute;inset:9%;border:2px solid rgba(255,255,255,.82);border-radius:45% 45% 28% 28%}.profile-sticker-camera-guide span{position:absolute;top:9%;left:27%;width:46%;aspect-ratio:1;border:1px solid rgba(255,255,255,.7);border-radius:50%}.profile-sticker-camera-guide i{position:absolute;right:12%;bottom:11%;left:12%;height:39%;border:1px solid rgba(255,255,255,.7);border-radius:50% 50% 0 0}.profile-sticker-crop-stage img{object-position:50% 50%;transform:translate(var(--crop-x,0%),var(--crop-y,0%)) scale(var(--crop-zoom,1));transform-origin:center}.profile-sticker-modal label{display:grid;grid-template-columns:80px 1fr;align-items:center;gap:8px;margin-top:10px;font-size:12px;font-weight:800}
+
+.profile-sticker-color-grid input{width:1px!important;height:1px!important}
+.profile-sticker-color-grid input:focus-visible+span{outline:2px solid #242220;outline-offset:3px}
+@media(min-width:720px){.profile-sticker-hero .profile-sticker-70{width:264px}.profile-sticker-editor main{grid-template-columns:360px minmax(0,1fr);align-items:start}.profile-sticker-editor-preview{position:sticky;top:18px}.profile-sticker-editor-preview .profile-sticker-70{width:332px}.profile-sticker-editor form{grid-column:2}.profile-sticker-editor-error{grid-column:2}}
+@media(max-width:390px){.profile-sticker-editor form{padding:16px 13px}.profile-sticker-color-grid{grid-template-columns:repeat(4,1fr)}.profile-sticker-color-grid span{width:34px;height:34px}}

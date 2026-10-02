@@ -1,0 +1,41 @@
+[
+  {
+    "width": 375,
+    "journey": "PASS",
+    "external_requests": 0,
+    "write_requests": 0,
+    "model": {
+      "candidates": 5,
+      "gating": true,
+      "directional": true,
+      "slots": true,
+      "idempotent": true
+    }
+  },
+  {
+    "width": 390,
+    "journey": "PASS",
+    "external_requests": 0,
+    "write_requests": 0,
+    "model": {
+      "candidates": 5,
+      "gating": true,
+      "directional": true,
+      "slots": true,
+      "idempotent": true
+    }
+  },
+  {
+    "width": 430,
+    "journey": "PASS",
+    "external_requests": 0,
+    "write_requests": 0,
+    "model": {
+      "candidates": 5,
+      "gating": true,
+      "directional": true,
+      "slots": true,
+      "idempotent": true
+    }
+  }
+]

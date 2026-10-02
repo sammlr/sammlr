@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="de">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>{{ 'Sammler' if partners_page else 'SammlrPax' }} · sammlr. Preview</title><link rel="stylesheet" href="{{ url_for('static', filename='compact_sticker_stack.css') }}"><link rel="stylesheet" href="{{ url_for('static', filename='trade_visual_preview.css') }}"><script src="{{ url_for('static', filename='trade_visual_preview.js') }}" defer></script></head>
+<body>
+<div class="preview-note">DESIGN PREVIEW V2 · Beispieldaten · Naming nicht final</div>
+<div class="shell">
+<header class="brandbar"><a href="/" aria-label="Sammlr Startseite">sammlr<span>.</span></a><span class="owner" aria-label="Dein Beispielprofil">V</span></header>
+<main>
+{% if partners_page %}
+<a class="back" href="/preview/trades-v1">← Zurück zu deinen Pax</a><div class="page-heading"><p class="eyebrow">GEMEINSAM WEITERSAMMELN</p><h1>Sammler</h1><p>Vielleicht fehlt euch genau das Richtige.</p></div>
+<div class="filters" aria-label="Albumfilter Vorschau">{% for label in ['Alle', 'WM26', 'EM04', 'Bundesliga 07/08'] %}<button aria-pressed="{{ 'true' if loop.first else 'false' }}" data-filter>{{ label }}</button>{% endfor %}</div>
+<section class="partners" aria-label="Tauschpartner">
+{% for name, stars, have, give, pronoun, albums in partners %}<article class="partner"><div class="partner-head"><span class="avatar">{{ name[0] }}</span><h2>{{ name }}</h2><span class="rating">★ {{ stars }}</span></div><div class="partner-body"><p>Hat <strong>{{ have }}</strong> Sticker, die dir fehlen<br>Du hast <strong>{{ give }}</strong> für {{ pronoun }}</p><small>{{ albums }} gemeinsame Alben</small><button class="partner-link" data-notice="{{ name }}: Partnerdetail folgt in einer späteren Designvorschau.">Partner ansehen ↗</button></div></article>{% endfor %}
+</section>
+{% else %}
+<div class="page-heading"><p class="eyebrow">FÜR DEINE SAMMLUNG</p><h1>Deine nächsten Sticker.</h1></div>
+<section class="attention" aria-labelledby="attention-title"><h2 id="attention-title">Für dich <span>2</span></h2>
+<div class="attention-row"><span class="avatar">F</span><div><h3>Fatima <span>23 ↔ 23</span></h3><p>Anfrage erhalten</p></div><button data-notice="Anfrage ansehen: rein visuelle Vorschau.">Ansehen ↗</button></div>
+<div class="attention-row"><span class="avatar sand">M</span><div><h3>Mert <span>18 ↔ 18</span></h3><p>Hat versendet</p></div><button data-notice="Versand bestätigen ist in dieser Preview nicht aktiv.">Jetzt versenden ↗</button></div>
+</section>
+<section class="pax-section" aria-labelledby="pax-title"><div class="section-heading"><h2 id="pax-title">SammlrPax</h2><button class="about" aria-expanded="false" aria-controls="pax-explanation" aria-label="Was sind SammlrPax?">?</button></div><p class="section-subtitle">Doppelte teilen. Lücken schließen.</p><p id="pax-explanation" hidden>Sammlr stellt passende Pax aus euren Fehlenden und Doppelten zusammen. Du musst nichts auswählen: Jeder Sticker, den du bekommst, schließt eine Lücke. Du gibst genauso viele, wie du bekommst.</p>
+<div class="pack-grid">
+{% for pack in packs %}<article class="pax {% if loop.first %}hero-pax{% endif %}" data-name="{{ pack.name }}">
+<button class="pack" id="open-{{ pack.name|lower }}" aria-expanded="false" aria-controls="{{ pack.name|lower }}-package" aria-label="Pax mit {{ pack.name }} öffnen: {{ pack.size }} Sticker bekommen und geben, {{ pack.albums }} Alben">
+<span class="seal" aria-hidden="true"></span><span class="pack-face"><span class="pack-brand">sammlr.</span><span class="pack-title">Sammlr<span>Pax</span></span><span class="pack-partner">mit {{ pack.name }}</span><span class="pack-bottom"><span class="pack-invitation">Öffnen <span aria-hidden="true">↗</span></span><span class="pack-contents"><strong>{{ pack.size }} Sticker</strong><span>{{ pack.albums }} Alben</span></span></span></span><span class="seal bottom-seal" aria-hidden="true"></span>
+</button>
+<div id="{{ pack.name|lower }}-package" class="package" hidden><div class="opened-heading"><span>SAMMLRPAX</span><h3>mit {{ pack.name }}</h3><p>{{ pack.size }} für dich · {{ pack.size }} von dir</p></div>
+<div class="board" data-variant="notes"><div class="board-tools" aria-label="Designexperiment Beschriftung"><button class="board-variant" data-variant="notes" aria-pressed="true">A · Mit Post-its</button><button class="board-variant" data-variant="direct" aria-pressed="false">B · Nur Stapel</button></div>
+<div class="board-halves">
+{% for direction, groups, side in [('Du bekommst', pack.incoming, 'in'), ('Du gibst', pack.outgoing, 'out')] %}
+<section class="board-side">
+<div class="board-label"><h4>{{ direction }}</h4><strong>{{ pack.size }} Sticker</strong><span>{{ pack.albums }} Alben</span></div>
+<button class="pax-stack" aria-expanded="false" aria-controls="{{ pack.name|lower }}-{{ side }}-stickers" aria-label="{{ direction }}: {{ pack.size }} verschiedene Sticker aus {{ pack.albums }} Alben auslegen">
+<span class="pax-stack-layer" style="--stack-index:0" aria-hidden="true"></span><span class="pax-stack-layer" style="--stack-index:1" aria-hidden="true"></span><span class="stack-front"><span class="stack-wordmark">sammlr.</span><span class="stack-code">{{ groups[0][1][0] }}</span><span class="stack-album">{{ groups[0][0] }}</span><span class="stack-quantity">{{ pack.size }}</span></span></button>
+<span class="stack-prompt" aria-hidden="true">Sticker auslegen ↗</span>
+<div class="laid-out" id="{{ pack.name|lower }}-{{ side }}-stickers" hidden>{% for album, codes in groups %}<div class="sticker-group"><h5>{{ album }} <span>{{ codes|length }}</span></h5><ul>{% for code in codes %}<li class="board-sticker"><span class="mini-brand">sammlr.</span><strong>{{ code }}</strong><span class="mini-album">{{ album }}</span></li>{% endfor %}</ul></div>{% endfor %}</div>
+</section>{% endfor %}</div></div>
+<div class="deal-actions"><button class="primary request-preview">Tausch anfragen →</button><button class="secondary" data-notice="Der gemeinsame Composer folgt in einer späteren Designvorschau.">Selbst zusammenstellen</button>
+<div class="request-result" role="status" hidden><p class="simulation">NUR SIMULIERT</p><h4>Angefragt ✓</h4><p>{{ pack.name }} hat 24 Stunden Zeit zu antworten.</p><p>Die betroffenen Sticker beider Seiten sind reserviert.</p><small>Andere Pax werden danach neu berechnet.</small><button class="secondary mutual-preview">Ansicht „Tausch steht“ zeigen</button></div>
+<div class="mutual-result" role="status" hidden><p class="simulation">NUR SIMULIERT</p><h4>Tausch steht!</h4><p>Du und {{ pack.name }} wolltet denselben Tausch.</p><strong>{{ pack.size }} ↔ {{ pack.size }}</strong></div>
+<p class="local-only">Preview: keine echte Anfrage oder Reservation.</p><button class="close-pack secondary">Pax schließen ↑</button></div></div>
+</article>{% endfor %}</div></section>
+<section class="discovery" aria-labelledby="discovery-title"><div class="discovery-top"><div class="avatar-stack" aria-hidden="true"><span>J</span><span>F</span><span>M</span></div><span>Zusammen sammelt’s sich besser.</span></div><h2 id="discovery-title">Sammler entdecken</h2><p>Finde weitere Sammler, die deine Sammlung voranbringen.</p><a href="/preview/trades-v1/partners">Alle Sammler ansehen →</a></section>
+<button class="history" data-notice="Vergangene Tausche: sekundärer Einstieg, in dieser Preview ohne Daten.">Vergangene Tausche <span aria-hidden="true">→</span></button>
+{% endif %}
+</main><footer>sammlr. <span>Für die Freude am Sammeln.</span></footer>
+</div><div id="preview-notice" class="notice" role="status" hidden><span></span><button aria-label="Hinweis schließen">×</button></div>
+</body></html>

@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>SammlrPax · Journey Preview</title>
+<link rel="stylesheet" href="{{ url_for('static', filename='sammlrpax_journey_v1.css') }}">
+<script src="{{ url_for('static', filename='sammlrpax_journey_v1.js') }}" defer></script>
+</head>
+<body class="pj">
+<div class="pj-shell">
+<header class="pj-header"><a href="/preview/sammlrpax-journey-v1" class="pj-brand" aria-label="SammlrPax Preview neu beginnen">sammlr<span>.</span></a><span class="pj-edition">SAMMLRPAX<br>JOURNEY / 01</span></header>
+<details class="pj-tools" open><summary>Design-Preview <span>Ansicht wechseln</span></summary><nav aria-label="Preview-Werkzeug: Zustand wählen">
+<button data-view="closed" aria-current="step">1 Geschlossen</button><button data-view="board">2 Geöffnet</button><button data-view="sent">3 Angefragt</button><button data-view="partner">4 Partner</button><button data-view="shipping">5 Versand</button>
+</nav><small>Beispieldaten · alle Aktionen sind nur in dieser Preview.</small></details>
+<main id="pj-main">
+<section class="pj-view" data-screen="closed" aria-labelledby="pj-pack-heading">
+<div class="pj-heading"><p class="pj-kicker" id="pj-persona">DEIN NÄCHSTER TAUSCH</p><h1 id="pj-pack-heading">Da steckt was für dich drin.</h1><p id="pj-pack-subtitle">Ein Pax. Sechs Alben. 23 neue Sticker.</p></div>
+<button class="pj-pack" id="pj-open" aria-label="SammlrPax mit Fatima öffnen">
+<span class="pj-seal pj-seal-top" aria-hidden="true"></span>
+<span class="pj-pack-inner"><span class="pj-pack-brand">sammlr.</span><span class="pj-pack-title">Sammlr<span>Pax</span></span><span class="pj-pack-partner" id="pj-pack-partner">mit Fatima</span><span class="pj-pack-footer"><span class="pj-open-label">Öffnen <span aria-hidden="true">↗</span></span><span><strong>23 Sticker</strong><small>6 Alben</small></span></span></span>
+<span class="pj-seal pj-seal-bottom" aria-hidden="true"></span>
+</button><p class="pj-underpack">Doppelte weitergeben. Lieblingsalben füllen.</p>
+</section>
+<section class="pj-view" data-screen="board" hidden aria-labelledby="pj-board-heading">
+<div class="pj-heading"><p class="pj-kicker" id="pj-board-persona">DEIN SAMMLRPAX</p><h1 id="pj-board-heading" tabindex="-1">Mit Fatima tauschen.</h1><p>23 für dich. 23 für sie.</p></div>
+<div class="pj-glass" id="pj-deal-board"><span class="pj-board-caption">AUF DEM TAUSCHBRETT</span><div class="pj-halves">
+{% for side, title in [('receive','Du bekommst'),('give','Du gibst')] %}
+<section class="pj-half"><h2>{{ title }}</h2><p class="pj-count">23 <span>Sticker</span></p><button class="pj-stack" data-fan="{{ side }}" aria-expanded="false" aria-controls="pj-fan" aria-label="{{ title }}: Sticker auslegen"></button><span class="pj-tap">Antippen & auslegen</span></section>
+{% endfor %}</div><div class="pj-fan" id="pj-fan" hidden><div class="pj-fan-head"><h3 id="pj-fan-title">Deine Sticker</h3><button id="pj-close-fan" aria-label="Sticker wieder stapeln">Zusammenlegen ↑</button></div><div id="pj-fan-cards"></div></div><p class="pj-board-bottom">Sechs Alben. Ein gemeinsamer Tausch.</p></div>
+<div class="pj-action"><button class="pj-primary" id="pj-request">Pax anfragen <span aria-hidden="true">↗</span></button></div>
+</section>
+<section class="pj-view" data-screen="sent" hidden aria-labelledby="pj-sent-heading">
+<div class="pj-heading"><p class="pj-kicker">DEIN PAX IST RAUS</p><h1 id="pj-sent-heading" tabindex="-1">Jetzt ist Fatima dran.</h1></div>
+<div class="pj-sent-note"><span class="pj-note-tape" aria-hidden="true"></span><span class="pj-stamp" aria-hidden="true">↗</span><h2>Pax an Fatima geschickt</h2><p>23 Sticker für dich.<br>23 Sticker für Fatima.</p><span class="pj-note-sign">Mal sehen, was sie sagt.</span></div>
+<button class="pj-simulation" id="pj-partner">Partneransicht simulieren →</button><p class="pj-tool-caption">Preview-Werkzeug · jetzt als Fatima ansehen</p>
+</section>
+<section class="pj-view" data-screen="shipping" hidden aria-labelledby="pj-shipping-heading">
+<div class="pj-heading pj-shipping-heading"><p class="pj-kicker">DEIN TAUSCH MIT FATIMA</p><h1 id="pj-shipping-heading" tabindex="-1">Ab an den Packtisch.</h1><p>Einpacken. Adressieren. Freude verschicken.</p></div>
+<div class="pj-shipping-board">
+<article class="pj-note pj-green"><span class="pj-note-tape" aria-hidden="true"></span><div><h2>Du bekommst</h2><p><strong>23 Sticker</strong> für deine Alben</p><span class="pj-note-codes" id="pj-expected-codes"></span></div><span class="pj-little-card" aria-hidden="true"><span>FWC</span><strong>14</strong></span></article>
+<article class="pj-note pj-pink"><span class="pj-note-tape" aria-hidden="true"></span><h2>Du verschickst</h2><p>23 Sticker · 6 Alben</p><button id="pj-check-toggle" aria-expanded="false" aria-controls="pj-checklist">Sticker prüfen <span id="pj-check-count">0 / 23</span><span aria-hidden="true">↗</span></button><div id="pj-checklist" hidden></div></article>
+<article class="pj-note pj-yellow"><span class="pj-note-tape" aria-hidden="true"></span><h2>Versenden an</h2><address>Fatima Beispiel<br>Musterstraße 89<br>29693 Hodenhagen</address><span class="pj-address-label">BEISPIELADRESSE</span></article>
+<p class="pj-shipping-foot">23 ↔ 23 Sticker <span>Mit Sorgfalt eingepackt.</span></p>
+</div><div class="pj-action"><p class="pj-progress" id="pj-progress">Noch 23 Sticker auf deiner Packliste.</p><button class="pj-primary" id="pj-send" disabled>23 Sticker versendet <span aria-hidden="true">↗</span></button></div>
+</section>
+<section class="pj-view" data-screen="done" hidden aria-labelledby="pj-done-heading"><div class="pj-heading"><p class="pj-kicker">GUTE REISE, STICKER</p><h1 id="pj-done-heading" tabindex="-1">Versand bestätigt.</h1><p>Deine Sticker sind unterwegs.</p></div><div class="pj-envelope" aria-hidden="true"><span>Für Fatima</span><b>sammlr.</b></div><p class="pj-tool-caption">In dieser Preview wurde nichts versendet oder gespeichert.</p><button class="pj-simulation" data-view="closed">Preview von vorn ansehen ↻</button></section>
+</main><div class="pj-sr" role="status" id="pj-live"></div>
+</div>
+<script id="pj-data" type="application/json">{{ {'incoming':incoming,'outgoing':outgoing}|tojson }}</script>
+</body></html>

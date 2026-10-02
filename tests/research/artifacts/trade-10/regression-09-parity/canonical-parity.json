@@ -1,0 +1,142 @@
+[
+  {
+    "width": 375,
+    "quantity": 1,
+    "numeric_face_parity": true
+  },
+  {
+    "width": 375,
+    "quantity": 2,
+    "numeric_face_parity": true
+  },
+  {
+    "width": 375,
+    "quantity": 5,
+    "numeric_face_parity": true
+  },
+  {
+    "width": 375,
+    "quantity": 6,
+    "numeric_face_parity": true
+  },
+  {
+    "width": 375,
+    "quantity": 10,
+    "numeric_face_parity": true
+  },
+  {
+    "width": 375,
+    "quantity": 15,
+    "numeric_face_parity": true
+  },
+  {
+    "width": 375,
+    "quantity": 37,
+    "numeric_face_parity": true
+  },
+  {
+    "width": 390,
+    "quantity": 1,
+    "numeric_face_parity": true
+  },
+  {
+    "width": 390,
+    "quantity": 2,
+    "numeric_face_parity": true
+  },
+  {
+    "width": 390,
+    "quantity": 5,
+    "numeric_face_parity": true
+  },
+  {
+    "width": 390,
+    "quantity": 6,
+    "numeric_face_parity": true
+  },
+  {
+    "width": 390,
+    "quantity": 10,
+    "numeric_face_parity": true
+  },
+  {
+    "width": 390,
+    "quantity": 15,
+    "numeric_face_parity": true
+  },
+  {
+    "width": 390,
+    "quantity": 37,
+    "numeric_face_parity": true
+  },
+  {
+    "width": 430,
+    "quantity": 1,
+    "numeric_face_parity": true
+  },
+  {
+    "width": 430,
+    "quantity": 2,
+    "numeric_face_parity": true
+  },
+  {
+    "width": 430,
+    "quantity": 5,
+    "numeric_face_parity": true
+  },
+  {
+    "width": 430,
+    "quantity": 6,
+    "numeric_face_parity": true
+  },
+  {
+    "width": 430,
+    "quantity": 10,
+    "numeric_face_parity": true
+  },
+  {
+    "width": 430,
+    "quantity": 15,
+    "numeric_face_parity": true
+  },
+  {
+    "width": 430,
+    "quantity": 37,
+    "numeric_face_parity": true
+  },
+  {
+    "width": 1280,
+    "quantity": 1,
+    "numeric_face_parity": true
+  },
+  {
+    "width": 1280,
+    "quantity": 2,
+    "numeric_face_parity": true
+  },
+  {
+    "width": 1280,
+    "quantity": 5,
+    "numeric_face_parity": true
+  },
+  {
+    "width": 1280,
+    "quantity": 6,
+    "numeric_face_parity": true
+  },
+  {
+    "width": 1280,
+    "quantity": 10,
+    "numeric_face_parity": true
+  },
+  {
+    "width": 1280,
+    "quantity": 15,
+    "numeric_face_parity": true
+  },
+  {
+    "width": 1280,
+    "quantity": 37,
+    "numeric_face_parity": true
+  }
+]

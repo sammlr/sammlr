@@ -1,0 +1,32 @@
+{
+  "results": [
+    {
+      "width": 375,
+      "packing_roles_slots_missing_input_motion_layout": "PASS",
+      "direct_scenarios": 14,
+      "whole_package_confirmation": "PASS"
+    },
+    {
+      "width": 390,
+      "packing_roles_slots_missing_input_motion_layout": "PASS",
+      "direct_scenarios": 14,
+      "whole_package_confirmation": "PASS"
+    },
+    {
+      "width": 430,
+      "packing_roles_slots_missing_input_motion_layout": "PASS",
+      "direct_scenarios": 14,
+      "whole_package_confirmation": "PASS"
+    },
+    {
+      "width": 1280,
+      "packing_roles_slots_missing_input_motion_layout": "PASS",
+      "direct_scenarios": 14,
+      "whole_package_confirmation": "PASS"
+    }
+  ],
+  "model": "PASS: origins, duplicate instances, guards, immutable snapshot, independent states, retained slots, no expiry",
+  "no_per_piece_controls": true,
+  "errors": [],
+  "external_or_write_requests": []
+}

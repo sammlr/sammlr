@@ -1,0 +1,47 @@
+[
+  {
+    "width": 375,
+    "candidates": 5,
+    "overflow": false,
+    "collisions": false,
+    "continuation": [
+      16,
+      20,
+      1
+    ],
+    "boundary_cases": 9,
+    "mutation_requests": 0,
+    "console_errors": 0,
+    "journey": "PASS"
+  },
+  {
+    "width": 390,
+    "candidates": 5,
+    "overflow": false,
+    "collisions": false,
+    "continuation": [
+      16,
+      20,
+      1
+    ],
+    "boundary_cases": 9,
+    "mutation_requests": 0,
+    "console_errors": 0,
+    "journey": "PASS"
+  },
+  {
+    "width": 430,
+    "candidates": 5,
+    "overflow": false,
+    "collisions": false,
+    "continuation": [
+      16,
+      20,
+      1
+    ],
+    "boundary_cases": 9,
+    "mutation_requests": 0,
+    "console_errors": 0,
+    "journey": "PASS"
+  }
+]

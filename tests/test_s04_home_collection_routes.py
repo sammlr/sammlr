@@ -79,27 +79,34 @@ class HomeCollectionRoutesTestCase(unittest.TestCase):
             connection.execute(statement, parameters)
             connection.commit()
 
-    def test_root_is_honest_home_ground_state_without_collection_dashboard(self):
+    def test_root_uses_approved_action_first_home_with_real_favorite(self):
         response = self.client.get("/")
         html = response.get_data(as_text=True)
 
         self.assertEqual(200, response.status_code)
-        self.assertIn("<h1>Home</h1>", html)
-        self.assertIn("Willkommen bei Sammlr.", html)
-        self.assertIn('href="/sammlung"', html)
+        self.assertIn("<h1>Für dich</h1>", html)
+        self.assertIn("Tauschchance", html)
+        self.assertIn("Finde Tauschpartner für deine fehlenden Sticker.", html)
+        self.assertIn("Favoritenalbum", html)
+        self.assertIn("VfL Osnabrück", html)
+        self.assertIn('href="/album/vfl"', html)
+        self.assertIn('href="/trades"', html)
+        self.assertNotIn("Deine Sammlerreise beginnt hier.", html)
+        self.assertNotIn(">17<", html)
+        self.assertNotIn("Das braucht dich", html)
+        self.assertNotIn("Alles erledigt.", html)
         self.assertNotIn("Aktive Alben", html)
         self.assertNotIn("Vitrine", html)
         self.assertNotIn("Album hinzufügen", html)
-        self.assertNotIn("VfL Osnabrück", html)
         self.assertNotIn("Tauschanfrage", html)
-        self.assertNotIn("Versand", html)
+        self.assertNotIn("home-album-card", html)
 
     def test_collection_route_preserves_album_cards_favorite_and_add_entry(self):
         response = self.client.get("/sammlung")
         html = response.get_data(as_text=True)
 
         self.assertEqual(200, response.status_code)
-        self.assertIn("<h1>Sammlr-Zentrale</h1>", html)
+        self.assertIn("<h1>Sammlung</h1>", html)
         self.assertIn("Aktive Alben", html)
         self.assertIn("VfL Osnabrück", html)
         self.assertIn("FIFA World Cup 2026", html)
@@ -113,19 +120,17 @@ class HomeCollectionRoutesTestCase(unittest.TestCase):
         self.assertIsNotNone(favorite_card)
         self.assertIn("is-favorite", favorite_card.group(1))
 
-    def test_collection_vitrine_still_uses_real_album_progress(self):
+    def test_current_completion_stays_in_collection_without_invented_history(self):
         self.execute("UPDATE albums SET total=3 WHERE id='vfl'")
 
         response = self.client.get("/sammlung")
         html = response.get_data(as_text=True)
 
         self.assertEqual(200, response.status_code)
-        self.assertIn('<h2 class="home-section-title">Vitrine</h2>', html)
-        vitrine_start = html.index(
-            '<h2 class="home-section-title">Vitrine</h2>'
-        )
-        self.assertIn("VfL Osnabrück", html[vitrine_start:])
-        self.assertIn("3/3", html[vitrine_start:])
+        self.assertIn("VfL Osnabrück", html)
+        self.assertIn("3 von 3 Stickern", html)
+        self.assertNotIn("Abgeschlossene Alben", html)
+        self.assertNotIn("Vervollständigt", html)
 
     def test_compatibility_routes_redirect_to_canonical_owners(self):
         cases = (
@@ -163,7 +168,7 @@ class HomeCollectionRoutesTestCase(unittest.TestCase):
         self.assertEqual(302, response.status_code)
         self.assertEqual("/", response.headers["Location"])
         home = self.client.get("/")
-        self.assertIn("<h1>Home</h1>", home.get_data(as_text=True))
+        self.assertIn("<h1>Für dich</h1>", home.get_data(as_text=True))
 
     def test_internal_collection_links_and_album_return_path_are_stable(self):
         home_html = self.client.get("/").get_data(as_text=True)
@@ -178,10 +183,8 @@ class HomeCollectionRoutesTestCase(unittest.TestCase):
         self.assertIn('href="/alben/hinzufuegen"', collection_html)
         self.assertIn('href="/sammlung">← Zurück</a>', add_html)
         self.assertIn('href="/sammlung">← Zur Sammlung</a>', album_html)
-        self.assertIn(
-            '<a class="profile-link-card" href="/sammlung">',
-            profile_html,
-        )
+        self.assertIn('class="bottom-nav-link" href="/sammlung"', profile_html)
+        self.assertIn('class="collector-showcase-album" href="/album/', profile_html)
         self.assertIn('class="app-header-brand" href="/"', collection_html)
 
     def test_album_addition_returns_to_collection_and_preserves_membership(self):
@@ -195,7 +198,7 @@ class HomeCollectionRoutesTestCase(unittest.TestCase):
             )
         )
 
-        response = self.client.get("/alben/hinzufuegen/em24")
+        response = self.client.post("/alben/hinzufuegen/em24")
 
         self.assertEqual(302, response.status_code)
         self.assertEqual("/sammlung", response.headers["Location"])
@@ -213,7 +216,7 @@ class HomeCollectionRoutesTestCase(unittest.TestCase):
         with self.client.session_transaction() as session:
             session.pop("last_action", None)
 
-        response = self.client.get("/undo")
+        response = self.client.post("/undo")
 
         self.assertEqual(302, response.status_code)
         self.assertEqual("/sammlung", response.headers["Location"])

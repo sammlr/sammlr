@@ -1,0 +1,19 @@
+/* Size is measured from the unchanged production wall CSS, never scaled. */
+.trade-preview .top-table{margin-inline:-22px;gap:4px;padding-top:28px}
+.trade-preview .top-toggle{min-height:190px}
+.trade-preview .top-stack{width:var(--trade-card-width);transform:translate(1px,0) rotate(-.3deg);margin:0 0 10px 18px}
+.trade-preview .top-offer:nth-child(2) .top-stack{transform:translate(0,1px) rotate(.3deg)}
+.trade-preview .top-offer:nth-child(3) .top-stack{transform:translate(-1px,0) rotate(-.2deg)}
+.trade-preview #pax-receive-albums{grid-template-columns:repeat(auto-fit,minmax(calc(var(--trade-card-width) + 26px),1fr));gap:32px 18px;overflow-anchor:none}
+.trade-preview .pax-receive-album:not(.is-expanded) .pax-album-toggle{transform:rotate(-.3deg);width:var(--trade-card-width);left:auto;margin:0 auto;position:relative}
+.trade-preview .pax-receive-album:nth-child(even):not(.is-expanded) .pax-album-toggle{transform:translate(1px,1px) rotate(.3deg)}
+.trade-preview .pax-receive-album h3{min-height:30px}
+.trade-preview .pax-album-count{margin-bottom:24px}
+.trade-preview .pax-album-toggle>.sticker-slot-frame,.trade-preview .pax-fan-grid>.sticker-slot-frame{width:var(--trade-card-width)}
+.trade-preview .pax-fan-grid{grid-template-columns:repeat(auto-fit,var(--trade-card-width));justify-content:space-around;gap:20px 8px;padding:12px 2px}
+.trade-preview .pax-receive-album.is-expanded{padding-top:18px;padding-bottom:26px}
+.trade-preview .receive-all,.trade-preview .pax-album-fan>.pj-simulation{width:fit-content;min-width:44px;min-height:44px;border:0;border-radius:4px;padding:10px 8px;background:transparent;color:var(--color-text-secondary);font-size:13px;font-weight:500;text-decoration:underline;text-underline-offset:3px;box-shadow:none}
+.trade-preview .receive-all{margin:10px 0 2px}
+.trade-preview .pax-album-fan>.pj-simulation{margin:0 auto 8px}
+.trade-flight-layer{position:fixed;inset:0;pointer-events:none;overflow:hidden;z-index:100;font-size:16px}
+.trade-flight-layer .sticker-slot-frame{position:absolute;display:block;margin:0;transform-origin:center}

@@ -1,0 +1,893 @@
+{
+  "version": "CEOKlaue final glyph reselection source import v1",
+  "open_characters": "HZzxhDF2ß",
+  "policy": {
+    "existing_variants_replaced": false,
+    "accepted_triple_sets_changed": false,
+    "automatic_selection": false,
+    "harmony_font_built": false,
+    "product_assets_written": []
+  },
+  "sources": [
+    {
+      "key": "reselection_01",
+      "filename": "ceoklaue_final_reselection_01.jpg",
+      "original_filename": "IMG_7174.JPG",
+      "sha256": "77fd1bf51a10098fc0076a57f94583d686647b74fa65cfa6baf402b1a6f0f9a3",
+      "pixel_dimensions": [
+        4032,
+        3024
+      ],
+      "characters": "HZzx"
+    },
+    {
+      "key": "reselection_02",
+      "filename": "ceoklaue_final_reselection_02.jpg",
+      "original_filename": "IMG_7175.JPG",
+      "sha256": "a2794ad5ca03a08843ed38d8ebf455ee6ef523a621b8bd9b3ab3f8d357ec4018",
+      "pixel_dimensions": [
+        4032,
+        3024
+      ],
+      "characters": "hDF2ß"
+    }
+  ],
+  "extraction": {
+    "exif_orientation_applied_in_memory": true,
+    "detection_threshold": 80,
+    "extraction_threshold": 90,
+    "component_relative_floor": 0.04,
+    "dilation_kernel": [
+      3,
+      3
+    ],
+    "dilation_iterations": 1,
+    "closing_kernel": [
+      5,
+      5
+    ]
+  },
+  "preexisting_inventory": {
+    "png_count": 554,
+    "svg_count": 554,
+    "sha256": "577652c6eee309a1791c1f947245a5b043a0e74408daf1ed6abb2796093aeb43"
+  },
+  "totals": {
+    "characters": 9,
+    "recognized_handwritten_sources": 44,
+    "extracted_pngs": 44,
+    "generated_svgs": 44,
+    "discarded_sources": 0
+  },
+  "characters": [
+    {
+      "character": "H",
+      "glyph_key": "cap_H",
+      "source": "ceoklaue_final_reselection_01.jpg",
+      "new_variant_ids": [
+        "11",
+        "12",
+        "13",
+        "14",
+        "15"
+      ],
+      "outputs": [
+        {
+          "id": "11",
+          "detected_ink_pixels": 6671,
+          "mask_dimensions": [
+            160,
+            288
+          ],
+          "png": {
+            "path": "01_extracted/glyphs/cap_H/cap_H_11.png",
+            "sha256": "f108a418036465e2a0590031f22714e71a045d5595ed8f94ffa3bab5d87695ca"
+          },
+          "svg": {
+            "path": "02_vectors/glyphs/cap_H/cap_H_11.svg",
+            "sha256": "ed370ca069396b2e654de05f1ad1ccce2d37306131611d42e853e6a95017ddbc"
+          }
+        },
+        {
+          "id": "12",
+          "detected_ink_pixels": 7575,
+          "mask_dimensions": [
+            173,
+            278
+          ],
+          "png": {
+            "path": "01_extracted/glyphs/cap_H/cap_H_12.png",
+            "sha256": "bcf7014b6f0998db7f0cfec9a0bcf9405205e5d56d34de0552589f4255c9307c"
+          },
+          "svg": {
+            "path": "02_vectors/glyphs/cap_H/cap_H_12.svg",
+            "sha256": "2348a0e81637aaca8c7aa3bccfa74e66e8d614e416a442214f6c2039da205413"
+          }
+        },
+        {
+          "id": "13",
+          "detected_ink_pixels": 7514,
+          "mask_dimensions": [
+            113,
+            285
+          ],
+          "png": {
+            "path": "01_extracted/glyphs/cap_H/cap_H_13.png",
+            "sha256": "0460f9a085889797b9f7153488646bf4d68421e7f85bf7eeb310317f18b0fe93"
+          },
+          "svg": {
+            "path": "02_vectors/glyphs/cap_H/cap_H_13.svg",
+            "sha256": "9ba9f2418574e5d58cd201b397eb9d95d08837e045261a832a7d5bd2aabbe703"
+          }
+        },
+        {
+          "id": "14",
+          "detected_ink_pixels": 9576,
+          "mask_dimensions": [
+            152,
+            320
+          ],
+          "png": {
+            "path": "01_extracted/glyphs/cap_H/cap_H_14.png",
+            "sha256": "40b967a497cc3f0d2d683c384db4f210ef547e8baf22ddcfb2f21c1e4c638f23"
+          },
+          "svg": {
+            "path": "02_vectors/glyphs/cap_H/cap_H_14.svg",
+            "sha256": "1d5b363d1744f3068a13eebcdbc66260f394bd421c2ab74cae3129c88321ca40"
+          }
+        },
+        {
+          "id": "15",
+          "detected_ink_pixels": 8594,
+          "mask_dimensions": [
+            147,
+            301
+          ],
+          "png": {
+            "path": "01_extracted/glyphs/cap_H/cap_H_15.png",
+            "sha256": "05b151e67740cad4c1030447cc575f6a1e32b79f2292eaafdc02ffffafb3e12b"
+          },
+          "svg": {
+            "path": "02_vectors/glyphs/cap_H/cap_H_15.svg",
+            "sha256": "0c8fb9b114e347a571cc0d8bb9d2ce5a2b9ddf82f59304690b3c6af538147e94"
+          }
+        }
+      ]
+    },
+    {
+      "character": "Z",
+      "glyph_key": "cap_Z",
+      "source": "ceoklaue_final_reselection_01.jpg",
+      "new_variant_ids": [
+        "06",
+        "07",
+        "08",
+        "09",
+        "10"
+      ],
+      "outputs": [
+        {
+          "id": "06",
+          "detected_ink_pixels": 7860,
+          "mask_dimensions": [
+            239,
+            231
+          ],
+          "png": {
+            "path": "01_extracted/glyphs/cap_Z/cap_Z_06.png",
+            "sha256": "1cf7610be8765a741ffdd36e2e2b631d7291fb3a429fc210ea860d9008b0378a"
+          },
+          "svg": {
+            "path": "02_vectors/glyphs/cap_Z/cap_Z_06.svg",
+            "sha256": "700c55f23aeae19b79f0c481d7c6720ed4abd68c84ca81ca4bda22b95441ae04"
+          }
+        },
+        {
+          "id": "07",
+          "detected_ink_pixels": 6860,
+          "mask_dimensions": [
+            238,
+            243
+          ],
+          "png": {
+            "path": "01_extracted/glyphs/cap_Z/cap_Z_07.png",
+            "sha256": "98191dc7cd1c8401e7a895cd8d441c2cf243a20db386d22ba13725d5693212fa"
+          },
+          "svg": {
+            "path": "02_vectors/glyphs/cap_Z/cap_Z_07.svg",
+            "sha256": "9cb3e53efc32f7b5908c784f1c53f47f8841af00f394acbbd99c80ffd30ba721"
+          }
+        },
+        {
+          "id": "08",
+          "detected_ink_pixels": 6814,
+          "mask_dimensions": [
+            208,
+            228
+          ],
+          "png": {
+            "path": "01_extracted/glyphs/cap_Z/cap_Z_08.png",
+            "sha256": "194da12b16c4d5c9651396a2e22dc3e3c642e36a837500e9e79407313348bf45"
+          },
+          "svg": {
+            "path": "02_vectors/glyphs/cap_Z/cap_Z_08.svg",
+            "sha256": "73a1401b76a5aa469026aa663e2eade3e76ac078f6c77814492d54e0d3a1a298"
+          }
+        },
+        {
+          "id": "09",
+          "detected_ink_pixels": 9796,
+          "mask_dimensions": [
+            262,
+            266
+          ],
+          "png": {
+            "path": "01_extracted/glyphs/cap_Z/cap_Z_09.png",
+            "sha256": "d996f1b5d37a1c17555f9bd41cc264b126da6892f406b2acc61fe4a4225aa93a"
+          },
+          "svg": {
+            "path": "02_vectors/glyphs/cap_Z/cap_Z_09.svg",
+            "sha256": "928ab9911a52caf91a6d0c94a2cf3ab7b99ff7a46a871170854ab65e6825d440"
+          }
+        },
+        {
+          "id": "10",
+          "detected_ink_pixels": 10401,
+          "mask_dimensions": [
+            255,
+            283
+          ],
+          "png": {
+            "path": "01_extracted/glyphs/cap_Z/cap_Z_10.png",
+            "sha256": "d7a1a6f33b83894f9ce96dc401d1dcd26161c081e133719ea80a10ba323cf3df"
+          },
+          "svg": {
+            "path": "02_vectors/glyphs/cap_Z/cap_Z_10.svg",
+            "sha256": "5e6dbd418ff7c7e894a2620a6b5bcb3e1b02fa34f3758c815e99fa44cdea5618"
+          }
+        }
+      ]
+    },
+    {
+      "character": "z",
+      "glyph_key": "lower_z",
+      "source": "ceoklaue_final_reselection_01.jpg",
+      "new_variant_ids": [
+        "06",
+        "07",
+        "08",
+        "09",
+        "10"
+      ],
+      "outputs": [
+        {
+          "id": "06",
+          "detected_ink_pixels": 4305,
+          "mask_dimensions": [
+            170,
+            143
+          ],
+          "png": {
+            "path": "01_extracted/glyphs/lower_z/lower_z_06.png",
+            "sha256": "dfded74d38bcd48b597d83a3790c4d980d9266a22ba678d48e797c934fcbdec6"
+          },
+          "svg": {
+            "path": "02_vectors/glyphs/lower_z/lower_z_06.svg",
+            "sha256": "bcfbb871e17576b014d40540851451fc513d984b05630056351c4134f6e532f9"
+          }
+        },
+        {
+          "id": "07",
+          "detected_ink_pixels": 4914,
+          "mask_dimensions": [
+            202,
+            155
+          ],
+          "png": {
+            "path": "01_extracted/glyphs/lower_z/lower_z_07.png",
+            "sha256": "8d6c5133d453a58ba3678ba4f0e738c02b3c8374fafb0d58aed035c38ee66369"
+          },
+          "svg": {
+            "path": "02_vectors/glyphs/lower_z/lower_z_07.svg",
+            "sha256": "d88f2c5cf4f26febe8580372d24eaa53c52d65013abf261ac5bd8d9cb92345cc"
+          }
+        },
+        {
+          "id": "08",
+          "detected_ink_pixels": 3797,
+          "mask_dimensions": [
+            188,
+            143
+          ],
+          "png": {
+            "path": "01_extracted/glyphs/lower_z/lower_z_08.png",
+            "sha256": "21fb48407685ac06355835a8b990baa70e2df9c375aa865574db15f9eb5bc152"
+          },
+          "svg": {
+            "path": "02_vectors/glyphs/lower_z/lower_z_08.svg",
+            "sha256": "a7fe349265fee6ff2826173cc5f48e5e5942c11bcdc1a48ac8495bc055e6976d"
+          }
+        },
+        {
+          "id": "09",
+          "detected_ink_pixels": 5700,
+          "mask_dimensions": [
+            201,
+            152
+          ],
+          "png": {
+            "path": "01_extracted/glyphs/lower_z/lower_z_09.png",
+            "sha256": "1124f73b6f0d454bf158cea560a3a7459db915a99313ff60625e7c0fc2092e54"
+          },
+          "svg": {
+            "path": "02_vectors/glyphs/lower_z/lower_z_09.svg",
+            "sha256": "8bd01e97bfb8fae61ebb12a71a1c3f7a4b2363e5567765bc9e99c8cec5b9cfff"
+          }
+        },
+        {
+          "id": "10",
+          "detected_ink_pixels": 6677,
+          "mask_dimensions": [
+            207,
+            173
+          ],
+          "png": {
+            "path": "01_extracted/glyphs/lower_z/lower_z_10.png",
+            "sha256": "85b1e84e064a984d284982224ab455bc738b3eb4211ec459de179f3a25e0ae5f"
+          },
+          "svg": {
+            "path": "02_vectors/glyphs/lower_z/lower_z_10.svg",
+            "sha256": "fcf8466ec79d32ab39465738d90d18aab628c75e4ae633f4cdf09ceda419f1d2"
+          }
+        }
+      ]
+    },
+    {
+      "character": "x",
+      "glyph_key": "lower_x",
+      "source": "ceoklaue_final_reselection_01.jpg",
+      "new_variant_ids": [
+        "06",
+        "07",
+        "08",
+        "09",
+        "10"
+      ],
+      "outputs": [
+        {
+          "id": "06",
+          "detected_ink_pixels": 4565,
+          "mask_dimensions": [
+            182,
+            164
+          ],
+          "png": {
+            "path": "01_extracted/glyphs/lower_x/lower_x_06.png",
+            "sha256": "279f1f36ed9055805ac09db0308d77f6dcd218dde33ba4a3c332c366aea10b0d"
+          },
+          "svg": {
+            "path": "02_vectors/glyphs/lower_x/lower_x_06.svg",
+            "sha256": "ae4858c7eec6b7e67f9cc1f7d2a21bc3c912f16309a6bdfae467e16fdab35758"
+          }
+        },
+        {
+          "id": "07",
+          "detected_ink_pixels": 3789,
+          "mask_dimensions": [
+            173,
+            140
+          ],
+          "png": {
+            "path": "01_extracted/glyphs/lower_x/lower_x_07.png",
+            "sha256": "5e93ffe9b467d4e38ceaa115cbc4db5352e854f15fad9db303615943082482dc"
+          },
+          "svg": {
+            "path": "02_vectors/glyphs/lower_x/lower_x_07.svg",
+            "sha256": "72708ee20f95a35813407709f5d564209e4f5fd12cbb4f6f252aa3f5488bdcd8"
+          }
+        },
+        {
+          "id": "08",
+          "detected_ink_pixels": 3960,
+          "mask_dimensions": [
+            167,
+            136
+          ],
+          "png": {
+            "path": "01_extracted/glyphs/lower_x/lower_x_08.png",
+            "sha256": "1f122fc8b9abf37c29a11f0fba478d8eddf4103994720bbbf52ff4929416f235"
+          },
+          "svg": {
+            "path": "02_vectors/glyphs/lower_x/lower_x_08.svg",
+            "sha256": "28f65cd5f889146fb788ea246e3da8ce5ede23374345fdb4906c1466688a3ef8"
+          }
+        },
+        {
+          "id": "09",
+          "detected_ink_pixels": 4721,
+          "mask_dimensions": [
+            218,
+            153
+          ],
+          "png": {
+            "path": "01_extracted/glyphs/lower_x/lower_x_09.png",
+            "sha256": "342c165a5aad74c2ef821f652993d94ba4233aa0417a973da230947778a00023"
+          },
+          "svg": {
+            "path": "02_vectors/glyphs/lower_x/lower_x_09.svg",
+            "sha256": "902d710382d30b8edc716b1f14e33574167d803c1c189c11e2741a4d1cd91b3a"
+          }
+        },
+        {
+          "id": "10",
+          "detected_ink_pixels": 6028,
+          "mask_dimensions": [
+            218,
+            168
+          ],
+          "png": {
+            "path": "01_extracted/glyphs/lower_x/lower_x_10.png",
+            "sha256": "a8caebbe75f5badc7db5b367c48a2c8d7d65249e54a5c2c626aeb1a1c131dcfa"
+          },
+          "svg": {
+            "path": "02_vectors/glyphs/lower_x/lower_x_10.svg",
+            "sha256": "91eb4ff205bb7f7298cc4782406d0ae1f73e215d99287ce4b9c741f69ce5c897"
+          }
+        }
+      ]
+    },
+    {
+      "character": "h",
+      "glyph_key": "lower_h",
+      "source": "ceoklaue_final_reselection_02.jpg",
+      "new_variant_ids": [
+        "06",
+        "07",
+        "08",
+        "09"
+      ],
+      "outputs": [
+        {
+          "id": "06",
+          "detected_ink_pixels": 7691,
+          "mask_dimensions": [
+            209,
+            306
+          ],
+          "png": {
+            "path": "01_extracted/glyphs/lower_h/lower_h_06.png",
+            "sha256": "79b273f77a526f4b15e25d18801e1e50a19dbb885eaa19461b53f6299dd477e6"
+          },
+          "svg": {
+            "path": "02_vectors/glyphs/lower_h/lower_h_06.svg",
+            "sha256": "58e0681fc36ceca6972a0d30d89409e3434e75f3d9a8def13bde8d15b3705407"
+          }
+        },
+        {
+          "id": "07",
+          "detected_ink_pixels": 6858,
+          "mask_dimensions": [
+            172,
+            302
+          ],
+          "png": {
+            "path": "01_extracted/glyphs/lower_h/lower_h_07.png",
+            "sha256": "66469d110521c07152ccf93bfb697794b8b28c72d322159efdc5a7a1db3dde36"
+          },
+          "svg": {
+            "path": "02_vectors/glyphs/lower_h/lower_h_07.svg",
+            "sha256": "9862fa586fc3e03b4c757b25aeb4d9f098394c0f2dbca255cfd786daa0d7a5d3"
+          }
+        },
+        {
+          "id": "08",
+          "detected_ink_pixels": 6574,
+          "mask_dimensions": [
+            173,
+            271
+          ],
+          "png": {
+            "path": "01_extracted/glyphs/lower_h/lower_h_08.png",
+            "sha256": "32f5dbc3b83020fc9de43dc3185fa79070835136066986d3249b763f87f575e8"
+          },
+          "svg": {
+            "path": "02_vectors/glyphs/lower_h/lower_h_08.svg",
+            "sha256": "9d50a0be8e5cf2b418c4faaff43030d09c6beacbb59b1c02dfd13796249b1cc5"
+          }
+        },
+        {
+          "id": "09",
+          "detected_ink_pixels": 7620,
+          "mask_dimensions": [
+            191,
+            259
+          ],
+          "png": {
+            "path": "01_extracted/glyphs/lower_h/lower_h_09.png",
+            "sha256": "25d2ab965a2b74068b09b82f8bf2ec18a014b5bac77a037d2016d47801777cf9"
+          },
+          "svg": {
+            "path": "02_vectors/glyphs/lower_h/lower_h_09.svg",
+            "sha256": "8757fbdcefffeecfc25212a278c26191c0d121c54eb54cf24949860f0c65720e"
+          }
+        }
+      ]
+    },
+    {
+      "character": "D",
+      "glyph_key": "cap_D",
+      "source": "ceoklaue_final_reselection_02.jpg",
+      "new_variant_ids": [
+        "06",
+        "07",
+        "08",
+        "09",
+        "10"
+      ],
+      "outputs": [
+        {
+          "id": "06",
+          "detected_ink_pixels": 9660,
+          "mask_dimensions": [
+            258,
+            276
+          ],
+          "png": {
+            "path": "01_extracted/glyphs/cap_D/cap_D_06.png",
+            "sha256": "b96765fbdd70ac205847ce11a60f853d62d91db1c14b81eef4b0511ee87cb1c5"
+          },
+          "svg": {
+            "path": "02_vectors/glyphs/cap_D/cap_D_06.svg",
+            "sha256": "b6efd3b58f490d185a3400bc14a5afe7a0dd27de1310c2263cb170072aa82c71"
+          }
+        },
+        {
+          "id": "07",
+          "detected_ink_pixels": 7736,
+          "mask_dimensions": [
+            226,
+            227
+          ],
+          "png": {
+            "path": "01_extracted/glyphs/cap_D/cap_D_07.png",
+            "sha256": "be213ec9d24b4e48a740a62be5c6c7f56b13acf20417dcc82eb279daedb56871"
+          },
+          "svg": {
+            "path": "02_vectors/glyphs/cap_D/cap_D_07.svg",
+            "sha256": "be8b507f653be690dd45999b5204333ec2727e87c72eb2c32bcb2b9cf792ff8b"
+          }
+        },
+        {
+          "id": "08",
+          "detected_ink_pixels": 7356,
+          "mask_dimensions": [
+            208,
+            249
+          ],
+          "png": {
+            "path": "01_extracted/glyphs/cap_D/cap_D_08.png",
+            "sha256": "1c8c75b13b449e649c62e1630c438dfaa95c543249da97de2eb304e0408b611b"
+          },
+          "svg": {
+            "path": "02_vectors/glyphs/cap_D/cap_D_08.svg",
+            "sha256": "65967f118cfc1d7088021cebe3f0d75a452f77da9d4373d6d02210c0ee613963"
+          }
+        },
+        {
+          "id": "09",
+          "detected_ink_pixels": 9273,
+          "mask_dimensions": [
+            246,
+            261
+          ],
+          "png": {
+            "path": "01_extracted/glyphs/cap_D/cap_D_09.png",
+            "sha256": "56447de0f6d60b3d5c9b7e872306f393f8359adb14074812d16d6abee3ac65b9"
+          },
+          "svg": {
+            "path": "02_vectors/glyphs/cap_D/cap_D_09.svg",
+            "sha256": "4cafbb2dd28716ecce73e9bc5e6eebb2b8c933e7be2cdc5f3ebcbf72d8e8fecb"
+          }
+        },
+        {
+          "id": "10",
+          "detected_ink_pixels": 10743,
+          "mask_dimensions": [
+            250,
+            247
+          ],
+          "png": {
+            "path": "01_extracted/glyphs/cap_D/cap_D_10.png",
+            "sha256": "75f7ffa13fa33357ed263ed8fb8604383798a26776286c8ace81b92ae23367cb"
+          },
+          "svg": {
+            "path": "02_vectors/glyphs/cap_D/cap_D_10.svg",
+            "sha256": "7f7962ecb6b9986158a74212eaf3893c0c19c6abafe397d2e78f8899d8f786b4"
+          }
+        }
+      ]
+    },
+    {
+      "character": "F",
+      "glyph_key": "cap_F",
+      "source": "ceoklaue_final_reselection_02.jpg",
+      "new_variant_ids": [
+        "06",
+        "07",
+        "08",
+        "09",
+        "10"
+      ],
+      "outputs": [
+        {
+          "id": "06",
+          "detected_ink_pixels": 6788,
+          "mask_dimensions": [
+            206,
+            258
+          ],
+          "png": {
+            "path": "01_extracted/glyphs/cap_F/cap_F_06.png",
+            "sha256": "dee52bffbde1bca73c2315b867efc91680b23cc7d8f996de36c4bdd7145c03e0"
+          },
+          "svg": {
+            "path": "02_vectors/glyphs/cap_F/cap_F_06.svg",
+            "sha256": "462cd115382307584a0e289760464e2e019615df041eb8a9fb7f0cb94aedad16"
+          }
+        },
+        {
+          "id": "07",
+          "detected_ink_pixels": 5466,
+          "mask_dimensions": [
+            180,
+            251
+          ],
+          "png": {
+            "path": "01_extracted/glyphs/cap_F/cap_F_07.png",
+            "sha256": "53b440fd6f6aa81480e85929d84b202a1b5bf26057ff449491c3dd2cca71b40c"
+          },
+          "svg": {
+            "path": "02_vectors/glyphs/cap_F/cap_F_07.svg",
+            "sha256": "a288ab89bfff610c5f77d6d00aa55f7898d01d23ec8bcb992fb3d0e37f570796"
+          }
+        },
+        {
+          "id": "08",
+          "detected_ink_pixels": 5939,
+          "mask_dimensions": [
+            193,
+            254
+          ],
+          "png": {
+            "path": "01_extracted/glyphs/cap_F/cap_F_08.png",
+            "sha256": "680f4fa85e8f889e96c995982f60c454d56dc2b7bc9c97422f987fbe882c179d"
+          },
+          "svg": {
+            "path": "02_vectors/glyphs/cap_F/cap_F_08.svg",
+            "sha256": "7505d3c8d48bdbae22da4d82fd3bcc0ee212cbda81c33895a43db27306c28404"
+          }
+        },
+        {
+          "id": "09",
+          "detected_ink_pixels": 5988,
+          "mask_dimensions": [
+            181,
+            246
+          ],
+          "png": {
+            "path": "01_extracted/glyphs/cap_F/cap_F_09.png",
+            "sha256": "e6385605e330b7292d2f961d6322b701d517c239244000e01ed17279b1709a76"
+          },
+          "svg": {
+            "path": "02_vectors/glyphs/cap_F/cap_F_09.svg",
+            "sha256": "44f5a838a61c044e13606bdf24badf8c0f37b1a167fef49428ee6910f582a425"
+          }
+        },
+        {
+          "id": "10",
+          "detected_ink_pixels": 7808,
+          "mask_dimensions": [
+            210,
+            278
+          ],
+          "png": {
+            "path": "01_extracted/glyphs/cap_F/cap_F_10.png",
+            "sha256": "37ade2a4cd4bcc77ccd3eca71e048475d734f729842f1980cfbce4775c8aeac1"
+          },
+          "svg": {
+            "path": "02_vectors/glyphs/cap_F/cap_F_10.svg",
+            "sha256": "2a70c802dad8249f4265ed8932d4fdebdc13a3ef903c0373740a38873968013a"
+          }
+        }
+      ]
+    },
+    {
+      "character": "2",
+      "glyph_key": "2",
+      "source": "ceoklaue_final_reselection_02.jpg",
+      "new_variant_ids": [
+        "06",
+        "07",
+        "08",
+        "09",
+        "10"
+      ],
+      "outputs": [
+        {
+          "id": "06",
+          "detected_ink_pixels": 7193,
+          "mask_dimensions": [
+            196,
+            286
+          ],
+          "png": {
+            "path": "01_extracted/glyphs/2/2_06.png",
+            "sha256": "2ae196ef612fcdf26fc37b0c7593eb1145da62a218b3cc89ebf493f80ac8f1c8"
+          },
+          "svg": {
+            "path": "02_vectors/glyphs/2/2_06.svg",
+            "sha256": "305c3c4415fa8ff506be092cb422239dc7786646af66538c86fe814769bf4202"
+          }
+        },
+        {
+          "id": "07",
+          "detected_ink_pixels": 5594,
+          "mask_dimensions": [
+            138,
+            284
+          ],
+          "png": {
+            "path": "01_extracted/glyphs/2/2_07.png",
+            "sha256": "bcb60668bf507e6906b1aaa3ed826eaa2d7a1e3a37d0a6f9835a37190dbe90cf"
+          },
+          "svg": {
+            "path": "02_vectors/glyphs/2/2_07.svg",
+            "sha256": "d3641c56b564d82d478e39659bdb639252bc9177bbe53a134e02ba6d2b8ea10b"
+          }
+        },
+        {
+          "id": "08",
+          "detected_ink_pixels": 6366,
+          "mask_dimensions": [
+            192,
+            278
+          ],
+          "png": {
+            "path": "01_extracted/glyphs/2/2_08.png",
+            "sha256": "45623628ac6a5ab21937c3e184409514ff28dd53bde9f9cd0e6c330fbbe67512"
+          },
+          "svg": {
+            "path": "02_vectors/glyphs/2/2_08.svg",
+            "sha256": "124774dc544ba304d8357afbe5805fad90606e8c6785459295e927bdce23ba2f"
+          }
+        },
+        {
+          "id": "09",
+          "detected_ink_pixels": 7567,
+          "mask_dimensions": [
+            226,
+            249
+          ],
+          "png": {
+            "path": "01_extracted/glyphs/2/2_09.png",
+            "sha256": "f42d06eb5d7809955e7025720c477c7e4157637e7c6c2536974fcf8ff3311630"
+          },
+          "svg": {
+            "path": "02_vectors/glyphs/2/2_09.svg",
+            "sha256": "a3a7d5ce5b9c774be5837bc7883232b2dc0702a410200d0573f732f7d9dfb62c"
+          }
+        },
+        {
+          "id": "10",
+          "detected_ink_pixels": 8291,
+          "mask_dimensions": [
+            198,
+            256
+          ],
+          "png": {
+            "path": "01_extracted/glyphs/2/2_10.png",
+            "sha256": "b8f694c1cdd0bd420c13f65748dc678c3ae62e9e6edc513120d923d34317e12d"
+          },
+          "svg": {
+            "path": "02_vectors/glyphs/2/2_10.svg",
+            "sha256": "7044697f1f300db2c64f6d0d5fbbf29e20d5b78e819a2bc3ae9fd817ac512265"
+          }
+        }
+      ]
+    },
+    {
+      "character": "ß",
+      "glyph_key": "germandbls",
+      "source": "ceoklaue_final_reselection_02.jpg",
+      "new_variant_ids": [
+        "11",
+        "12",
+        "13",
+        "14",
+        "15"
+      ],
+      "outputs": [
+        {
+          "id": "11",
+          "detected_ink_pixels": 10676,
+          "mask_dimensions": [
+            273,
+            260
+          ],
+          "png": {
+            "path": "01_extracted/glyphs/germandbls/germandbls_11.png",
+            "sha256": "629ab0696243ce8f3db32ea777a77a0317200b7f0917faea6967d23083ec7f17"
+          },
+          "svg": {
+            "path": "02_vectors/glyphs/germandbls/germandbls_11.svg",
+            "sha256": "3fae05bc1cfe2a4e0cb11ebc2b00d7d592ce0f567be36ec0f6c8c4e602e9c7e9"
+          }
+        },
+        {
+          "id": "12",
+          "detected_ink_pixels": 11535,
+          "mask_dimensions": [
+            239,
+            293
+          ],
+          "png": {
+            "path": "01_extracted/glyphs/germandbls/germandbls_12.png",
+            "sha256": "46ed51ac50be108eed31923da7b18ff7874f2590bcb92b8724b3cb016f725a53"
+          },
+          "svg": {
+            "path": "02_vectors/glyphs/germandbls/germandbls_12.svg",
+            "sha256": "fd3ab46cca8343480558e236f5c3a715ac714db9821dd13fbe4030c3612d7aa3"
+          }
+        },
+        {
+          "id": "13",
+          "detected_ink_pixels": 10783,
+          "mask_dimensions": [
+            239,
+            299
+          ],
+          "png": {
+            "path": "01_extracted/glyphs/germandbls/germandbls_13.png",
+            "sha256": "df68cca40eef87f243251fc1e27b70cdd03b77eac399633726cd5e038253d288"
+          },
+          "svg": {
+            "path": "02_vectors/glyphs/germandbls/germandbls_13.svg",
+            "sha256": "88706f164c76410742a56f48118678acbb40cfe58267bb9043e8e5c77c40c1b2"
+          }
+        },
+        {
+          "id": "14",
+          "detected_ink_pixels": 11877,
+          "mask_dimensions": [
+            272,
+            267
+          ],
+          "png": {
+            "path": "01_extracted/glyphs/germandbls/germandbls_14.png",
+            "sha256": "d2b5305251a8dcdb10d020189aef9745dc3c01106f193c13efd7455304ccb6c0"
+          },
+          "svg": {
+            "path": "02_vectors/glyphs/germandbls/germandbls_14.svg",
+            "sha256": "eabbae4101df19eb31ca73c8375b0282a867a6659452b0400de147d36c3cd8ed"
+          }
+        },
+        {
+          "id": "15",
+          "detected_ink_pixels": 10690,
+          "mask_dimensions": [
+            245,
+            258
+          ],
+          "png": {
+            "path": "01_extracted/glyphs/germandbls/germandbls_15.png",
+            "sha256": "fc7a4b0ae7c94ceee0a176444f1418a4e339c18cb36acd3ef0b3b148bae6e442"
+          },
+          "svg": {
+            "path": "02_vectors/glyphs/germandbls/germandbls_15.svg",
+            "sha256": "0cc92f11c12c7034cbefbe4f8be856cd6864f9ec296cd362a57b47389dc3cba2"
+          }
+        }
+      ]
+    }
+  ]
+}

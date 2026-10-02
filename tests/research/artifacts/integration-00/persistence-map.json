@@ -1,0 +1,768 @@
+{
+  "database_examined": "/Users/valy/Desktop/sammlr./App/Database/sammlr.db",
+  "mode": "read-only immutable; no application imports, no data rows read",
+  "user_version": 0,
+  "schema": [
+    {
+      "type": "index",
+      "name": "idx_blocks_blocked_user",
+      "table": "blocks",
+      "sql": "CREATE INDEX idx_blocks_blocked_user\n    ON blocks(blocked_user_id, blocker_user_id)"
+    },
+    {
+      "type": "index",
+      "name": "idx_cb001_acquisitions_album_time",
+      "table": "historical_sticker_acquisitions",
+      "sql": "CREATE INDEX idx_cb001_acquisitions_album_time\n    ON historical_sticker_acquisitions(user_album_id, occurred_at, id)"
+    },
+    {
+      "type": "index",
+      "name": "idx_cb001_acquisitions_user_time",
+      "table": "historical_sticker_acquisitions",
+      "sql": "CREATE INDEX idx_cb001_acquisitions_user_time\n    ON historical_sticker_acquisitions(user_id, occurred_at, id)"
+    },
+    {
+      "type": "index",
+      "name": "idx_cb001_album_records_user_time",
+      "table": "historical_album_records",
+      "sql": "CREATE INDEX idx_cb001_album_records_user_time\n    ON historical_album_records(user_id, completed_at, started_at, user_album_id)"
+    },
+    {
+      "type": "index",
+      "name": "idx_cb001_feed_events_actor_time",
+      "table": "feed_events",
+      "sql": "CREATE INDEX idx_cb001_feed_events_actor_time\n    ON feed_events(actor_user_id, occurred_at DESC, id DESC)"
+    },
+    {
+      "type": "index",
+      "name": "idx_cb001_feed_events_time",
+      "table": "feed_events",
+      "sql": "CREATE INDEX idx_cb001_feed_events_time\n    ON feed_events(occurred_at DESC, id DESC)"
+    },
+    {
+      "type": "index",
+      "name": "idx_cb001_progress_album_time",
+      "table": "historical_album_progress_points",
+      "sql": "CREATE INDEX idx_cb001_progress_album_time\n    ON historical_album_progress_points(user_album_id, captured_at, id)"
+    },
+    {
+      "type": "index",
+      "name": "idx_cb001_trophy_context_album",
+      "table": "trophy_unlock_history_context",
+      "sql": "CREATE INDEX idx_cb001_trophy_context_album\n    ON trophy_unlock_history_context(user_album_id, unlocked_trophy_id)"
+    },
+    {
+      "type": "index",
+      "name": "idx_cb001_user_albums_context",
+      "table": "user_albums",
+      "sql": "CREATE UNIQUE INDEX idx_cb001_user_albums_context\n    ON user_albums(id, user_id, album_id)"
+    },
+    {
+      "type": "index",
+      "name": "idx_cb002_inventory_mutations_album_time",
+      "table": "historical_inventory_mutations",
+      "sql": "CREATE INDEX idx_cb002_inventory_mutations_album_time\n    ON historical_inventory_mutations(user_album_id, occurred_at, id)"
+    },
+    {
+      "type": "index",
+      "name": "idx_cb005_trophy_unlocks_album_time",
+      "table": "canonical_trophy_unlocks",
+      "sql": "CREATE INDEX idx_cb005_trophy_unlocks_album_time\n    ON canonical_trophy_unlocks(user_album_id, unlocked_at, id)"
+    },
+    {
+      "type": "index",
+      "name": "idx_cb005_trophy_unlocks_user_time",
+      "table": "canonical_trophy_unlocks",
+      "sql": "CREATE INDEX idx_cb005_trophy_unlocks_user_time\n    ON canonical_trophy_unlocks(user_id, unlocked_at DESC, id DESC)"
+    },
+    {
+      "type": "index",
+      "name": "idx_cb007_feed_events_canonical_time",
+      "table": "feed_events",
+      "sql": "CREATE INDEX idx_cb007_feed_events_canonical_time\n    ON feed_events(occurred_at DESC, event_key DESC)"
+    },
+    {
+      "type": "index",
+      "name": "idx_cb007_news_time",
+      "table": "sammlr_news",
+      "sql": "CREATE INDEX idx_cb007_news_time\n    ON sammlr_news(published_at DESC, news_key DESC)"
+    },
+    {
+      "type": "index",
+      "name": "idx_friendship_requests_pending_direction",
+      "table": "friendship_requests",
+      "sql": "CREATE UNIQUE INDEX idx_friendship_requests_pending_direction\n    ON friendship_requests(requester_user_id, recipient_user_id)\n    WHERE status='pending'"
+    },
+    {
+      "type": "index",
+      "name": "idx_friendship_requests_recipient_status",
+      "table": "friendship_requests",
+      "sql": "CREATE INDEX idx_friendship_requests_recipient_status\n    ON friendship_requests(recipient_user_id, status, created_at, id)"
+    },
+    {
+      "type": "index",
+      "name": "idx_friendships_high_user",
+      "table": "friendships",
+      "sql": "CREATE INDEX idx_friendships_high_user\n    ON friendships(user_high_id, user_low_id)"
+    },
+    {
+      "type": "index",
+      "name": "idx_login_throttle_locked_until",
+      "table": "login_throttle",
+      "sql": "CREATE INDEX idx_login_throttle_locked_until\n    ON login_throttle(locked_until)"
+    },
+    {
+      "type": "index",
+      "name": "idx_notifications_dedupe_key",
+      "table": "notifications",
+      "sql": "CREATE UNIQUE INDEX idx_notifications_dedupe_key\n    ON notifications(dedupe_key)\n    WHERE dedupe_key IS NOT NULL"
+    },
+    {
+      "type": "index",
+      "name": "idx_notifications_target",
+      "table": "notifications",
+      "sql": "CREATE INDEX idx_notifications_target\n    ON notifications(target_type, target_id)"
+    },
+    {
+      "type": "index",
+      "name": "idx_s33_stickers_identity",
+      "table": "stickers",
+      "sql": "CREATE UNIQUE INDEX idx_s33_stickers_identity\n    ON stickers(user_id, album_id, sticker_code)"
+    },
+    {
+      "type": "index",
+      "name": "idx_s35_users_account_state",
+      "table": "users",
+      "sql": "CREATE INDEX idx_s35_users_account_state\n    ON users(account_state, id)"
+    },
+    {
+      "type": "index",
+      "name": "idx_trade_events_trade_time",
+      "table": "trade_events",
+      "sql": "CREATE INDEX idx_trade_events_trade_time\n    ON trade_events(trade_id, occurred_at, id)"
+    },
+    {
+      "type": "index",
+      "name": "idx_trade_positions_trade_id",
+      "table": "trade_positions",
+      "sql": "CREATE INDEX idx_trade_positions_trade_id\n    ON trade_positions(trade_id)"
+    },
+    {
+      "type": "index",
+      "name": "idx_trade_ratings_rated_user",
+      "table": "trade_ratings",
+      "sql": "CREATE INDEX idx_trade_ratings_rated_user\n    ON trade_ratings(rated_user_id, created_at, id)"
+    },
+    {
+      "type": "index",
+      "name": "idx_trade_receipt_report_positions_trade_position",
+      "table": "trade_receipt_report_positions",
+      "sql": "CREATE INDEX idx_trade_receipt_report_positions_trade_position\n    ON trade_receipt_report_positions(trade_position_id, state)"
+    },
+    {
+      "type": "index",
+      "name": "idx_trade_receipt_reports_trade_state",
+      "table": "trade_receipt_reports",
+      "sql": "CREATE INDEX idx_trade_receipt_reports_trade_state\n    ON trade_receipt_reports(trade_id, state)"
+    },
+    {
+      "type": "index",
+      "name": "idx_trade_reservations_active_inventory",
+      "table": "trade_reservations",
+      "sql": "CREATE INDEX idx_trade_reservations_active_inventory\n    ON trade_reservations(user_id, album_id, sticker_code, state)"
+    },
+    {
+      "type": "index",
+      "name": "idx_trade_reservations_trade_state",
+      "table": "trade_reservations",
+      "sql": "CREATE INDEX idx_trade_reservations_trade_state\n    ON trade_reservations(trade_id, state)"
+    },
+    {
+      "type": "index",
+      "name": "idx_user_albums_trade_pool",
+      "table": "user_albums",
+      "sql": "CREATE INDEX idx_user_albums_trade_pool\n    ON user_albums(album_id, trade_pool_enabled, user_id)"
+    },
+    {
+      "type": "index",
+      "name": "idx_user_albums_visibility",
+      "table": "user_albums",
+      "sql": "CREATE INDEX idx_user_albums_visibility\n    ON user_albums(user_id, visibility, album_id)"
+    },
+    {
+      "type": "table",
+      "name": "albums",
+      "table": "albums",
+      "sql": "CREATE TABLE albums (\n\n    id TEXT PRIMARY KEY,\n    name TEXT,\n    season TEXT,\n    total INTEGER,\n    complete INTEGER,\n    cover TEXT\n\n)"
+    },
+    {
+      "type": "table",
+      "name": "blocks",
+      "table": "blocks",
+      "sql": "CREATE TABLE blocks (\n    id INTEGER PRIMARY KEY AUTOINCREMENT,\n    blocker_user_id INTEGER NOT NULL,\n    blocked_user_id INTEGER NOT NULL,\n    created_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP,\n    FOREIGN KEY (blocker_user_id) REFERENCES users(id) ON DELETE RESTRICT,\n    FOREIGN KEY (blocked_user_id) REFERENCES users(id) ON DELETE RESTRICT,\n    CHECK (blocker_user_id <> blocked_user_id),\n    UNIQUE (blocker_user_id, blocked_user_id)\n)"
+    },
+    {
+      "type": "table",
+      "name": "canonical_trophy_unlocks",
+      "table": "canonical_trophy_unlocks",
+      "sql": "CREATE TABLE \"canonical_trophy_unlocks\" (\n    id INTEGER PRIMARY KEY AUTOINCREMENT,\n    event_key TEXT NOT NULL UNIQUE,\n    trophy_definition_id TEXT NOT NULL,\n    user_album_id INTEGER NOT NULL,\n    user_id INTEGER NOT NULL,\n    album_id TEXT NOT NULL,\n    trophy_name TEXT NOT NULL,\n    unlocked_at TEXT NOT NULL,\n    source_type TEXT NOT NULL,\n    source_key TEXT NOT NULL,\n    trigger_sticker_code TEXT,\n    created_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP,\n    FOREIGN KEY (user_album_id, user_id, album_id)\n        REFERENCES user_albums(id, user_id, album_id) ON DELETE CASCADE,\n    CHECK (length(trim(event_key)) > 0),\n    CHECK (length(trim(trophy_definition_id)) > 0),\n    CHECK (length(trim(trophy_name)) > 0),\n    CHECK (length(trim(unlocked_at)) > 0),\n    CHECK (source_type IN (\n        'inventory_transition',\n        'album_completion',\n        'legacy_trophy_backfill'\n    )),\n    CHECK (length(trim(source_key)) > 0),\n    CHECK (\n        trigger_sticker_code IS NULL\n        OR length(trim(trigger_sticker_code)) > 0\n    ),\n    UNIQUE (user_album_id, trophy_definition_id)\n)"
+    },
+    {
+      "type": "table",
+      "name": "feed_events",
+      "table": "feed_events",
+      "sql": "CREATE TABLE feed_events (\n    id INTEGER PRIMARY KEY AUTOINCREMENT,\n    event_key TEXT NOT NULL UNIQUE,\n    event_type TEXT NOT NULL,\n    actor_user_id INTEGER,\n    user_album_id INTEGER,\n    user_id INTEGER,\n    album_id TEXT,\n    target_type TEXT NOT NULL,\n    target_key TEXT NOT NULL,\n    occurred_at TEXT NOT NULL,\n    created_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP,\n    FOREIGN KEY (actor_user_id) REFERENCES users(id) ON DELETE RESTRICT,\n    FOREIGN KEY (user_album_id, user_id, album_id)\n        REFERENCES user_albums(id, user_id, album_id) ON DELETE RESTRICT,\n    CHECK (length(trim(event_key)) > 0),\n    CHECK (event_type IN (\n        'album_started',\n        'album_progress',\n        'album_completed',\n        'trophy_unlocked',\n        'trade_milestone',\n        'sammlr_news'\n    )),\n    CHECK (target_type IN ('album', 'trophy', 'profile', 'trade', 'news')),\n    CHECK (length(trim(target_key)) > 0),\n    CHECK (length(trim(occurred_at)) > 0),\n    CHECK (\n        (event_type = 'sammlr_news' AND actor_user_id IS NULL)\n        OR\n        (event_type <> 'sammlr_news' AND actor_user_id IS NOT NULL)\n    ),\n    CHECK (\n        (user_album_id IS NULL AND user_id IS NULL AND album_id IS NULL)\n        OR\n        (user_album_id IS NOT NULL AND user_id IS NOT NULL AND album_id IS NOT NULL)\n    )\n)"
+    },
+    {
+      "type": "table",
+      "name": "friendship_requests",
+      "table": "friendship_requests",
+      "sql": "CREATE TABLE friendship_requests (\n    id INTEGER PRIMARY KEY AUTOINCREMENT,\n    requester_user_id INTEGER NOT NULL,\n    recipient_user_id INTEGER NOT NULL,\n    status TEXT NOT NULL DEFAULT 'pending'\n        CHECK (status IN ('pending', 'accepted', 'declined', 'cancelled')),\n    created_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP,\n    updated_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP,\n    FOREIGN KEY (requester_user_id) REFERENCES users(id) ON DELETE RESTRICT,\n    FOREIGN KEY (recipient_user_id) REFERENCES users(id) ON DELETE RESTRICT,\n    CHECK (requester_user_id <> recipient_user_id)\n)"
+    },
+    {
+      "type": "table",
+      "name": "friendships",
+      "table": "friendships",
+      "sql": "CREATE TABLE friendships (\n    id INTEGER PRIMARY KEY AUTOINCREMENT,\n    user_low_id INTEGER NOT NULL,\n    user_high_id INTEGER NOT NULL,\n    status TEXT NOT NULL DEFAULT 'accepted' CHECK (status='accepted'),\n    created_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP,\n    FOREIGN KEY (user_low_id) REFERENCES users(id) ON DELETE RESTRICT,\n    FOREIGN KEY (user_high_id) REFERENCES users(id) ON DELETE RESTRICT,\n    CHECK (user_low_id < user_high_id),\n    UNIQUE (user_low_id, user_high_id)\n)"
+    },
+    {
+      "type": "table",
+      "name": "historical_album_progress_points",
+      "table": "historical_album_progress_points",
+      "sql": "CREATE TABLE historical_album_progress_points (\n    id INTEGER PRIMARY KEY AUTOINCREMENT,\n    user_album_id INTEGER NOT NULL,\n    user_id INTEGER NOT NULL,\n    album_id TEXT NOT NULL,\n    event_key TEXT NOT NULL,\n    captured_at TEXT NOT NULL,\n    owned_count INTEGER NOT NULL,\n    total_count INTEGER NOT NULL,\n    created_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP,\n    FOREIGN KEY (user_album_id, user_id, album_id)\n        REFERENCES user_albums(id, user_id, album_id) ON DELETE RESTRICT,\n    CHECK (length(trim(event_key)) > 0),\n    CHECK (length(trim(captured_at)) > 0),\n    CHECK (owned_count >= 0),\n    CHECK (total_count > 0),\n    CHECK (owned_count <= total_count),\n    UNIQUE (user_album_id, event_key)\n)"
+    },
+    {
+      "type": "table",
+      "name": "historical_album_records",
+      "table": "historical_album_records",
+      "sql": "CREATE TABLE historical_album_records (\n    user_album_id INTEGER PRIMARY KEY,\n    user_id INTEGER NOT NULL,\n    album_id TEXT NOT NULL,\n    started_at TEXT,\n    start_event_key TEXT UNIQUE,\n    completed_at TEXT,\n    completion_event_key TEXT UNIQUE,\n    completion_source_type TEXT,\n    completion_source_key TEXT,\n    created_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP,\n    updated_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP,\n    FOREIGN KEY (user_album_id, user_id, album_id)\n        REFERENCES user_albums(id, user_id, album_id) ON DELETE RESTRICT,\n    CHECK (\n        (started_at IS NULL AND start_event_key IS NULL)\n        OR\n        (started_at IS NOT NULL AND length(trim(started_at)) > 0\n         AND start_event_key IS NOT NULL\n         AND length(trim(start_event_key)) > 0)\n    ),\n    CHECK (\n        (completed_at IS NULL\n         AND completion_event_key IS NULL\n         AND completion_source_type IS NULL\n         AND completion_source_key IS NULL)\n        OR\n        (completed_at IS NOT NULL\n         AND length(trim(completed_at)) > 0\n         AND completion_event_key IS NOT NULL\n         AND length(trim(completion_event_key)) > 0\n         AND completion_source_type IN (\n             'inventory_transition', 'validated_trophy'\n         )\n         AND completion_source_key IS NOT NULL\n         AND length(trim(completion_source_key)) > 0)\n    ),\n    CHECK (started_at IS NOT NULL OR completed_at IS NOT NULL)\n)"
+    },
+    {
+      "type": "table",
+      "name": "historical_inventory_mutations",
+      "table": "historical_inventory_mutations",
+      "sql": "CREATE TABLE historical_inventory_mutations (\n    id INTEGER PRIMARY KEY AUTOINCREMENT,\n    event_key TEXT NOT NULL UNIQUE,\n    user_album_id INTEGER NOT NULL,\n    user_id INTEGER NOT NULL,\n    album_id TEXT NOT NULL,\n    sticker_code TEXT NOT NULL,\n    source_type TEXT NOT NULL,\n    operation_type TEXT NOT NULL,\n    requested_value INTEGER NOT NULL,\n    previous_quantity INTEGER NOT NULL,\n    result_quantity INTEGER NOT NULL,\n    occurred_at TEXT NOT NULL,\n    created_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP,\n    FOREIGN KEY (user_album_id, user_id, album_id)\n        REFERENCES user_albums(id, user_id, album_id) ON DELETE RESTRICT,\n    CHECK (length(trim(event_key)) > 0),\n    CHECK (length(trim(sticker_code)) > 0),\n    CHECK (source_type IN (\n        'inventory', 'paper_trade', 'trade_receipt', 'trade_shipping'\n    )),\n    CHECK (operation_type IN ('delta', 'set')),\n    CHECK (\n        operation_type = 'delta'\n        OR requested_value >= 0\n    ),\n    CHECK (previous_quantity >= 0),\n    CHECK (result_quantity >= 0),\n    CHECK (length(trim(occurred_at)) > 0)\n)"
+    },
+    {
+      "type": "table",
+      "name": "historical_sticker_acquisitions",
+      "table": "historical_sticker_acquisitions",
+      "sql": "CREATE TABLE historical_sticker_acquisitions (\n    id INTEGER PRIMARY KEY AUTOINCREMENT,\n    user_album_id INTEGER NOT NULL,\n    user_id INTEGER NOT NULL,\n    album_id TEXT NOT NULL,\n    sticker_code TEXT NOT NULL,\n    quantity INTEGER NOT NULL,\n    source_type TEXT NOT NULL,\n    source_key TEXT NOT NULL,\n    occurred_at TEXT NOT NULL,\n    created_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP,\n    FOREIGN KEY (user_album_id, user_id, album_id)\n        REFERENCES user_albums(id, user_id, album_id) ON DELETE RESTRICT,\n    CHECK (length(trim(sticker_code)) > 0),\n    CHECK (quantity > 0),\n    CHECK (source_type IN ('inventory', 'paper_trade', 'trade_receipt')),\n    CHECK (length(trim(source_key)) > 0),\n    CHECK (length(trim(occurred_at)) > 0),\n    UNIQUE (source_type, source_key, user_album_id, sticker_code)\n)"
+    },
+    {
+      "type": "table",
+      "name": "login_throttle",
+      "table": "login_throttle",
+      "sql": "CREATE TABLE login_throttle (\n    normalized_username TEXT NOT NULL,\n    client_ip TEXT NOT NULL,\n    failure_count INTEGER NOT NULL DEFAULT 0 CHECK (failure_count >= 0),\n    window_started_at TEXT NOT NULL,\n    locked_until TEXT,\n    updated_at TEXT NOT NULL,\n    PRIMARY KEY (normalized_username, client_ip)\n)"
+    },
+    {
+      "type": "table",
+      "name": "notifications",
+      "table": "notifications",
+      "sql": "CREATE TABLE notifications (\n        id INTEGER PRIMARY KEY AUTOINCREMENT,\n        user_id INTEGER,\n        title TEXT,\n        body TEXT,\n        is_read INTEGER DEFAULT 0,\n        created_at TEXT DEFAULT CURRENT_TIMESTAMP\n    , notification_type TEXT NOT NULL DEFAULT 'legacy', target_type TEXT, target_id INTEGER, source_event_id INTEGER, dedupe_key TEXT)"
+    },
+    {
+      "type": "table",
+      "name": "sammlr_news",
+      "table": "sammlr_news",
+      "sql": "CREATE TABLE sammlr_news (\n    news_key TEXT PRIMARY KEY,\n    event_key TEXT NOT NULL UNIQUE,\n    title TEXT NOT NULL,\n    body TEXT NOT NULL,\n    target_path TEXT,\n    published_at TEXT NOT NULL,\n    created_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP,\n    FOREIGN KEY (event_key) REFERENCES feed_events(event_key) ON DELETE RESTRICT,\n    CHECK (length(trim(news_key)) > 0),\n    CHECK (length(trim(event_key)) > 0),\n    CHECK (length(trim(title)) > 0),\n    CHECK (length(trim(body)) > 0),\n    CHECK (\n        target_path IS NULL\n        OR (length(trim(target_path)) > 0 AND substr(target_path, 1, 1) = '/')\n    ),\n    CHECK (length(trim(published_at)) > 0)\n)"
+    },
+    {
+      "type": "table",
+      "name": "schema_migrations",
+      "table": "schema_migrations",
+      "sql": "CREATE TABLE schema_migrations (\n            version INTEGER PRIMARY KEY,\n            name TEXT NOT NULL,\n            checksum TEXT NOT NULL,\n            applied_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP\n        )"
+    },
+    {
+      "type": "table",
+      "name": "stickers",
+      "table": "stickers",
+      "sql": "CREATE TABLE stickers (\n\n    id INTEGER PRIMARY KEY AUTOINCREMENT,\n    album_id TEXT,\n    sticker_code TEXT,\n    status TEXT,\n    duplicates INTEGER DEFAULT 0,\n    quantity INTEGER DEFAULT 1\n\n, user_id INTEGER DEFAULT 1)"
+    },
+    {
+      "type": "table",
+      "name": "trade_events",
+      "table": "trade_events",
+      "sql": "CREATE TABLE trade_events (\n    id INTEGER PRIMARY KEY AUTOINCREMENT,\n    trade_id INTEGER NOT NULL,\n    event_type TEXT NOT NULL,\n    actor_user_id INTEGER,\n    payload_json TEXT,\n    occurred_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP,\n    FOREIGN KEY (trade_id) REFERENCES trades(id) ON DELETE CASCADE\n)"
+    },
+    {
+      "type": "table",
+      "name": "trade_positions",
+      "table": "trade_positions",
+      "sql": "CREATE TABLE trade_positions (\n    id INTEGER PRIMARY KEY AUTOINCREMENT,\n    trade_id INTEGER NOT NULL,\n    from_user_id INTEGER NOT NULL,\n    to_user_id INTEGER NOT NULL,\n    album_id TEXT NOT NULL,\n    sticker_code TEXT NOT NULL,\n    quantity INTEGER NOT NULL,\n    created_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP,\n    FOREIGN KEY (trade_id) REFERENCES trades(id) ON DELETE CASCADE,\n    CHECK (from_user_id <> to_user_id),\n    CHECK (quantity > 0),\n    UNIQUE (trade_id, from_user_id, to_user_id, album_id, sticker_code)\n)"
+    },
+    {
+      "type": "table",
+      "name": "trade_ratings",
+      "table": "trade_ratings",
+      "sql": "CREATE TABLE trade_ratings (\n    id INTEGER PRIMARY KEY AUTOINCREMENT,\n    trade_id INTEGER NOT NULL,\n    rater_user_id INTEGER NOT NULL,\n    rated_user_id INTEGER NOT NULL,\n    stars INTEGER NOT NULL,\n    created_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP,\n    FOREIGN KEY (trade_id) REFERENCES trades(id) ON DELETE RESTRICT,\n    CHECK (rater_user_id <> rated_user_id),\n    CHECK (stars BETWEEN 1 AND 5),\n    UNIQUE (trade_id, rater_user_id),\n    UNIQUE (trade_id, rated_user_id)\n)"
+    },
+    {
+      "type": "table",
+      "name": "trade_receipt_report_positions",
+      "table": "trade_receipt_report_positions",
+      "sql": "CREATE TABLE trade_receipt_report_positions (\n    id INTEGER PRIMARY KEY AUTOINCREMENT,\n    report_id INTEGER NOT NULL,\n    trade_position_id INTEGER NOT NULL,\n    expected_quantity INTEGER NOT NULL,\n    initial_received_quantity INTEGER NOT NULL,\n    resolution_received_quantity INTEGER NOT NULL DEFAULT 0,\n    problem_type TEXT,\n    state TEXT NOT NULL,\n    created_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP,\n    resolved_at TEXT,\n    FOREIGN KEY (report_id) REFERENCES trade_receipt_reports(id) ON DELETE CASCADE,\n    FOREIGN KEY (trade_position_id) REFERENCES trade_positions(id) ON DELETE CASCADE,\n    UNIQUE (report_id, trade_position_id),\n    CHECK (expected_quantity > 0),\n    CHECK (initial_received_quantity >= 0),\n    CHECK (initial_received_quantity <= expected_quantity),\n    CHECK (resolution_received_quantity >= 0),\n    CHECK (\n        initial_received_quantity + resolution_received_quantity\n        <= expected_quantity\n    ),\n    CHECK (\n        problem_type IS NULL\n        OR problem_type IN (\n            'missing', 'wrong_sticker', 'damaged', 'shipment_lost'\n        )\n    ),\n    CHECK (state IN ('fulfilled', 'open', 'resolved')),\n    CHECK (\n        (state = 'fulfilled'\n         AND initial_received_quantity = expected_quantity\n         AND resolution_received_quantity = 0\n         AND problem_type IS NULL\n         AND resolved_at IS NULL)\n        OR\n        (state = 'open'\n         AND initial_received_quantity < expected_quantity\n         AND resolution_received_quantity = 0\n         AND problem_type IS NOT NULL\n         AND resolved_at IS NULL)\n        OR\n        (state = 'resolved'\n         AND initial_received_quantity < expected_quantity\n         AND initial_received_quantity + resolution_received_quantity\n             = expected_quantity\n         AND problem_type IS NOT NULL\n         AND resolved_at IS NOT NULL)\n    )\n)"
+    },
+    {
+      "type": "table",
+      "name": "trade_receipt_reports",
+      "table": "trade_receipt_reports",
+      "sql": "CREATE TABLE trade_receipt_reports (\n    id INTEGER PRIMARY KEY AUTOINCREMENT,\n    trade_id INTEGER NOT NULL,\n    receiver_user_id INTEGER NOT NULL,\n    receiver_side TEXT NOT NULL,\n    state TEXT NOT NULL DEFAULT 'open',\n    shipment_lost INTEGER NOT NULL DEFAULT 0,\n    created_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP,\n    resolved_at TEXT,\n    FOREIGN KEY (trade_id) REFERENCES trades(id) ON DELETE CASCADE,\n    UNIQUE (trade_id, receiver_user_id),\n    CHECK (receiver_side IN ('requester', 'partner')),\n    CHECK (state IN ('open', 'resolved')),\n    CHECK (shipment_lost IN (0, 1)),\n    CHECK (\n        (state = 'open' AND resolved_at IS NULL)\n        OR\n        (state = 'resolved' AND resolved_at IS NOT NULL)\n    )\n)"
+    },
+    {
+      "type": "table",
+      "name": "trade_receipt_status",
+      "table": "trade_receipt_status",
+      "sql": "CREATE TABLE trade_receipt_status (\n    trade_id INTEGER PRIMARY KEY,\n    requester_received INTEGER NOT NULL DEFAULT 0,\n    requester_received_at TEXT,\n    partner_received INTEGER NOT NULL DEFAULT 0,\n    partner_received_at TEXT,\n    updated_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP,\n    FOREIGN KEY (trade_id) REFERENCES trades(id) ON DELETE CASCADE,\n    CHECK (requester_received IN (0, 1)),\n    CHECK (partner_received IN (0, 1)),\n    CHECK (\n        (requester_received = 0 AND requester_received_at IS NULL)\n        OR\n        (requester_received = 1 AND requester_received_at IS NOT NULL)\n    ),\n    CHECK (\n        (partner_received = 0 AND partner_received_at IS NULL)\n        OR\n        (partner_received = 1 AND partner_received_at IS NOT NULL)\n    )\n)"
+    },
+    {
+      "type": "table",
+      "name": "trade_requests",
+      "table": "trade_requests",
+      "sql": "CREATE TABLE trade_requests (\n        id INTEGER PRIMARY KEY AUTOINCREMENT,\n        album_id TEXT,\n        from_user_id INTEGER,\n        to_user_id INTEGER,\n        give_codes TEXT,\n        get_codes TEXT,\n        status TEXT DEFAULT 'open',\n        created_at TEXT DEFAULT CURRENT_TIMESTAMP\n    , from_confirmed INTEGER DEFAULT 0, to_confirmed INTEGER DEFAULT 0)"
+    },
+    {
+      "type": "table",
+      "name": "trade_reservations",
+      "table": "trade_reservations",
+      "sql": "CREATE TABLE trade_reservations (\n    id INTEGER PRIMARY KEY AUTOINCREMENT,\n    trade_id INTEGER NOT NULL,\n    trade_position_id INTEGER NOT NULL UNIQUE,\n    user_id INTEGER NOT NULL,\n    album_id TEXT NOT NULL,\n    sticker_code TEXT NOT NULL,\n    quantity INTEGER NOT NULL,\n    state TEXT NOT NULL DEFAULT 'active',\n    created_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP,\n    released_at TEXT,\n    release_reason TEXT,\n    FOREIGN KEY (trade_id) REFERENCES trades(id) ON DELETE CASCADE,\n    FOREIGN KEY (trade_position_id) REFERENCES trade_positions(id) ON DELETE CASCADE,\n    CHECK (quantity > 0),\n    CHECK (state IN ('active', 'released')),\n    CHECK (\n        (state = 'active' AND released_at IS NULL AND release_reason IS NULL)\n        OR\n        (state = 'released' AND released_at IS NOT NULL AND release_reason IS NOT NULL)\n    )\n)"
+    },
+    {
+      "type": "table",
+      "name": "trade_shipping_status",
+      "table": "trade_shipping_status",
+      "sql": "CREATE TABLE trade_shipping_status (\n    trade_id INTEGER PRIMARY KEY,\n    requester_shipped INTEGER NOT NULL DEFAULT 0,\n    requester_shipped_at TEXT,\n    partner_shipped INTEGER NOT NULL DEFAULT 0,\n    partner_shipped_at TEXT,\n    updated_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP,\n    FOREIGN KEY (trade_id) REFERENCES trades(id) ON DELETE CASCADE,\n    CHECK (requester_shipped IN (0, 1)),\n    CHECK (partner_shipped IN (0, 1)),\n    CHECK (\n        (requester_shipped = 0 AND requester_shipped_at IS NULL)\n        OR\n        (requester_shipped = 1 AND requester_shipped_at IS NOT NULL)\n    ),\n    CHECK (\n        (partner_shipped = 0 AND partner_shipped_at IS NULL)\n        OR\n        (partner_shipped = 1 AND partner_shipped_at IS NOT NULL)\n    )\n)"
+    },
+    {
+      "type": "table",
+      "name": "trades",
+      "table": "trades",
+      "sql": "CREATE TABLE trades (\n    id INTEGER PRIMARY KEY AUTOINCREMENT,\n    legacy_trade_request_id INTEGER UNIQUE,\n    requester_user_id INTEGER NOT NULL,\n    partner_user_id INTEGER NOT NULL,\n    lifecycle_state TEXT NOT NULL,\n    created_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP,\n    updated_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP,\n    completed_at TEXT,\n    CHECK (requester_user_id <> partner_user_id)\n)"
+    },
+    {
+      "type": "table",
+      "name": "trophy_unlock_history_context",
+      "table": "trophy_unlock_history_context",
+      "sql": "CREATE TABLE trophy_unlock_history_context (\n    unlocked_trophy_id INTEGER PRIMARY KEY,\n    user_album_id INTEGER NOT NULL,\n    user_id INTEGER NOT NULL,\n    album_id TEXT NOT NULL,\n    trigger_sticker_code TEXT,\n    trigger_source_key TEXT,\n    created_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP,\n    FOREIGN KEY (unlocked_trophy_id)\n        REFERENCES unlocked_trophies(id) ON DELETE CASCADE,\n    FOREIGN KEY (user_album_id, user_id, album_id)\n        REFERENCES user_albums(id, user_id, album_id) ON DELETE RESTRICT,\n    CHECK (\n        trigger_sticker_code IS NULL\n        OR length(trim(trigger_sticker_code)) > 0\n    ),\n    CHECK (\n        trigger_source_key IS NULL\n        OR length(trim(trigger_source_key)) > 0\n    )\n)"
+    },
+    {
+      "type": "table",
+      "name": "unlocked_trophies",
+      "table": "unlocked_trophies",
+      "sql": "CREATE TABLE unlocked_trophies (\n        id INTEGER PRIMARY KEY AUTOINCREMENT,\n        user_id INTEGER,\n        album_id TEXT,\n        trophy_name TEXT,\n        unlocked_at TEXT DEFAULT CURRENT_TIMESTAMP,\n        UNIQUE(user_id, album_id, trophy_name)\n    )"
+    },
+    {
+      "type": "table",
+      "name": "user_activity",
+      "table": "user_activity",
+      "sql": "CREATE TABLE user_activity (\n    user_id INTEGER PRIMARY KEY,\n    last_active_at TEXT NOT NULL,\n    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE RESTRICT\n)"
+    },
+    {
+      "type": "table",
+      "name": "user_albums",
+      "table": "user_albums",
+      "sql": "CREATE TABLE user_albums (\n        id INTEGER PRIMARY KEY AUTOINCREMENT,\n        user_id INTEGER,\n        album_id TEXT, visibility TEXT NOT NULL DEFAULT 'private'\n    CHECK (visibility IN ('public', 'friends', 'private')), trade_pool_enabled INTEGER NOT NULL DEFAULT 1\n    CHECK (trade_pool_enabled IN (0, 1)),\n        UNIQUE(user_id, album_id)\n    )"
+    },
+    {
+      "type": "table",
+      "name": "user_profile_stickers",
+      "table": "user_profile_stickers",
+      "sql": "CREATE TABLE \"user_profile_stickers\" (\n    user_id INTEGER PRIMARY KEY,\n    display_name TEXT NOT NULL,\n    country_code TEXT NOT NULL DEFAULT 'DE',\n    club_name TEXT NOT NULL DEFAULT '',\n    accent_color TEXT NOT NULL DEFAULT 'purple',\n    portrait_filename TEXT,\n    portrait_mime TEXT,\n    portrait_width INTEGER,\n    portrait_height INTEGER,\n    crop_x REAL NOT NULL DEFAULT 0,\n    crop_y REAL NOT NULL DEFAULT 0,\n    crop_zoom REAL NOT NULL DEFAULT 1,\n    updated_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP,\n    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,\n    CHECK (length(trim(display_name)) BETWEEN 1 AND 32),\n    CHECK (country_code IN (\n        'DE', 'NL', 'FR', 'IT', 'BE', 'IE', 'RO',\n        'AT', 'ES', 'AR', 'EG', 'HU', 'BG', 'LU', 'RU', 'CO', 'MX', 'PE', 'TH'\n    )),\n    CHECK (length(club_name) <= 48),\n    CHECK (accent_color IN ('purple', 'red', 'blue', 'yellow', 'green', 'orange', 'black', 'cream')),\n    CHECK (portrait_filename IS NULL OR portrait_filename GLOB '[0-9a-f]*.*'),\n    CHECK (portrait_mime IS NULL OR portrait_mime IN ('image/jpeg', 'image/png')),\n    CHECK (crop_x BETWEEN -35 AND 35),\n    CHECK (crop_y BETWEEN -35 AND 35),\n    CHECK (crop_zoom BETWEEN 1 AND 2.5)\n)"
+    },
+    {
+      "type": "table",
+      "name": "users",
+      "table": "users",
+      "sql": "CREATE TABLE users (\n        id INTEGER PRIMARY KEY AUTOINCREMENT,\n        username TEXT UNIQUE,\n        password TEXT\n    , name TEXT, favorite_album_id TEXT, password_scheme TEXT NOT NULL DEFAULT 'legacy_plaintext'\n    CHECK (password_scheme IN ('legacy_plaintext', 'werkzeug_scrypt')), auth_version INTEGER NOT NULL DEFAULT 1\n    CHECK (auth_version >= 1), account_state TEXT NOT NULL DEFAULT 'active'\n    CHECK (account_state IN ('active', 'deactivated', 'anonymized')), profile_privacy TEXT NOT NULL DEFAULT 'public'\n    CHECK (profile_privacy IN ('public', 'private')))"
+    },
+    {
+      "type": "trigger",
+      "name": "cb007_feed_event_type_insert",
+      "table": "feed_events",
+      "sql": "CREATE TRIGGER cb007_feed_event_type_insert\nBEFORE INSERT ON feed_events\nWHEN NEW.event_type NOT IN (\n    'album_started', 'album_completed', 'trophy_unlocked', 'sammlr_news'\n)\nBEGIN\n    SELECT RAISE(ABORT, 'unsupported CB-007 feed event type');\nEND"
+    },
+    {
+      "type": "trigger",
+      "name": "cb007_feed_event_type_update",
+      "table": "feed_events",
+      "sql": "CREATE TRIGGER cb007_feed_event_type_update\nBEFORE UPDATE OF event_type ON feed_events\nWHEN NEW.event_type NOT IN (\n    'album_started', 'album_completed', 'trophy_unlocked', 'sammlr_news'\n)\nBEGIN\n    SELECT RAISE(ABORT, 'unsupported CB-007 feed event type');\nEND"
+    },
+    {
+      "type": "trigger",
+      "name": "s33_notifications_validate_insert",
+      "table": "notifications",
+      "sql": "CREATE TRIGGER s33_notifications_validate_insert\nBEFORE INSERT ON notifications\nBEGIN\n    SELECT CASE\n        WHEN NEW.user_id IS NULL\n          OR NEW.is_read IS NULL\n          OR NEW.is_read NOT IN (0, 1)\n          OR NOT EXISTS (SELECT 1 FROM users WHERE id=NEW.user_id)\n        THEN RAISE(ABORT, 'invalid notification row')\n    END;\nEND"
+    },
+    {
+      "type": "trigger",
+      "name": "s33_notifications_validate_update",
+      "table": "notifications",
+      "sql": "CREATE TRIGGER s33_notifications_validate_update\nBEFORE UPDATE ON notifications\nBEGIN\n    SELECT CASE\n        WHEN NEW.user_id IS NULL\n          OR NEW.is_read IS NULL\n          OR NEW.is_read NOT IN (0, 1)\n          OR NOT EXISTS (SELECT 1 FROM users WHERE id=NEW.user_id)\n        THEN RAISE(ABORT, 'invalid notification row')\n    END;\nEND"
+    },
+    {
+      "type": "trigger",
+      "name": "s33_stickers_validate_insert",
+      "table": "stickers",
+      "sql": "CREATE TRIGGER s33_stickers_validate_insert\nBEFORE INSERT ON stickers\nBEGIN\n    SELECT CASE\n        WHEN NEW.user_id IS NULL\n          OR NEW.album_id IS NULL\n          OR NEW.sticker_code IS NULL\n          OR NEW.quantity IS NULL\n          OR NEW.quantity < 1\n          OR NEW.duplicates IS NULL\n          OR NEW.duplicates <> NEW.quantity - 1\n          OR NOT EXISTS (SELECT 1 FROM users WHERE id=NEW.user_id)\n          OR NOT EXISTS (SELECT 1 FROM albums WHERE id=NEW.album_id)\n        THEN RAISE(ABORT, 'invalid sticker inventory row')\n    END;\nEND"
+    },
+    {
+      "type": "trigger",
+      "name": "s33_stickers_validate_update",
+      "table": "stickers",
+      "sql": "CREATE TRIGGER s33_stickers_validate_update\nBEFORE UPDATE ON stickers\nBEGIN\n    SELECT CASE\n        WHEN NEW.user_id IS NULL\n          OR NEW.album_id IS NULL\n          OR NEW.sticker_code IS NULL\n          OR NEW.quantity IS NULL\n          OR NEW.quantity < 1\n          OR NEW.duplicates IS NULL\n          OR NEW.duplicates <> NEW.quantity - 1\n          OR NOT EXISTS (SELECT 1 FROM users WHERE id=NEW.user_id)\n          OR NOT EXISTS (SELECT 1 FROM albums WHERE id=NEW.album_id)\n        THEN RAISE(ABORT, 'invalid sticker inventory row')\n    END;\nEND"
+    },
+    {
+      "type": "trigger",
+      "name": "s33_trade_requests_validate_insert",
+      "table": "trade_requests",
+      "sql": "CREATE TRIGGER s33_trade_requests_validate_insert\nBEFORE INSERT ON trade_requests\nBEGIN\n    SELECT CASE\n        WHEN NEW.album_id IS NULL\n          OR NEW.from_user_id IS NULL\n          OR NEW.to_user_id IS NULL\n          OR NEW.from_user_id = NEW.to_user_id\n          OR NEW.status IS NULL\n          OR NEW.status NOT IN (\n              'open', 'accepted', 'declined', 'completed', 'failed',\n              'cancelled', 'expired', 'obsolete'\n          )\n          OR NEW.from_confirmed IS NULL\n          OR NEW.from_confirmed NOT IN (-22, 0, 1)\n          OR NEW.to_confirmed IS NULL\n          OR NEW.to_confirmed NOT IN (0, 1)\n          OR NOT EXISTS (SELECT 1 FROM albums WHERE id=NEW.album_id)\n          OR NOT EXISTS (SELECT 1 FROM users WHERE id=NEW.from_user_id)\n          OR NOT EXISTS (SELECT 1 FROM users WHERE id=NEW.to_user_id)\n        THEN RAISE(ABORT, 'invalid trade request row')\n    END;\nEND"
+    },
+    {
+      "type": "trigger",
+      "name": "s33_trade_requests_validate_update",
+      "table": "trade_requests",
+      "sql": "CREATE TRIGGER s33_trade_requests_validate_update\nBEFORE UPDATE ON trade_requests\nBEGIN\n    SELECT CASE\n        WHEN NEW.album_id IS NULL\n          OR NEW.from_user_id IS NULL\n          OR NEW.to_user_id IS NULL\n          OR NEW.from_user_id = NEW.to_user_id\n          OR NEW.status IS NULL\n          OR NEW.status NOT IN (\n              'open', 'accepted', 'declined', 'completed', 'failed',\n              'cancelled', 'expired', 'obsolete'\n          )\n          OR NEW.from_confirmed IS NULL\n          OR NEW.from_confirmed NOT IN (-22, 0, 1)\n          OR NEW.to_confirmed IS NULL\n          OR NEW.to_confirmed NOT IN (0, 1)\n          OR NOT EXISTS (SELECT 1 FROM albums WHERE id=NEW.album_id)\n          OR NOT EXISTS (SELECT 1 FROM users WHERE id=NEW.from_user_id)\n          OR NOT EXISTS (SELECT 1 FROM users WHERE id=NEW.to_user_id)\n        THEN RAISE(ABORT, 'invalid trade request row')\n    END;\nEND"
+    },
+    {
+      "type": "trigger",
+      "name": "s33_unlocked_trophies_validate_insert",
+      "table": "unlocked_trophies",
+      "sql": "CREATE TRIGGER s33_unlocked_trophies_validate_insert\nBEFORE INSERT ON unlocked_trophies\nBEGIN\n    SELECT CASE\n        WHEN NEW.user_id IS NULL\n          OR NEW.album_id IS NULL\n          OR NEW.trophy_name IS NULL\n          OR NEW.trophy_name = ''\n          OR NOT EXISTS (SELECT 1 FROM users WHERE id=NEW.user_id)\n          OR (\n              NEW.album_id <> '__global__'\n              AND NOT EXISTS (SELECT 1 FROM albums WHERE id=NEW.album_id)\n          )\n        THEN RAISE(ABORT, 'invalid trophy unlock row')\n    END;\nEND"
+    },
+    {
+      "type": "trigger",
+      "name": "s33_unlocked_trophies_validate_update",
+      "table": "unlocked_trophies",
+      "sql": "CREATE TRIGGER s33_unlocked_trophies_validate_update\nBEFORE UPDATE ON unlocked_trophies\nBEGIN\n    SELECT CASE\n        WHEN NEW.user_id IS NULL\n          OR NEW.album_id IS NULL\n          OR NEW.trophy_name IS NULL\n          OR NEW.trophy_name = ''\n          OR NOT EXISTS (SELECT 1 FROM users WHERE id=NEW.user_id)\n          OR (\n              NEW.album_id <> '__global__'\n              AND NOT EXISTS (SELECT 1 FROM albums WHERE id=NEW.album_id)\n          )\n        THEN RAISE(ABORT, 'invalid trophy unlock row')\n    END;\nEND"
+    },
+    {
+      "type": "trigger",
+      "name": "s33_user_albums_validate_insert",
+      "table": "user_albums",
+      "sql": "CREATE TRIGGER s33_user_albums_validate_insert\nBEFORE INSERT ON user_albums\nBEGIN\n    SELECT CASE\n        WHEN NEW.user_id IS NULL\n          OR NEW.album_id IS NULL\n          OR NOT EXISTS (SELECT 1 FROM users WHERE id=NEW.user_id)\n          OR NOT EXISTS (SELECT 1 FROM albums WHERE id=NEW.album_id)\n        THEN RAISE(ABORT, 'invalid user album reference')\n    END;\nEND"
+    },
+    {
+      "type": "trigger",
+      "name": "s33_user_albums_validate_update",
+      "table": "user_albums",
+      "sql": "CREATE TRIGGER s33_user_albums_validate_update\nBEFORE UPDATE ON user_albums\nBEGIN\n    SELECT CASE\n        WHEN NEW.user_id IS NULL\n          OR NEW.album_id IS NULL\n          OR NOT EXISTS (SELECT 1 FROM users WHERE id=NEW.user_id)\n          OR NOT EXISTS (SELECT 1 FROM albums WHERE id=NEW.album_id)\n        THEN RAISE(ABORT, 'invalid user album reference')\n    END;\nEND"
+    },
+    {
+      "type": "trigger",
+      "name": "trade_ratings_no_delete",
+      "table": "trade_ratings",
+      "sql": "CREATE TRIGGER trade_ratings_no_delete\nBEFORE DELETE ON trade_ratings\nBEGIN\n    SELECT RAISE(ABORT, 'trade ratings are final');\nEND"
+    },
+    {
+      "type": "trigger",
+      "name": "trade_ratings_no_update",
+      "table": "trade_ratings",
+      "sql": "CREATE TRIGGER trade_ratings_no_update\nBEFORE UPDATE ON trade_ratings\nBEGIN\n    SELECT RAISE(ABORT, 'trade ratings are final');\nEND"
+    }
+  ],
+  "production_configuration": "/var/data/sammlr.db per runtime_operations; remote volume not accessed",
+  "wal_sidecars": [],
+  "migration_files": [
+    "App/Database/migrations/0001_trade_lifecycle_foundation.up.sql",
+    "App/Database/migrations/0002_trade_reservations.up.sql",
+    "App/Database/migrations/0003_trade_shipping_status.up.sql",
+    "App/Database/migrations/0004_trade_receipt_status.up.sql",
+    "App/Database/migrations/0005_trade_problems_partial_receipt.up.sql",
+    "App/Database/migrations/0006_typed_notifications.up.sql",
+    "App/Database/migrations/0007_album_privacy_trade_pool.up.sql",
+    "App/Database/migrations/0008_trade_ratings.up.sql",
+    "App/Database/migrations/0009_friendships_community.up.sql",
+    "App/Database/migrations/0010_auth_session_csrf.up.sql",
+    "App/Database/migrations/0011_http_integrity_hardening.up.sql",
+    "App/Database/migrations/0012_account_lifecycle.up.sql",
+    "App/Database/migrations/0013_historical_collection_contract.up.sql",
+    "App/Database/migrations/0014_collection_history_cutover.up.sql",
+    "App/Database/migrations/0015_canonical_album_trophy_unlocks.up.sql",
+    "App/Database/migrations/0016_legacy_trophy_backfill_source.up.sql",
+    "App/Database/migrations/0017_profile_privacy_gate.up.sql",
+    "App/Database/migrations/0018_feed_eventstore_operationalization.up.sql",
+    "App/Database/migrations/0019_profile_sticker_70.up.sql",
+    "App/Database/migrations/0020_profile_sticker_country_codes.up.sql",
+    "App/Database/migrations/0021_smartdeal_contract_foundation.up.sql"
+  ],
+  "schema_migrations": [
+    [
+      1
+    ],
+    [
+      2
+    ],
+    [
+      3
+    ],
+    [
+      4
+    ],
+    [
+      5
+    ],
+    [
+      6
+    ],
+    [
+      7
+    ],
+    [
+      8
+    ],
+    [
+      9
+    ],
+    [
+      10
+    ],
+    [
+      11
+    ],
+    [
+      12
+    ],
+    [
+      13
+    ],
+    [
+      14
+    ],
+    [
+      15
+    ],
+    [
+      16
+    ],
+    [
+      17
+    ],
+    [
+      18
+    ],
+    [
+      19
+    ],
+    [
+      20
+    ]
+  ],
+  "source_of_truth_matrix": [
+    {
+      "concept": "User",
+      "production": "users.id; Session + globaler Login/Auth-Version-Guard",
+      "preview": "Fixture-IDs/Valentin/role",
+      "future": "Server actor aus Session",
+      "action": "Fixtureidentität entfernen",
+      "risk": "IDOR"
+    },
+    {
+      "concept": "Album",
+      "production": "albums + user_albums + services/albums.py",
+      "preview": "Synthetische ALBUMS",
+      "future": "Bestehende IDs/Katalogresolver",
+      "action": "IDs adaptieren",
+      "risk": "Falsche Albumzuordnung"
+    },
+    {
+      "concept": "Sticker",
+      "production": "Kanonischer Albumcode-Resolver",
+      "preview": "Fixturecodes, z.B. BRA 1",
+      "future": "Kanonischer (album_id,code)",
+      "action": "Am Rand normalisieren",
+      "risk": "Alias-Doppelposition"
+    },
+    {
+      "concept": "Quantity",
+      "production": "stickers.quantity; InventoryReadService",
+      "preview": "Fixture supply/need",
+      "future": "Inventar + Reservationsprojektion",
+      "action": "Reader wiederverwenden",
+      "risk": "Doppelverplanung"
+    },
+    {
+      "concept": "Missing",
+      "production": "Kanonischer Need unter Bindung/Transit",
+      "preview": "Fixture eligible/need",
+      "future": "Kanonischer Need",
+      "action": "Frisch bei Submit prüfen",
+      "risk": "Doppelte Incoming Needs"
+    },
+    {
+      "concept": "Duplicates",
+      "production": "max(physical-assigned-reserved,0)",
+      "preview": "Fixture potential",
+      "future": "Availability-Service",
+      "action": "Keine eigene Mengenformel",
+      "risk": "Übersupply"
+    },
+    {
+      "concept": "Album visibility",
+      "production": "user_albums.visibility; AlbumPrivacyService",
+      "preview": "Fixture Sichtbarkeit",
+      "future": "Bestehende Privacy",
+      "action": "An jeder Projektion prüfen",
+      "risk": "Datenleck"
+    },
+    {
+      "concept": "Favorite album",
+      "production": "users.favorite_album_id",
+      "preview": "Fixturepriorität",
+      "future": "Bestehender Favorit + gültiger Algorithmus",
+      "action": "Kein neues Gewicht erfinden",
+      "risk": "Algorithmusdrift"
+    },
+    {
+      "concept": "Trade preferences",
+      "production": "trade_pool_enabled; kein peralbum smart/cross Feld",
+      "preview": "manual_fixtures / manual_rules",
+      "future": "Versionierte bilaterale Albumpräferenzen",
+      "action": "Persistenz/Hooks ergänzen",
+      "risk": "OPEN global falsch"
+    },
+    {
+      "concept": "SmartDeal",
+      "production": "Optimizer/planning/revalidation; V1-Vertrag",
+      "preview": "Fixierte Deals/Toporder",
+      "future": "Kanonischer Optimizer + neuer Submitadapter",
+      "action": "UI Top3 von Planung trennen",
+      "risk": "Stale Angebot"
+    },
+    {
+      "concept": "Manual trade",
+      "production": "Legacy singlealbum request; neuer V1 Text noch spec",
+      "preview": "manual_rules + Sessiondraft",
+      "future": "Servervalidator für neuen Vertrag",
+      "action": "Beidseitige Freigaben/Receive≤Give",
+      "risk": "Client umgehbar"
+    },
+    {
+      "concept": "Trade request",
+      "production": "trade_requests + trades",
+      "preview": "requests.js sessionStorage",
+      "future": "Persistenter versionierter Request",
+      "action": "Atomarer Submit",
+      "risk": "Keine Bindung im Browser"
+    },
+    {
+      "concept": "Trade version",
+      "production": "trade_positions ohne Version",
+      "preview": "deal_versions.js v1/v2",
+      "future": "Immutable Paketversion + current pointer",
+      "action": "Version/Positionsschema ergänzen",
+      "risk": "Stale Zustimmung"
+    },
+    {
+      "concept": "Amendment",
+      "production": "Kein entsprechendes Modell",
+      "preview": "amendments.js",
+      "future": "Persistenter Vorschlag + erforderliche Zustimmung",
+      "action": "Atomarer Versionswechsel",
+      "risk": "Stille Paketmutation"
+    },
+    {
+      "concept": "3/3 slots",
+      "production": "Nur V1 offene ausgehende Requests",
+      "preview": "requests.js Slots beider Rollen",
+      "future": "Operative richtungsbezogene Serverableitung",
+      "action": "Status von Slot trennen",
+      "risk": "Accept schafft unbegrenzt Kapazität"
+    },
+    {
+      "concept": "Request expiry",
+      "production": "V1 binding_created_at +24h; lokal Schema21 fehlt",
+      "preview": "Client Date.now",
+      "future": "Server UTC Bindung +24h",
+      "action": "Terminalübergang atomar",
+      "risk": "Accept vs Expiry"
+    },
+    {
+      "concept": "Packing state",
+      "production": "Keine versionierte Packfreigabe",
+      "preview": "packing.js",
+      "future": "Eigener Packstatus je Paketversion",
+      "action": "Persistieren und invalidieren",
+      "risk": "Freigabe alten Pakets"
+    },
+    {
+      "concept": "Address release",
+      "production": "Kein strukturiertes produktives Modell gefunden",
+      "preview": "shipping.js Demo-Adresse",
+      "future": "Private Vorlage getrennt von Tradefreigabe",
+      "action": "Zweckgebundene Autorisierung/Retention",
+      "risk": "URL-Datenleck"
+    },
+    {
+      "concept": "Shipping direction",
+      "production": "trade_shipping_status + ShippingService",
+      "preview": "shipping_state / shipping.js",
+      "future": "Eigene Versandbestätigung je Richtung",
+      "action": "Version-/Pack-/Adressguards + exactly once",
+      "risk": "Doppelte Inventarbuchung"
+    },
+    {
+      "concept": "Receipt",
+      "production": "trade_receipt_status; NOT_SHIPPED-Guard",
+      "preview": "receipts.js Q2",
+      "future": "Eigenständiger tatsächlicher Empfang",
+      "action": "Neuer Q2-Adapter/Buchungsledger",
+      "risk": "Shipping/Slot unerlaubt ändern"
+    },
+    {
+      "concept": "Problem",
+      "production": "trade_problem_reports/positions",
+      "preview": "receipts.js Lösungsvorschlag",
+      "future": "Versionierter richtungsbezogener Problemflow",
+      "action": "Bestehende Regeln scoped adaptieren",
+      "risk": "Fiktive volle Nachlieferung"
+    },
+    {
+      "concept": "Completion",
+      "production": "trades.lifecycle_state/completed_at",
+      "preview": "receipt_state.js",
+      "future": "Serveraggregation erfüllter Abschlussbedingungen",
+      "action": "Receipt unabhängig von Versandklick",
+      "risk": "Offener eigener operativer Slot unsichtbar"
+    },
+    {
+      "concept": "Rating",
+      "production": "trade_ratings 1–5 immutable",
+      "preview": "1–3 local rating",
+      "future": "Versionierte unveränderliche Skala je Vertrag",
+      "action": "Keine Legacy-Konvertierung",
+      "risk": "Falsche Aggregation"
+    },
+    {
+      "concept": "Notifications",
+      "production": "typed_notifications / events",
+      "preview": "Previewanzeigen",
+      "future": "Serverevents + deduplizierte Typed-Meldungen",
+      "action": "Q7 Accept-Typ und Deep Links",
+      "risk": "Doppelmeldung/IDOR"
+    },
+    {
+      "concept": "Canonical sticker card",
+      "production": "Produktives style.css / Stickerliste",
+      "preview": "sticker_physics.js iframe-Probe",
+      "future": "Bestehende physische Karte",
+      "action": "Gemeinsamen Adapter scoped nutzen",
+      "risk": "Dimensionsdrift"
+    },
+    {
+      "concept": "Canonical stack geometry",
+      "production": "Produktive Wall Cap5",
+      "preview": "Pax-Receive Cap10",
+      "future": "Gleiche −2/−2 Faces/z-index, Tradecap10",
+      "action": "Nur cap kontextabhängig",
+      "risk": "Geometrie wächst über10"
+    },
+    {
+      "concept": "Reservations",
+      "production": "trade_reservations + Positionen/Availability",
+      "preview": "Session snapshot bindet nichts",
+      "future": "Server Supply + Incoming Need Bindung",
+      "action": "Beide Richtungen in Submittransaktion",
+      "risk": "Crossrequest Oversubscription"
+    }
+  ]
+}

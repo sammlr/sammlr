@@ -1,0 +1,98 @@
+<!doctype html>
+<html lang="de">
+<head>
+    {{ style_html|safe }}
+    <link rel="stylesheet" href="/static/profile_sticker.css">
+    <script defer src="/static/profile_sticker.js"></script>
+    <title>Sticker bearbeiten · sammlr</title>
+</head>
+<body class="s31-product-page profile-sticker-editor-page">
+<div class="container profile-sticker-editor">
+    {{ header_html|safe }}
+    <a class="sammlr-back-link" href="/profil">← Zurück zum Profil</a>
+    <main data-sticker-editor data-countries='{{ countries_json }}' data-colors='{{ colors_json }}'>
+        <section class="profile-sticker-editor-preview" aria-label="Live-Vorschau">
+            <p class="profile-sticker-editor-kicker">Live-Vorschau</p>
+            <div data-preview-host>{{ sticker_html|safe }}</div>
+        </section>
+
+        {% if error %}<p class="profile-sticker-editor-error" role="alert">{{ error }}</p>{% endif %}
+
+        <form method="post" enctype="multipart/form-data" action="/profil/sticker/bearbeiten" data-sticker-form>
+            <input type="hidden" name="crop_x" value="{{ settings.crop_x }}" data-crop-x>
+            <input type="hidden" name="crop_y" value="{{ settings.crop_y }}" data-crop-y>
+            <input type="hidden" name="crop_zoom" value="{{ settings.crop_zoom }}" data-crop-zoom>
+
+            <fieldset class="profile-sticker-fieldset">
+                <legend>Foto</legend>
+                <div class="profile-sticker-photo-actions">
+                    <button type="button" class="profile-sticker-secondary" data-open-camera>Foto aufnehmen</button>
+                    <label class="profile-sticker-secondary" for="portraitInput">{{ 'Foto ändern' if settings.portrait_filename else 'Foto auswählen' }}</label>
+                    <input id="portraitInput" name="portrait" type="file" accept="image/jpeg,image/png" data-portrait-input>
+                </div>
+                <p class="profile-sticker-help" data-camera-status>JPEG oder PNG. Kopf, Schultern und Oberkörper sollten sichtbar sein.</p>
+            </fieldset>
+
+            <label class="profile-sticker-label" for="stickerName">Name</label>
+            <input id="stickerName" name="display_name" value="{{ settings.display_name }}" maxlength="32" required data-sticker-name>
+
+            <label class="profile-sticker-label" for="stickerNation">Nation</label>
+            <select id="stickerNation" name="country_code" data-sticker-country>
+                {% for item in countries %}<option value="{{ item.code }}"{% if item.code == settings.country_code %} selected{% endif %}>{{ item.label.title() }}</option>{% endfor %}
+            </select>
+
+            <label class="profile-sticker-label" for="stickerClub">Verein <span>optional</span></label>
+            <input id="stickerClub" name="club_name" value="{{ settings.club_name }}" maxlength="48" data-sticker-club>
+
+            <fieldset class="profile-sticker-fieldset profile-sticker-colors">
+                <legend>Farbe</legend>
+                <div class="profile-sticker-color-grid">
+                    {% for item in colors %}
+                    <label title="{{ item.label }}">
+                        <input type="radio" name="accent_color" value="{{ item.code }}"{% if item.code == settings.accent_color %} checked{% endif %} data-sticker-color>
+                        <span style="--swatch:{{ item.hex_value }}"></span><b>{{ item.label }}</b>
+                    </label>
+                    {% endfor %}
+                </div>
+            </fieldset>
+
+            <div class="profile-sticker-form-actions">
+                <button class="profile-sticker-save" type="submit">Speichern</button>
+                <a class="profile-sticker-cancel" href="/profil">Abbrechen</a>
+            </div>
+        </form>
+    </main>
+    {{ bottom_nav_html|safe }}
+</div>
+
+<div class="profile-sticker-modal" data-camera-modal hidden>
+    <section role="dialog" aria-modal="true" aria-labelledby="cameraTitle">
+        <h1 id="cameraTitle">Foto aufnehmen</h1>
+        <div class="profile-sticker-camera-frame">
+            <video playsinline muted data-camera-video></video>
+            <div class="profile-sticker-camera-guide" aria-hidden="true"><span></span><i></i></div>
+        </div>
+        <p>Kopf und Schultern im Rahmen platzieren</p>
+        <div class="profile-sticker-modal-actions">
+            <button type="button" class="profile-sticker-save" data-camera-capture>Aufnehmen</button>
+            <button type="button" class="profile-sticker-secondary" data-camera-close>Abbrechen</button>
+        </div>
+    </section>
+</div>
+
+<div class="profile-sticker-modal" data-crop-modal hidden>
+    <section role="dialog" aria-modal="true" aria-labelledby="cropTitle">
+        <h1 id="cropTitle">Foto ausrichten</h1>
+        <p>Kopf, Schultern und Oberkörper im Ausschnitt platzieren.</p>
+        <div class="profile-sticker-crop-stage"><img alt="Neuer Fotoausschnitt" data-crop-image></div>
+        <label>Horizontal <input type="range" min="-35" max="35" step="1" data-crop-control="x"></label>
+        <label>Vertikal <input type="range" min="-35" max="35" step="1" data-crop-control="y"></label>
+        <label>Zoom <input type="range" min="1" max="2.5" step="0.01" data-crop-control="zoom"></label>
+        <div class="profile-sticker-modal-actions">
+            <button type="button" class="profile-sticker-save" data-crop-apply>Übernehmen</button>
+            <button type="button" class="profile-sticker-secondary" data-crop-cancel>Abbrechen</button>
+        </div>
+    </section>
+</div>
+</body>
+</html>

@@ -1,0 +1,10 @@
+/* PAX-06 surfaces only. Locked packs, red post-its and sticker stacks untouched. */
+.pax-preview .pax-address-note{background:#f5dd62;padding:26px 24px;margin:24px 6px 30px;box-shadow:3px 7px 15px #30263815;transform:rotate(-.7deg)}
+.pax-preview .pax-address-note address{font:500 16px/1.7 var(--sammlr-font-family),sans-serif;white-space:pre-line;overflow-wrap:anywhere;color:#302638}
+.pax-preview .pax-address-note .pax-quiet{margin-bottom:0}
+.pax-preview .pax-shipping-label{display:block;font-size:13px;margin-bottom:8px}
+.pax-preview #pax-shipping-method{width:100%;min-height:44px;padding:10px;font:inherit;border:1px solid #d2c5dd;border-radius:8px;background:transparent;color:inherit}
+.pax-preview .pax-shipping-status{padding:12px 0 24px;line-height:1.7}
+.pax-preview .pax-shipping-status .pj-kicker{margin:20px 0 6px}
+.pax-preview #pax-shipping-dev{font:11px/1.6 monospace;white-space:pre-wrap;overflow-wrap:anywhere}
+.pax-preview #pax-shipping-method:focus-visible{outline:2px solid #54247b;outline-offset:2px}

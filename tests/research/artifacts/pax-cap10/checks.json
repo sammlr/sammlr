@@ -1,0 +1,149 @@
+[
+  {
+    "width": 375,
+    "quantity": 1,
+    "pax_layers": 1,
+    "wall_layers": 1,
+    "parity": "PASS"
+  },
+  {
+    "width": 375,
+    "quantity": 2,
+    "pax_layers": 2,
+    "wall_layers": 2,
+    "parity": "PASS"
+  },
+  {
+    "width": 375,
+    "quantity": 5,
+    "pax_layers": 5,
+    "wall_layers": 5,
+    "parity": "PASS"
+  },
+  {
+    "width": 375,
+    "quantity": 6,
+    "pax_layers": 6,
+    "wall_layers": 5,
+    "parity": "PASS"
+  },
+  {
+    "width": 375,
+    "quantity": 10,
+    "pax_layers": 10,
+    "wall_layers": 5,
+    "parity": "PASS"
+  },
+  {
+    "width": 375,
+    "quantity": 15,
+    "pax_layers": 10,
+    "wall_layers": 5,
+    "parity": "PASS"
+  },
+  {
+    "width": 375,
+    "quantity": 37,
+    "pax_layers": 10,
+    "wall_layers": 5,
+    "parity": "PASS"
+  },
+  {
+    "width": 390,
+    "quantity": 1,
+    "pax_layers": 1,
+    "wall_layers": 1,
+    "parity": "PASS"
+  },
+  {
+    "width": 390,
+    "quantity": 2,
+    "pax_layers": 2,
+    "wall_layers": 2,
+    "parity": "PASS"
+  },
+  {
+    "width": 390,
+    "quantity": 5,
+    "pax_layers": 5,
+    "wall_layers": 5,
+    "parity": "PASS"
+  },
+  {
+    "width": 390,
+    "quantity": 6,
+    "pax_layers": 6,
+    "wall_layers": 5,
+    "parity": "PASS"
+  },
+  {
+    "width": 390,
+    "quantity": 10,
+    "pax_layers": 10,
+    "wall_layers": 5,
+    "parity": "PASS"
+  },
+  {
+    "width": 390,
+    "quantity": 15,
+    "pax_layers": 10,
+    "wall_layers": 5,
+    "parity": "PASS"
+  },
+  {
+    "width": 390,
+    "quantity": 37,
+    "pax_layers": 10,
+    "wall_layers": 5,
+    "parity": "PASS"
+  },
+  {
+    "width": 430,
+    "quantity": 1,
+    "pax_layers": 1,
+    "wall_layers": 1,
+    "parity": "PASS"
+  },
+  {
+    "width": 430,
+    "quantity": 2,
+    "pax_layers": 2,
+    "wall_layers": 2,
+    "parity": "PASS"
+  },
+  {
+    "width": 430,
+    "quantity": 5,
+    "pax_layers": 5,
+    "wall_layers": 5,
+    "parity": "PASS"
+  },
+  {
+    "width": 430,
+    "quantity": 6,
+    "pax_layers": 6,
+    "wall_layers": 5,
+    "parity": "PASS"
+  },
+  {
+    "width": 430,
+    "quantity": 10,
+    "pax_layers": 10,
+    "wall_layers": 5,
+    "parity": "PASS"
+  },
+  {
+    "width": 430,
+    "quantity": 15,
+    "pax_layers": 10,
+    "wall_layers": 5,
+    "parity": "PASS"
+  },
+  {
+    "width": 430,
+    "quantity": 37,
+    "pax_layers": 10,
+    "wall_layers": 5,
+    "parity": "PASS"
+  }
+]

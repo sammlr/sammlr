@@ -1,0 +1,1312 @@
+{
+  "routes": [
+    {
+      "file": "App/webapp.py",
+      "line": 421,
+      "path": "/design-bible/master-assets/<path:filename>",
+      "methods": [
+        "GET"
+      ],
+      "function": "design_bible_master_asset",
+      "decorators": [
+        "app.route('/design-bible/master-assets/<path:filename>')"
+      ]
+    },
+    {
+      "file": "App/webapp.py",
+      "line": 2606,
+      "path": "/healthz",
+      "methods": [
+        "GET"
+      ],
+      "function": "healthz",
+      "decorators": [
+        "app.route('/healthz')"
+      ]
+    },
+    {
+      "file": "App/webapp.py",
+      "line": 3765,
+      "path": "/dev/retro-ziffern",
+      "methods": [
+        "GET"
+      ],
+      "function": "retro_digit_lab",
+      "decorators": [
+        "app.route('/dev/retro-ziffern')"
+      ]
+    },
+    {
+      "file": "App/webapp.py",
+      "line": 5067,
+      "path": "/login",
+      "methods": [
+        "GET",
+        "POST"
+      ],
+      "function": "login",
+      "decorators": [
+        "app.route('/login', methods=['GET', 'POST'])"
+      ]
+    },
+    {
+      "file": "App/webapp.py",
+      "line": 5147,
+      "path": "/konto/reaktivieren",
+      "methods": [
+        "GET",
+        "POST"
+      ],
+      "function": "reactivate_account",
+      "decorators": [
+        "app.route('/konto/reaktivieren', methods=['GET', 'POST'])"
+      ]
+    },
+    {
+      "file": "App/webapp.py",
+      "line": 5188,
+      "path": "/register",
+      "methods": [
+        "GET",
+        "POST"
+      ],
+      "function": "register",
+      "decorators": [
+        "app.route('/register', methods=['GET', 'POST'])"
+      ]
+    },
+    {
+      "file": "App/webapp.py",
+      "line": 5268,
+      "path": "/datenschutz",
+      "methods": [
+        "GET"
+      ],
+      "function": "privacy_notice",
+      "decorators": [
+        "app.route('/datenschutz')"
+      ]
+    },
+    {
+      "file": "App/webapp.py",
+      "line": 5295,
+      "path": "/impressum",
+      "methods": [
+        "GET"
+      ],
+      "function": "legal_notice",
+      "decorators": [
+        "app.route('/impressum')"
+      ]
+    },
+    {
+      "file": "App/webapp.py",
+      "line": 5313,
+      "path": "/datenexport-hinweise",
+      "methods": [
+        "GET"
+      ],
+      "function": "data_export_notice",
+      "decorators": [
+        "app.route('/datenexport-hinweise')"
+      ]
+    },
+    {
+      "file": "App/webapp.py",
+      "line": 5336,
+      "path": "/logout",
+      "methods": [
+        "POST"
+      ],
+      "function": "logout",
+      "decorators": [
+        "app.route('/logout', methods=['POST'])"
+      ]
+    },
+    {
+      "file": "App/webapp.py",
+      "line": 5342,
+      "path": "/",
+      "methods": [
+        "GET"
+      ],
+      "function": "startseite",
+      "decorators": [
+        "app.route('/')"
+      ]
+    },
+    {
+      "file": "App/webapp.py",
+      "line": 5490,
+      "path": "/home",
+      "methods": [
+        "GET"
+      ],
+      "function": "home_compatibility_redirect",
+      "decorators": [
+        "app.route('/home')"
+      ]
+    },
+    {
+      "file": "App/webapp.py",
+      "line": 5496,
+      "path": "/zentrale",
+      "methods": [
+        "GET"
+      ],
+      "function": "collection_compatibility_redirect",
+      "decorators": [
+        "app.route('/zentrale')",
+        "app.route('/sammlr-zentrale')"
+      ]
+    },
+    {
+      "file": "App/webapp.py",
+      "line": 5496,
+      "path": "/sammlr-zentrale",
+      "methods": [
+        "GET"
+      ],
+      "function": "collection_compatibility_redirect",
+      "decorators": [
+        "app.route('/zentrale')",
+        "app.route('/sammlr-zentrale')"
+      ]
+    },
+    {
+      "file": "App/webapp.py",
+      "line": 5502,
+      "path": "/sammlung",
+      "methods": [
+        "GET"
+      ],
+      "function": "sammlung",
+      "decorators": [
+        "app.route('/sammlung')",
+        "serialized_sqlite_projection"
+      ]
+    },
+    {
+      "file": "App/webapp.py",
+      "line": 5967,
+      "path": "/favorit",
+      "methods": [
+        "GET"
+      ],
+      "function": "favorit",
+      "decorators": [
+        "app.route('/favorit')"
+      ]
+    },
+    {
+      "file": "App/webapp.py",
+      "line": 6020,
+      "path": "/favorit/toggle/<album_id>",
+      "methods": [
+        "POST"
+      ],
+      "function": "favorit_toggle",
+      "decorators": [
+        "app.route('/favorit/toggle/<album_id>', methods=['POST'])"
+      ]
+    },
+    {
+      "file": "App/webapp.py",
+      "line": 6049,
+      "path": "/favorit/setzen/<album_id>",
+      "methods": [
+        "POST"
+      ],
+      "function": "favorit_setzen",
+      "decorators": [
+        "app.route('/favorit/setzen/<album_id>', methods=['POST'])"
+      ]
+    },
+    {
+      "file": "App/webapp.py",
+      "line": 6092,
+      "path": "/alben/hinzufuegen",
+      "methods": [
+        "GET"
+      ],
+      "function": "alben_hinzufuegen",
+      "decorators": [
+        "app.route('/alben/hinzufuegen')"
+      ]
+    },
+    {
+      "file": "App/webapp.py",
+      "line": 6136,
+      "path": "/alben/hinzufuegen/<album_id>",
+      "methods": [
+        "POST"
+      ],
+      "function": "album_hinzufuegen",
+      "decorators": [
+        "app.route('/alben/hinzufuegen/<album_id>', methods=['POST'])"
+      ]
+    },
+    {
+      "file": "App/webapp.py",
+      "line": 6373,
+      "path": "/album/<album_id>/privacy",
+      "methods": [
+        "POST"
+      ],
+      "function": "update_album_privacy",
+      "decorators": [
+        "app.route('/album/<album_id>/privacy', methods=['POST'])"
+      ]
+    },
+    {
+      "file": "App/webapp.py",
+      "line": 6396,
+      "path": "/album/<album_id>",
+      "methods": [
+        "GET",
+        "POST"
+      ],
+      "function": "albumseite",
+      "decorators": [
+        "app.route('/album/<album_id>', methods=['GET', 'POST'])"
+      ]
+    },
+    {
+      "file": "App/webapp.py",
+      "line": 7597,
+      "path": "/bulk_add/<album_id>",
+      "methods": [
+        "POST"
+      ],
+      "function": "bulk_add",
+      "decorators": [
+        "app.route('/bulk_add/<album_id>', methods=['POST'])"
+      ]
+    },
+    {
+      "file": "App/webapp.py",
+      "line": 7645,
+      "path": "/bulk_remove/<album_id>",
+      "methods": [
+        "POST"
+      ],
+      "function": "bulk_remove",
+      "decorators": [
+        "app.route('/bulk_remove/<album_id>', methods=['POST'])"
+      ]
+    },
+    {
+      "file": "App/webapp.py",
+      "line": 7691,
+      "path": "/sticker/<album_id>/<path:code>",
+      "methods": [
+        "GET",
+        "POST"
+      ],
+      "function": "sticker_detail",
+      "decorators": [
+        "app.route('/sticker/<album_id>/<path:code>', methods=['GET', 'POST'])"
+      ]
+    },
+    {
+      "file": "App/webapp.py",
+      "line": 7806,
+      "path": "/album/<album_id>/sticker/<path:code>/quantity",
+      "methods": [
+        "POST"
+      ],
+      "function": "update_sticker_quantity_inline",
+      "decorators": [
+        "app.route('/album/<album_id>/sticker/<path:code>/quantity', methods=['POST'])"
+      ]
+    },
+    {
+      "file": "App/webapp.py",
+      "line": 7873,
+      "path": "/add/<album_id>/<path:code>",
+      "methods": [
+        "POST"
+      ],
+      "function": "add",
+      "decorators": [
+        "app.route('/add/<album_id>/<path:code>', methods=['POST'])"
+      ]
+    },
+    {
+      "file": "App/webapp.py",
+      "line": 7919,
+      "path": "/undo",
+      "methods": [
+        "POST"
+      ],
+      "function": "undo_last_action",
+      "decorators": [
+        "app.route('/undo', methods=['POST'])"
+      ]
+    },
+    {
+      "file": "App/webapp.py",
+      "line": 7988,
+      "path": "/remove/<album_id>/<path:code>",
+      "methods": [
+        "POST"
+      ],
+      "function": "remove",
+      "decorators": [
+        "app.route('/remove/<album_id>/<path:code>', methods=['POST'])"
+      ]
+    },
+    {
+      "file": "App/webapp.py",
+      "line": 8733,
+      "path": "/trade/<int:trade_id>",
+      "methods": [
+        "GET"
+      ],
+      "function": "trade_detail",
+      "decorators": [
+        "app.route('/trade/<int:trade_id>')",
+        "app.route('/trades/<int:trade_id>')"
+      ]
+    },
+    {
+      "file": "App/webapp.py",
+      "line": 8733,
+      "path": "/trades/<int:trade_id>",
+      "methods": [
+        "GET"
+      ],
+      "function": "trade_detail",
+      "decorators": [
+        "app.route('/trade/<int:trade_id>')",
+        "app.route('/trades/<int:trade_id>')"
+      ]
+    },
+    {
+      "file": "App/webapp.py",
+      "line": 9026,
+      "path": "/trades/<int:trade_id>/rating",
+      "methods": [
+        "POST"
+      ],
+      "function": "create_trade_rating",
+      "decorators": [
+        "app.route('/trades/<int:trade_id>/rating', methods=['POST'])"
+      ]
+    },
+    {
+      "file": "App/webapp.py",
+      "line": 9073,
+      "path": "/album/<album_id>/trades",
+      "methods": [
+        "GET"
+      ],
+      "function": "album_trades",
+      "decorators": [
+        "app.route('/album/<album_id>/trades')"
+      ]
+    },
+    {
+      "file": "App/webapp.py",
+      "line": 9411,
+      "path": "/album/<album_id>/statistik",
+      "methods": [
+        "GET"
+      ],
+      "function": "album_statistik",
+      "decorators": [
+        "app.route('/album/<album_id>/statistik')"
+      ]
+    },
+    {
+      "file": "App/webapp.py",
+      "line": 9641,
+      "path": "/album/<album_id>/trade/<int:other_user_id>",
+      "methods": [
+        "GET"
+      ],
+      "function": "trade_center",
+      "decorators": [
+        "app.route('/album/<album_id>/trade/<int:other_user_id>')",
+        "app.route('/album/<album_id>/trades/<int:other_user_id>')"
+      ]
+    },
+    {
+      "file": "App/webapp.py",
+      "line": 9641,
+      "path": "/album/<album_id>/trades/<int:other_user_id>",
+      "methods": [
+        "GET"
+      ],
+      "function": "trade_center",
+      "decorators": [
+        "app.route('/album/<album_id>/trade/<int:other_user_id>')",
+        "app.route('/album/<album_id>/trades/<int:other_user_id>')"
+      ]
+    },
+    {
+      "file": "App/webapp.py",
+      "line": 10318,
+      "path": "/album/<album_id>/smart-trades",
+      "methods": [
+        "GET"
+      ],
+      "function": "album_smart_trades",
+      "decorators": [
+        "app.route('/album/<album_id>/smart-trades')"
+      ]
+    },
+    {
+      "file": "App/webapp.py",
+      "line": 10454,
+      "path": "/album/<album_id>/smart-trades/<int:partner_user_id>/request",
+      "methods": [
+        "POST"
+      ],
+      "function": "create_smart_trade_request",
+      "decorators": [
+        "app.route('/album/<album_id>/smart-trades/<int:partner_user_id>/request', methods=['POST'])"
+      ]
+    },
+    {
+      "file": "App/webapp.py",
+      "line": 10534,
+      "path": "/album/<album_id>/trade/<int:other_user_id>/request",
+      "methods": [
+        "POST"
+      ],
+      "function": "create_trade_request",
+      "decorators": [
+        "app.route('/album/<album_id>/trade/<int:other_user_id>/request', methods=['POST'])",
+        "app.route('/album/<album_id>/trades/<int:other_user_id>/request', methods=['POST'])"
+      ]
+    },
+    {
+      "file": "App/webapp.py",
+      "line": 10534,
+      "path": "/album/<album_id>/trades/<int:other_user_id>/request",
+      "methods": [
+        "POST"
+      ],
+      "function": "create_trade_request",
+      "decorators": [
+        "app.route('/album/<album_id>/trade/<int:other_user_id>/request', methods=['POST'])",
+        "app.route('/album/<album_id>/trades/<int:other_user_id>/request', methods=['POST'])"
+      ]
+    },
+    {
+      "file": "App/webapp.py",
+      "line": 10630,
+      "path": "/trade/<int:trade_id>/accept",
+      "methods": [
+        "POST"
+      ],
+      "function": "accept_trade_request",
+      "decorators": [
+        "app.route('/trade/<int:trade_id>/accept', methods=['POST'])"
+      ]
+    },
+    {
+      "file": "App/webapp.py",
+      "line": 10716,
+      "path": "/trade/<int:trade_id>/ship",
+      "methods": [
+        "POST"
+      ],
+      "function": "confirm_trade_shipping",
+      "decorators": [
+        "app.route('/trade/<int:trade_id>/ship', methods=['POST'])"
+      ]
+    },
+    {
+      "file": "App/webapp.py",
+      "line": 10738,
+      "path": "/trade/<int:trade_id>/receive",
+      "methods": [
+        "POST"
+      ],
+      "function": "confirm_trade_receipt",
+      "decorators": [
+        "app.route('/trade/<int:trade_id>/receive', methods=['POST'])"
+      ]
+    },
+    {
+      "file": "App/webapp.py",
+      "line": 10808,
+      "path": "/trades/<int:trade_id>/problem",
+      "methods": [
+        "GET"
+      ],
+      "function": "trade_problem_form",
+      "decorators": [
+        "app.route('/trades/<int:trade_id>/problem')"
+      ]
+    },
+    {
+      "file": "App/webapp.py",
+      "line": 10955,
+      "path": "/trade/<int:trade_id>/problem",
+      "methods": [
+        "POST"
+      ],
+      "function": "report_trade_problem",
+      "decorators": [
+        "app.route('/trade/<int:trade_id>/problem', methods=['POST'])"
+      ]
+    },
+    {
+      "file": "App/webapp.py",
+      "line": 11031,
+      "path": "/trade/<int:trade_id>/problem/close",
+      "methods": [
+        "POST"
+      ],
+      "function": "close_trade_with_problem",
+      "decorators": [
+        "app.route('/trade/<int:trade_id>/problem/close', methods=['POST'])"
+      ]
+    },
+    {
+      "file": "App/webapp.py",
+      "line": 11057,
+      "path": "/trade/<int:trade_id>/problem/resolve",
+      "methods": [
+        "POST"
+      ],
+      "function": "resolve_trade_problem",
+      "decorators": [
+        "app.route('/trade/<int:trade_id>/problem/resolve', methods=['POST'])"
+      ]
+    },
+    {
+      "file": "App/webapp.py",
+      "line": 11108,
+      "path": "/trade/<int:trade_id>/decline",
+      "methods": [
+        "POST"
+      ],
+      "function": "decline_trade_request",
+      "decorators": [
+        "app.route('/trade/<int:trade_id>/decline', methods=['POST'])"
+      ]
+    },
+    {
+      "file": "App/webapp.py",
+      "line": 11148,
+      "path": "/trades",
+      "methods": [
+        "GET"
+      ],
+      "function": "trades_overview",
+      "decorators": [
+        "app.route('/trades')",
+        "serialized_sqlite_projection"
+      ]
+    },
+    {
+      "file": "App/webapp.py",
+      "line": 11545,
+      "path": "/trades/<int:trade_id>/accept",
+      "methods": [
+        "POST"
+      ],
+      "function": "accept_trade",
+      "decorators": [
+        "app.route('/trades/<int:trade_id>/accept', methods=['POST'])"
+      ]
+    },
+    {
+      "file": "App/webapp.py",
+      "line": 11550,
+      "path": "/trade/<int:trade_id>/confirm",
+      "methods": [
+        "POST"
+      ],
+      "function": "confirm_trade_done",
+      "decorators": [
+        "app.route('/trade/<int:trade_id>/confirm', methods=['POST'])"
+      ]
+    },
+    {
+      "file": "App/webapp.py",
+      "line": 11613,
+      "path": "/trade/<int:trade_id>/fail",
+      "methods": [
+        "POST"
+      ],
+      "function": "fail_trade_done",
+      "decorators": [
+        "app.route('/trade/<int:trade_id>/fail', methods=['POST'])"
+      ]
+    },
+    {
+      "file": "App/webapp.py",
+      "line": 11657,
+      "path": "/trades/<int:trade_id>/decline",
+      "methods": [
+        "POST"
+      ],
+      "function": "decline_trade",
+      "decorators": [
+        "app.route('/trades/<int:trade_id>/decline', methods=['POST'])"
+      ]
+    },
+    {
+      "file": "App/webapp.py",
+      "line": 11664,
+      "path": "/trades/<int:trade_id>/confirm",
+      "methods": [
+        "POST"
+      ],
+      "function": "confirm_trade",
+      "decorators": [
+        "app.route('/trades/<int:trade_id>/confirm', methods=['POST'])"
+      ]
+    },
+    {
+      "file": "App/webapp.py",
+      "line": 11669,
+      "path": "/trades/<int:trade_id>/cancel",
+      "methods": [
+        "POST"
+      ],
+      "function": "cancel_trade",
+      "decorators": [
+        "app.route('/trades/<int:trade_id>/cancel', methods=['POST'])"
+      ]
+    },
+    {
+      "file": "App/webapp.py",
+      "line": 11681,
+      "path": "/notifications",
+      "methods": [
+        "GET",
+        "POST"
+      ],
+      "function": "notifications_page",
+      "decorators": [
+        "app.route('/notifications', methods=['GET', 'POST'])"
+      ]
+    },
+    {
+      "file": "App/webapp.py",
+      "line": 11798,
+      "path": "/notifications/<int:notification_id>/open",
+      "methods": [
+        "POST"
+      ],
+      "function": "open_notification",
+      "decorators": [
+        "app.route('/notifications/<int:notification_id>/open', methods=['POST'])"
+      ]
+    },
+    {
+      "file": "App/webapp.py",
+      "line": 11813,
+      "path": "/notifications/<int:notification_id>/read",
+      "methods": [
+        "POST"
+      ],
+      "function": "mark_notification_read",
+      "decorators": [
+        "app.route('/notifications/<int:notification_id>/read', methods=['POST'])"
+      ]
+    },
+    {
+      "file": "App/webapp.py",
+      "line": 11826,
+      "path": "/album/<album_id>/trophaeen",
+      "methods": [
+        "GET"
+      ],
+      "function": "album_trophaeen",
+      "decorators": [
+        "app.route('/album/<album_id>/trophaeen')"
+      ]
+    },
+    {
+      "file": "App/webapp.py",
+      "line": 11874,
+      "path": "/trophaeen",
+      "methods": [
+        "GET"
+      ],
+      "function": "globale_trophaeen",
+      "decorators": [
+        "app.route('/trophaeen')"
+      ]
+    },
+    {
+      "file": "App/webapp.py",
+      "line": 11890,
+      "path": "/statistik",
+      "methods": [
+        "GET"
+      ],
+      "function": "statistik",
+      "decorators": [
+        "app.route('/statistik')"
+      ]
+    },
+    {
+      "file": "App/webapp.py",
+      "line": 12448,
+      "path": "/profil",
+      "methods": [
+        "GET"
+      ],
+      "function": "profil",
+      "decorators": [
+        "app.route('/profil')",
+        "serialized_sqlite_projection"
+      ]
+    },
+    {
+      "file": "App/webapp.py",
+      "line": 12486,
+      "path": "/profil/sticker/bearbeiten",
+      "methods": [
+        "GET",
+        "POST"
+      ],
+      "function": "profile_sticker_edit",
+      "decorators": [
+        "app.route('/profil/sticker/bearbeiten', methods=['GET', 'POST'])"
+      ]
+    },
+    {
+      "file": "App/webapp.py",
+      "line": 12544,
+      "path": "/profil/sticker/portrait/<filename>",
+      "methods": [
+        "GET"
+      ],
+      "function": "profile_sticker_portrait",
+      "decorators": [
+        "app.route('/profil/sticker/portrait/<filename>')"
+      ]
+    },
+    {
+      "file": "App/webapp.py",
+      "line": 12562,
+      "path": "/profil/<username>/sticker/portrait/<filename>",
+      "methods": [
+        "GET"
+      ],
+      "function": "public_profile_sticker_portrait",
+      "decorators": [
+        "app.route('/profil/<username>/sticker/portrait/<filename>')"
+      ]
+    },
+    {
+      "file": "App/webapp.py",
+      "line": 12589,
+      "path": "/account",
+      "methods": [
+        "GET"
+      ],
+      "function": "account_settings",
+      "decorators": [
+        "app.route('/account')"
+      ]
+    },
+    {
+      "file": "App/webapp.py",
+      "line": 12607,
+      "path": "/profil/<username>",
+      "methods": [
+        "GET"
+      ],
+      "function": "public_profile",
+      "decorators": [
+        "app.route('/profil/<username>')",
+        "serialized_sqlite_projection"
+      ]
+    },
+    {
+      "file": "App/webapp.py",
+      "line": 12625,
+      "path": "/profil/freunde",
+      "methods": [
+        "GET"
+      ],
+      "function": "profile_friends",
+      "decorators": [
+        "app.route('/profil/freunde')"
+      ]
+    },
+    {
+      "file": "App/webapp.py",
+      "line": 12687,
+      "path": "/profil/freunde/anfragen/<int:user_id>",
+      "methods": [
+        "POST"
+      ],
+      "function": "send_friend_request",
+      "decorators": [
+        "app.route('/profil/freunde/anfragen/<int:user_id>', methods=['POST'])"
+      ]
+    },
+    {
+      "file": "App/webapp.py",
+      "line": 12695,
+      "path": "/profil/freunde/anfragen/<int:request_id>/<action>",
+      "methods": [
+        "POST"
+      ],
+      "function": "mutate_friend_request",
+      "decorators": [
+        "app.route('/profil/freunde/anfragen/<int:request_id>/<action>', methods=['POST'])"
+      ]
+    },
+    {
+      "file": "App/webapp.py",
+      "line": 12713,
+      "path": "/profil/freunde/<int:user_id>/remove",
+      "methods": [
+        "POST"
+      ],
+      "function": "remove_friend",
+      "decorators": [
+        "app.route('/profil/freunde/<int:user_id>/remove', methods=['POST'])"
+      ]
+    },
+    {
+      "file": "App/webapp.py",
+      "line": 12722,
+      "path": "/profil/<username>/block",
+      "methods": [
+        "POST"
+      ],
+      "function": "mutate_user_block",
+      "decorators": [
+        "app.route('/profil/<username>/block', methods=['POST'])",
+        "app.route('/profil/<username>/unblock', methods=['POST'])"
+      ]
+    },
+    {
+      "file": "App/webapp.py",
+      "line": 12722,
+      "path": "/profil/<username>/unblock",
+      "methods": [
+        "POST"
+      ],
+      "function": "mutate_user_block",
+      "decorators": [
+        "app.route('/profil/<username>/block', methods=['POST'])",
+        "app.route('/profil/<username>/unblock', methods=['POST'])"
+      ]
+    },
+    {
+      "file": "App/webapp.py",
+      "line": 12766,
+      "path": "/profil/<username>/album/<album_id>",
+      "methods": [
+        "GET"
+      ],
+      "function": "public_profile_album",
+      "decorators": [
+        "app.route('/profil/<username>/album/<album_id>')"
+      ]
+    },
+    {
+      "file": "App/webapp.py",
+      "line": 12854,
+      "path": "/profil/<username>/album/<album_id>/sticker/<path:code>",
+      "methods": [
+        "GET"
+      ],
+      "function": "public_profile_sticker",
+      "decorators": [
+        "app.route('/profil/<username>/album/<album_id>/sticker/<path:code>')"
+      ]
+    },
+    {
+      "file": "App/webapp.py",
+      "line": 12881,
+      "path": "/profil/trade-archiv",
+      "methods": [
+        "GET"
+      ],
+      "function": "profil_trade_archiv",
+      "decorators": [
+        "app.route('/profil/trade-archiv')"
+      ]
+    },
+    {
+      "file": "App/webapp.py",
+      "line": 12898,
+      "path": "/profil/name",
+      "methods": [
+        "GET",
+        "POST"
+      ],
+      "function": "profil_name",
+      "decorators": [
+        "app.route('/profil/name', methods=['GET', 'POST'])"
+      ]
+    },
+    {
+      "file": "App/webapp.py",
+      "line": 12936,
+      "path": "/profil/username",
+      "methods": [
+        "GET",
+        "POST"
+      ],
+      "function": "profil_username",
+      "decorators": [
+        "app.route('/profil/username', methods=['GET', 'POST'])"
+      ]
+    },
+    {
+      "file": "App/webapp.py",
+      "line": 12978,
+      "path": "/profil/password",
+      "methods": [
+        "GET",
+        "POST"
+      ],
+      "function": "profil_password",
+      "decorators": [
+        "app.route('/profil/password', methods=['GET', 'POST'])"
+      ]
+    },
+    {
+      "file": "App/webapp.py",
+      "line": 13036,
+      "path": "/profil/privacy",
+      "methods": [
+        "GET",
+        "POST"
+      ],
+      "function": "profile_privacy_settings",
+      "decorators": [
+        "app.route('/profil/privacy', methods=['GET', 'POST'])"
+      ]
+    },
+    {
+      "file": "App/webapp.py",
+      "line": 13085,
+      "path": "/profil/datenexport",
+      "methods": [
+        "GET",
+        "POST"
+      ],
+      "function": "profile_data_export",
+      "decorators": [
+        "app.route('/profil/datenexport', methods=['GET', 'POST'])"
+      ]
+    },
+    {
+      "file": "App/webapp.py",
+      "line": 13131,
+      "path": "/profil/delete",
+      "methods": [
+        "POST"
+      ],
+      "function": "profil_delete",
+      "decorators": [
+        "app.route('/profil/delete', methods=['POST'])"
+      ]
+    },
+    {
+      "file": "App/webapp.py",
+      "line": 13156,
+      "path": "/profil/deactivate",
+      "methods": [
+        "POST"
+      ],
+      "function": "profil_deactivate",
+      "decorators": [
+        "app.route('/profil/deactivate', methods=['POST'])"
+      ]
+    },
+    {
+      "file": "App/trade_v2/routes.py",
+      "line": 15,
+      "path": "/",
+      "methods": [
+        "GET"
+      ],
+      "function": "home",
+      "decorators": [
+        "preview.get('/')"
+      ]
+    },
+    {
+      "file": "App/trade_v2/routes.py",
+      "line": 20,
+      "path": "/partners",
+      "methods": [
+        "GET"
+      ],
+      "function": "partners",
+      "decorators": [
+        "preview.get('/partners')"
+      ]
+    },
+    {
+      "file": "App/trade_v2/routes.py",
+      "line": 25,
+      "path": "/partners/<slug>",
+      "methods": [
+        "GET"
+      ],
+      "function": "partner",
+      "decorators": [
+        "preview.get('/partners/<slug>')"
+      ]
+    },
+    {
+      "file": "App/trade_v2/routes.py",
+      "line": 33,
+      "path": "/deals/<slug>",
+      "methods": [
+        "GET"
+      ],
+      "function": "top_detail",
+      "decorators": [
+        "preview.get('/deals/<slug>')"
+      ]
+    },
+    {
+      "file": "App/trade_v2/routes.py",
+      "line": 41,
+      "path": "/partners/<slug>/smartdeal",
+      "methods": [
+        "GET"
+      ],
+      "function": "smartdeal",
+      "decorators": [
+        "preview.get('/partners/<slug>/smartdeal')"
+      ]
+    },
+    {
+      "file": "App/trade_v2/routes.py",
+      "line": 49,
+      "path": "/partners/<slug>/manual",
+      "methods": [
+        "GET"
+      ],
+      "function": "manual",
+      "decorators": [
+        "preview.get('/partners/<slug>/manual')"
+      ]
+    },
+    {
+      "file": "App/trade_v2/routes.py",
+      "line": 57,
+      "path": "/requests/<slug>",
+      "methods": [
+        "GET"
+      ],
+      "function": "waiting",
+      "decorators": [
+        "preview.get('/requests/<slug>')"
+      ]
+    },
+    {
+      "file": "App/trade_v2/routes.py",
+      "line": 65,
+      "path": "/requests/<slug>/next",
+      "methods": [
+        "GET"
+      ],
+      "function": "next_step",
+      "decorators": [
+        "preview.get('/requests/<slug>/next')"
+      ]
+    },
+    {
+      "file": "App/trade_v2/routes.py",
+      "line": 73,
+      "path": "/requests/<slug>/amendment",
+      "methods": [
+        "GET"
+      ],
+      "function": "amendment",
+      "decorators": [
+        "preview.get('/requests/<slug>/amendment')"
+      ]
+    },
+    {
+      "file": "App/trade_v2/routes.py",
+      "line": 81,
+      "path": "/requests/<slug>/shipping",
+      "methods": [
+        "GET"
+      ],
+      "function": "shipping",
+      "decorators": [
+        "preview.get('/requests/<slug>/shipping')"
+      ]
+    },
+    {
+      "file": "App/trade_v2/routes.py",
+      "line": 89,
+      "path": "/requests/<slug>/receipt",
+      "methods": [
+        "GET"
+      ],
+      "function": "receipt",
+      "decorators": [
+        "preview.get('/requests/<slug>/receipt')"
+      ]
+    },
+    {
+      "file": "App/trade_v2/routes.py",
+      "line": 97,
+      "path": "/active",
+      "methods": [
+        "GET"
+      ],
+      "function": "active",
+      "decorators": [
+        "preview.get('/active')"
+      ]
+    },
+    {
+      "file": "App/trade_v2/routes.py",
+      "line": 109,
+      "path": "/partners/<slug>/manual/review",
+      "methods": [
+        "GET"
+      ],
+      "function": "manual_review",
+      "decorators": [
+        "preview.get('/partners/<slug>/manual/review')"
+      ]
+    },
+    {
+      "file": "App/sticker_list.py",
+      "line": 381,
+      "path": "/album/<album_id>/liste",
+      "methods": [
+        "GET"
+      ],
+      "registration": "add_url_rule"
+    },
+    {
+      "file": "App/sticker_list.py",
+      "line": 386,
+      "path": "/album/<album_id>/stickerliste",
+      "methods": [
+        "GET"
+      ],
+      "registration": "add_url_rule"
+    },
+    {
+      "file": "App/sticker_list.py",
+      "line": 391,
+      "path": "/album/<album_id>/liste/trade",
+      "methods": [
+        "POST"
+      ],
+      "registration": "add_url_rule"
+    },
+    {
+      "file": "App/sticker_list.py",
+      "line": 397,
+      "path": "/album/<album_id>/stickerliste/trade",
+      "methods": [
+        "POST"
+      ],
+      "registration": "add_url_rule"
+    }
+  ],
+  "note": "Static AST extraction; webapp not imported. Blueprint trade_v2 adds /trade-v2. Production auth also enforced by before_request. Future authorization matrix is in integration map.; ergänzt um vier add_url_rule-Registrierungen der Stickerliste. Automatische Flask-static/HEAD/OPTIONS nicht als fachliche Routes gezählt.",
+  "trade_v2_authorization": [
+    {
+      "path": "/trade-v2/",
+      "current": "GET-only, unauthenticated fixture app; commands in browser session",
+      "future_read": "Authentifiziert; Privacy, Account/Block, Album-Eligibility prüfen",
+      "future_write": "Keine Mutation durch GET; eigener autorisierter Submit separat",
+      "url_role_is_authority": false
+    },
+    {
+      "path": "/trade-v2/partners",
+      "current": "GET-only, unauthenticated fixture app; commands in browser session",
+      "future_read": "Authentifiziert; Privacy, Account/Block, Album-Eligibility prüfen",
+      "future_write": "Keine Mutation durch GET; eigener autorisierter Submit separat",
+      "url_role_is_authority": false
+    },
+    {
+      "path": "/trade-v2/partners/<slug>",
+      "current": "GET-only, unauthenticated fixture app; commands in browser session",
+      "future_read": "Authentifiziert; Privacy, Account/Block, Album-Eligibility prüfen",
+      "future_write": "Keine Mutation durch GET; eigener autorisierter Submit separat",
+      "url_role_is_authority": false
+    },
+    {
+      "path": "/trade-v2/deals/<slug>",
+      "current": "GET-only, unauthenticated fixture app; commands in browser session",
+      "future_read": "Authentifiziert; Privacy, Account/Block, Album-Eligibility prüfen",
+      "future_write": "Keine Mutation durch GET; eigener autorisierter Submit separat",
+      "url_role_is_authority": false
+    },
+    {
+      "path": "/trade-v2/partners/<slug>/smartdeal",
+      "current": "GET-only, unauthenticated fixture app; commands in browser session",
+      "future_read": "Authentifiziert; Privacy, Account/Block, Album-Eligibility prüfen",
+      "future_write": "Keine Mutation durch GET; eigener autorisierter Submit separat",
+      "url_role_is_authority": false
+    },
+    {
+      "path": "/trade-v2/partners/<slug>/manual",
+      "current": "GET-only, unauthenticated fixture app; commands in browser session",
+      "future_read": "Authentifiziert; Privacy, Account/Block, Album-Eligibility prüfen",
+      "future_write": "Nur eigener unverbindlicher Draft",
+      "url_role_is_authority": false
+    },
+    {
+      "path": "/trade-v2/requests/<slug>",
+      "current": "GET-only, unauthenticated fixture app; commands in browser session",
+      "future_read": "Nur authentifizierte Teilnehmer des konkreten Trades",
+      "future_write": "Absender Withdraw, Empfänger Accept/Decline; Serverzeit",
+      "url_role_is_authority": false
+    },
+    {
+      "path": "/trade-v2/requests/<slug>/next",
+      "current": "GET-only, unauthenticated fixture app; commands in browser session",
+      "future_read": "Nur authentifizierte Teilnehmer des konkreten Trades",
+      "future_write": "Nur eigene Packrichtung, aktuelle Paketversion",
+      "url_role_is_authority": false
+    },
+    {
+      "path": "/trade-v2/requests/<slug>/amendment",
+      "current": "GET-only, unauthenticated fixture app; commands in browser session",
+      "future_read": "Nur authentifizierte Teilnehmer des konkreten Trades",
+      "future_write": "Berechtigter Melder schlägt vor, erforderliche Gegenseite stimmt exakt dieser Version zu",
+      "url_role_is_authority": false
+    },
+    {
+      "path": "/trade-v2/requests/<slug>/shipping",
+      "current": "GET-only, unauthenticated fixture app; commands in browser session",
+      "future_read": "Nur authentifizierte Teilnehmer des konkreten Trades",
+      "future_write": "Nur eigene Adresse freigeben und eigenen Versand bestätigen; Partner liest freigegebene notwendige Adresse",
+      "url_role_is_authority": false
+    },
+    {
+      "path": "/trade-v2/requests/<slug>/receipt",
+      "current": "GET-only, unauthenticated fixture app; commands in browser session",
+      "future_read": "Nur authentifizierte Teilnehmer des konkreten Trades",
+      "future_write": "Nur eigene Empfangsrichtung/Problemmeldung/Bewertung; Lösung gemäß bestätigter Rollenfreigabe",
+      "url_role_is_authority": false
+    },
+    {
+      "path": "/trade-v2/active",
+      "current": "GET-only, unauthenticated fixture app; commands in browser session",
+      "future_read": "Nur eigene laufende Vorgänge",
+      "future_write": "Keine Mutation durch GET; eigener autorisierter Submit separat",
+      "url_role_is_authority": false
+    },
+    {
+      "path": "/trade-v2/partners/<slug>/manual/review",
+      "current": "GET-only, unauthenticated fixture app; commands in browser session",
+      "future_read": "Authentifiziert; Privacy, Account/Block, Album-Eligibility prüfen",
+      "future_write": "Nur eigener Draft; Submit atomar neu validieren",
+      "url_role_is_authority": false
+    }
+  ]
+}

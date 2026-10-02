@@ -1,0 +1,75 @@
+{
+  "version": 1,
+  "historical": {
+    "tests.test_ceoklaue_analog_ui_final_import.CEOKlaueAnalogUIFinalImportTests.test_seven_new_originals_are_byte_exact_archived_and_documented": {
+      "reason": "Historical provenance of seven original JPEGs: exact SHA/format/dimensions; synthetic images cannot establish identity of these GPS-tagged originals.",
+      "release_contracts": []
+    },
+    "tests.test_ceoklaue_analog_ui_final_import.CEOKlaueAnalogUIFinalImportTests.test_import_is_idempotent_and_product_scope_is_locked": {
+      "reason": "Original handwritten-drop reimport idempotence; current product policy assertions remain independently executed.",
+      "release_contracts": [
+        "tests.test_r5_release_contracts.ReleaseAssetContracts.test_product_master_and_import_policy_checks_remain_in_release_gate"
+      ]
+    },
+    "tests.test_ceoklaue_final_mini_reselection.CEOKlaueFinalMiniImportTests.test_only_two_new_originals_are_byte_exact_archived_images": {
+      "reason": "Historical exact-photo archive hashes and camera image dimensions, not an application input contract.",
+      "release_contracts": []
+    },
+    "tests.test_ceoklaue_final_mini_reselection.CEOKlaueFinalMiniImportTests.test_importer_is_idempotent_and_product_assets_are_out_of_scope": {
+      "reason": "Historical original-photo extraction rerun; product-scope flags remain in the release gate.",
+      "release_contracts": [
+        "tests.test_r5_release_contracts.ReleaseAssetContracts.test_product_master_and_import_policy_checks_remain_in_release_gate"
+      ]
+    },
+    "tests.test_ceoklaue_final_reselection.CEOKlaueFinalReselectionImportTests.test_two_new_originals_are_exact_archived_jpegs": {
+      "reason": "Original-artwork provenance check requiring the excluded GPS-bearing originals byte-for-byte.",
+      "release_contracts": []
+    },
+    "tests.test_ceoklaue_final_reselection.CEOKlaueFinalReselectionImportTests.test_importer_is_idempotent_and_final_master_references_it_without_mutation": {
+      "reason": "Historical source reimport; runtime/harmony linkage and nonmutation policy remain separately protected.",
+      "release_contracts": [
+        "tests.test_r5_release_contracts.ReleaseAssetContracts.test_product_master_and_import_policy_checks_remain_in_release_gate"
+      ]
+    },
+    "tests.test_ceoklaue_workbench.CEOKlaueFinalControlPageTests.test_button_import_is_idempotent": {
+      "reason": "Original photo extraction/archive rerun; current five real pairs and runtime output hashes remain covered by existing release tests.",
+      "release_contracts": [
+        "tests.test_ceoklaue_workbench.CEOKlaueFinalControlPageTests.test_button_source_and_all_five_real_pairs_are_integral"
+      ]
+    },
+    "tests.test_ceoklaue_sticker_list.CEOKlaueStickerListTests.test_runtime_builder_is_reproducible": {
+      "reason": "Full original-connected-wordmark revectorization requires its private GPS photo. Font/marker rebuilds and current wordmark artifact integrity remain release-relevant and are executed independently.",
+      "release_contracts": [
+        "tests.test_r5_release_contracts.ReleaseAssetContracts.test_runtime_fonts_and_markers_rebuild_from_safe_derived_glyphs",
+        "tests.test_r5_release_contracts.ReleaseAssetContracts.test_current_manifest_asset_hashes_do_not_depend_on_any_database_hash"
+      ]
+    },
+    "tests.test_s31_ui_foundation.UiFoundationTestCase.test_reference_screen_manifest_is_complete": {
+      "reason": "Checks only filenames/count/byte-size of seven historical developer screenshots. It performs no layout or rendering assertion. Existing UI/route tests remain in release gate.",
+      "release_contracts": []
+    }
+  },
+  "baseline": {
+    "tests.test_ceoklaue_analog_ui_final_import.CEOKlaueAnalogUIFinalImportTests.test_database_is_unchanged_and_final_master_shape_is_preserved": {
+      "reason": "Frozen historical local DB byte hash cannot identify a fresh synthetic DB. The exact following master/marker assertions are preserved as a separate release method.",
+      "release_contracts": [
+        "tests.test_ceoklaue_analog_ui_final_import.CEOKlaueAnalogUIFinalImportTests.test_release_master_shape_and_marker_hashes",
+        "tests.test_r5_release_contracts.ReleaseAssetContracts.test_current_manifest_asset_hashes_do_not_depend_on_any_database_hash",
+        "tests.test_r5_release_bootstrap.ReleaseBootstrapTests.test_empty_database_reaches_v20_without_users_and_rejects_reuse"
+      ]
+    },
+    "tests.test_s24_notification_history_navigation.NotificationHistoryNavigationTestCase.test_more_than_twenty_five_paginates_newest_first": {
+      "reason": "Fixed August 2026 timestamps age past read-notification retention. First POST marks 25 read; second POST expires those 25, so the expected previous-page link no longer exists. Current two-way pagination and exact retention behavior are independently verified.",
+      "release_contracts": [
+        "tests.test_r5_release_contracts.ReleaseRuntimeContracts.test_current_notifications_paginate_both_ways_without_retention_loss",
+        "tests.test_r5_release_contracts.ReleaseRuntimeContracts.test_old_read_notifications_expire_between_two_page_opens"
+      ]
+    },
+    "tests.test_s38_release_candidate.ReleaseCandidateGateTestCase.test_realistic_v0007_copy_is_backed_up_then_upgraded_to_latest": {
+      "reason": "Assumes the application DB is V7, while the declared runtime is V20. Explicit synthetic V7 backup and upgrade to V20 is independently executed.",
+      "release_contracts": [
+        "tests.test_r5_release_contracts.ReleaseRuntimeContracts.test_synthetic_v7_backup_upgrade_reaches_v20_and_preserves_source_backup"
+      ]
+    }
+  }
+}

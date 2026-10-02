@@ -1,0 +1,10 @@
+/* Yellow note geometry is reused read-only from /static/pax/shipping.css. */
+.trade-shipping-panel{line-height:1.6}
+.trade-shipping-panel h2{font-size:24px;line-height:1.2;letter-spacing:-.5px}
+.trade-shipping-panel>.action{margin-top:12px}
+.trade-shipping-panel label{display:block;font-size:13px;margin:20px 0 8px}
+.trade-shipping-panel .pax-address-note .eyebrow{font-size:11px}
+.trade-shipping-panel #ship-details{margin:24px 0}
+.trade-shipping-panel #ship-details summary{padding:12px 0;cursor:pointer}
+.trade-shipping-panel #ship-details address{font:inherit;white-space:pre-line;overflow-wrap:anywhere}
+#ship-dev{font-size:11px;white-space:pre-wrap;overflow-wrap:anywhere}

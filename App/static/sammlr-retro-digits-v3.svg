@@ -1,0 +1,40 @@
+<svg xmlns="http://www.w3.org/2000/svg">
+  <title>Sammlr Retro-Ziffern 0–9 · Entwurf 03</title>
+  <metadata>
+    Typografischer Feinpass auf Entwurf 02. Ausschließlich die Ziffern 1, 4
+    und 7 wurden optisch entlastet; alle übrigen Pfade sind unverändert aus
+    Entwurf 02 übernommen. Keine Fremdglyphen oder automatische Vektorisierung.
+  </metadata>
+  <defs>
+    <symbol id="sammlr-digit-v3-0" viewBox="0 0 68 104">
+      <path fill-rule="evenodd" d="M11 2H48L59 13V84L50 96H12L2 84V14ZM21 18L18 22V77L21 81H39L43 76V22L40 18Z"/>
+    </symbol>
+    <symbol id="sammlr-digit-v3-1" viewBox="0 0 68 104">
+      <path d="M7 25L24 2H44V78L55 85V96H7V82L15 78H23V29H7Z"/>
+    </symbol>
+    <symbol id="sammlr-digit-v3-2" viewBox="0 0 68 104">
+      <path d="M3 14L14 2H48L59 13V38L18 79H59V96H2V75L42 34V20H21V32H3Z"/>
+    </symbol>
+    <symbol id="sammlr-digit-v3-3" viewBox="0 0 68 104">
+      <path d="M3 2H47L59 13V39L50 48L59 57V84L48 96H3V79H39L43 75V60L38 56H18V40H38L43 35V20H3Z"/>
+    </symbol>
+    <symbol id="sammlr-digit-v3-4" viewBox="0 0 68 104">
+      <path fill-rule="evenodd" d="M35 2H52V58H60V75H52V96H33V75H3V58L30 2ZM33 25L16 58H33Z"/>
+    </symbol>
+    <symbol id="sammlr-digit-v3-5" viewBox="0 0 68 104">
+      <path d="M3 2H59V20H21V39H47L59 51V84L47 96H3V79H39L43 75V59L39 55H3Z"/>
+    </symbol>
+    <symbol id="sammlr-digit-v3-6" viewBox="0 0 68 104">
+      <path fill-rule="evenodd" d="M14 2H55V20H23L20 23V39H47L59 51V84L47 96H13L2 84V15ZM20 56V76L24 80H39L43 76V60L39 56Z"/>
+    </symbol>
+    <symbol id="sammlr-digit-v3-7" viewBox="0 0 68 104">
+      <path d="M2 2H60V20L31 96H13L41 21H2Z"/>
+    </symbol>
+    <symbol id="sammlr-digit-v3-8" viewBox="0 0 68 104">
+      <path fill-rule="evenodd" d="M12 2H49L59 13V38L51 48L59 58V84L48 96H12L2 84V58L10 48L2 38V14ZM20 18V39H41V18ZM19 57V80H42V57Z"/>
+    </symbol>
+    <symbol id="sammlr-digit-v3-9" viewBox="0 0 68 104">
+      <path fill-rule="evenodd" d="M13 2H48L59 14V82L47 96H5V78H38L42 74V60H13L2 49V14ZM20 18V42H41V18Z"/>
+    </symbol>
+  </defs>
+</svg>

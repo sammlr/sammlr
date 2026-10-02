@@ -1,0 +1,36 @@
+{
+  "changed": [
+    "App/pax/routes.py",
+    "App/static/pax/pax.js",
+    "App/static/pax/pax.css",
+    "tests/test_pax_preview.py",
+    "tests/research/check_pax_04b.py",
+    "tests/research/check_pax_component_parity.py"
+  ],
+  "new": [
+    "App/pax/layer_comparison.html",
+    "docs/PAX_04C_AUDIT.md",
+    "tests/research/artifacts/pax-04c/01-discovery-375.png",
+    "tests/research/artifacts/pax-04c/01-discovery-390.png",
+    "tests/research/artifacts/pax-04c/01-discovery-430.png",
+    "tests/research/artifacts/pax-04c/03-large-receive-390.png",
+    "tests/research/artifacts/pax-04c/04-fatima-receive-390.png",
+    "tests/research/artifacts/pax-04c/05-album-fan-390.png",
+    "tests/research/artifacts/pax-04c/06-give-albums-390.png",
+    "tests/research/artifacts/pax-04c/07-continuation-16-20-rest-390.png",
+    "tests/research/artifacts/pax-04c/08-cta-390.png",
+    "tests/research/artifacts/pax-04c/checks.json",
+    "tests/research/artifacts/pax-04c/index.html",
+    "tests/research/artifacts/pax-04c/layer-comparison-375.png",
+    "tests/research/artifacts/pax-04c/layer-comparison-390.png",
+    "tests/research/artifacts/pax-04c/layer-comparison-430.png",
+    "tests/research/artifacts/pax-04c/scope-check.json",
+    "tests/research/check_pax_04c.py"
+  ],
+  "protected_files_byte_unchanged": true,
+  "discovery_pixel_identical": [
+    375,
+    390,
+    430
+  ]
+}

@@ -1,0 +1,9 @@
+.trade-packing .pax-give{padding-top:0}
+.trade-packing .pack-progress{font-size:14px;text-align:center;margin:18px 0 26px;line-height:1.6}
+.trade-packing .secondary-receive{margin:12px 0 0}
+.trade-packing .secondary-receive>summary{padding:16px 0;font-size:12px;cursor:pointer;color:var(--pj-muted)}
+.trade-packing .secondary-receive[open]>.pax-receive{margin-top:20px}
+.trade-packing .secondary-receive>summary:focus-visible{outline:2px solid #54247b;outline-offset:2px}
+#pack-missing-list{padding-left:20px;font-size:13px;line-height:1.7;margin:24px 0;overflow-wrap:anywhere}
+#pack-dev{white-space:pre-wrap;overflow-wrap:anywhere;font-size:11px}
+.pack-actions{display:grid;gap:12px;margin:24px 0}

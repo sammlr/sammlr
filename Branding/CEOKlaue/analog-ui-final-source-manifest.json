@@ -1,0 +1,1642 @@
+{
+  "version": "CEOKlaue analog UI final source import v1",
+  "drop": "analog_ui_final",
+  "policy": {
+    "append_only": true,
+    "automatic_selection": false,
+    "product_integration": false,
+    "accepted_82x3_masterset_changed": false,
+    "harmony_changed": false,
+    "runtime_changed": false,
+    "sticker_list_changed": false,
+    "sticker_wall_changed": false,
+    "product_assets_written": []
+  },
+  "sources": [
+    {
+      "key": "analog_sheet",
+      "filename": "ceoklaue_analog_ui_final_01.jpg",
+      "original_filename": "IMG_7178.JPG",
+      "format": "JPEG",
+      "pixel_dimensions": [
+        4032,
+        3024
+      ],
+      "oriented_dimensions": [
+        3024,
+        4032
+      ],
+      "sha256": "499da63b20d435d1cb15aa0537d269add64e597854dc3820a5b41b971fcb2ed9"
+    },
+    {
+      "key": "u_detail",
+      "filename": "ceoklaue_analog_ui_final_02.jpg",
+      "original_filename": "IMG_7179.JPG",
+      "format": "JPEG",
+      "pixel_dimensions": [
+        4032,
+        3024
+      ],
+      "oriented_dimensions": [
+        3024,
+        4032
+      ],
+      "sha256": "c1953532155354337422769f81489e0b89f7ee3d432ecc10ce437b20aa311efc"
+    },
+    {
+      "key": "wordmark_sheet",
+      "filename": "ceoklaue_analog_ui_final_03.jpg",
+      "original_filename": "IMG_7180.JPG",
+      "format": "JPEG",
+      "pixel_dimensions": [
+        4032,
+        3024
+      ],
+      "oriented_dimensions": [
+        3024,
+        4032
+      ],
+      "sha256": "06bd6f9fb4907d61ef99ed3e561ac14a20aa9049f61b45cf4bec2352c578c958"
+    },
+    {
+      "key": "wordmark_detail",
+      "filename": "ceoklaue_analog_ui_final_04.jpg",
+      "original_filename": "IMG_7181.JPG",
+      "format": "JPEG",
+      "pixel_dimensions": [
+        4032,
+        3024
+      ],
+      "oriented_dimensions": [
+        3024,
+        4032
+      ],
+      "sha256": "33ee48f38b5a658a20f4d9582d14103892bc9794dc3da44a6675bd533eee96e5"
+    },
+    {
+      "key": "phrases_sheet",
+      "filename": "ceoklaue_analog_ui_final_05.jpg",
+      "original_filename": "IMG_7182.JPG",
+      "format": "JPEG",
+      "pixel_dimensions": [
+        4032,
+        3024
+      ],
+      "oriented_dimensions": [
+        3024,
+        4032
+      ],
+      "sha256": "47067a154ecc82b47e36379205dccd61e1cdeac512d0150c12c57acb64a2f754"
+    },
+    {
+      "key": "underlines_detail",
+      "filename": "ceoklaue_analog_ui_final_06.jpg",
+      "original_filename": "IMG_7183.JPG",
+      "format": "JPEG",
+      "pixel_dimensions": [
+        4032,
+        3024
+      ],
+      "oriented_dimensions": [
+        3024,
+        4032
+      ],
+      "sha256": "44686d072d1b32bf3e340c6c50cbbbc461c8facb90d79762201bc8890ff971fd"
+    },
+    {
+      "key": "boxes_lines_detail",
+      "filename": "ceoklaue_analog_ui_final_07.jpg",
+      "original_filename": "IMG_7184.JPG",
+      "format": "JPEG",
+      "pixel_dimensions": [
+        4032,
+        3024
+      ],
+      "oriented_dimensions": [
+        3024,
+        4032
+      ],
+      "sha256": "a99cc75dadf25c57e7437621d34ecd05245ce58539db66d5176d77f72cb73f19"
+    }
+  ],
+  "extraction": {
+    "exif_orientation_applied_in_memory": true,
+    "threshold": 100,
+    "safe_transparent_margin_pixels": 8,
+    "physical_marks_deduplicated_across_detail_photos": true,
+    "geometry_correction": false,
+    "synthetic_assets": false
+  },
+  "preexisting_glyph_inventory": {
+    "png_count": 628,
+    "svg_count": 628,
+    "sha256": "aa666dfd0ad8d5bc85a9ede51ed0b5b02f285f6d26d10e054745b87a0338796c"
+  },
+  "selection_groups": [
+    {
+      "selection_key": "u",
+      "asset_key": "lower_u",
+      "source": "ceoklaue_analog_ui_final_02.jpg",
+      "required_selection": {
+        "min": 3,
+        "max": 3
+      },
+      "new_variant_ids": [
+        "06",
+        "07",
+        "08",
+        "09",
+        "10"
+      ],
+      "outputs": [
+        {
+          "mask_dimensions": [
+            163,
+            239
+          ],
+          "id": "06",
+          "source_region_id": "lower_u-01",
+          "oriented_crop": [
+            320,
+            1330,
+            590,
+            1700
+          ],
+          "png": {
+            "path": "01_extracted/glyphs/lower_u/lower_u_06.png",
+            "sha256": "19d0aeae1b28681e8cec678a961a58686cea21e3f8263b8ec3c78d5c8f59a227"
+          },
+          "svg": {
+            "path": "02_vectors/glyphs/lower_u/lower_u_06.svg",
+            "sha256": "7ee9a789650e7c49943574cb79394423c1f6df19367629134fcc53c45101b618"
+          }
+        },
+        {
+          "mask_dimensions": [
+            174,
+            229
+          ],
+          "id": "07",
+          "source_region_id": "lower_u-02",
+          "oriented_crop": [
+            700,
+            1330,
+            1000,
+            1700
+          ],
+          "png": {
+            "path": "01_extracted/glyphs/lower_u/lower_u_07.png",
+            "sha256": "fe2105324a63234e6e3000bc048e8e161d59fd83a0823f4a95e25e590c4fb374"
+          },
+          "svg": {
+            "path": "02_vectors/glyphs/lower_u/lower_u_07.svg",
+            "sha256": "b3d8fce898ce1886356079543e1e2c8441fe6d347c83fc4c107a930fa313e0e2"
+          }
+        },
+        {
+          "mask_dimensions": [
+            166,
+            212
+          ],
+          "id": "08",
+          "source_region_id": "lower_u-03",
+          "oriented_crop": [
+            1120,
+            1330,
+            1400,
+            1700
+          ],
+          "png": {
+            "path": "01_extracted/glyphs/lower_u/lower_u_08.png",
+            "sha256": "379c4e83623cff9cea5f51124a7b8c534c48eeeee89a7819a1cbef6eb3198fad"
+          },
+          "svg": {
+            "path": "02_vectors/glyphs/lower_u/lower_u_08.svg",
+            "sha256": "b8fcb151422de0c5749cee597b998859a860e3ad515a40727d2f2daf09c43cff"
+          }
+        },
+        {
+          "mask_dimensions": [
+            179,
+            200
+          ],
+          "id": "09",
+          "source_region_id": "lower_u-04",
+          "oriented_crop": [
+            1570,
+            1330,
+            1850,
+            1700
+          ],
+          "png": {
+            "path": "01_extracted/glyphs/lower_u/lower_u_09.png",
+            "sha256": "9cc1d98cb11081089b4b9276626326ab8a17236f8cfca1229083d3471bbc77d8"
+          },
+          "svg": {
+            "path": "02_vectors/glyphs/lower_u/lower_u_09.svg",
+            "sha256": "928ef6a73445a3e3fa72a759d2160bbb14826350b039168ad99f40577c295eaf"
+          }
+        },
+        {
+          "mask_dimensions": [
+            168,
+            213
+          ],
+          "id": "10",
+          "source_region_id": "lower_u-05",
+          "oriented_crop": [
+            1980,
+            1330,
+            2250,
+            1700
+          ],
+          "png": {
+            "path": "01_extracted/glyphs/lower_u/lower_u_10.png",
+            "sha256": "ede30b14d4777bacb7adcc5f5c419712a1f3fec2c913b8e18eb6e5bdb4ee6165"
+          },
+          "svg": {
+            "path": "02_vectors/glyphs/lower_u/lower_u_10.svg",
+            "sha256": "802ed0f65eebd8d5f33fee59f0f2079589c063862877ec99afa8aca2f9400ab4"
+          }
+        }
+      ]
+    },
+    {
+      "selection_key": "A",
+      "asset_key": "cap_A",
+      "source": "ceoklaue_analog_ui_final_01.jpg",
+      "required_selection": {
+        "min": 3,
+        "max": 3
+      },
+      "new_variant_ids": [
+        "06",
+        "07",
+        "08",
+        "09",
+        "10"
+      ],
+      "outputs": [
+        {
+          "mask_dimensions": [
+            173,
+            232
+          ],
+          "id": "06",
+          "source_region_id": "cap_A-01",
+          "oriented_crop": [
+            330,
+            2630,
+            590,
+            2980
+          ],
+          "png": {
+            "path": "01_extracted/glyphs/cap_A/cap_A_06.png",
+            "sha256": "33a666c040c9864e08bc10308f23b511a6ee71ace7c01761f45e9f9bb4544f59"
+          },
+          "svg": {
+            "path": "02_vectors/glyphs/cap_A/cap_A_06.svg",
+            "sha256": "5c645b11a3743b1d613325d5f96f14d90de49968b427fcf1e185fba145324f47"
+          }
+        },
+        {
+          "mask_dimensions": [
+            144,
+            197
+          ],
+          "id": "07",
+          "source_region_id": "cap_A-02",
+          "oriented_crop": [
+            620,
+            2630,
+            840,
+            2980
+          ],
+          "png": {
+            "path": "01_extracted/glyphs/cap_A/cap_A_07.png",
+            "sha256": "2e46da784f93d2b6c2ebd4873d5905b61de7a09c05c07a3d2b18483ec106b834"
+          },
+          "svg": {
+            "path": "02_vectors/glyphs/cap_A/cap_A_07.svg",
+            "sha256": "cb32d0559e4f9fb56af500c52b0989a8c420493f5e96bff5365c2eb81567f3ec"
+          }
+        },
+        {
+          "mask_dimensions": [
+            144,
+            196
+          ],
+          "id": "08",
+          "source_region_id": "cap_A-03",
+          "oriented_crop": [
+            850,
+            2630,
+            1080,
+            2980
+          ],
+          "png": {
+            "path": "01_extracted/glyphs/cap_A/cap_A_08.png",
+            "sha256": "7719299b5c63a4b3fbb2ebce42a6fbe80679fc41cfa96f8de36d27cd5d33b6b7"
+          },
+          "svg": {
+            "path": "02_vectors/glyphs/cap_A/cap_A_08.svg",
+            "sha256": "71605713afe2af3afb80c06981b747fe27de971adee368fddc96274feaa95b7f"
+          }
+        },
+        {
+          "mask_dimensions": [
+            157,
+            210
+          ],
+          "id": "09",
+          "source_region_id": "cap_A-04",
+          "oriented_crop": [
+            1090,
+            2630,
+            1360,
+            2980
+          ],
+          "png": {
+            "path": "01_extracted/glyphs/cap_A/cap_A_09.png",
+            "sha256": "256030f81b49896ce1f9953b796390b865056e0e530679c356a5de614c9898ba"
+          },
+          "svg": {
+            "path": "02_vectors/glyphs/cap_A/cap_A_09.svg",
+            "sha256": "5de9e192353bd4b2d2b3a2097280cc564ff5f4030ffdae5c3f08cbb58b3ee7f3"
+          }
+        },
+        {
+          "mask_dimensions": [
+            186,
+            246
+          ],
+          "id": "10",
+          "source_region_id": "cap_A-05",
+          "oriented_crop": [
+            1380,
+            2630,
+            1700,
+            2980
+          ],
+          "png": {
+            "path": "01_extracted/glyphs/cap_A/cap_A_10.png",
+            "sha256": "cfdd21f6db7fbf0c72c8e2b093126d197a9fc0ed5f8d0fb15b4386c494c9f949"
+          },
+          "svg": {
+            "path": "02_vectors/glyphs/cap_A/cap_A_10.svg",
+            "sha256": "d531f45f84a58de93435cc0ed9261769072d2685838dc7b70bcc90c65af81886"
+          }
+        }
+      ]
+    },
+    {
+      "selection_key": ",",
+      "asset_key": "comma",
+      "source": "ceoklaue_analog_ui_final_01.jpg",
+      "required_selection": {
+        "min": 3,
+        "max": 3
+      },
+      "new_variant_ids": [
+        "06",
+        "07",
+        "08",
+        "09",
+        "10"
+      ],
+      "outputs": [
+        {
+          "mask_dimensions": [
+            56,
+            119
+          ],
+          "id": "06",
+          "source_region_id": "comma-01",
+          "oriented_crop": [
+            500,
+            1240,
+            650,
+            1460
+          ],
+          "png": {
+            "path": "01_extracted/glyphs/comma/comma_06.png",
+            "sha256": "42989b3603e4ed32c772c224f089dbcf9ce4c6ed68a84b63741b75f9fa8e4e0c"
+          },
+          "svg": {
+            "path": "02_vectors/glyphs/comma/comma_06.svg",
+            "sha256": "643877fc58bee74148f7fdeb6dfbb9ab02ad6a57a73b9c8dbee820e158bd0e5d"
+          }
+        },
+        {
+          "mask_dimensions": [
+            49,
+            113
+          ],
+          "id": "07",
+          "source_region_id": "comma-02",
+          "oriented_crop": [
+            810,
+            1240,
+            950,
+            1460
+          ],
+          "png": {
+            "path": "01_extracted/glyphs/comma/comma_07.png",
+            "sha256": "ff587c8ede3ef8ca71015e25c266cb51d1a7541ab8257a0983a70c550e0fa5c9"
+          },
+          "svg": {
+            "path": "02_vectors/glyphs/comma/comma_07.svg",
+            "sha256": "ea2f1d51894e0773aad7bb215c92cc053c254f418719986c46f581edde0ea050"
+          }
+        },
+        {
+          "mask_dimensions": [
+            59,
+            111
+          ],
+          "id": "08",
+          "source_region_id": "comma-03",
+          "oriented_crop": [
+            1130,
+            1240,
+            1280,
+            1460
+          ],
+          "png": {
+            "path": "01_extracted/glyphs/comma/comma_08.png",
+            "sha256": "2c327c5d9f13ccf85bb36cd8c33847cbdb13ed745904bf1fd0e360bd74e1d815"
+          },
+          "svg": {
+            "path": "02_vectors/glyphs/comma/comma_08.svg",
+            "sha256": "7c08871d4c2bf278298fe53f3a71458f0dbe503bdf88ff8c426e0e1b589c6be5"
+          }
+        },
+        {
+          "mask_dimensions": [
+            64,
+            113
+          ],
+          "id": "09",
+          "source_region_id": "comma-04",
+          "oriented_crop": [
+            1440,
+            1240,
+            1600,
+            1460
+          ],
+          "png": {
+            "path": "01_extracted/glyphs/comma/comma_09.png",
+            "sha256": "7536eb75d6cbb543c908383a7cae30419b4ec9169a8dcd7d4c8694f6cd25b45a"
+          },
+          "svg": {
+            "path": "02_vectors/glyphs/comma/comma_09.svg",
+            "sha256": "891c6edd733d662dbf606a943accfa61e12a715824caefcc7b47da497cd00dac"
+          }
+        },
+        {
+          "mask_dimensions": [
+            68,
+            121
+          ],
+          "id": "10",
+          "source_region_id": "comma-05",
+          "oriented_crop": [
+            1750,
+            1240,
+            1930,
+            1460
+          ],
+          "png": {
+            "path": "01_extracted/glyphs/comma/comma_10.png",
+            "sha256": "4838ce4269a618db50965e7d6db8afc11efbd45610067d41f082f7a0f00d504e"
+          },
+          "svg": {
+            "path": "02_vectors/glyphs/comma/comma_10.svg",
+            "sha256": "b2412f7cf0fac698d695e6ca83b414f7ade3d6b7405bb972e156072ba283c2b0"
+          }
+        }
+      ]
+    },
+    {
+      "asset_key": "middle_dot",
+      "source": "ceoklaue_analog_ui_final_01.jpg",
+      "outputs": [
+        {
+          "mask_dimensions": [
+            59,
+            58
+          ],
+          "id": "01",
+          "source_region_id": "middle_dot-01",
+          "oriented_crop": [
+            500,
+            1600,
+            650,
+            1790
+          ],
+          "png": {
+            "path": "01_extracted/analog_ui_final/middle_dot/middle_dot_01.png",
+            "sha256": "bc2d66ae32e57403a3b0ceeb54193c5251c067907e178fa1c919b2fd88edd697"
+          },
+          "svg": {
+            "path": "02_vectors/analog_ui_final/middle_dot/middle_dot_01.svg",
+            "sha256": "051a8672b310e25f13029cb24239585efac4e5c3ec6c2e4cfbfbdeaa0791b557"
+          }
+        },
+        {
+          "mask_dimensions": [
+            59,
+            69
+          ],
+          "id": "02",
+          "source_region_id": "middle_dot-02",
+          "oriented_crop": [
+            810,
+            1600,
+            950,
+            1790
+          ],
+          "png": {
+            "path": "01_extracted/analog_ui_final/middle_dot/middle_dot_02.png",
+            "sha256": "4cb7f27d54dfc06c59ee5adc0de44e3b62597bd88d1a7f5e054916b87dacc074"
+          },
+          "svg": {
+            "path": "02_vectors/analog_ui_final/middle_dot/middle_dot_02.svg",
+            "sha256": "6e5a673210534f7f6a7268619a0523c04edca035539df88111d2aa2d5a910131"
+          }
+        },
+        {
+          "mask_dimensions": [
+            59,
+            67
+          ],
+          "id": "03",
+          "source_region_id": "middle_dot-03",
+          "oriented_crop": [
+            1130,
+            1600,
+            1280,
+            1790
+          ],
+          "png": {
+            "path": "01_extracted/analog_ui_final/middle_dot/middle_dot_03.png",
+            "sha256": "7f8784a1f05d425f741d8054c5e364185fdb41ea4780d4d8c19a447d564f4caa"
+          },
+          "svg": {
+            "path": "02_vectors/analog_ui_final/middle_dot/middle_dot_03.svg",
+            "sha256": "11a062982337f2e85fb5a89964a3e5155b3952062b4bff34af0eacf753fbf903"
+          }
+        },
+        {
+          "mask_dimensions": [
+            59,
+            72
+          ],
+          "id": "04",
+          "source_region_id": "middle_dot-04",
+          "oriented_crop": [
+            1430,
+            1600,
+            1580,
+            1790
+          ],
+          "png": {
+            "path": "01_extracted/analog_ui_final/middle_dot/middle_dot_04.png",
+            "sha256": "4dbcb484a621764471d8e40e63dad5512270744afdf6e8825c99800236452c74"
+          },
+          "svg": {
+            "path": "02_vectors/analog_ui_final/middle_dot/middle_dot_04.svg",
+            "sha256": "1443aed9a1b00a9c7735f4a34a487e6c0a7678b349b0d1bbf0d3e4770ce4ea6a"
+          }
+        },
+        {
+          "mask_dimensions": [
+            77,
+            71
+          ],
+          "id": "05",
+          "source_region_id": "middle_dot-05",
+          "oriented_crop": [
+            1740,
+            1600,
+            1940,
+            1790
+          ],
+          "png": {
+            "path": "01_extracted/analog_ui_final/middle_dot/middle_dot_05.png",
+            "sha256": "37f49e24a731b8355b1aa5176b44d6628ad6df57291c5832b428e12ea00edbe4"
+          },
+          "svg": {
+            "path": "02_vectors/analog_ui_final/middle_dot/middle_dot_05.svg",
+            "sha256": "ee543113bde4dc72851d568c8e93fe070b615c92129b03de1012d940acad8897"
+          }
+        }
+      ],
+      "selection_key": "middle_dot",
+      "required_selection": {
+        "min": 1,
+        "max": 3
+      },
+      "new_variant_ids": [
+        "01",
+        "02",
+        "03",
+        "04",
+        "05"
+      ]
+    }
+  ],
+  "fixed_assets": [
+    {
+      "asset_key": "back_arrow",
+      "source": "ceoklaue_analog_ui_final_01.jpg",
+      "outputs": [
+        {
+          "mask_dimensions": [
+            184,
+            156
+          ],
+          "id": "01",
+          "source_region_id": "back_arrow-01",
+          "oriented_crop": [
+            420,
+            1900,
+            690,
+            2160
+          ],
+          "png": {
+            "path": "01_extracted/analog_ui_final/back_arrow/back_arrow_01.png",
+            "sha256": "71683f01436706060e6a7df6071ec774f5b5209b730a113b6ea3c3d8bb273f43"
+          },
+          "svg": {
+            "path": "02_vectors/analog_ui_final/back_arrow/back_arrow_01.svg",
+            "sha256": "f5a928cd3adbafd62b8689ad2511a2e19f532dd218286c63360ef4cd43cea63e"
+          }
+        },
+        {
+          "mask_dimensions": [
+            137,
+            124
+          ],
+          "id": "02",
+          "source_region_id": "back_arrow-02",
+          "oriented_crop": [
+            735,
+            1900,
+            1005,
+            2160
+          ],
+          "png": {
+            "path": "01_extracted/analog_ui_final/back_arrow/back_arrow_02.png",
+            "sha256": "78ba5c55add67a5c84379993cb2afb311105a15e37d057b6924086d54efcbaa5"
+          },
+          "svg": {
+            "path": "02_vectors/analog_ui_final/back_arrow/back_arrow_02.svg",
+            "sha256": "3e08eca0bc0132534c7e7fc7b5925bbed8fb868b0c21c9c63156415971548987"
+          }
+        },
+        {
+          "mask_dimensions": [
+            154,
+            145
+          ],
+          "id": "03",
+          "source_region_id": "back_arrow-03",
+          "oriented_crop": [
+            1045,
+            1900,
+            1315,
+            2160
+          ],
+          "png": {
+            "path": "01_extracted/analog_ui_final/back_arrow/back_arrow_03.png",
+            "sha256": "ea4c7a490d72f93d742b28b60bc876c107d9c3122bd991d91d303ab25290f916"
+          },
+          "svg": {
+            "path": "02_vectors/analog_ui_final/back_arrow/back_arrow_03.svg",
+            "sha256": "07ca4ee1e8a88df013f232de4038d0a1b8745d4c62e51fad987c060d76698ce3"
+          }
+        },
+        {
+          "mask_dimensions": [
+            150,
+            134
+          ],
+          "id": "04",
+          "source_region_id": "back_arrow-04",
+          "oriented_crop": [
+            1355,
+            1900,
+            1625,
+            2160
+          ],
+          "png": {
+            "path": "01_extracted/analog_ui_final/back_arrow/back_arrow_04.png",
+            "sha256": "4785658e97106e6c2573d3e6afa06027d90fd070b8b4af90b271a7a865976254"
+          },
+          "svg": {
+            "path": "02_vectors/analog_ui_final/back_arrow/back_arrow_04.svg",
+            "sha256": "c6d9ab5a9bab72f3e6fc52ec19ed25ca82a12ec9e8b05a9696fe724c721cecb6"
+          }
+        },
+        {
+          "mask_dimensions": [
+            180,
+            139
+          ],
+          "id": "05",
+          "source_region_id": "back_arrow-05",
+          "oriented_crop": [
+            1665,
+            1900,
+            1935,
+            2160
+          ],
+          "png": {
+            "path": "01_extracted/analog_ui_final/back_arrow/back_arrow_05.png",
+            "sha256": "2aa4d72707eb1415fe05f68d6efa173d95ebeffd85e3163e716635cd9299564f"
+          },
+          "svg": {
+            "path": "02_vectors/analog_ui_final/back_arrow/back_arrow_05.svg",
+            "sha256": "bb26770fbb77d3e57186bd55e906dd3fd47c8fde18d3292ae8ea949b11b57632"
+          }
+        }
+      ]
+    },
+    {
+      "asset_key": "2",
+      "inventory_key": "digit_2_replacement_alt1",
+      "source": "ceoklaue_analog_ui_final_01.jpg",
+      "new_variant_ids": [
+        "11"
+      ],
+      "outputs": [
+        {
+          "mask_dimensions": [
+            248,
+            242
+          ],
+          "id": "11",
+          "source_region_id": "digit_2_replacement_alt1-01",
+          "oriented_crop": [
+            1750,
+            2980,
+            2150,
+            3330
+          ],
+          "png": {
+            "path": "01_extracted/glyphs/2/2_11.png",
+            "sha256": "189d31d9487398b832b39364ab576f9640926ec6b126ab1c3922a16b289b0c83"
+          },
+          "svg": {
+            "path": "02_vectors/glyphs/2/2_11.svg",
+            "sha256": "785e4766ab767466e7cbfabffdfbf8ea14721879fc248c78006c4592282c92a3"
+          }
+        }
+      ]
+    },
+    {
+      "asset_key": "wordmark_sammlr",
+      "source": "ceoklaue_analog_ui_final_04.jpg",
+      "outputs": [
+        {
+          "mask_dimensions": [
+            2477,
+            572
+          ],
+          "id": "01",
+          "source_region_id": "wordmark_sammlr-01",
+          "oriented_crop": [
+            70,
+            1050,
+            2670,
+            1660
+          ],
+          "png": {
+            "path": "01_extracted/analog_ui_final/wordmark_sammlr/wordmark_sammlr_01.png",
+            "sha256": "70421be80ff8e3425281a1bf8f6865c198403d037853242db07291d6247c4b90"
+          },
+          "svg": {
+            "path": "02_vectors/analog_ui_final/wordmark_sammlr/wordmark_sammlr_01.svg",
+            "sha256": "8781425e32933ad32d305b39301b4317efdaa8a821bb65b8953ffe1b4492fbcf"
+          }
+        }
+      ]
+    },
+    {
+      "asset_key": "phrase_aktueller_tausch",
+      "source": "ceoklaue_analog_ui_final_05.jpg",
+      "outputs": [
+        {
+          "mask_dimensions": [
+            1768,
+            277
+          ],
+          "id": "01",
+          "source_region_id": "phrase_aktueller_tausch-01",
+          "oriented_crop": [
+            250,
+            400,
+            2110,
+            760
+          ],
+          "png": {
+            "path": "01_extracted/analog_ui_final/phrase_aktueller_tausch/phrase_aktueller_tausch_01.png",
+            "sha256": "d5f7423bb634051e9a438f5664e4f3c0ff3f162b66eb01728daffb8d3395a437"
+          },
+          "svg": {
+            "path": "02_vectors/analog_ui_final/phrase_aktueller_tausch/phrase_aktueller_tausch_01.svg",
+            "sha256": "bf8ca9dad7f1a68f91654bbfa78ed5532079d7eaf9a009c880d87df8403ce945"
+          }
+        },
+        {
+          "mask_dimensions": [
+            1681,
+            215
+          ],
+          "id": "02",
+          "source_region_id": "phrase_aktueller_tausch-02",
+          "oriented_crop": [
+            280,
+            780,
+            2050,
+            1060
+          ],
+          "png": {
+            "path": "01_extracted/analog_ui_final/phrase_aktueller_tausch/phrase_aktueller_tausch_02.png",
+            "sha256": "c01be36bc82fc4ed5f8569779f424d25559f9b3ac876415ed3b84cce74b71260"
+          },
+          "svg": {
+            "path": "02_vectors/analog_ui_final/phrase_aktueller_tausch/phrase_aktueller_tausch_02.svg",
+            "sha256": "28eaec6161d8526e300d8bf48b489359b5e90aee357fe0a0e90cb868562eeec6"
+          }
+        },
+        {
+          "mask_dimensions": [
+            1683,
+            253
+          ],
+          "id": "03",
+          "source_region_id": "phrase_aktueller_tausch-03",
+          "oriented_crop": [
+            270,
+            1070,
+            2050,
+            1410
+          ],
+          "png": {
+            "path": "01_extracted/analog_ui_final/phrase_aktueller_tausch/phrase_aktueller_tausch_03.png",
+            "sha256": "e8fa5e85cba4fa3d5d0654c887e48712c080de1d94076d168036cb68f5bab12a"
+          },
+          "svg": {
+            "path": "02_vectors/analog_ui_final/phrase_aktueller_tausch/phrase_aktueller_tausch_03.svg",
+            "sha256": "cee2127d1c4d5eeffa54c79a80de27b567dab11f1ed17247a24e8290a23eba1c"
+          }
+        }
+      ]
+    },
+    {
+      "asset_key": "phrase_du_gibst_ab",
+      "source": "ceoklaue_analog_ui_final_05.jpg",
+      "outputs": [
+        {
+          "mask_dimensions": [
+            1360,
+            259
+          ],
+          "id": "01",
+          "source_region_id": "phrase_du_gibst_ab-01",
+          "oriented_crop": [
+            300,
+            1410,
+            1770,
+            1710
+          ],
+          "png": {
+            "path": "01_extracted/analog_ui_final/phrase_du_gibst_ab/phrase_du_gibst_ab_01.png",
+            "sha256": "b66718e2bf258764e06fb4b3c74c43c128622ce6605344583a71176e56f68b8a"
+          },
+          "svg": {
+            "path": "02_vectors/analog_ui_final/phrase_du_gibst_ab/phrase_du_gibst_ab_01.svg",
+            "sha256": "07a247df5e29ea3f8c5c3ffd576bbd85d9b5b4a20ae6d77c513204d80dd04888"
+          }
+        },
+        {
+          "mask_dimensions": [
+            1331,
+            283
+          ],
+          "id": "02",
+          "source_region_id": "phrase_du_gibst_ab-02",
+          "oriented_crop": [
+            340,
+            1730,
+            1790,
+            2040
+          ],
+          "png": {
+            "path": "01_extracted/analog_ui_final/phrase_du_gibst_ab/phrase_du_gibst_ab_02.png",
+            "sha256": "2a78625c669643c8b5fc148c80867ce4ac9c312d962af1d496271d1e4b967e1d"
+          },
+          "svg": {
+            "path": "02_vectors/analog_ui_final/phrase_du_gibst_ab/phrase_du_gibst_ab_02.svg",
+            "sha256": "dec3d74ada5129cf6d70beb761fbdceacfc3caaaa73e1a3225b3513ff866e1c7"
+          }
+        }
+      ]
+    },
+    {
+      "asset_key": "phrase_mehr_ellipsis",
+      "source": "ceoklaue_analog_ui_final_05.jpg",
+      "outputs": [
+        {
+          "mask_dimensions": [
+            639,
+            198
+          ],
+          "id": "01",
+          "source_region_id": "phrase_mehr_ellipsis-01",
+          "oriented_crop": [
+            410,
+            2030,
+            1120,
+            2310
+          ],
+          "png": {
+            "path": "01_extracted/analog_ui_final/phrase_mehr_ellipsis/phrase_mehr_ellipsis_01.png",
+            "sha256": "4bbde0742ac62eb7710c754bf6e9ea49e832ce3486ac74bf59bbbcf2db3f4fbc"
+          },
+          "svg": {
+            "path": "02_vectors/analog_ui_final/phrase_mehr_ellipsis/phrase_mehr_ellipsis_01.svg",
+            "sha256": "b95a78c326c005f53d98944e0c8d258e316465a734134b2560915db56e25906a"
+          }
+        },
+        {
+          "mask_dimensions": [
+            616,
+            168
+          ],
+          "id": "02",
+          "source_region_id": "phrase_mehr_ellipsis-02",
+          "oriented_crop": [
+            1380,
+            2030,
+            2060,
+            2310
+          ],
+          "png": {
+            "path": "01_extracted/analog_ui_final/phrase_mehr_ellipsis/phrase_mehr_ellipsis_02.png",
+            "sha256": "0bae1b032b5ceee9b01cc27c1083265feb3e86de937f486248baad10eb1b832a"
+          },
+          "svg": {
+            "path": "02_vectors/analog_ui_final/phrase_mehr_ellipsis/phrase_mehr_ellipsis_02.svg",
+            "sha256": "8324712bffd367629e425085ee6914c1029968552d499fb102e46d9ee66c2a39"
+          }
+        },
+        {
+          "mask_dimensions": [
+            595,
+            190
+          ],
+          "id": "03",
+          "source_region_id": "phrase_mehr_ellipsis-03",
+          "oriented_crop": [
+            2110,
+            2000,
+            2780,
+            2310
+          ],
+          "png": {
+            "path": "01_extracted/analog_ui_final/phrase_mehr_ellipsis/phrase_mehr_ellipsis_03.png",
+            "sha256": "4f60ab93455de3dd366c81cb9f37347d9b5df7bdfdccfff18fd1b70258ca5557"
+          },
+          "svg": {
+            "path": "02_vectors/analog_ui_final/phrase_mehr_ellipsis/phrase_mehr_ellipsis_03.svg",
+            "sha256": "9c0a5bd2159e83128c2a138515c1fb6577b4a94b624cde8c39291d0e9076851f"
+          }
+        }
+      ]
+    },
+    {
+      "asset_key": "phrase_auswahl_pruefen",
+      "source": "ceoklaue_analog_ui_final_05.jpg",
+      "outputs": [
+        {
+          "mask_dimensions": [
+            1483,
+            284
+          ],
+          "id": "01",
+          "source_region_id": "phrase_auswahl_pruefen-01",
+          "oriented_crop": [
+            420,
+            2290,
+            1980,
+            2630
+          ],
+          "png": {
+            "path": "01_extracted/analog_ui_final/phrase_auswahl_pruefen/phrase_auswahl_pruefen_01.png",
+            "sha256": "b3d3ad0fef2809bce7652a7b86d9a7fe90e6a39499d7e56d567271a36d9df402"
+          },
+          "svg": {
+            "path": "02_vectors/analog_ui_final/phrase_auswahl_pruefen/phrase_auswahl_pruefen_01.svg",
+            "sha256": "a8993364a8e6f3c272077b2fb0a054fc75a2dacb9c2c6d66d6214b7469355cb3"
+          }
+        },
+        {
+          "mask_dimensions": [
+            1351,
+            251
+          ],
+          "id": "02",
+          "source_region_id": "phrase_auswahl_pruefen-02",
+          "oriented_crop": [
+            450,
+            2620,
+            1900,
+            2920
+          ],
+          "png": {
+            "path": "01_extracted/analog_ui_final/phrase_auswahl_pruefen/phrase_auswahl_pruefen_02.png",
+            "sha256": "c8e7aed35ac1e97044dcd9d291c83a8d0ac6c8c0363f9b956960730bbb5cf4ae"
+          },
+          "svg": {
+            "path": "02_vectors/analog_ui_final/phrase_auswahl_pruefen/phrase_auswahl_pruefen_02.svg",
+            "sha256": "aa20be4e5f032b4879c06ac234fb0a1eed1b9403d7cca18b55a101b09909b9cc"
+          }
+        }
+      ]
+    },
+    {
+      "asset_key": "underline",
+      "source": "ceoklaue_analog_ui_final_06.jpg",
+      "outputs": [
+        {
+          "mask_dimensions": [
+            1056,
+            54
+          ],
+          "id": "01",
+          "source_region_id": "underline-01",
+          "oriented_crop": [
+            900,
+            1080,
+            2070,
+            1210
+          ],
+          "png": {
+            "path": "01_extracted/analog_ui_final/underline/underline_01.png",
+            "sha256": "18e77e8e982fb8a6fd60aea6af1d3dcff9f5c77b0dfb0505ebcd1bdcce723cff"
+          },
+          "svg": {
+            "path": "02_vectors/analog_ui_final/underline/underline_01.svg",
+            "sha256": "66e6b7d6e4278ffc4dc41aee79c5500d5663cc91e71f5cb391901450b6242ab1"
+          }
+        },
+        {
+          "mask_dimensions": [
+            1113,
+            77
+          ],
+          "id": "02",
+          "source_region_id": "underline-02",
+          "oriented_crop": [
+            850,
+            1260,
+            2080,
+            1420
+          ],
+          "png": {
+            "path": "01_extracted/analog_ui_final/underline/underline_02.png",
+            "sha256": "2295b5cc45c0beba805fde25f107a347b49000ddff048df2055774860a90b6ff"
+          },
+          "svg": {
+            "path": "02_vectors/analog_ui_final/underline/underline_02.svg",
+            "sha256": "672ad39e42428c72ccbf115d5acb3c9bce20e380f97eede97256a9c8e4307a3e"
+          }
+        },
+        {
+          "mask_dimensions": [
+            1143,
+            62
+          ],
+          "id": "03",
+          "source_region_id": "underline-03",
+          "oriented_crop": [
+            850,
+            1590,
+            2110,
+            1750
+          ],
+          "png": {
+            "path": "01_extracted/analog_ui_final/underline/underline_03.png",
+            "sha256": "0bd7987ed527e222adf432b08b28888c9f5a654e50e986a02b2a7b3c7adc86e0"
+          },
+          "svg": {
+            "path": "02_vectors/analog_ui_final/underline/underline_03.svg",
+            "sha256": "587187d4e9716d7c61414b1ea8189e52bf747ad60fb3750a5737f960d595559c"
+          }
+        },
+        {
+          "mask_dimensions": [
+            1167,
+            87
+          ],
+          "id": "04",
+          "source_region_id": "underline-04",
+          "oriented_crop": [
+            850,
+            1860,
+            2140,
+            2040
+          ],
+          "png": {
+            "path": "01_extracted/analog_ui_final/underline/underline_04.png",
+            "sha256": "d9e2596dd978ac233f467ccf9dd3d5fd9f1a5c1b972df5fd0906064d1f93276d"
+          },
+          "svg": {
+            "path": "02_vectors/analog_ui_final/underline/underline_04.svg",
+            "sha256": "38ce00e1aa46fd63cb404de3ec309b93e2efb4e8cbf9411b2f73ee465a59642d"
+          }
+        },
+        {
+          "mask_dimensions": [
+            534,
+            49
+          ],
+          "id": "05",
+          "source_region_id": "underline-05",
+          "oriented_crop": [
+            830,
+            2180,
+            1480,
+            2320
+          ],
+          "png": {
+            "path": "01_extracted/analog_ui_final/underline/underline_05.png",
+            "sha256": "13dce723aedc7c7ae40dce7da1d3098396162da9425c33758b10e3dbf82c356b"
+          },
+          "svg": {
+            "path": "02_vectors/analog_ui_final/underline/underline_05.svg",
+            "sha256": "94f95fb09e7b1bb8aa6c46793541aebf97076dc6e0bd770dd5ae94c110e9d99d"
+          }
+        },
+        {
+          "mask_dimensions": [
+            1906,
+            74
+          ],
+          "id": "06",
+          "source_region_id": "underline-06",
+          "oriented_crop": [
+            180,
+            2430,
+            2220,
+            2620
+          ],
+          "png": {
+            "path": "01_extracted/analog_ui_final/underline/underline_06.png",
+            "sha256": "c94a016c4913849309c5e2c63ee3cfdc16aba7a0cf85dbc846af917eec092f42"
+          },
+          "svg": {
+            "path": "02_vectors/analog_ui_final/underline/underline_06.svg",
+            "sha256": "5793da51fd0a230cbd333e62a46b2eacf2beb0e75e08fe050035483d730ca7fd"
+          }
+        }
+      ]
+    },
+    {
+      "asset_key": "box",
+      "source": "ceoklaue_analog_ui_final_07.jpg",
+      "outputs": [
+        {
+          "mask_dimensions": [
+            594,
+            225
+          ],
+          "id": "01",
+          "source_region_id": "box-01",
+          "oriented_crop": [
+            220,
+            740,
+            920,
+            1080
+          ],
+          "png": {
+            "path": "01_extracted/analog_ui_final/box/box_01.png",
+            "sha256": "86351fef5ff19da2888e0fb585b2f4c2db8cfc668a94233f8fab9e8cd513096a"
+          },
+          "svg": {
+            "path": "02_vectors/analog_ui_final/box/box_01.svg",
+            "sha256": "48e5c4bebc2ac2b695efdf009c21f4558db0c5c0ae5c25a52ee5d806ed5579fe"
+          }
+        },
+        {
+          "mask_dimensions": [
+            771,
+            234
+          ],
+          "id": "02",
+          "source_region_id": "box-02",
+          "oriented_crop": [
+            1080,
+            800,
+            1960,
+            1160
+          ],
+          "png": {
+            "path": "01_extracted/analog_ui_final/box/box_02.png",
+            "sha256": "7ea034ce08abf7efee60acb0e8133e6eaf3b55c10f4c4fbfb93355d80f2df579"
+          },
+          "svg": {
+            "path": "02_vectors/analog_ui_final/box/box_02.svg",
+            "sha256": "8ebc4461e68f3bde32456bf4970fd8a6ff37bb4690ec6ba2e3c5ea7fa6674ca1"
+          }
+        },
+        {
+          "mask_dimensions": [
+            864,
+            230
+          ],
+          "id": "03",
+          "source_region_id": "box-03",
+          "oriented_crop": [
+            230,
+            1130,
+            1210,
+            1470
+          ],
+          "png": {
+            "path": "01_extracted/analog_ui_final/box/box_03.png",
+            "sha256": "50314e9d0c351ece497c832bfa12bd42daf58788501f476aec54305e0fc4ea93"
+          },
+          "svg": {
+            "path": "02_vectors/analog_ui_final/box/box_03.svg",
+            "sha256": "05fdc271a5d20968ac469fcd04fb9cd1b6d54e86a23c33ec1fc9ec9a1ed08ef3"
+          }
+        },
+        {
+          "mask_dimensions": [
+            752,
+            261
+          ],
+          "id": "04",
+          "source_region_id": "box-04",
+          "oriented_crop": [
+            1220,
+            1150,
+            2090,
+            1530
+          ],
+          "png": {
+            "path": "01_extracted/analog_ui_final/box/box_04.png",
+            "sha256": "21664a4a92d091bd58ca8ac57d014f8bc0cda95637ccdccaa5fa1211f406b289"
+          },
+          "svg": {
+            "path": "02_vectors/analog_ui_final/box/box_04.svg",
+            "sha256": "25778e2989fce03a12f34848d65c9954a5f14c9689b0682438f75b40bf324318"
+          }
+        },
+        {
+          "mask_dimensions": [
+            760,
+            285
+          ],
+          "id": "05",
+          "source_region_id": "box-05",
+          "oriented_crop": [
+            270,
+            1530,
+            1160,
+            1940
+          ],
+          "png": {
+            "path": "01_extracted/analog_ui_final/box/box_05.png",
+            "sha256": "996321d4dee84d6244d58d533796b0763e268148240b866c04aad96be280983c"
+          },
+          "svg": {
+            "path": "02_vectors/analog_ui_final/box/box_05.svg",
+            "sha256": "8eacf9493f6bb92479c236f448f759f526c76ab01a9ff91b09e3f7e8f23bd2c4"
+          }
+        },
+        {
+          "mask_dimensions": [
+            692,
+            286
+          ],
+          "id": "06",
+          "source_region_id": "box-06",
+          "oriented_crop": [
+            1220,
+            1540,
+            2050,
+            1960
+          ],
+          "png": {
+            "path": "01_extracted/analog_ui_final/box/box_06.png",
+            "sha256": "c78f7370fda639f35e3a70bf850201ee942a86af906a7611a71af2dd8b1e9df6"
+          },
+          "svg": {
+            "path": "02_vectors/analog_ui_final/box/box_06.svg",
+            "sha256": "6148737fd48391a1557e2eb8373c5694867b6d2c4265951a84f133b300c379a5"
+          }
+        }
+      ]
+    },
+    {
+      "asset_key": "line_component_vertical",
+      "source": "ceoklaue_analog_ui_final_07.jpg",
+      "outputs": [
+        {
+          "mask_dimensions": [
+            45,
+            252
+          ],
+          "id": "01",
+          "source_region_id": "line_component_vertical-01",
+          "oriented_crop": [
+            1230,
+            2140,
+            1380,
+            2470
+          ],
+          "png": {
+            "path": "01_extracted/analog_ui_final/line_component_vertical/line_component_vertical_01.png",
+            "sha256": "8ef459d9a502a1c11e6d3403e2192c69250de46cb2ec008451b7a0febdf5b5bf"
+          },
+          "svg": {
+            "path": "02_vectors/analog_ui_final/line_component_vertical/line_component_vertical_01.svg",
+            "sha256": "42953b9b8116338f5cce1f9977463f01b009fb6398a69c13015306f47658a208"
+          }
+        },
+        {
+          "mask_dimensions": [
+            37,
+            225
+          ],
+          "id": "02",
+          "source_region_id": "line_component_vertical-02",
+          "oriented_crop": [
+            1230,
+            2490,
+            1380,
+            2790
+          ],
+          "png": {
+            "path": "01_extracted/analog_ui_final/line_component_vertical/line_component_vertical_02.png",
+            "sha256": "a3ec63de6e1a73cc189ac2089cc78a807f10971bbde5d4317073a9749c8b228b"
+          },
+          "svg": {
+            "path": "02_vectors/analog_ui_final/line_component_vertical/line_component_vertical_02.svg",
+            "sha256": "d6a1e47a84597a682087753ad9ed36f82fd68a7ccff00164a965e69eb0a813fa"
+          }
+        },
+        {
+          "mask_dimensions": [
+            42,
+            258
+          ],
+          "id": "03",
+          "source_region_id": "line_component_vertical-03",
+          "oriented_crop": [
+            1230,
+            2810,
+            1380,
+            3130
+          ],
+          "png": {
+            "path": "01_extracted/analog_ui_final/line_component_vertical/line_component_vertical_03.png",
+            "sha256": "d200e14d94561225df387778303500a451e68c3630c46a5b1c125e0768017c52"
+          },
+          "svg": {
+            "path": "02_vectors/analog_ui_final/line_component_vertical/line_component_vertical_03.svg",
+            "sha256": "7073f2f94df9b48d63a835ffe1a21413c7ab2eeabe081258121ec3b0fbd42ef5"
+          }
+        },
+        {
+          "mask_dimensions": [
+            60,
+            256
+          ],
+          "id": "04",
+          "source_region_id": "line_component_vertical-04",
+          "oriented_crop": [
+            1230,
+            3150,
+            1400,
+            3480
+          ],
+          "png": {
+            "path": "01_extracted/analog_ui_final/line_component_vertical/line_component_vertical_04.png",
+            "sha256": "4dfbe3d8fdc23dc527d38113ff770a29473fd0b390d5c0e46a8d613bcce570b7"
+          },
+          "svg": {
+            "path": "02_vectors/analog_ui_final/line_component_vertical/line_component_vertical_04.svg",
+            "sha256": "838cd5a45e0fb323aa006105e46bd4f331d39dd0739aeb25558454b90051910d"
+          }
+        },
+        {
+          "mask_dimensions": [
+            44,
+            182
+          ],
+          "id": "05",
+          "source_region_id": "line_component_vertical-05",
+          "oriented_crop": [
+            1660,
+            3260,
+            1800,
+            3510
+          ],
+          "png": {
+            "path": "01_extracted/analog_ui_final/line_component_vertical/line_component_vertical_05.png",
+            "sha256": "4b601908711697504d1491acaf3d52b00e69901c41b6b238ee7781a7bd1823f9"
+          },
+          "svg": {
+            "path": "02_vectors/analog_ui_final/line_component_vertical/line_component_vertical_05.svg",
+            "sha256": "558b15461d6a567af0808a88bedeb7488b35e71118b9b65b732dec9e0a78cbbc"
+          }
+        },
+        {
+          "mask_dimensions": [
+            52,
+            209
+          ],
+          "id": "06",
+          "source_region_id": "line_component_vertical-06",
+          "oriented_crop": [
+            1870,
+            3240,
+            2020,
+            3520
+          ],
+          "png": {
+            "path": "01_extracted/analog_ui_final/line_component_vertical/line_component_vertical_06.png",
+            "sha256": "0d3ab5165abb80032ff80048453e4f69c0acdd2b16fcb47adb5f5ac32c545c37"
+          },
+          "svg": {
+            "path": "02_vectors/analog_ui_final/line_component_vertical/line_component_vertical_06.svg",
+            "sha256": "989007704d06dd6062cf6a8cca0b36fd479db6dbb3e95ae87e0ca8794ef3af62"
+          }
+        }
+      ]
+    },
+    {
+      "asset_key": "line_component_horizontal",
+      "source": "ceoklaue_analog_ui_final_07.jpg",
+      "outputs": [
+        {
+          "mask_dimensions": [
+            902,
+            68
+          ],
+          "id": "01",
+          "source_region_id": "line_component_horizontal-01",
+          "oriented_crop": [
+            1430,
+            2110,
+            2440,
+            2280
+          ],
+          "png": {
+            "path": "01_extracted/analog_ui_final/line_component_horizontal/line_component_horizontal_01.png",
+            "sha256": "003c9f588bcfdfe47526950c55daaf5cd6c29e49f3d15542c50dde58868002dd"
+          },
+          "svg": {
+            "path": "02_vectors/analog_ui_final/line_component_horizontal/line_component_horizontal_01.svg",
+            "sha256": "bdd8b77200b8331bc7455f9e5760845968dbee3b5ad90822c5827b7df683c7cf"
+          }
+        },
+        {
+          "mask_dimensions": [
+            518,
+            112
+          ],
+          "id": "02",
+          "source_region_id": "line_component_horizontal-02",
+          "oriented_crop": [
+            1460,
+            2320,
+            2100,
+            2480
+          ],
+          "png": {
+            "path": "01_extracted/analog_ui_final/line_component_horizontal/line_component_horizontal_02.png",
+            "sha256": "c46616ccccf481919a96cf6c934648a2d01cd92688a1849ed85df2086a3c973a"
+          },
+          "svg": {
+            "path": "02_vectors/analog_ui_final/line_component_horizontal/line_component_horizontal_02.svg",
+            "sha256": "9397cc5e8a20195d04bc9df69d1e9db7dc22c212328642e6a4a90f20ddbf45f6"
+          }
+        },
+        {
+          "mask_dimensions": [
+            1269,
+            112
+          ],
+          "id": "03",
+          "source_region_id": "line_component_horizontal-03",
+          "oriented_crop": [
+            1430,
+            2460,
+            2860,
+            2690
+          ],
+          "png": {
+            "path": "01_extracted/analog_ui_final/line_component_horizontal/line_component_horizontal_03.png",
+            "sha256": "a7d9ec7ca5dc3ed277abb05cc72bc9c4b6e98835988d658566e8f01b2af05c02"
+          },
+          "svg": {
+            "path": "02_vectors/analog_ui_final/line_component_horizontal/line_component_horizontal_03.svg",
+            "sha256": "e7808f1cd3247f3f58889c636dd5f218cc2fdb7b4111cc5c9596e8a6052e905d"
+          }
+        },
+        {
+          "mask_dimensions": [
+            661,
+            73
+          ],
+          "id": "04",
+          "source_region_id": "line_component_horizontal-04",
+          "oriented_crop": [
+            1460,
+            2700,
+            2290,
+            2880
+          ],
+          "png": {
+            "path": "01_extracted/analog_ui_final/line_component_horizontal/line_component_horizontal_04.png",
+            "sha256": "785808655123032e22afe222252e91a84091845d50349d939c719c14ccaf19db"
+          },
+          "svg": {
+            "path": "02_vectors/analog_ui_final/line_component_horizontal/line_component_horizontal_04.svg",
+            "sha256": "08449cda175da46e604b82f97a0ab08142d7c029e60c3dc4b4f53a84b98dadcd"
+          }
+        },
+        {
+          "mask_dimensions": [
+            443,
+            54
+          ],
+          "id": "05",
+          "source_region_id": "line_component_horizontal-05",
+          "oriented_crop": [
+            1460,
+            2910,
+            2100,
+            3060
+          ],
+          "png": {
+            "path": "01_extracted/analog_ui_final/line_component_horizontal/line_component_horizontal_05.png",
+            "sha256": "a37ba5710b9d71c9ab124575e0b6494a0b98a4843524f08e96dcb77b8bf568a3"
+          },
+          "svg": {
+            "path": "02_vectors/analog_ui_final/line_component_horizontal/line_component_horizontal_05.svg",
+            "sha256": "4db91088232a7dca585aeb0004578f58019707c9ce98e5cec25263617d7f3271"
+          }
+        },
+        {
+          "mask_dimensions": [
+            815,
+            97
+          ],
+          "id": "06",
+          "source_region_id": "line_component_horizontal-06",
+          "oriented_crop": [
+            1430,
+            3060,
+            2450,
+            3250
+          ],
+          "png": {
+            "path": "01_extracted/analog_ui_final/line_component_horizontal/line_component_horizontal_06.png",
+            "sha256": "a5c272a9d0f32852ea45451a264cae5cf907298e9dadc30aefc11fd59d1f2afc"
+          },
+          "svg": {
+            "path": "02_vectors/analog_ui_final/line_component_horizontal/line_component_horizontal_06.svg",
+            "sha256": "882a143153bb2143efe2c10422ee139a795a26bba0b0b3e4f4ed892440b523f8"
+          }
+        }
+      ]
+    }
+  ],
+  "not_found_in_new_sources": [
+    "phrase_du_bekommst",
+    "phrase_mehr_anzeigen"
+  ],
+  "totals": {
+    "new_u_candidates": 5,
+    "new_A_candidates": 5,
+    "new_comma_candidates": 5,
+    "new_middle_dot_candidates": 5,
+    "digit_2_replacements": 1,
+    "back_arrows": 5,
+    "wordmarks": 1,
+    "phrase_assets": 10,
+    "underlines": 6,
+    "boxes": 6,
+    "line_components": 12,
+    "extracted_pngs": 61,
+    "generated_svgs": 61
+  }
+}

@@ -1,0 +1,26 @@
+{
+  "version": "CEOKlaue v0.1",
+  "raw_sources": [
+    "ceoklaue_alphabet_upper_01.jpg",
+    "ceoklaue_alphabet_lower_symbols_01.jpg",
+    "ceoklaue_numbers_words_01.jpg",
+    "ceoklaue_codes_reference_01.jpg"
+  ],
+  "primary_sources": {
+    "uppercase": "ceoklaue_alphabet_upper_01.jpg",
+    "lowercase_and_symbols": "ceoklaue_alphabet_lower_symbols_01.jpg",
+    "numbers": "ceoklaue_numbers_words_01.jpg"
+  },
+  "style_and_legibility_reference": [
+    "ceoklaue_numbers_words_01.jpg",
+    "ceoklaue_codes_reference_01.jpg"
+  ],
+  "canonical_variant": 3,
+  "included_characters": "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789äöüß.,:!?-+/&%()",
+  "missing_requested_characters": "ÄÖÜ;",
+  "signature_source_text": "Sammler.",
+  "signature_runtime_status": "not shipped: source does not read Sammlr.",
+  "public_runtime_assets": [
+    "App/static/fonts/ceoklaue-v0.1.woff2"
+  ]
+}

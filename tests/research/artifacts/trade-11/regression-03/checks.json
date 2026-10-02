@@ -1,0 +1,27 @@
+{
+  "results": [
+    {
+      "width": 375,
+      "mirror_decisions_slots_expiry": "PASS",
+      "responsive_input": "PASS"
+    },
+    {
+      "width": 390,
+      "mirror_decisions_slots_expiry": "PASS",
+      "responsive_input": "PASS"
+    },
+    {
+      "width": 430,
+      "mirror_decisions_slots_expiry": "PASS",
+      "responsive_input": "PASS"
+    },
+    {
+      "width": 1280,
+      "mirror_decisions_slots_expiry": "PASS",
+      "responsive_input": "PASS"
+    }
+  ],
+  "model": "PASS",
+  "errors": [],
+  "external_or_write_requests": []
+}

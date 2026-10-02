@@ -1,0 +1,46 @@
+# Local environments and generated Python files
+.venv/
+__pycache__/
+*.py[cod]
+.DS_Store
+# Private local configuration
+.env
+.env.*
+!.env.example
+# Local runtime DBs/backups; legitimate S00 fixture remains versionable
+/App/Database/sammlr.db
+/App/Database/sammlr.db-*
+/App/Database/s20_coverage_debug.db
+/App/Database/s20_coverage_debug.db-*
+/App/Database/collectr.db Kopie
+/App/Database/Database:Backups/*.db
+/Backups/*.db
+/Backups/*.db-*
+# Local collection exports, not source or test fixtures
+/App/Database/em24_fehlende.txt
+/App/Database/fehlende.txt
+/Backups/em24_doppelte.txt
+/Exports/doppelte.txt
+/Exports/em24_doppelte.txt
+/Exports/em24_doppelte.txt.sb-*
+/Exports/em24_fehlende.txt
+/Exports/fehlende.txt
+/App/uploads/
+/App/static/profile-sticker/valentin-portrait-source-v1.png
+# Local execution artifacts
+*.log
+/test-results/
+/playwright-report/
+
+# Explicitly approved historical source copies; keep local files
+/App/Archive/webapp_backup_before_trophy_cleanup.py
+/App/Archive/webapp_backup_multiuser_albums.py
+/App/Archive/webapp_backup_popup_clean.py
+/App/Archive/webapp_backup_session_ready.py
+/App/Archive/webapp_backup_trophy_tabs_visual_runs.py
+/App/Archive/webapp_backup_users_trophy_clean_runs.py
+/App/webapp_backup.py
+/App/webapp_broken_now.py
+/App/webapp_rescue_candidate.py
+/Backups/webapp_2026-06-02_22-14-50.py
+/Backups/webapp_2026-06-02_22-14-58.py

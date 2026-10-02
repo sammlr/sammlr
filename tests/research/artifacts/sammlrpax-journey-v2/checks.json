@@ -1,0 +1,26 @@
+[
+  {
+    "width": 375,
+    "journey": "PASS",
+    "mirroring": "PASS",
+    "overflow": false,
+    "mutation_requests": 0,
+    "console_errors": 0
+  },
+  {
+    "width": 390,
+    "journey": "PASS",
+    "mirroring": "PASS",
+    "overflow": false,
+    "mutation_requests": 0,
+    "console_errors": 0
+  },
+  {
+    "width": 430,
+    "journey": "PASS",
+    "mirroring": "PASS",
+    "overflow": false,
+    "mutation_requests": 0,
+    "console_errors": 0
+  }
+]

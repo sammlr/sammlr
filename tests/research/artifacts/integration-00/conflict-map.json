@@ -1,0 +1,101 @@
+{
+  "method": "Expliziten Geltungsbereich und Implementierung vergleichen, nicht neuestes Datum automatisch priorisieren",
+  "conflicts": [
+    {
+      "id": "C01",
+      "topic": "Q1 / AC25–26 vs Trade-v2 Amendment",
+      "current_sources": "docs/TRADE_UX_PO_DECISIONS_Q1_Q8.md; docs/SMARTDEAL_ALGORITHM_CONTRACT_V1.md",
+      "target_sources": "docs/TRADE_PRODUCT_CONTRACT_V2.md; App/trade_v2/assets/amendments.js",
+      "resolution": "Nur neuer Contract: explizite Zustimmung zu exaktem Pre-Shipment-Paket; kein stiller Repair, keine Änderung versendeter Richtung. Legacy bleibt unverändert.",
+      "phase": "06"
+    },
+    {
+      "id": "C02",
+      "topic": "Empfängerpräferenz vs beidseitige Albumfreigabe",
+      "current_sources": "docs/MANUAL_OFFER_DOMAIN_CONTRACT_V1.md; Q3",
+      "target_sources": "docs/TRADE_V2_MANUAL_SELECTION_CONTRACT.md; manual_rules.js",
+      "resolution": "Neue Trade-v2-Angebote: Schnittmenge beider Freigaben; SAME_ALBUM_ONLY Receive≤Give pro Album, OPEN nur bilateral zulässiger Pool. Nicht global umdeuten.",
+      "phase": "03"
+    },
+    {
+      "id": "C03",
+      "topic": "Open-request-Quota vs operative 3/3-Slots",
+      "current_sources": "App/services/smartdeal_requests.py; SMARTDEAL_PRODUCT_BIBLE_V1.md",
+      "target_sources": "TRADE_PRODUCT_CONTRACT_V2.md; requests.js",
+      "resolution": "Neue manuelle und Smart-Angebote teilen 3 ausgehende/3 eingehende operative Slots; Accept hält, nur eigener Versand oder zulässiger Abbruch löst. Receipt löst nie.",
+      "phase": "04"
+    },
+    {
+      "id": "C04",
+      "topic": "Q2 erlaubt Empfang, produktiver Service verlangt Partner-SHIPPED",
+      "current_sources": "App/services/trade_receipt.py; App/services/trade_problems.py",
+      "target_sources": "TRADE_UX_PO_DECISIONS_Q1_Q8.md Q2; TRADE_PRODUCT_CONTRACT_V2.md; receipts.js",
+      "resolution": "Neue versionierte Receipt-/Buchungslogik; keine fingierte Shippingmutation oder Slotfreigabe, genau einmal physisch buchen. Legacyguard unangetastet lassen.",
+      "phase": "08"
+    },
+    {
+      "id": "C05",
+      "topic": "Rating 1–5 vs 1–3",
+      "current_sources": "App/services/trade_ratings.py; DB trade_ratings CHECK und immutable triggers",
+      "target_sources": "TRADE_PRODUCT_CONTRACT_V2.md; receipts.js",
+      "resolution": "Neue Skala versionieren; Legacy nicht umrechnen; Aggregationsdarstellung vor Phase08 spezifizieren.",
+      "phase": "08"
+    },
+    {
+      "id": "C06",
+      "topic": "Schema21-Quellcode vs tatsächlich lokaler Schema20",
+      "current_sources": "App/services/runtime_operations.py; schema_migrations; App/migrations/0021*",
+      "target_sources": "App/services/trade_contracts.py; smartdeal_requests.py",
+      "resolution": "Schema21 existiert nur als Migration; Produktionsvolume nicht geprüft. Migrationsfolge/runtime expected version koordinieren; keine blinde Anwendung oder V2-Enum-Erweiterung.",
+      "phase": "04"
+    },
+    {
+      "id": "C07",
+      "topic": "Legacy manuelle Submitbindung vs neuer Vertrag",
+      "current_sources": "App/webapp.py create_trade_request; TradeReservationService.accept",
+      "target_sources": "MANUAL_OFFER_DOMAIN_CONTRACT_V1.md Q4; TRADE_PRODUCT_CONTRACT_V2.md",
+      "resolution": "Neuer Submit reserviert beide Richtungen und Incoming Needs atomar; Legacy reserviert erst bei Accept. Stickerlisten-Transfer ist kein Requestendpoint.",
+      "phase": "04"
+    },
+    {
+      "id": "C08",
+      "topic": "Indexreduktion und zwei Previewversionen vs belastbare Amendments",
+      "current_sources": "App/trade_v2/assets/deal_versions.js",
+      "target_sources": "TRADE_PRODUCT_CONTRACT_V2.md; TRADE_V2_MANUAL_SELECTION_CONTRACT.md",
+      "resolution": "Previewindexpaarung ist keine allgemeine Domainregel. Exakte explizite Positionen, Versionen und beidseitige Mengenregeln validieren; asymmetrische manuelle Pakete abdecken.",
+      "phase": "06"
+    },
+    {
+      "id": "C09",
+      "topic": "24h: kein Superseding",
+      "current_sources": "SMARTDEAL_ALGORITHM_CONTRACT_V1.md AC23; smartdeal_expiry.py",
+      "target_sources": "TRADE_PRODUCT_CONTRACT_V2.md; requests.js",
+      "resolution": "Bindungszeit + absolute24h bleibt; server UTC und atomarer Accept/Expiry-Wettlauf. PO review before productive Pax integration bleibt historischer Reviewmarker, keine neue Frist.",
+      "phase": "05"
+    },
+    {
+      "id": "C10",
+      "topic": "Top3 vs global maximal5 / Paarpotential",
+      "current_sources": "SMARTDEAL_ALGORITHM_CONTRACT_V1.md; smartdeal_planning.py",
+      "target_sources": "TRADE_08_AUDIT.md; discovery.js; Q5/Q8",
+      "resolution": "Drei sichtbare Vorschläge mit Nachrücken, kein neuer Optimizer. Paaroptimum nicht globaler Plan; Unter5-Paaranzeige keine automatische Smart-Submit-Freigabe.",
+      "phase": "02"
+    },
+    {
+      "id": "C11",
+      "topic": "Discovery kann schreiben",
+      "current_sources": "App/services/smartdeal_runtime.py discover/cleanup",
+      "target_sources": "INTEGRATION-01 Read Models",
+      "resolution": "Readonly-Shell verwendet reine Reader/Planung, nicht Wrapper mit Expiry-Cleanup; GET-Sideeffects explizit trennen.",
+      "phase": "01"
+    },
+    {
+      "id": "C12",
+      "topic": "Pax-Komponenten vs Pax-Produktsemantik",
+      "current_sources": "App/trade_v2/assets/preview.js; receive.js; App/static/pax/",
+      "target_sources": "TRADE_00_RESET_AUDIT.md; TRADE_11_AUDIT.md",
+      "resolution": "Nur geprüfte Renderingbausteine adaptieren; keine Paxgröße/Lifecycle-Fixture als neue Trade-SoT. Wall5/Trade10, −2/−2, Face und z-index kanonisch.",
+      "phase": "01–09"
+    }
+  ]
+}

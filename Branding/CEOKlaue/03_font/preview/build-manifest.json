@@ -1,0 +1,180 @@
+{
+  "version": "CEOKlaue v0.2 Preview (not final)",
+  "source": "Branding/CEOKlaue/01_extracted/glyphs",
+  "character_order": "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789äöüß.,:!?-+/()",
+  "po_selections": {
+    "A": "03",
+    "B": "05",
+    "C": "01",
+    "D": "04",
+    "E": "03",
+    "F": "03",
+    "G": "01",
+    "H": "01",
+    "I": "01",
+    "J": "04",
+    "L": "04",
+    "M": "03",
+    "N": "03",
+    "O": "05",
+    "Q": "04",
+    "R": "02",
+    "S": "05",
+    "T": "02",
+    "U": "04",
+    "V": "03",
+    "W": "02",
+    "X": "05",
+    "Y": "03",
+    "Z": "01",
+    "a": "03",
+    "b": "05",
+    "c": "04",
+    "d": "02",
+    "e": "03",
+    "f": "05",
+    "g": "03",
+    "h": "05",
+    "i": "04",
+    "j": "05",
+    "l": "03",
+    "m": "02",
+    "n": "05",
+    "o": "04",
+    "p": "02",
+    "q": "05",
+    "r": "03",
+    "s": "03",
+    "t": "04",
+    "u": "05",
+    "v": "02",
+    "w": "05",
+    "x": "05",
+    "y": "02",
+    "z": "02",
+    "1": "01",
+    "2": "03",
+    "3": "01",
+    "4": "02",
+    "5": "02",
+    "6": "01",
+    "7": "05",
+    "8": "03",
+    "9": "05",
+    "ä": "04",
+    "ö": "05",
+    "ü": "04",
+    "ß": "05",
+    ".": "03",
+    ",": "03",
+    ":": "05",
+    "!": "05",
+    "?": "01",
+    "-": "04",
+    "+": "02",
+    "/": "03",
+    "(": "04",
+    ")": "04"
+  },
+  "open_selections_using_v0.1_variant_03": {
+    "K": "03",
+    "P": "03",
+    "k": "03",
+    "0": "03"
+  },
+  "missing_source_backed_characters": "ÄÖÜ;",
+  "contour_thickening": {
+    "method": "binary mask dilation before vectorization",
+    "kernel": [
+      3,
+      3
+    ],
+    "kernel_shape": "ellipse",
+    "iterations": 1
+  },
+  "critical_counter_audit": {
+    "B": {
+      "before": 2,
+      "after": 2
+    },
+    "R": {
+      "before": 1,
+      "after": 1
+    },
+    "a": {
+      "before": 1,
+      "after": 1
+    },
+    "e": {
+      "before": 1,
+      "after": 1
+    },
+    "6": {
+      "before": 1,
+      "after": 1
+    },
+    "8": {
+      "before": 2,
+      "after": 2
+    }
+  },
+  "normalization": {
+    "strategy": "uniform optical outlier scaling with preserved group variation",
+    "factors": {
+      "B": 1.06,
+      "C": 1.11,
+      "D": 1.23,
+      "E": 1.08,
+      "F": 1.16,
+      "H": 0.96,
+      "I": 1.06,
+      "L": 1.08,
+      "N": 0.93,
+      "O": 1.14,
+      "P": 1.1,
+      "Q": 1.11,
+      "T": 1.16,
+      "U": 1.3,
+      "V": 0.95,
+      "X": 0.96,
+      "Z": 1.08,
+      "a": 0.85,
+      "d": 0.95,
+      "e": 1.11,
+      "f": 0.86,
+      "h": 0.93,
+      "p": 1.18,
+      "u": 1.1,
+      "x": 0.95,
+      "y": 1.13,
+      "ß": 0.82,
+      "2": 0.93,
+      "3": 0.95,
+      "4": 1.07,
+      "6": 0.91,
+      "ä": 1.05,
+      "ö": 1.18,
+      "ü": 1.15
+    },
+    "unchanged_factor": 1.0,
+    "side_bearing_units": 45,
+    "cap_height_units": 500,
+    "x_height_units": 390,
+    "hhea": {
+      "ascent": 960,
+      "descent": -230,
+      "line_gap": 30
+    },
+    "os2_typographic": {
+      "ascent": 820,
+      "descent": -230,
+      "line_gap": 50
+    },
+    "os2_windows": {
+      "ascent": 980,
+      "descent": 250
+    },
+    "vertical_anchor": "ink bottom aligned by glyph class; descenders retain -185"
+  },
+  "public_runtime_assets": []
+}

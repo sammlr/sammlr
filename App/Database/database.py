@@ -1,9 +1,13 @@
+import os
 import sqlite3
 from flask import Flask, render_template, request, redirect, url_for, session, flash
 from App.Database import database
 
 app = Flask(__name__)
-app.secret_key = 'your_secret_key'
+# Use the same environment contract as App/webapp.py; never a known fallback.
+app.config["SECRET_KEY"] = os.environ.get("SAMMLR_SECRET_KEY")
+if not app.config["SECRET_KEY"]:
+    raise RuntimeError("SAMMLR_SECRET_KEY is required")
 
 def init_db():
     con = database.get_db()

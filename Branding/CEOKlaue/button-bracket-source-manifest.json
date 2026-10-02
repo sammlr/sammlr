@@ -1,0 +1,321 @@
+{
+  "version": "CEOKlaue button bracket source import v1",
+  "source": {
+    "filename": "ceoklaue_button_brackets_01.jpg",
+    "original_filename": "IMG_7192.JPG",
+    "sha256": "ff3216183427dc96f85fe88b3fa595d46c0f1c3a04f6f38fbefc110dda39d3db",
+    "pixel_dimensions": [
+      4032,
+      3024
+    ],
+    "oriented_dimensions": [
+      3024,
+      4032
+    ],
+    "content": "five real left brackets over five matching real right brackets"
+  },
+  "pairing": {
+    "method": "same left-to-right column index across source rows",
+    "synthetic_variants": false,
+    "mirroring": false,
+    "pair_integrity_required": true
+  },
+  "extraction": {
+    "exif_orientation_applied_in_memory": true,
+    "detection_threshold": 80,
+    "extraction_threshold": 105,
+    "safe_margin": 6
+  },
+  "totals": {
+    "pairs": 5,
+    "left_assets": 5,
+    "right_assets": 5
+  },
+  "pairs": [
+    {
+      "id": "01",
+      "left": {
+        "candidate_key": "button_bracket_01_left",
+        "source_region_id": "button-bracket-left-01",
+        "oriented_crop": [
+          513,
+          1600,
+          753,
+          2070
+        ],
+        "detected_ink_pixels": 7040,
+        "mask_dimensions": [
+          165,
+          328
+        ],
+        "png": {
+          "path": "Branding/CEOKlaue/01_extracted/button_brackets/button_bracket_01_left.png",
+          "sha256": "da67379b34449c9f32f8d39ae6cb99a1205c20e27665765ed22bd3e6c4677d9a"
+        },
+        "svg": {
+          "path": "Branding/CEOKlaue/02_vectors/button_brackets/button_bracket_01_left.svg",
+          "sha256": "35e71140b667a7c1a29b4dc48cadb56839c2ac07e9b326f7f069fcf5d361203c"
+        },
+        "runtime_svg": {
+          "path": "App/static/ceoklaue-ui/button-brackets/button_bracket_01_left.svg",
+          "sha256": "35e71140b667a7c1a29b4dc48cadb56839c2ac07e9b326f7f069fcf5d361203c"
+        }
+      },
+      "right": {
+        "candidate_key": "button_bracket_01_right",
+        "source_region_id": "button-bracket-right-01",
+        "oriented_crop": [
+          489,
+          2160,
+          766,
+          2620
+        ],
+        "detected_ink_pixels": 9128,
+        "mask_dimensions": [
+          212,
+          337
+        ],
+        "png": {
+          "path": "Branding/CEOKlaue/01_extracted/button_brackets/button_bracket_01_right.png",
+          "sha256": "110f770f7850fcbcef502ccb8683de02acf07f21da17b93abaa0eb99d95ddfcf"
+        },
+        "svg": {
+          "path": "Branding/CEOKlaue/02_vectors/button_brackets/button_bracket_01_right.svg",
+          "sha256": "0b136fd0b7e4930953b837554d5ff90c26dee0add912641484e2f033615d52c4"
+        },
+        "runtime_svg": {
+          "path": "App/static/ceoklaue-ui/button-brackets/button_bracket_01_right.svg",
+          "sha256": "0b136fd0b7e4930953b837554d5ff90c26dee0add912641484e2f033615d52c4"
+        }
+      }
+    },
+    {
+      "id": "02",
+      "left": {
+        "candidate_key": "button_bracket_02_left",
+        "source_region_id": "button-bracket-left-02",
+        "oriented_crop": [
+          920,
+          1600,
+          1188,
+          2070
+        ],
+        "detected_ink_pixels": 7339,
+        "mask_dimensions": [
+          183,
+          315
+        ],
+        "png": {
+          "path": "Branding/CEOKlaue/01_extracted/button_brackets/button_bracket_02_left.png",
+          "sha256": "4a88f8726a90cc46c4e08e026f84b29bc861ae11a04441c7560f2823757b9c22"
+        },
+        "svg": {
+          "path": "Branding/CEOKlaue/02_vectors/button_brackets/button_bracket_02_left.svg",
+          "sha256": "67f5a5a751d8b5c284d06d7e625d49ad39ce72828df3a5fa5f30490e12980124"
+        },
+        "runtime_svg": {
+          "path": "App/static/ceoklaue-ui/button-brackets/button_bracket_02_left.svg",
+          "sha256": "67f5a5a751d8b5c284d06d7e625d49ad39ce72828df3a5fa5f30490e12980124"
+        }
+      },
+      "right": {
+        "candidate_key": "button_bracket_02_right",
+        "source_region_id": "button-bracket-right-02",
+        "oriented_crop": [
+          908,
+          2160,
+          1187,
+          2620
+        ],
+        "detected_ink_pixels": 8501,
+        "mask_dimensions": [
+          205,
+          286
+        ],
+        "png": {
+          "path": "Branding/CEOKlaue/01_extracted/button_brackets/button_bracket_02_right.png",
+          "sha256": "df942f70bf638991ec30154c201797802b310af9fd2f6a318a6c5072d02104d3"
+        },
+        "svg": {
+          "path": "Branding/CEOKlaue/02_vectors/button_brackets/button_bracket_02_right.svg",
+          "sha256": "26b40f93ddb44ae6bf93b015f5eaa9d966883ce698382f40f132e6ba91254597"
+        },
+        "runtime_svg": {
+          "path": "App/static/ceoklaue-ui/button-brackets/button_bracket_02_right.svg",
+          "sha256": "26b40f93ddb44ae6bf93b015f5eaa9d966883ce698382f40f132e6ba91254597"
+        }
+      }
+    },
+    {
+      "id": "03",
+      "left": {
+        "candidate_key": "button_bracket_03_left",
+        "source_region_id": "button-bracket-left-03",
+        "oriented_crop": [
+          1436,
+          1600,
+          1688,
+          2070
+        ],
+        "detected_ink_pixels": 6761,
+        "mask_dimensions": [
+          181,
+          317
+        ],
+        "png": {
+          "path": "Branding/CEOKlaue/01_extracted/button_brackets/button_bracket_03_left.png",
+          "sha256": "d7839cc203ae3c6ae8d4699cee1333e3142cb9d260f5a72af8b1fe60b09a1fc5"
+        },
+        "svg": {
+          "path": "Branding/CEOKlaue/02_vectors/button_brackets/button_bracket_03_left.svg",
+          "sha256": "3f187893d526f0991ae4537ef5f878606f9981ccbc98bdfce6a6cd63f1dddd54"
+        },
+        "runtime_svg": {
+          "path": "App/static/ceoklaue-ui/button-brackets/button_bracket_03_left.svg",
+          "sha256": "3f187893d526f0991ae4537ef5f878606f9981ccbc98bdfce6a6cd63f1dddd54"
+        }
+      },
+      "right": {
+        "candidate_key": "button_bracket_03_right",
+        "source_region_id": "button-bracket-right-03",
+        "oriented_crop": [
+          1416,
+          2160,
+          1696,
+          2620
+        ],
+        "detected_ink_pixels": 7795,
+        "mask_dimensions": [
+          206,
+          282
+        ],
+        "png": {
+          "path": "Branding/CEOKlaue/01_extracted/button_brackets/button_bracket_03_right.png",
+          "sha256": "c96162e22a8072872bb512a181de08f88a36aaed264ab5705e5cdc5205242364"
+        },
+        "svg": {
+          "path": "Branding/CEOKlaue/02_vectors/button_brackets/button_bracket_03_right.svg",
+          "sha256": "f34ec0ac4a1095fd99abb2b917ad14f1464aeb9058fb357542f6930846af5197"
+        },
+        "runtime_svg": {
+          "path": "App/static/ceoklaue-ui/button-brackets/button_bracket_03_right.svg",
+          "sha256": "f34ec0ac4a1095fd99abb2b917ad14f1464aeb9058fb357542f6930846af5197"
+        }
+      }
+    },
+    {
+      "id": "04",
+      "left": {
+        "candidate_key": "button_bracket_04_left",
+        "source_region_id": "button-bracket-left-04",
+        "oriented_crop": [
+          1682,
+          1600,
+          1920,
+          2070
+        ],
+        "detected_ink_pixels": 7745,
+        "mask_dimensions": [
+          164,
+          322
+        ],
+        "png": {
+          "path": "Branding/CEOKlaue/01_extracted/button_brackets/button_bracket_04_left.png",
+          "sha256": "5064aed2fb441a9c30e334d5537bac40fd0319cd68481b6b6784b3ed875bdaec"
+        },
+        "svg": {
+          "path": "Branding/CEOKlaue/02_vectors/button_brackets/button_bracket_04_left.svg",
+          "sha256": "dd4006710bc97bb5b1b9ea08bfa116a295494e39ab61fab63d41923a4a1fb7b9"
+        },
+        "runtime_svg": {
+          "path": "App/static/ceoklaue-ui/button-brackets/button_bracket_04_left.svg",
+          "sha256": "dd4006710bc97bb5b1b9ea08bfa116a295494e39ab61fab63d41923a4a1fb7b9"
+        }
+      },
+      "right": {
+        "candidate_key": "button_bracket_04_right",
+        "source_region_id": "button-bracket-right-04",
+        "oriented_crop": [
+          1789,
+          2160,
+          2050,
+          2620
+        ],
+        "detected_ink_pixels": 7890,
+        "mask_dimensions": [
+          186,
+          294
+        ],
+        "png": {
+          "path": "Branding/CEOKlaue/01_extracted/button_brackets/button_bracket_04_right.png",
+          "sha256": "396ebc6ceb0777b34a6d565443733d15a3050a7db624b3d3dd6af252851c41db"
+        },
+        "svg": {
+          "path": "Branding/CEOKlaue/02_vectors/button_brackets/button_bracket_04_right.svg",
+          "sha256": "abce4dd5c144c834cfcac5207e333d46e0a9c786b00a0f3c9aac1291bf4b50d6"
+        },
+        "runtime_svg": {
+          "path": "App/static/ceoklaue-ui/button-brackets/button_bracket_04_right.svg",
+          "sha256": "abce4dd5c144c834cfcac5207e333d46e0a9c786b00a0f3c9aac1291bf4b50d6"
+        }
+      }
+    },
+    {
+      "id": "05",
+      "left": {
+        "candidate_key": "button_bracket_05_left",
+        "source_region_id": "button-bracket-left-05",
+        "oriented_crop": [
+          1986,
+          1600,
+          2207,
+          2070
+        ],
+        "detected_ink_pixels": 6559,
+        "mask_dimensions": [
+          147,
+          291
+        ],
+        "png": {
+          "path": "Branding/CEOKlaue/01_extracted/button_brackets/button_bracket_05_left.png",
+          "sha256": "734e75b4105daf5dba6f216b6312a63b83a4365befd86580c12ecb825157b708"
+        },
+        "svg": {
+          "path": "Branding/CEOKlaue/02_vectors/button_brackets/button_bracket_05_left.svg",
+          "sha256": "df7d70f13b0bb58b4808794b0e3ff80478b85a8ed3ade1bbcc6cb337cd6a9dff"
+        },
+        "runtime_svg": {
+          "path": "App/static/ceoklaue-ui/button-brackets/button_bracket_05_left.svg",
+          "sha256": "df7d70f13b0bb58b4808794b0e3ff80478b85a8ed3ade1bbcc6cb337cd6a9dff"
+        }
+      },
+      "right": {
+        "candidate_key": "button_bracket_05_right",
+        "source_region_id": "button-bracket-right-05",
+        "oriented_crop": [
+          2101,
+          2160,
+          2351,
+          2620
+        ],
+        "detected_ink_pixels": 7003,
+        "mask_dimensions": [
+          176,
+          287
+        ],
+        "png": {
+          "path": "Branding/CEOKlaue/01_extracted/button_brackets/button_bracket_05_right.png",
+          "sha256": "2e7bd5604d6ffe616a85d9c1ad53085ccd466232e73016df6f36cf4773d75da6"
+        },
+        "svg": {
+          "path": "Branding/CEOKlaue/02_vectors/button_brackets/button_bracket_05_right.svg",
+          "sha256": "89730cb753284b7107320aaa1be0fbce7728679ae725dfa054acfe92e257bcd9"
+        },
+        "runtime_svg": {
+          "path": "App/static/ceoklaue-ui/button-brackets/button_bracket_05_right.svg",
+          "sha256": "89730cb753284b7107320aaa1be0fbce7728679ae725dfa054acfe92e257bcd9"
+        }
+      }
+    }
+  ]
+}

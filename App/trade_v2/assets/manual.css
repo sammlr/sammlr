@@ -1,0 +1,14 @@
+/* Only multi-album composition and safe in-flow dock placement. Canonical list styles are read-only. */
+.trade-manual .sticker-list-shell{max-width:760px;margin:0 auto;padding-bottom:30px!important}
+.trade-manual .sticker-list-header h1{overflow-wrap:anywhere}
+.trade-manual .manual-album{margin:24px 0 36px;min-width:0}
+.trade-manual .manual-album h2{font-size:28px;color:#7c3aed;margin:0 0 16px;font-weight:400}
+.trade-manual .manual-album h3{font-size:23px;font-weight:400;margin:20px 0 8px}
+.trade-manual .sticker-list-tradebar{position:relative!important;top:auto!important;left:auto!important;right:auto!important;bottom:auto!important;transform:rotate(-1.05deg)!important;margin:28px 8px 24px auto}
+.trade-manual #manual-summary{display:flex;flex-direction:column;align-items:flex-start}
+.trade-manual #manual-status{font:14px/1.5 Arial,sans-serif;min-height:42px;overflow-wrap:anywhere}
+.trade-manual .sticker-list-item[aria-disabled=true]:not(.selected){opacity:.38}
+.trade-manual .sticker-list-item:focus-visible{outline:2px solid #7c3aed;outline-offset:4px}
+.trade-manual [hidden]{display:none!important}
+@media(prefers-reduced-motion:reduce){.trade-manual *{animation:none!important;transition:none!important;scroll-behavior:auto!important}}
+@media(prefers-reduced-motion:reduce){.trade-manual .sticker-list-item.selected .marker-draw{stroke-dashoffset:0}}

@@ -1,0 +1,70 @@
+{
+  "results": [
+    {
+      "width": 375,
+      "model": {
+        "assertions": 52
+      },
+      "limit": true,
+      "no_disappearance": true,
+      "two_for_three": true,
+      "bilateral_open": true,
+      "one_sided_rejected": true,
+      "stale_and_empty_rejected": true,
+      "request_reused": true,
+      "complete_manual_e2e": true,
+      "capacity_three_blocked": true,
+      "overflow": false
+    },
+    {
+      "width": 390,
+      "model": {
+        "assertions": 52
+      },
+      "limit": true,
+      "no_disappearance": true,
+      "two_for_three": true,
+      "bilateral_open": true,
+      "one_sided_rejected": true,
+      "stale_and_empty_rejected": true,
+      "request_reused": true,
+      "complete_manual_e2e": true,
+      "capacity_three_blocked": true,
+      "overflow": false
+    },
+    {
+      "width": 430,
+      "model": {
+        "assertions": 52
+      },
+      "limit": true,
+      "no_disappearance": true,
+      "two_for_three": true,
+      "bilateral_open": true,
+      "one_sided_rejected": true,
+      "stale_and_empty_rejected": true,
+      "request_reused": true,
+      "complete_manual_e2e": true,
+      "capacity_three_blocked": true,
+      "overflow": false
+    },
+    {
+      "width": 1280,
+      "model": {
+        "assertions": 52
+      },
+      "limit": true,
+      "no_disappearance": true,
+      "two_for_three": true,
+      "bilateral_open": true,
+      "one_sided_rejected": true,
+      "stale_and_empty_rejected": true,
+      "request_reused": true,
+      "complete_manual_e2e": true,
+      "capacity_three_blocked": true,
+      "overflow": false
+    }
+  ],
+  "browser_errors": [],
+  "network_mutations": []
+}

@@ -1,0 +1,929 @@
+{
+  "baseline": "/tmp/trade04-before.json",
+  "changed_existing": [
+    "App/trade_v2/assets/preview.js",
+    "App/trade_v2/templates/preview.html",
+    "tests/research/check_trade_01.py",
+    "tests/research/check_trade_02.py",
+    "tests/research/check_trade_03.py"
+  ],
+  "new_file_manifest": "files.json",
+  "protected_count": 228,
+  "protected_hashes": {
+    "App/performance_wsgi.py": {
+      "before": "b75d09bb6f87f0b592cb6b778ee66d66fddf945d1f3e3a58c09b5317af0921f1",
+      "after": "b75d09bb6f87f0b592cb6b778ee66d66fddf945d1f3e3a58c09b5317af0921f1"
+    },
+    "App/sammlrpax_journey_v2_preview.py": {
+      "before": "2e3540f6c3f7533cc3a82a94ab9af4702fae9640144f12bb4bea8b5657bdfbb0",
+      "after": "2e3540f6c3f7533cc3a82a94ab9af4702fae9640144f12bb4bea8b5657bdfbb0"
+    },
+    "App/.DS_Store": {
+      "before": "c42474c79a09ce6b6a3a1871de0c397dec340efa73cb5b398946642f2d02cec4",
+      "after": "c42474c79a09ce6b6a3a1871de0c397dec340efa73cb5b398946642f2d02cec4"
+    },
+    "App/webapp_rescue_candidate.py": {
+      "before": "6c5c8cb71b2963e88e00b9037a98fc7a52e2d1329ba3561b1eadfb53508b703e",
+      "after": "6c5c8cb71b2963e88e00b9037a98fc7a52e2d1329ba3561b1eadfb53508b703e"
+    },
+    "App/trophy_definitions.py": {
+      "before": "3b66db01b7c4c0d76e7a96850c7c8c7a738b4ce6692d82e93f0d1d87508684ed",
+      "after": "3b66db01b7c4c0d76e7a96850c7c8c7a738b4ce6692d82e93f0d1d87508684ed"
+    },
+    "App/sticker_list.py": {
+      "before": "d24ecd4778fb0634495305ff19e25862eb1660fce36d5beba9657c65d9659587",
+      "after": "d24ecd4778fb0634495305ff19e25862eb1660fce36d5beba9657c65d9659587"
+    },
+    "App/webapp.py": {
+      "before": "266ccb319b2e415076787fad2d8d46f6bf0dca8c5d61603670e131efc191cff4",
+      "after": "266ccb319b2e415076787fad2d8d46f6bf0dca8c5d61603670e131efc191cff4"
+    },
+    "App/trade_visual_preview.py": {
+      "before": "4f73e8db8bc65159aca6d3722d4163d46bf2c666507f93ea8fa592234bf9476e",
+      "after": "4f73e8db8bc65159aca6d3722d4163d46bf2c666507f93ea8fa592234bf9476e"
+    },
+    "App/wm26_data.py": {
+      "before": "dde1395857ac6119d8de177ede9f1bc54aee9b1956c6ba9a072d5615b4c9c025",
+      "after": "dde1395857ac6119d8de177ede9f1bc54aee9b1956c6ba9a072d5615b4c9c025"
+    },
+    "App/webapp_backup.py": {
+      "before": "6c5c8cb71b2963e88e00b9037a98fc7a52e2d1329ba3561b1eadfb53508b703e",
+      "after": "6c5c8cb71b2963e88e00b9037a98fc7a52e2d1329ba3561b1eadfb53508b703e"
+    },
+    "App/em24_data.py": {
+      "before": "0338a4dc225ce1ae53ff3c8e8cff0eb2b955d112a25772725dff5b249fee3cfa",
+      "after": "0338a4dc225ce1ae53ff3c8e8cff0eb2b955d112a25772725dff5b249fee3cfa"
+    },
+    "App/profile_sticker.py": {
+      "before": "325a9f209d5634040958b59d3ebbf69456b524f2ca2bb6ab2e53abe1025d61ce",
+      "after": "325a9f209d5634040958b59d3ebbf69456b524f2ca2bb6ab2e53abe1025d61ce"
+    },
+    "App/webapp_broken_now.py": {
+      "before": "f593a1265005ffcc919f8031b3145ecc401dd652daa2880ee97f6a18dccfabba",
+      "after": "f593a1265005ffcc919f8031b3145ecc401dd652daa2880ee97f6a18dccfabba"
+    },
+    "App/webapp_blob_backup.py": {
+      "before": "233727bce5c2e88b0ddc0298fdff671fbe76d2e7db8509b7e90cd2f7b1cab0db",
+      "after": "233727bce5c2e88b0ddc0298fdff671fbe76d2e7db8509b7e90cd2f7b1cab0db"
+    },
+    "App/Database/fehlende.txt": {
+      "before": "2d821f3a14930f07eb261999d3f506deb485aa473e647d803cf7bc54ab788a3e",
+      "after": "2d821f3a14930f07eb261999d3f506deb485aa473e647d803cf7bc54ab788a3e"
+    },
+    "App/Database/.DS_Store": {
+      "before": "0bc41c416a8286a45becd4a597f83877d45906cf38686e55c0c091d8ff25ade2",
+      "after": "0bc41c416a8286a45becd4a597f83877d45906cf38686e55c0c091d8ff25ade2"
+    },
+    "App/Database/collectr.db Kopie": {
+      "before": "f25e1b02975da4cda2dfc0e217fe30ae294030dbb9fc0b7a5b6d4b93318f5e4a",
+      "after": "f25e1b02975da4cda2dfc0e217fe30ae294030dbb9fc0b7a5b6d4b93318f5e4a"
+    },
+    "App/Database/repair_database.py": {
+      "before": "b8633369fce20ce6ce454ff916653a919155411bb2a363c6b48c8e7f4132b136",
+      "after": "b8633369fce20ce6ce454ff916653a919155411bb2a363c6b48c8e7f4132b136"
+    },
+    "App/Database/sammlr_reference_s00.sql": {
+      "before": "0477be18d41a6839954385c8400af9310c50024f5283ea98adaf0b135cda3ba5",
+      "after": "0477be18d41a6839954385c8400af9310c50024f5283ea98adaf0b135cda3ba5"
+    },
+    "App/Database/database.py": {
+      "before": "87b42989244e342ccee5448657ab8777aae605b969883ec4685615d00eb7e56d",
+      "after": "87b42989244e342ccee5448657ab8777aae605b969883ec4685615d00eb7e56d"
+    },
+    "App/Database/catalog_seed.sql": {
+      "before": "796d4fc5024e8d60487cc323d53ed9a8632c769092982e87397dc9251f0969a6",
+      "after": "796d4fc5024e8d60487cc323d53ed9a8632c769092982e87397dc9251f0969a6"
+    },
+    "App/Database/em24_fehlende.txt": {
+      "before": "ecea639f00b92aea8b1beb31e1abd6017718b0882e2ab08100be844b5ea6ca04",
+      "after": "ecea639f00b92aea8b1beb31e1abd6017718b0882e2ab08100be844b5ea6ca04"
+    },
+    "App/Database/sqlite_recovery.py": {
+      "before": "e8ca8e28a85fdb69067b33a00e7c0a12ad790d57308d529d65ee555cc2ad5ce3",
+      "after": "e8ca8e28a85fdb69067b33a00e7c0a12ad790d57308d529d65ee555cc2ad5ce3"
+    },
+    "App/Database/sammlr_reference_s00.db": {
+      "before": "21774db638fa8f700b4e831d56e14739acb1b74e4d307852e8a7b2c474811971",
+      "after": "21774db638fa8f700b4e831d56e14739acb1b74e4d307852e8a7b2c474811971"
+    },
+    "App/Database/em24_data.py": {
+      "before": "0338a4dc225ce1ae53ff3c8e8cff0eb2b955d112a25772725dff5b249fee3cfa",
+      "after": "0338a4dc225ce1ae53ff3c8e8cff0eb2b955d112a25772725dff5b249fee3cfa"
+    },
+    "App/Database/repair_quantity.py": {
+      "before": "eb5b7ebe6c90e843a63c1a946774810cdcdb22829fed5fc6f0c2545f40623ccd",
+      "after": "eb5b7ebe6c90e843a63c1a946774810cdcdb22829fed5fc6f0c2545f40623ccd"
+    },
+    "App/Database/migration_runner.py": {
+      "before": "5734bada72ea7dbb683f4ba5a7564e56e37db3c37ecc13948a7c0909f0134124",
+      "after": "5734bada72ea7dbb683f4ba5a7564e56e37db3c37ecc13948a7c0909f0134124"
+    },
+    "App/Database/em24_structure.py": {
+      "before": "7ebea30ece9e2b5532b4979612b0f8beb9404dba74cc592319c99930f56c4857",
+      "after": "7ebea30ece9e2b5532b4979612b0f8beb9404dba74cc592319c99930f56c4857"
+    },
+    "App/Database/base_schema.sql": {
+      "before": "1150958195752a4cc8b3851f507435e31c19df16ea5810ace71ef8d7c62c67ef",
+      "after": "1150958195752a4cc8b3851f507435e31c19df16ea5810ace71ef8d7c62c67ef"
+    },
+    "App/Database/repair_vfl_database.py.txt": {
+      "before": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "after": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "App/Database/s20_coverage_debug.db": {
+      "before": "dadac1c379a45ec0245208293aef3eccd732cc41b3c07e4b8c523cace1444d9e",
+      "after": "dadac1c379a45ec0245208293aef3eccd732cc41b3c07e4b8c523cace1444d9e"
+    },
+    "App/Database/repair_vfl_database.py": {
+      "before": "3ca75c152e01c58f66a34f89d3b578d273623229beaff89655ba1c229d1ee8c8",
+      "after": "3ca75c152e01c58f66a34f89d3b578d273623229beaff89655ba1c229d1ee8c8"
+    },
+    "App/Database/sammlr.db": {
+      "before": "74c4a71abe79597b9fc24a4c298db3c9e480fea7f385857353df551a47cdbbbe",
+      "after": "74c4a71abe79597b9fc24a4c298db3c9e480fea7f385857353df551a47cdbbbe"
+    },
+    "App/Archive/webapp_backup_popup_clean.py": {
+      "before": "adb74a3418752e59f5047f96651e8fa9ac0f6e2f4cde118a40d673b470233bc5",
+      "after": "adb74a3418752e59f5047f96651e8fa9ac0f6e2f4cde118a40d673b470233bc5"
+    },
+    "App/Archive/webapp_backup_before_users.py": {
+      "before": "4ca254073db0af4b76d1297730933f40757e64b7b14563c4837d8f27d5c38b2a",
+      "after": "4ca254073db0af4b76d1297730933f40757e64b7b14563c4837d8f27d5c38b2a"
+    },
+    "App/Archive/webapp_backup_session_ready.py": {
+      "before": "4959b9c58edd66908d3f7906bd28f2a5d55f92650b7c87b86e3aaefbf53b7cae",
+      "after": "4959b9c58edd66908d3f7906bd28f2a5d55f92650b7c87b86e3aaefbf53b7cae"
+    },
+    "App/Archive/webapp_backup_multiuser_albums.py": {
+      "before": "bc3a3fe43d3693b0d4b74031274be8d1c5d7cb1f941343ef16e95b33cab5b57c",
+      "after": "bc3a3fe43d3693b0d4b74031274be8d1c5d7cb1f941343ef16e95b33cab5b57c"
+    },
+    "App/Archive/webapp_backup_users_trophy_clean_runs.py": {
+      "before": "8fcb5f1c96bea4bce080079a1e93d90def7233c00304d85ff40f43bd301fabad",
+      "after": "8fcb5f1c96bea4bce080079a1e93d90def7233c00304d85ff40f43bd301fabad"
+    },
+    "App/Archive/webapp_backup_trophy_tabs_visual_runs.py": {
+      "before": "1994e83e8bb9d0f1a2db8df48882f01a07b3cc5182de8b21e76976dc550aa47b",
+      "after": "1994e83e8bb9d0f1a2db8df48882f01a07b3cc5182de8b21e76976dc550aa47b"
+    },
+    "App/Archive/webapp_backup_before_trophy_cleanup.py": {
+      "before": "a2aa44e81f3f994f77504e90c530b27137303525a492ec380245a4b9b33526d6",
+      "after": "a2aa44e81f3f994f77504e90c530b27137303525a492ec380245a4b9b33526d6"
+    },
+    "App/uploads/.gitignore": {
+      "before": "08766be5571a25324199f16d3299d47af5ded8c249a7e58179bc6d948654dc94",
+      "after": "08766be5571a25324199f16d3299d47af5ded8c249a7e58179bc6d948654dc94"
+    },
+    "App/pax/__init__.py": {
+      "before": "bf9d4bf9f30a8b6878767bc7d096ba4135332a8ffcdea5916f0819ec314cd47d",
+      "after": "bf9d4bf9f30a8b6878767bc7d096ba4135332a8ffcdea5916f0819ec314cd47d"
+    },
+    "App/pax/layer_comparison.html": {
+      "before": "66e632f1edaa2a46d02f9e6f4f30cd70f8c3717fd2c4f13aeb011e8db9ddf8c0",
+      "after": "66e632f1edaa2a46d02f9e6f4f30cd70f8c3717fd2c4f13aeb011e8db9ddf8c0"
+    },
+    "App/pax/__main__.py": {
+      "before": "f73b51e098f3a572cbc56d897c996e0d5d0adccb294b615ab4921b7421be6ee8",
+      "after": "f73b51e098f3a572cbc56d897c996e0d5d0adccb294b615ab4921b7421be6ee8"
+    },
+    "App/pax/fixtures.py": {
+      "before": "58ddcdcce52fbb9284aa345e29e61957fccc7308e10628449161d54e983f96c1",
+      "after": "58ddcdcce52fbb9284aa345e29e61957fccc7308e10628449161d54e983f96c1"
+    },
+    "App/pax/routes.py": {
+      "before": "fee7be69e4760f4afb4d293ee5cd6d36cd861b3739ad330912164606bb346e1a",
+      "after": "fee7be69e4760f4afb4d293ee5cd6d36cd861b3739ad330912164606bb346e1a"
+    },
+    "App/static/collectr_logo.png": {
+      "before": "4873cc7a079fc90aa40106a5901d9c38167d317c4bdafb246de1f2b78ac34701",
+      "after": "4873cc7a079fc90aa40106a5901d9c38167d317c4bdafb246de1f2b78ac34701"
+    },
+    "App/static/ceoklaue-wordmark.svg": {
+      "before": "692592c48e612a7d4b8199ec5dae2928248e15be88e836dcaf4db1411cec8d07",
+      "after": "692592c48e612a7d4b8199ec5dae2928248e15be88e836dcaf4db1411cec8d07"
+    },
+    "App/static/sammlr_logo_header.png": {
+      "before": "7f6ca26d84e41cbd9dcbaf770287676d97ba524e4bb2a677849684f8f1ec1633",
+      "after": "7f6ca26d84e41cbd9dcbaf770287676d97ba524e4bb2a677849684f8f1ec1633"
+    },
+    "App/static/sticker_list.js": {
+      "before": "dc3a174045c9c3119f8aaabbbff14cffb9fa370b108558a634b7a28edbc52665",
+      "after": "dc3a174045c9c3119f8aaabbbff14cffb9fa370b108558a634b7a28edbc52665"
+    },
+    "App/static/sammlrpax_journey_v1.js": {
+      "before": "ed2c2f483f8713536629acd3003059be56cce2413e9794e78c625f16d9fc6aa9",
+      "after": "ed2c2f483f8713536629acd3003059be56cce2413e9794e78c625f16d9fc6aa9"
+    },
+    "App/static/.DS_Store": {
+      "before": "beab13b832f59cb83d6ce073c3b77f62b806ac492a88573db1d9c8d2e3dcb79e",
+      "after": "beab13b832f59cb83d6ce073c3b77f62b806ac492a88573db1d9c8d2e3dcb79e"
+    },
+    "App/static/sammlr-retro-digits.svg": {
+      "before": "262d07f5b1ed755b4d7ce09c836175b397cefda733515b90f733129f434319c2",
+      "after": "262d07f5b1ed755b4d7ce09c836175b397cefda733515b90f733129f434319c2"
+    },
+    "App/static/trade_visual_preview.js": {
+      "before": "be743f712b7901f40954de7d8de890263d95182e4d8b95d410826de299b07d6a",
+      "after": "be743f712b7901f40954de7d8de890263d95182e4d8b95d410826de299b07d6a"
+    },
+    "App/static/profile_sticker.css": {
+      "before": "471e2d91bc662306a690069f5068b1ca3aed008b1a012025eff92e10126ff221",
+      "after": "471e2d91bc662306a690069f5068b1ca3aed008b1a012025eff92e10126ff221"
+    },
+    "App/static/sticker_wall_read_only.js": {
+      "before": "eda776efb53bbe3cdef679b05c83a4d082295f7101085b8a7506d0f1983b9451",
+      "after": "eda776efb53bbe3cdef679b05c83a4d082295f7101085b8a7506d0f1983b9451"
+    },
+    "App/static/sammlr_logo_transparent.png": {
+      "before": "5deec3285d7a231ca42c1cfb27286675d0b415fd138e2edab0731b62e9ff0891",
+      "after": "5deec3285d7a231ca42c1cfb27286675d0b415fd138e2edab0731b62e9ff0891"
+    },
+    "App/static/Stickeralbum.svg": {
+      "before": "d2f4c0241ad4cfb7650feefb596420bc769aca9a8d9ad1aa0264f614daba0357",
+      "after": "d2f4c0241ad4cfb7650feefb596420bc769aca9a8d9ad1aa0264f614daba0357"
+    },
+    "App/static/profile_sticker.js": {
+      "before": "e57541fc12e1e7070cb82b298eaaa892f604fbd210a71281e3f39e921bd38b71",
+      "after": "e57541fc12e1e7070cb82b298eaaa892f604fbd210a71281e3f39e921bd38b71"
+    },
+    "App/static/compact_sticker_stack.css": {
+      "before": "66be585f69734f59088941c6b4675efe6552c19b21e791d685c7379ccce650f1",
+      "after": "66be585f69734f59088941c6b4675efe6552c19b21e791d685c7379ccce650f1"
+    },
+    "App/static/style.css": {
+      "before": "5dff8ff51a91dbdab7439745c802da7d32bbf83bd39b3db460cf06b6a88c3440",
+      "after": "5dff8ff51a91dbdab7439745c802da7d32bbf83bd39b3db460cf06b6a88c3440"
+    },
+    "App/static/profile_v1.css": {
+      "before": "545205f9e000462798b3d68b3533f0143025f59031f133b5ff88d8ad0e227d15",
+      "after": "545205f9e000462798b3d68b3533f0143025f59031f133b5ff88d8ad0e227d15"
+    },
+    "App/static/trade_visual_preview.css": {
+      "before": "569b35e573dd33bfb73afe1d811dd69ef4700710070708faae76df364d632c4a",
+      "after": "569b35e573dd33bfb73afe1d811dd69ef4700710070708faae76df364d632c4a"
+    },
+    "App/static/logo_sammlr_white.png": {
+      "before": "cd896d935f83bc2cef9fee9b9136b5f78775ddb419065b2cd21f85b03a2d75ab",
+      "after": "cd896d935f83bc2cef9fee9b9136b5f78775ddb419065b2cd21f85b03a2d75ab"
+    },
+    "App/static/sammlrpax_journey_v1.css": {
+      "before": "f195af5dd8a9daccebe291e6eb98d39484a9db63dda1e0b3288602a362217822",
+      "after": "f195af5dd8a9daccebe291e6eb98d39484a9db63dda1e0b3288602a362217822"
+    },
+    "App/static/sticker_list.css": {
+      "before": "810bdd9c8aaa349c17edddea35db7b7b5673467c0aec55af7acd356a10724129",
+      "after": "810bdd9c8aaa349c17edddea35db7b7b5673467c0aec55af7acd356a10724129"
+    },
+    "App/static/sammlr-retro-digits-v3.svg": {
+      "before": "de2afa4ace51efe85399a21fe2884bb9973872f6c9c5ecf8c4e1926db794f3c1",
+      "after": "de2afa4ace51efe85399a21fe2884bb9973872f6c9c5ecf8c4e1926db794f3c1"
+    },
+    "App/static/sammlrpax_journey_v2.css": {
+      "before": "12d0a104870a04ff7d71a252af51c6b7e8ecaa7a8cc6f65dddde506302a71248",
+      "after": "12d0a104870a04ff7d71a252af51c6b7e8ecaa7a8cc6f65dddde506302a71248"
+    },
+    "App/static/sammlrpax_journey_v2_components.css": {
+      "before": "b079a161a78fc1ae7ac9351bd074a70d54a712846d30d6ed4ca3a07526eb3e8d",
+      "after": "b079a161a78fc1ae7ac9351bd074a70d54a712846d30d6ed4ca3a07526eb3e8d"
+    },
+    "App/static/sammlrpax_journey_v2.js": {
+      "before": "90c1bb92ab8d5913ed2b1e64dd8cc6b29f20fe700dc184018fbdd3b6ae6fd3e8",
+      "after": "90c1bb92ab8d5913ed2b1e64dd8cc6b29f20fe700dc184018fbdd3b6ae6fd3e8"
+    },
+    "App/static/sammlr-retro-digits-v2.svg": {
+      "before": "629a08ed6a6a28b27b4ea2320e2c4795d7c4733653c3fecfb08b8a5eadd1a877",
+      "after": "629a08ed6a6a28b27b4ea2320e2c4795d7c4733653c3fecfb08b8a5eadd1a877"
+    },
+    "App/templates/trade_visual_preview.html": {
+      "before": "d64803c8b363976f28942f5381d2f43b952c3ae9e5caed22c42d40723613dffc",
+      "after": "d64803c8b363976f28942f5381d2f43b952c3ae9e5caed22c42d40723613dffc"
+    },
+    "App/templates/profile_sticker_edit.html": {
+      "before": "04f92957a1f68eb3361e1cbbd37790076cdadc55f08aa98edd77e991c1816272",
+      "after": "04f92957a1f68eb3361e1cbbd37790076cdadc55f08aa98edd77e991c1816272"
+    },
+    "App/templates/sammlrpax_journey_v1.html": {
+      "before": "a5feaee1512d03b4d0c88388db4761c7b562ebaab98bcbc2d5cf52399dbd8630",
+      "after": "a5feaee1512d03b4d0c88388db4761c7b562ebaab98bcbc2d5cf52399dbd8630"
+    },
+    "App/templates/sammlrpax_journey_v2.html": {
+      "before": "10c789c3799d8871487449a38596247ff1511963d37d5b78bcf09f560ccde12e",
+      "after": "10c789c3799d8871487449a38596247ff1511963d37d5b78bcf09f560ccde12e"
+    },
+    "App/templates/sticker_list.html": {
+      "before": "69302afc9ed50e3f44c179f49aa9330b474140eb6e970016fb469c1478fe8d37",
+      "after": "69302afc9ed50e3f44c179f49aa9330b474140eb6e970016fb469c1478fe8d37"
+    },
+    "App/services/smartdeal_planning.py": {
+      "before": "098ebf80ae6c0392b7c427334f76ba902fe3a9fc7b9b98d9af79d19105e406e3",
+      "after": "098ebf80ae6c0392b7c427334f76ba902fe3a9fc7b9b98d9af79d19105e406e3"
+    },
+    "App/services/smartdeal_optimizer.py": {
+      "before": "855a88afdeead2643a41a5cb86a72417c2d540ff097700ba6770b61bbbe6d9a1",
+      "after": "855a88afdeead2643a41a5cb86a72417c2d540ff097700ba6770b61bbbe6d9a1"
+    },
+    "App/services/history_cutover.py": {
+      "before": "12865e4a375731943320b8b31dd6918474215eb2bd6532cc4793d096144502ba",
+      "after": "12865e4a375731943320b8b31dd6918474215eb2bd6532cc4793d096144502ba"
+    },
+    "App/services/smart_trade_requests.py": {
+      "before": "37af3ec93cb685fb627d279539c186da305b04990c200df49998da3fed3daea6",
+      "after": "37af3ec93cb685fb627d279539c186da305b04990c200df49998da3fed3daea6"
+    },
+    "App/services/smartdeal_pairwise.py": {
+      "before": "3487bc857b31d30669d5114b26255e1f906d6a941a412d4847df66fcf44fdadd",
+      "after": "3487bc857b31d30669d5114b26255e1f906d6a941a412d4847df66fcf44fdadd"
+    },
+    "App/services/.DS_Store": {
+      "before": "d93309d94b32ba6fedff8aeee437df419d9e6de612e5e45983fbfdb0348ca23b",
+      "after": "d93309d94b32ba6fedff8aeee437df419d9e6de612e5e45983fbfdb0348ca23b"
+    },
+    "App/services/trophy_service.py": {
+      "before": "c1068dcf5fa4c9d340aa83c817f753f2a902fb0f17e4b91237eaa84da0a9707d",
+      "after": "c1068dcf5fa4c9d340aa83c817f753f2a902fb0f17e4b91237eaa84da0a9707d"
+    },
+    "App/services/profile_privacy.py": {
+      "before": "72d53bc85c26c43286fd1860e936eb145da540c592491323ffea88368b99f3ca",
+      "after": "72d53bc85c26c43286fd1860e936eb145da540c592491323ffea88368b99f3ca"
+    },
+    "App/services/statistics_projection.py": {
+      "before": "97ef4b792ee3d36f3a611a3597171751b3b21e780ab39966eca1859dcb80a4ab",
+      "after": "97ef4b792ee3d36f3a611a3597171751b3b21e780ab39966eca1859dcb80a4ab"
+    },
+    "App/services/inventory_write.py": {
+      "before": "4c1e83f644a776aa22c1b61980b1a10feff6226e91c7a6be96740f3fe7b62726",
+      "after": "4c1e83f644a776aa22c1b61980b1a10feff6226e91c7a6be96740f3fe7b62726"
+    },
+    "App/services/auth_security.py": {
+      "before": "b0f17f8161fdc755318cb515f57e4bba144899b80d7c1d360ac951a329e1d71e",
+      "after": "b0f17f8161fdc755318cb515f57e4bba144899b80d7c1d360ac951a329e1d71e"
+    },
+    "App/services/album_completion.py": {
+      "before": "f909eed6b217e3808a4d71020a7439eb88e31073350dc082fa664df1081981ee",
+      "after": "f909eed6b217e3808a4d71020a7439eb88e31073350dc082fa664df1081981ee"
+    },
+    "App/services/smartdeal_identity.py": {
+      "before": "f78c54da48c49790a248b5f486ca97a89ce3efb76f37db65cebaed4a7daf233f",
+      "after": "f78c54da48c49790a248b5f486ca97a89ce3efb76f37db65cebaed4a7daf233f"
+    },
+    "App/services/feed_events.py": {
+      "before": "a5ba1759c6ddcf3950de275d30b359a76b260bb5cb158f976cab7b125571adf0",
+      "after": "a5ba1759c6ddcf3950de275d30b359a76b260bb5cb158f976cab7b125571adf0"
+    },
+    "App/services/legacy_trophy_backfill.py": {
+      "before": "8225d930931e92daccd2cb659bd0a1614d558aebbf3d65ee40e52a08999a84ae",
+      "after": "8225d930931e92daccd2cb659bd0a1614d558aebbf3d65ee40e52a08999a84ae"
+    },
+    "App/services/observability.py": {
+      "before": "21715e3e25c97b3478003beb93db0b731fc2289d403647973d3676eccbd2e3b9",
+      "after": "21715e3e25c97b3478003beb93db0b731fc2289d403647973d3676eccbd2e3b9"
+    },
+    "App/services/smartdeal_requests.py": {
+      "before": "0f026bef61f194b99712c5b7d86d0a470a96a4f33b7242057df8f3ba242f00d0",
+      "after": "0f026bef61f194b99712c5b7d86d0a470a96a4f33b7242057df8f3ba242f00d0"
+    },
+    "App/services/trade_coverage.py": {
+      "before": "5e6623fd208add9518afdcdab4fbf6a74ff6d03b4878ce03464fb4c036f230dd",
+      "after": "5e6623fd208add9518afdcdab4fbf6a74ff6d03b4878ce03464fb4c036f230dd"
+    },
+    "App/services/executable_trade_matches.py": {
+      "before": "953b61a867156e710546c713614d822d634f9b8037b723c6241ffff58008e4c6",
+      "after": "953b61a867156e710546c713614d822d634f9b8037b723c6241ffff58008e4c6"
+    },
+    "App/services/historical_collection.py": {
+      "before": "6f9b908ed3986a749093dc9612ee81f975698debe23b8d3cba5b54711d1a0c05",
+      "after": "6f9b908ed3986a749093dc9612ee81f975698debe23b8d3cba5b54711d1a0c05"
+    },
+    "App/services/successful_trade_projection.py": {
+      "before": "ae0c0f54c63534b2f4bced3516dbd2bc249d5e9e4f9a7babf00aff8ff813d35f",
+      "after": "ae0c0f54c63534b2f4bced3516dbd2bc249d5e9e4f9a7babf00aff8ff813d35f"
+    },
+    "App/services/collector_profiles.py": {
+      "before": "41684be68f568d0a1716da58461ceea8b0c1e174e11e493ded01bd50437102f3",
+      "after": "41684be68f568d0a1716da58461ceea8b0c1e174e11e493ded01bd50437102f3"
+    },
+    "App/services/smartdeal_suggestions.py": {
+      "before": "dbd64fd59ece9a9a1ee223efc6ea78959fa02d5908be75c8ca9c571ef7f17045",
+      "after": "dbd64fd59ece9a9a1ee223efc6ea78959fa02d5908be75c8ca9c571ef7f17045"
+    },
+    "App/services/account_lifecycle.py": {
+      "before": "123eae9683783753ccb3a266384e7986a64d2ad9678dd15756a491132c5b3f5a",
+      "after": "123eae9683783753ccb3a266384e7986a64d2ad9678dd15756a491132c5b3f5a"
+    },
+    "App/services/trade_contracts.py": {
+      "before": "b7d91ffb325ae1b10c4cd40463e7aaab0282ae3e62f3616f446765ad92c711a8",
+      "after": "b7d91ffb325ae1b10c4cd40463e7aaab0282ae3e62f3616f446765ad92c711a8"
+    },
+    "App/services/typed_notifications.py": {
+      "before": "b4de4e3f68e8a90c25e8877171443ed29c60684b1681bd2534652dc6e9a1aba1",
+      "after": "b4de4e3f68e8a90c25e8877171443ed29c60684b1681bd2534652dc6e9a1aba1"
+    },
+    "App/services/trade_problems.py": {
+      "before": "2c979276f118e349558419744f1534f03f47a45712aad344499878ee79185db6",
+      "after": "2c979276f118e349558419744f1534f03f47a45712aad344499878ee79185db6"
+    },
+    "App/services/smartdeal_runtime.py": {
+      "before": "d67f5bf63fb0716fa5b44a93394345e54e8aeae2321b30f71d395073e8613192",
+      "after": "d67f5bf63fb0716fa5b44a93394345e54e8aeae2321b30f71d395073e8613192"
+    },
+    "App/services/community.py": {
+      "before": "e2dad6e12022d1e251d6afc88042e76a355b0dcae10ca2598d1bd59318118bbd",
+      "after": "e2dad6e12022d1e251d6afc88042e76a355b0dcae10ca2598d1bd59318118bbd"
+    },
+    "App/services/smartdeal_expiry.py": {
+      "before": "b1dd8a27a0b1a36eb78ae2f1740b2ee4ac8cf14ec9c926dac6d0c1b584343360",
+      "after": "b1dd8a27a0b1a36eb78ae2f1740b2ee4ac8cf14ec9c926dac6d0c1b584343360"
+    },
+    "App/services/trophy_unlocks.py": {
+      "before": "f6a589d70937d05791f7018ed6771633c52f207430511a2952af85d9de1fd3a7",
+      "after": "f6a589d70937d05791f7018ed6771633c52f207430511a2952af85d9de1fd3a7"
+    },
+    "App/services/collection_projection.py": {
+      "before": "5396eaf10403272da6bda246c79afd52ac983f3c13bfbf720da610ec37429b0d",
+      "after": "5396eaf10403272da6bda246c79afd52ac983f3c13bfbf720da610ec37429b0d"
+    },
+    "App/services/notification_history.py": {
+      "before": "97f93b9f9c45f1b260c4b8049391a20542b146c62ac068bf7004b1ff30fd6552",
+      "after": "97f93b9f9c45f1b260c4b8049391a20542b146c62ac068bf7004b1ff30fd6552"
+    },
+    "App/services/runtime_operations.py": {
+      "before": "65840903b34b40999f8ea7c74308cd160379835b809ff6a16475aa67b56141a6",
+      "after": "65840903b34b40999f8ea7c74308cd160379835b809ff6a16475aa67b56141a6"
+    },
+    "App/services/top_match_optimization.py": {
+      "before": "34637c067fca1bc6fcd88011e8fe6a0de71491c32f6ef4d1f62ac435bc66a9be",
+      "after": "34637c067fca1bc6fcd88011e8fe6a0de71491c32f6ef4d1f62ac435bc66a9be"
+    },
+    "App/services/trade_shipping.py": {
+      "before": "a61657e6dc5d712d96025b7b55a48322db1a50cb8c2ccdd979d5996cfaea66f4",
+      "after": "a61657e6dc5d712d96025b7b55a48322db1a50cb8c2ccdd979d5996cfaea66f4"
+    },
+    "App/services/inventory_availability.py": {
+      "before": "83875928324287e57869e63bcc49f0ea976788951ce855cd56a0e0e204ccfa59",
+      "after": "83875928324287e57869e63bcc49f0ea976788951ce855cd56a0e0e204ccfa59"
+    },
+    "App/services/inventory_guard.py": {
+      "before": "e19acc7282041b5c58db1ba9f80b3dd6a69de19553db7be914cd760fafe407ed",
+      "after": "e19acc7282041b5c58db1ba9f80b3dd6a69de19553db7be914cd760fafe407ed"
+    },
+    "App/services/smartdeal_release.py": {
+      "before": "7205a25fe4ea623dbeed1fd4ecef7ede35f00713d8a736fcc2eb91cf821be23b",
+      "after": "7205a25fe4ea623dbeed1fd4ecef7ede35f00713d8a736fcc2eb91cf821be23b"
+    },
+    "App/services/album_privacy.py": {
+      "before": "7ffe52aefe7dc6a04bb167331712c8659ecb5e2e30980ee633d71c97e83ffd25",
+      "after": "7ffe52aefe7dc6a04bb167331712c8659ecb5e2e30980ee633d71c97e83ffd25"
+    },
+    "App/services/trade_ratings.py": {
+      "before": "02dbe7959a35909bfee5030e3cf0ea8bc7e417be198dc88a0b66c01a797ebf3e",
+      "after": "02dbe7959a35909bfee5030e3cf0ea8bc7e417be198dc88a0b66c01a797ebf3e"
+    },
+    "App/services/trade_receipt.py": {
+      "before": "c7aa159f7788be2c59b2ee1791e1e164dac5f9858cca59e29150391918ad3066",
+      "after": "c7aa159f7788be2c59b2ee1791e1e164dac5f9858cca59e29150391918ad3066"
+    },
+    "App/services/_smartdeal_flow.py": {
+      "before": "69ec13507929519bf2f7a749854becf17b94f3d5fe708014df31caef55b41dec",
+      "after": "69ec13507929519bf2f7a749854becf17b94f3d5fe708014df31caef55b41dec"
+    },
+    "App/services/user_data_export.py": {
+      "before": "348f4d997936a33e878dd0948babd87857a135bbd4ca62f02d3900d91207112f",
+      "after": "348f4d997936a33e878dd0948babd87857a135bbd4ca62f02d3900d91207112f"
+    },
+    "App/services/albums.py": {
+      "before": "6ef57ccb35d6222d9a22c2944b6b2a75fd4baf248b13aac5eb3721c5c46ae98e",
+      "after": "6ef57ccb35d6222d9a22c2944b6b2a75fd4baf248b13aac5eb3721c5c46ae98e"
+    },
+    "App/services/smartdeal_acceptance.py": {
+      "before": "69098573aaf2b897110f897baf7ca0fb60231d7cc1f05b72dac8802f1d810262",
+      "after": "69098573aaf2b897110f897baf7ca0fb60231d7cc1f05b72dac8802f1d810262"
+    },
+    "App/services/trade_reservations.py": {
+      "before": "c3ce5bebf3559861470c2aa40da422f8f040e158d647c3dc80bd01328e1d0e15",
+      "after": "c3ce5bebf3559861470c2aa40da422f8f040e158d647c3dc80bd01328e1d0e15"
+    },
+    "App/services/inventory.py": {
+      "before": "5c2e5a690f5e72e011c358b74d2e5748d78d3106900382ee974343a172560951",
+      "after": "5c2e5a690f5e72e011c358b74d2e5748d78d3106900382ee974343a172560951"
+    },
+    "App/templates/pax/_pack.html": {
+      "before": "e20b18a6eb53e0eed7b9625dc205c2628009ec05ee557a124e6e5b04db034558",
+      "after": "e20b18a6eb53e0eed7b9625dc205c2628009ec05ee557a124e6e5b04db034558"
+    },
+    "App/templates/pax/base.html": {
+      "before": "56fb4b8cc74af530b9d05b408649645133076427814ea6db04a93c4a3ae4efab",
+      "after": "56fb4b8cc74af530b9d05b408649645133076427814ea6db04a93c4a3ae4efab"
+    },
+    "App/templates/pax/discovery.html": {
+      "before": "8eb5727382c0e46319c706843a0416a9eaa9e9156517b118db0c7877a221398d",
+      "after": "8eb5727382c0e46319c706843a0416a9eaa9e9156517b118db0c7877a221398d"
+    },
+    "App/templates/pax/detail.html": {
+      "before": "c6d705610cb66c4a6be2180437e5129839430a9f8232b08ec18e7ab224343eb3",
+      "after": "c6d705610cb66c4a6be2180437e5129839430a9f8232b08ec18e7ab224343eb3"
+    },
+    "App/templates/components/profile_sticker.html": {
+      "before": "0e9fb0780bc9dde6588645fd36337f6d2f3e2d6a7f8db44ebbf8692402fddca3",
+      "after": "0e9fb0780bc9dde6588645fd36337f6d2f3e2d6a7f8db44ebbf8692402fddca3"
+    },
+    "App/templates/components/profile_sticker_70.html": {
+      "before": "1c871f2f29bbcd41250527ba87a836c71944f5a417953dace233a0ed412c0ca5",
+      "after": "1c871f2f29bbcd41250527ba87a836c71944f5a417953dace233a0ed412c0ca5"
+    },
+    "App/static/trophies/master_logo_vfl.svg": {
+      "before": "cba4c4600c6c54b84cc63a94198a71d2f1d3f8ccfcf50f16876eb27ce6f8d505",
+      "after": "cba4c4600c6c54b84cc63a94198a71d2f1d3f8ccfcf50f16876eb27ce6f8d505"
+    },
+    "App/static/trophies/trophy_album_first_sticker_v1.png": {
+      "before": "174b6095ab101eb5ad91a0253f2da18b33612ced6ae99b60f4fd0daa67c4d439",
+      "after": "174b6095ab101eb5ad91a0253f2da18b33612ced6ae99b60f4fd0daa67c4d439"
+    },
+    "App/static/trophies/master_album_vfl_2526_patch_v1.svg": {
+      "before": "9a1832eb4f81570084dedb8d535bf4bd9e8857541cdf0d6842d98ec5866b8a5e",
+      "after": "9a1832eb4f81570084dedb8d535bf4bd9e8857541cdf0d6842d98ec5866b8a5e"
+    },
+    "App/static/trophies/master_album_vfl_2526_patch_v1.png": {
+      "before": "6d652b9129788006dbab35bf07bdc4f63e4f1cd7b29eb8cb05b8537e8a38c66e",
+      "after": "6d652b9129788006dbab35bf07bdc4f63e4f1cd7b29eb8cb05b8537e8a38c66e"
+    },
+    "App/static/trophies/trophy_album_first_sticker_v1.svg": {
+      "before": "5202ffab8e846397d719e582846e98724b269224b672fcc14a01bae65eba7e46",
+      "after": "5202ffab8e846397d719e582846e98724b269224b672fcc14a01bae65eba7e46"
+    },
+    "App/static/trophies/master_logo_vfl.png": {
+      "before": "8f9a522306788fdc21c8897c6720ec592c4e1a5659c149ad287036f22738dab6",
+      "after": "8f9a522306788fdc21c8897c6720ec592c4e1a5659c149ad287036f22738dab6"
+    },
+    "App/static/trophies/master_album_branding_vfl_v1.png": {
+      "before": "8f9a522306788fdc21c8897c6720ec592c4e1a5659c149ad287036f22738dab6",
+      "after": "8f9a522306788fdc21c8897c6720ec592c4e1a5659c149ad287036f22738dab6"
+    },
+    "App/static/trophies/master_album_branding_vfl_v1.svg": {
+      "before": "8b085fe5322e06c25d4f288037030617228e78e1109082d797abdeb250af7207",
+      "after": "8b085fe5322e06c25d4f288037030617228e78e1109082d797abdeb250af7207"
+    },
+    "App/static/pax/journey.css": {
+      "before": "83028e857b36ebfc0bd25309565b12755a2b4b4b7afda28b67064f85bd205c58",
+      "after": "83028e857b36ebfc0bd25309565b12755a2b4b4b7afda28b67064f85bd205c58"
+    },
+    "App/static/pax/shipping.css": {
+      "before": "40923bcd60eff912abb4de7268d46c7fcb5c463d050b95f9f43088287192aa00",
+      "after": "40923bcd60eff912abb4de7268d46c7fcb5c463d050b95f9f43088287192aa00"
+    },
+    "App/static/pax/pax.js": {
+      "before": "58a18306b85a5dd7cee870b0a858cd16659b76d46e0e635ddee543ad993f33fd",
+      "after": "58a18306b85a5dd7cee870b0a858cd16659b76d46e0e635ddee543ad993f33fd"
+    },
+    "App/static/pax/components.css": {
+      "before": "c27c6b1712aaa56b83d55cc843c31a8915fc2b1ccdf049ed7f2b9af7a0b2e48d",
+      "after": "c27c6b1712aaa56b83d55cc843c31a8915fc2b1ccdf049ed7f2b9af7a0b2e48d"
+    },
+    "App/static/pax/pax.css": {
+      "before": "82fda58029b306b7885a7ca830e9fa842309153ccddd91c4d564fbc2b1465245",
+      "after": "82fda58029b306b7885a7ca830e9fa842309153ccddd91c4d564fbc2b1465245"
+    },
+    "App/static/pax/shipping.js": {
+      "before": "2f61fc7f3a88fd1b0e56cfe020e3043adead07ef8e2f1c993c3a72d358848609",
+      "after": "2f61fc7f3a88fd1b0e56cfe020e3043adead07ef8e2f1c993c3a72d358848609"
+    },
+    "App/static/pax/journey.js": {
+      "before": "ef56831831fbcfb35f4287da2655971e2d59c3568a610f8f56e67b0b7334a24b",
+      "after": "ef56831831fbcfb35f4287da2655971e2d59c3568a610f8f56e67b0b7334a24b"
+    },
+    "App/static/pax/lifecycle.js": {
+      "before": "9d2b6693d4594353e0c0fe4e3fe8357050bae60258de7ad0b0a2994fd3ff177c",
+      "after": "9d2b6693d4594353e0c0fe4e3fe8357050bae60258de7ad0b0a2994fd3ff177c"
+    },
+    "App/static/profile-sticker/sammlr-70-signet-final.png": {
+      "before": "ed81de0f0371cca4878d3a31d18c491fa3a40adf35dac89872f8a102373f3916",
+      "after": "ed81de0f0371cca4878d3a31d18c491fa3a40adf35dac89872f8a102373f3916"
+    },
+    "App/static/profile-sticker/sammlr-70-series-mark.svg": {
+      "before": "e4263d2327ed923861ba32e3c92a9efb331966b5b9fa85a5d9352fdd8efb72fd",
+      "after": "e4263d2327ed923861ba32e3c92a9efb331966b5b9fa85a5d9352fdd8efb72fd"
+    },
+    "App/static/profile-sticker/valentin-portrait-source-v1.png": {
+      "before": "ef103fbaf78c497ab74b06db27561078f33a5c23b93bbd0764db41c76fadd2e3",
+      "after": "ef103fbaf78c497ab74b06db27561078f33a5c23b93bbd0764db41c76fadd2e3"
+    },
+    "App/static/profile-sticker/sammlr-speed-s-03.svg": {
+      "before": "a9c03bcd94f65f729f480ed06e3db604443eb431579014c21e31afe67f4bba4d",
+      "after": "a9c03bcd94f65f729f480ed06e3db604443eb431579014c21e31afe67f4bba4d"
+    },
+    "App/static/ceoklaue-ui/underline.svg": {
+      "before": "66e6b7d6e4278ffc4dc41aee79c5500d5663cc91e71f5cb391901450b6242ab1",
+      "after": "66e6b7d6e4278ffc4dc41aee79c5500d5663cc91e71f5cb391901450b6242ab1"
+    },
+    "App/static/ceoklaue-ui/back-arrow.svg": {
+      "before": "07ca4ee1e8a88df013f232de4038d0a1b8745d4c62e51fad987c060d76698ce3",
+      "after": "07ca4ee1e8a88df013f232de4038d0a1b8745d4c62e51fad987c060d76698ce3"
+    },
+    "App/static/ceoklaue-ui/middle-dot-02.svg": {
+      "before": "6e5a673210534f7f6a7268619a0523c04edca035539df88111d2aa2d5a910131",
+      "after": "6e5a673210534f7f6a7268619a0523c04edca035539df88111d2aa2d5a910131"
+    },
+    "App/static/ceoklaue-ui/middle-dot-01.svg": {
+      "before": "051a8672b310e25f13029cb24239585efac4e5c3ec6c2e4cfbfbdeaa0791b557",
+      "after": "051a8672b310e25f13029cb24239585efac4e5c3ec6c2e4cfbfbdeaa0791b557"
+    },
+    "App/static/ceoklaue-ui/middle-dot-04.svg": {
+      "before": "1443aed9a1b00a9c7735f4a34a487e6c0a7678b349b0d1bbf0d3e4770ce4ea6a",
+      "after": "1443aed9a1b00a9c7735f4a34a487e6c0a7678b349b0d1bbf0d3e4770ce4ea6a"
+    },
+    "App/static/ceoklaue-ui/box.svg": {
+      "before": "48e5c4bebc2ac2b695efdf009c21f4558db0c5c0ae5c25a52ee5d806ed5579fe",
+      "after": "48e5c4bebc2ac2b695efdf009c21f4558db0c5c0ae5c25a52ee5d806ed5579fe"
+    },
+    "App/static/fonts/ceoklaue-final-alt2.woff2": {
+      "before": "e07d4183ff8321ed3887bb58a7401c70083cb16cfbdcac82b312c39c2c035e94",
+      "after": "e07d4183ff8321ed3887bb58a7401c70083cb16cfbdcac82b312c39c2c035e94"
+    },
+    "App/static/fonts/ceoklaue-final-alt3.woff2": {
+      "before": "ddb5599337abf7f0383575f544aa414f960786eaccc03a3db6fc511b835d05af",
+      "after": "ddb5599337abf7f0383575f544aa414f960786eaccc03a3db6fc511b835d05af"
+    },
+    "App/static/fonts/ceoklaue-final-alt1.woff2": {
+      "before": "7cd4bd2b9d18c25f7d3bf6469d2768119c4c6a5ee272059889eedef841789475",
+      "after": "7cd4bd2b9d18c25f7d3bf6469d2768119c4c6a5ee272059889eedef841789475"
+    },
+    "App/static/ceoklaue-ui/button-brackets/button_bracket_05_right.svg": {
+      "before": "89730cb753284b7107320aaa1be0fbce7728679ae725dfa054acfe92e257bcd9",
+      "after": "89730cb753284b7107320aaa1be0fbce7728679ae725dfa054acfe92e257bcd9"
+    },
+    "App/static/ceoklaue-ui/button-brackets/button_bracket_01_left.svg": {
+      "before": "35e71140b667a7c1a29b4dc48cadb56839c2ac07e9b326f7f069fcf5d361203c",
+      "after": "35e71140b667a7c1a29b4dc48cadb56839c2ac07e9b326f7f069fcf5d361203c"
+    },
+    "App/static/ceoklaue-ui/button-brackets/button_bracket_03_right.svg": {
+      "before": "f34ec0ac4a1095fd99abb2b917ad14f1464aeb9058fb357542f6930846af5197",
+      "after": "f34ec0ac4a1095fd99abb2b917ad14f1464aeb9058fb357542f6930846af5197"
+    },
+    "App/static/ceoklaue-ui/button-brackets/button_bracket_04_right.svg": {
+      "before": "abce4dd5c144c834cfcac5207e333d46e0a9c786b00a0f3c9aac1291bf4b50d6",
+      "after": "abce4dd5c144c834cfcac5207e333d46e0a9c786b00a0f3c9aac1291bf4b50d6"
+    },
+    "App/static/ceoklaue-ui/button-brackets/button_bracket_02_right.svg": {
+      "before": "26b40f93ddb44ae6bf93b015f5eaa9d966883ce698382f40f132e6ba91254597",
+      "after": "26b40f93ddb44ae6bf93b015f5eaa9d966883ce698382f40f132e6ba91254597"
+    },
+    "App/static/ceoklaue-ui/button-brackets/button_bracket_02_left.svg": {
+      "before": "67f5a5a751d8b5c284d06d7e625d49ad39ce72828df3a5fa5f30490e12980124",
+      "after": "67f5a5a751d8b5c284d06d7e625d49ad39ce72828df3a5fa5f30490e12980124"
+    },
+    "App/static/ceoklaue-ui/button-brackets/button_bracket_03_left.svg": {
+      "before": "3f187893d526f0991ae4537ef5f878606f9981ccbc98bdfce6a6cd63f1dddd54",
+      "after": "3f187893d526f0991ae4537ef5f878606f9981ccbc98bdfce6a6cd63f1dddd54"
+    },
+    "App/static/ceoklaue-ui/button-brackets/button_bracket_01_right.svg": {
+      "before": "0b136fd0b7e4930953b837554d5ff90c26dee0add912641484e2f033615d52c4",
+      "after": "0b136fd0b7e4930953b837554d5ff90c26dee0add912641484e2f033615d52c4"
+    },
+    "App/static/ceoklaue-ui/button-brackets/button_bracket_05_left.svg": {
+      "before": "df7d70f13b0bb58b4808794b0e3ff80478b85a8ed3ade1bbcc6cb337cd6a9dff",
+      "after": "df7d70f13b0bb58b4808794b0e3ff80478b85a8ed3ade1bbcc6cb337cd6a9dff"
+    },
+    "App/static/ceoklaue-ui/button-brackets/button_bracket_04_left.svg": {
+      "before": "dd4006710bc97bb5b1b9ea08bfa116a295494e39ab61fab63d41923a4a1fb7b9",
+      "after": "dd4006710bc97bb5b1b9ea08bfa116a295494e39ab61fab63d41923a4a1fb7b9"
+    },
+    "App/static/ceoklaue-markers/receive_circle/receive_circle_05.svg": {
+      "before": "f09b2e8d32e6756c1301aa341c257d64838825fe9e358b0ae6ffb0b7a3e5dbc6",
+      "after": "f09b2e8d32e6756c1301aa341c257d64838825fe9e358b0ae6ffb0b7a3e5dbc6"
+    },
+    "App/static/ceoklaue-markers/receive_circle/receive_circle_04.svg": {
+      "before": "7c21af09d5bbe6784b9700f36856e435d748b50209787ec6576e5ec538cf7c23",
+      "after": "7c21af09d5bbe6784b9700f36856e435d748b50209787ec6576e5ec538cf7c23"
+    },
+    "App/static/ceoklaue-markers/receive_circle/receive_circle_01.svg": {
+      "before": "15392d8958c32075c289c7e5425b9e7b3408ada862a2ef66941161141be2b187",
+      "after": "15392d8958c32075c289c7e5425b9e7b3408ada862a2ef66941161141be2b187"
+    },
+    "App/static/ceoklaue-markers/receive_circle/receive_circle_03.svg": {
+      "before": "9af9edd51adc78a510daeb4ab5c880e4cb6bfbc9de08d28f3d20d541026de07a",
+      "after": "9af9edd51adc78a510daeb4ab5c880e4cb6bfbc9de08d28f3d20d541026de07a"
+    },
+    "App/static/ceoklaue-markers/receive_circle/receive_circle_02.svg": {
+      "before": "1875d45adf1b060091a5658011d66f33d8d412d8542a27a7d304d5a20b2fdce9",
+      "after": "1875d45adf1b060091a5658011d66f33d8d412d8542a27a7d304d5a20b2fdce9"
+    },
+    "App/static/ceoklaue-markers/give_cross/give_cross_03.svg": {
+      "before": "11f8fc3d46991a970fc994d8f41d7c5c26a09b2e24dc953d7c7b24c390244389",
+      "after": "11f8fc3d46991a970fc994d8f41d7c5c26a09b2e24dc953d7c7b24c390244389"
+    },
+    "App/static/ceoklaue-markers/give_cross/give_cross_02.svg": {
+      "before": "e0ec976b63e53e69fc67e77df6a5d275fd96b524d63985ebffd507820cf91889",
+      "after": "e0ec976b63e53e69fc67e77df6a5d275fd96b524d63985ebffd507820cf91889"
+    },
+    "App/static/ceoklaue-markers/give_cross/give_cross_01.svg": {
+      "before": "571166987de0a7392af91621b5132fa0cb0581bf04e59ab932741fd234b907d7",
+      "after": "571166987de0a7392af91621b5132fa0cb0581bf04e59ab932741fd234b907d7"
+    },
+    "App/static/ceoklaue-markers/give_cross/give_cross_05.svg": {
+      "before": "dab3c8dcd72209e7fb5f2d33062869e83f62bb215c0c471f0afcd10bbf271cc9",
+      "after": "dab3c8dcd72209e7fb5f2d33062869e83f62bb215c0c471f0afcd10bbf271cc9"
+    },
+    "App/static/ceoklaue-markers/give_cross/give_cross_04.svg": {
+      "before": "b41ff3553c60555f64f8281987461a00a4ab08f685dd4062692b8ae77553e2c4",
+      "after": "b41ff3553c60555f64f8281987461a00a4ab08f685dd4062692b8ae77553e2c4"
+    },
+    "App/uploads/profile_portraits/.gitkeep": {
+      "before": "01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b",
+      "after": "01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b"
+    },
+    "App/uploads/profile_portraits/480e56b7fe2c4e740aa072e220e599da.jpg": {
+      "before": "1818c857dc610b7bb9da8721d18e10854979e8b719546f7c84d955bdf27507a8",
+      "after": "1818c857dc610b7bb9da8721d18e10854979e8b719546f7c84d955bdf27507a8"
+    },
+    "App/Database/migrations/0001_trade_lifecycle_foundation.down.sql": {
+      "before": "093547414c40e9b78b165160d8f5191464e9b802a6495fcd506e78f089fdf855",
+      "after": "093547414c40e9b78b165160d8f5191464e9b802a6495fcd506e78f089fdf855"
+    },
+    "App/Database/migrations/0014_collection_history_cutover.down.sql": {
+      "before": "c90d394838e70863fefe59add65f7755decf2c512cd599308df53e4b2a670e14",
+      "after": "c90d394838e70863fefe59add65f7755decf2c512cd599308df53e4b2a670e14"
+    },
+    "App/Database/migrations/0006_typed_notifications.up.sql": {
+      "before": "623aa4f12a4ad6d0107707e583ed33b957bd9c19778c5fb58b92365ceeaa82ab",
+      "after": "623aa4f12a4ad6d0107707e583ed33b957bd9c19778c5fb58b92365ceeaa82ab"
+    },
+    "App/Database/migrations/0005_trade_problems_partial_receipt.up.sql": {
+      "before": "572c43d8a926bcfe5da18bf15c8470fd03c4319555ce3c98a38c9d88d27546d8",
+      "after": "572c43d8a926bcfe5da18bf15c8470fd03c4319555ce3c98a38c9d88d27546d8"
+    },
+    "App/Database/migrations/0012_account_lifecycle.down.sql": {
+      "before": "8c3ed376c6f37b680d77cbdb7a4ca61245d0c8e6e22dea32b05b12f18876dc13",
+      "after": "8c3ed376c6f37b680d77cbdb7a4ca61245d0c8e6e22dea32b05b12f18876dc13"
+    },
+    "App/Database/migrations/0004_trade_receipt_status.up.sql": {
+      "before": "5cd9c9cb16897ce8943f25ba148c408a43d52e6c774b26db7365774703940782",
+      "after": "5cd9c9cb16897ce8943f25ba148c408a43d52e6c774b26db7365774703940782"
+    },
+    "App/Database/migrations/0012_account_lifecycle.up.sql": {
+      "before": "8fabb86d2a9f6546f81ea79325087047ca267064f881445d44a5ac74372b3db5",
+      "after": "8fabb86d2a9f6546f81ea79325087047ca267064f881445d44a5ac74372b3db5"
+    },
+    "App/Database/migrations/0008_trade_ratings.down.sql": {
+      "before": "634f470e64ca40b46859959b49b271139d3ecdcf5bda70d8db002a5e3bce54c9",
+      "after": "634f470e64ca40b46859959b49b271139d3ecdcf5bda70d8db002a5e3bce54c9"
+    },
+    "App/Database/migrations/0016_legacy_trophy_backfill_source.up.sql": {
+      "before": "b2203ef264fb28ffa5e9330d62a24c24f0ed0f39486a5a839470fccfb5a92461",
+      "after": "b2203ef264fb28ffa5e9330d62a24c24f0ed0f39486a5a839470fccfb5a92461"
+    },
+    "App/Database/migrations/0014_collection_history_cutover.up.sql": {
+      "before": "f57b9bd6dc9bcdfcac3fb631fb05ab5f7887a95b2c72f52c63f0cde428317b37",
+      "after": "f57b9bd6dc9bcdfcac3fb631fb05ab5f7887a95b2c72f52c63f0cde428317b37"
+    },
+    "App/Database/migrations/0013_historical_collection_contract.up.sql": {
+      "before": "858abce7f4d37d48a01ffba1e2979820a5b076525811424009f25e032ba248de",
+      "after": "858abce7f4d37d48a01ffba1e2979820a5b076525811424009f25e032ba248de"
+    },
+    "App/Database/migrations/0001_trade_lifecycle_foundation.up.sql": {
+      "before": "687783a75170cff969902c55a63bd4f2336343baade4205352c576759f284ca2",
+      "after": "687783a75170cff969902c55a63bd4f2336343baade4205352c576759f284ca2"
+    },
+    "App/Database/migrations/0003_trade_shipping_status.up.sql": {
+      "before": "80e7b77826df7764cbb8de857e28927f745cb2a287aa736033a9cb44b9b575dc",
+      "after": "80e7b77826df7764cbb8de857e28927f745cb2a287aa736033a9cb44b9b575dc"
+    },
+    "App/Database/migrations/0019_profile_sticker_70.up.sql": {
+      "before": "621555946ed0e06d3a6e0a458cd31299c5944541bc042d5f823c1609b5932b6c",
+      "after": "621555946ed0e06d3a6e0a458cd31299c5944541bc042d5f823c1609b5932b6c"
+    },
+    "App/Database/migrations/0017_profile_privacy_gate.up.sql": {
+      "before": "2d298956cfdef759261b617f0714770777f480a0ebe6c727402255ae03b12fe1",
+      "after": "2d298956cfdef759261b617f0714770777f480a0ebe6c727402255ae03b12fe1"
+    },
+    "App/Database/migrations/0002_trade_reservations.up.sql": {
+      "before": "f0e1173e653a22ac645e74fd81c3eda821c1e13e094256868d33f9a3d22b7156",
+      "after": "f0e1173e653a22ac645e74fd81c3eda821c1e13e094256868d33f9a3d22b7156"
+    },
+    "App/Database/migrations/0009_friendships_community.down.sql": {
+      "before": "53ee61408b6cfcf70e9d8b6526b77bae4631fb2547b2f024437f720a8c08cd53",
+      "after": "53ee61408b6cfcf70e9d8b6526b77bae4631fb2547b2f024437f720a8c08cd53"
+    },
+    "App/Database/migrations/0020_profile_sticker_country_codes.up.sql": {
+      "before": "4eda964113df278bf8d9ca30eb42edff45fb4a4adef989865f5aea670e307da1",
+      "after": "4eda964113df278bf8d9ca30eb42edff45fb4a4adef989865f5aea670e307da1"
+    },
+    "App/Database/migrations/0007_album_privacy_trade_pool.up.sql": {
+      "before": "3b5b1f80f5263ef74249e836078899c9a814d7d3cba7d7c5cd0484039176a583",
+      "after": "3b5b1f80f5263ef74249e836078899c9a814d7d3cba7d7c5cd0484039176a583"
+    },
+    "App/Database/migrations/0010_auth_session_csrf.up.sql": {
+      "before": "8a33d81a020166346bd224a7a5dbc3130637b080a8b4d7058fd137cde88a5487",
+      "after": "8a33d81a020166346bd224a7a5dbc3130637b080a8b4d7058fd137cde88a5487"
+    },
+    "App/Database/migrations/0006_typed_notifications.down.sql": {
+      "before": "e0f31ab156c422a57c9c9b26f8fda8c4e696c327531f96ff10a0ce2d73318651",
+      "after": "e0f31ab156c422a57c9c9b26f8fda8c4e696c327531f96ff10a0ce2d73318651"
+    },
+    "App/Database/migrations/0013_historical_collection_contract.down.sql": {
+      "before": "0f22d501951ad73bf2c14dee0611a92c4bc1f09e9361cc61780092f88133280a",
+      "after": "0f22d501951ad73bf2c14dee0611a92c4bc1f09e9361cc61780092f88133280a"
+    },
+    "App/Database/migrations/0011_http_integrity_hardening.down.sql": {
+      "before": "d0edfcc8f1c035c5539b03a8eff45a6dec9e3ee5928379178761b443f0b7a882",
+      "after": "d0edfcc8f1c035c5539b03a8eff45a6dec9e3ee5928379178761b443f0b7a882"
+    },
+    "App/Database/migrations/0011_http_integrity_hardening.up.sql": {
+      "before": "7b80b0840aec19bf6c17891780bdbabfecf732b9feac15d3f15caa4eb27ab467",
+      "after": "7b80b0840aec19bf6c17891780bdbabfecf732b9feac15d3f15caa4eb27ab467"
+    },
+    "App/Database/migrations/0010_auth_session_csrf.down.sql": {
+      "before": "54437a22a01ae819ed79eba9c12e492a7b534502f25f70ada3dc39859afda604",
+      "after": "54437a22a01ae819ed79eba9c12e492a7b534502f25f70ada3dc39859afda604"
+    },
+    "App/Database/migrations/0020_profile_sticker_country_codes.down.sql": {
+      "before": "2cb4bafb8f3c3d6a57bf3e7e416fdf1d2a28c3751dcfb1a02195b8f63784e3e9",
+      "after": "2cb4bafb8f3c3d6a57bf3e7e416fdf1d2a28c3751dcfb1a02195b8f63784e3e9"
+    },
+    "App/Database/migrations/0019_profile_sticker_70.down.sql": {
+      "before": "2dd303c53c921d86b3c3f81712384344b78a5320cec73a430aedf2757261231b",
+      "after": "2dd303c53c921d86b3c3f81712384344b78a5320cec73a430aedf2757261231b"
+    },
+    "App/Database/migrations/0008_trade_ratings.up.sql": {
+      "before": "70d208bfe1a0c1eab348f6b621b1b131b866e616edfa6e0f7150f3cbbd9fee6a",
+      "after": "70d208bfe1a0c1eab348f6b621b1b131b866e616edfa6e0f7150f3cbbd9fee6a"
+    },
+    "App/Database/migrations/0009_friendships_community.up.sql": {
+      "before": "de0bf9f8296d2e88585132594a8f267e747eeb88471e4ecf7aff19843266bfc0",
+      "after": "de0bf9f8296d2e88585132594a8f267e747eeb88471e4ecf7aff19843266bfc0"
+    },
+    "App/Database/migrations/0005_trade_problems_partial_receipt.down.sql": {
+      "before": "bf1898c94b8c5c52caa9e2738a30f677841677bcbc9c52239a7e01d7307bd4b9",
+      "after": "bf1898c94b8c5c52caa9e2738a30f677841677bcbc9c52239a7e01d7307bd4b9"
+    },
+    "App/Database/migrations/0021_smartdeal_contract_foundation.down.sql": {
+      "before": "e39f7ef8b5dd151557c7072da78ee6bc96e1dc071a444e306693a4fa95a91eeb",
+      "after": "e39f7ef8b5dd151557c7072da78ee6bc96e1dc071a444e306693a4fa95a91eeb"
+    },
+    "App/Database/migrations/0003_trade_shipping_status.down.sql": {
+      "before": "aa9e0128403feda014ca086a0317f661edc636b351fc1d6ce996852a8630c03f",
+      "after": "aa9e0128403feda014ca086a0317f661edc636b351fc1d6ce996852a8630c03f"
+    },
+    "App/Database/migrations/0002_trade_reservations.down.sql": {
+      "before": "8aa58fa04831ea2eee5de11cc534c38d591142a0208941414f3d913161d7f7f3",
+      "after": "8aa58fa04831ea2eee5de11cc534c38d591142a0208941414f3d913161d7f7f3"
+    },
+    "App/Database/migrations/0018_feed_eventstore_operationalization.up.sql": {
+      "before": "b02ac1d1111b4e56380f05b6024181c6a98a8fb395e517cf6bfc4a0f6df18952",
+      "after": "b02ac1d1111b4e56380f05b6024181c6a98a8fb395e517cf6bfc4a0f6df18952"
+    },
+    "App/Database/migrations/0018_feed_eventstore_operationalization.down.sql": {
+      "before": "7b3a788662f6d9ef9c06c1cfaf671c90c9407ac9e68b5bd846c7e3959422d465",
+      "after": "7b3a788662f6d9ef9c06c1cfaf671c90c9407ac9e68b5bd846c7e3959422d465"
+    },
+    "App/Database/migrations/0017_profile_privacy_gate.down.sql": {
+      "before": "b23070efb94ac4e7f8db4c4471ad93915d5e7a8b0f5bd2d273855e60e9885142",
+      "after": "b23070efb94ac4e7f8db4c4471ad93915d5e7a8b0f5bd2d273855e60e9885142"
+    },
+    "App/Database/migrations/0007_album_privacy_trade_pool.down.sql": {
+      "before": "43630a0d4d4771f75ec7caebc7679982d7ae75a422e7fe0dc83fe24e80512d33",
+      "after": "43630a0d4d4771f75ec7caebc7679982d7ae75a422e7fe0dc83fe24e80512d33"
+    },
+    "App/Database/migrations/0021_smartdeal_contract_foundation.up.sql": {
+      "before": "9eb31cdcd46cf2517ee0259eb881863168276e7c1c2b805464752b525067aa56",
+      "after": "9eb31cdcd46cf2517ee0259eb881863168276e7c1c2b805464752b525067aa56"
+    },
+    "App/Database/migrations/0015_canonical_album_trophy_unlocks.up.sql": {
+      "before": "42d7dff32e7c110fc0f43aaa79aae17ada447dccb6a73434d6cd5718569e0c42",
+      "after": "42d7dff32e7c110fc0f43aaa79aae17ada447dccb6a73434d6cd5718569e0c42"
+    },
+    "App/Database/migrations/0015_canonical_album_trophy_unlocks.down.sql": {
+      "before": "2c12c10dc545e380d678e0e0748f7d29763166ff7bc2ff17d1804fac1afb2a9d",
+      "after": "2c12c10dc545e380d678e0e0748f7d29763166ff7bc2ff17d1804fac1afb2a9d"
+    },
+    "App/Database/migrations/0016_legacy_trophy_backfill_source.down.sql": {
+      "before": "48acd1eb39b97057862e2fb35544a709aa57cab9d32b923197acbb1760223323",
+      "after": "48acd1eb39b97057862e2fb35544a709aa57cab9d32b923197acbb1760223323"
+    },
+    "App/Database/migrations/0004_trade_receipt_status.down.sql": {
+      "before": "d0a0cc6318387b1de5ba383e2f180f535510b2bf817df54a268ed3902034dd40",
+      "after": "d0a0cc6318387b1de5ba383e2f180f535510b2bf817df54a268ed3902034dd40"
+    },
+    "App/Database/Database:Backups/collectr_backup_before_trophy_cleanup.db": {
+      "before": "447a9164ba7772b04ee12ccfc5c65a39720cf1f1776c86002ffe3161fded287e",
+      "after": "447a9164ba7772b04ee12ccfc5c65a39720cf1f1776c86002ffe3161fded287e"
+    },
+    "App/Database/Database:Backups/collectr_backup_popup_clean.db": {
+      "before": "6bcb037730123b78fe756856bc8735a7358f185872040d179fc34a5ebb1d51e3",
+      "after": "6bcb037730123b78fe756856bc8735a7358f185872040d179fc34a5ebb1d51e3"
+    },
+    "App/Database/Database:Backups/collectr_backup_before_users.db": {
+      "before": "f4796d18d36a6a0f1625bfc7eb2fb926006ef50d534472ca32a3cfbe0a4e8039",
+      "after": "f4796d18d36a6a0f1625bfc7eb2fb926006ef50d534472ca32a3cfbe0a4e8039"
+    },
+    "App/Database/Database:Backups/collectr_backup_trophy_tabs_visual_runs.db": {
+      "before": "6bcb037730123b78fe756856bc8735a7358f185872040d179fc34a5ebb1d51e3",
+      "after": "6bcb037730123b78fe756856bc8735a7358f185872040d179fc34a5ebb1d51e3"
+    },
+    "App/Database/Database:Backups/collectr_backup_users_trophy_clean_runs.db": {
+      "before": "602883a8538f9377847542c1c7c969d326adc7d071c6cca2ff5822eca1b96f8f",
+      "after": "602883a8538f9377847542c1c7c969d326adc7d071c6cca2ff5822eca1b96f8f"
+    }
+  },
+  "all_protected_unchanged": true,
+  "git_diff_check": "PASS",
+  "new_and_changed_text_whitespace": "PASS"
+}

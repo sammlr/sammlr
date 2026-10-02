@@ -1,0 +1,41 @@
+[
+  {
+    "width": 375,
+    "journey": "PASS",
+    "no_overflow": true,
+    "no_writes": true,
+    "model": {
+      "candidates": 5,
+      "mirror": true,
+      "expiry_boundary": true,
+      "role_guards": true,
+      "packing": true
+    }
+  },
+  {
+    "width": 390,
+    "journey": "PASS",
+    "no_overflow": true,
+    "no_writes": true,
+    "model": {
+      "candidates": 5,
+      "mirror": true,
+      "expiry_boundary": true,
+      "role_guards": true,
+      "packing": true
+    }
+  },
+  {
+    "width": 430,
+    "journey": "PASS",
+    "no_overflow": true,
+    "no_writes": true,
+    "model": {
+      "candidates": 5,
+      "mirror": true,
+      "expiry_boundary": true,
+      "role_guards": true,
+      "packing": true
+    }
+  }
+]
