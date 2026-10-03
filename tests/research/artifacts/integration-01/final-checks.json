@@ -1,0 +1,17 @@
+{
+  "protected_db_count": 15,
+  "all_db_hashes_unchanged": true,
+  "new_repository_databases": [],
+  "protected_domain_preview_style_files_unchanged": true,
+  "unexpected_tracked_changes": [],
+  "secret_private_findings": [],
+  "checked_candidate_files": 2757,
+  "diff_check_exit": 0,
+  "cached_diff_check_exit": 0,
+  "synthetic_data_only_in_new_artifacts": true,
+  "release_tests": 1303,
+  "preview_unit_tests": 8,
+  "preview_regression_gates": 11,
+  "numeric_stack_comparisons": 28,
+  "no_push_or_deploy": true
+}

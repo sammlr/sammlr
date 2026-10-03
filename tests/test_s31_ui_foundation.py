@@ -130,10 +130,10 @@ class UiFoundationTestCase(unittest.TestCase):
         self.assertIn("--sammlr-header-compact-height:var(--sammlr-space-16)", self.s31_css)
 
     def test_three_target_navigation_has_central_home_and_correct_active_states(self):
-        expected = ["/sammlung", "/", "/trades"]
+        expected = ["/sammlung", "/", "/tauschen"]
         for route, active in (
             ("/", "/"), ("/sammlung", "/sammlung"),
-            ("/trades", "/trades"),
+            ("/trades", "/tauschen"),
         ):
             nav = self.navigation(self.client.get(route).get_data(as_text=True))
             entries = re.findall(r'<a class="([^"]+)" href="([^"]+)"[^>]*>', nav)
@@ -189,7 +189,7 @@ class UiFoundationTestCase(unittest.TestCase):
             nav = self.navigation(html)
             self.assertEqual(1, nav.count('href="/sammlung"'))
             self.assertEqual(1, nav.count('href="/"'))
-            self.assertEqual(1, nav.count('href="/trades"'))
+            self.assertEqual(1, nav.count('href="/tauschen"'))
             self.assertNotIn('href="/profil"', nav)
             self.assertNotIn('href="/notifications"', nav)
         self.assertIn(".s31-product-page .app-workflow-header", self.s31_css)

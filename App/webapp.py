@@ -3800,6 +3800,7 @@ def sticker_wall_slot_html(
     *,
     can_edit_inventory=True,
     detail_href=None,
+    max_visible_layers=5,
 ):
     """Render the canonical wall slot; capabilities only affect its controls."""
     quantity = sticker_quantity_for_counter(by_code, code)
@@ -3808,7 +3809,9 @@ def sticker_wall_slot_html(
         if can_edit_inventory
         else 0
     )
-    visible_stack_layers = min(max(quantity, 0), 5)
+    if max_visible_layers not in (5, 10):
+        raise ValueError("Only canonical wall/trade caps are supported")
+    visible_stack_layers = min(max(quantity, 0), max_visible_layers)
     backing_face = sticker_wall_card_inner(album_id, code, {code: {"quantity": 1}}, 0)
     stack_layers = "".join(
         f'<i class="sticker-wall-stack-layer" data-stack-layer="{layer}" '
@@ -5929,7 +5932,7 @@ def bottom_nav(active="sammlr"):
     items = [
         ("sammlung", "/sammlung", "Sammlung"),
         ("sammlr", "/", "sammlr"),
-        ("tauschen", "/trades", "Tauschen"),
+        ("tauschen", "/tauschen", "Tauschen"),
     ]
 
     links = ""
@@ -13203,6 +13206,14 @@ stickerliste, stickerliste_trade = register_sticker_list_routes(
 from trade_visual_preview import register_trade_visual_preview
 
 register_trade_visual_preview(app)
+
+
+from trade_shell import register_trade_shell
+
+register_trade_shell(
+    app, database_path=lambda: DB, global_head=style, header=app_header,
+    navigation=bottom_nav, render_slot=sticker_wall_slot_html,
+)
 
 
 if __name__ == "__main__":

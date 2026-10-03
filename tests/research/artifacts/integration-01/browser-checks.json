@@ -1,0 +1,83 @@
+{
+  "results": [
+    {
+      "viewport": 375,
+      "card_parity": {
+        "width": "103px",
+        "height": "117.406px",
+        "padding": "11px 7px",
+        "borderRadius": "14px",
+        "borderWidth": "1px",
+        "boxSizing": "border-box",
+        "fontFamily": "Arial, sans-serif",
+        "fontSize": "13px",
+        "aspectRatio": "1 / 1.14"
+      },
+      "touch_mouse_keyboard": true,
+      "groups_independent": true,
+      "all_open_close": true,
+      "reduced_motion": true,
+      "no_overflow": true
+    },
+    {
+      "viewport": 390,
+      "card_parity": {
+        "width": "108px",
+        "height": "123.109px",
+        "padding": "11px 7px",
+        "borderRadius": "14px",
+        "borderWidth": "1px",
+        "boxSizing": "border-box",
+        "fontFamily": "Arial, sans-serif",
+        "fontSize": "13px",
+        "aspectRatio": "1 / 1.14"
+      },
+      "touch_mouse_keyboard": true,
+      "groups_independent": true,
+      "all_open_close": true,
+      "reduced_motion": true,
+      "no_overflow": true
+    },
+    {
+      "viewport": 430,
+      "card_parity": {
+        "width": "118.656px",
+        "height": "135.266px",
+        "padding": "11px 7px",
+        "borderRadius": "14px",
+        "borderWidth": "1px",
+        "boxSizing": "border-box",
+        "fontFamily": "Arial, sans-serif",
+        "fontSize": "13px",
+        "aspectRatio": "1 / 1.14"
+      },
+      "touch_mouse_keyboard": true,
+      "groups_independent": true,
+      "all_open_close": true,
+      "reduced_motion": true,
+      "no_overflow": true
+    },
+    {
+      "viewport": 1280,
+      "card_parity": {
+        "width": "96.1719px",
+        "height": "109.625px",
+        "padding": "11px 7px",
+        "borderRadius": "14px",
+        "borderWidth": "1px",
+        "boxSizing": "border-box",
+        "fontFamily": "Arial, sans-serif",
+        "fontSize": "14px",
+        "aspectRatio": "1 / 1.14"
+      },
+      "touch_mouse_keyboard": true,
+      "groups_independent": true,
+      "all_open_close": true,
+      "reduced_motion": true,
+      "no_overflow": true
+    }
+  ],
+  "errors": [],
+  "writes": [],
+  "db_unchanged": true
+}

@@ -113,7 +113,7 @@ class ThreeAreaNavigationTestCase(unittest.TestCase):
         self.assertEqual(200, response.status_code, route)
         entries = self.nav_entries(response.get_data(as_text=True))
         self.assertEqual(
-            ["/sammlung", "/", "/trades"],
+            ["/sammlung", "/", "/tauschen"],
             [entry["href"] for entry in entries],
         )
         self.assertEqual(
@@ -131,7 +131,7 @@ class ThreeAreaNavigationTestCase(unittest.TestCase):
 
         self.assertEqual(3, len(entries))
         self.assertEqual(
-            ["/sammlung", "/", "/trades"],
+            ["/sammlung", "/", "/tauschen"],
             [entry["href"] for entry in entries],
         )
         self.assertEqual(
@@ -146,7 +146,7 @@ class ThreeAreaNavigationTestCase(unittest.TestCase):
         self.assert_navigation("/sammlung", "/sammlung")
 
     def test_trade_centre_has_only_trade_active(self):
-        self.assert_navigation("/trades", "/trades")
+        self.assert_navigation("/trades", "/tauschen")
 
     def test_collection_subpages_keep_collection_active(self):
         for route in (
@@ -160,7 +160,7 @@ class ThreeAreaNavigationTestCase(unittest.TestCase):
                 self.assert_navigation(route, "/sammlung")
 
     def test_trade_subpage_keeps_trade_active(self):
-        self.assert_navigation("/album/vfl/trades", "/trades")
+        self.assert_navigation("/album/vfl/trades", "/tauschen")
 
     def test_hierarchical_targets_are_not_rendered_as_primary_links(self):
         for route in ("/", "/sammlung", "/trades"):

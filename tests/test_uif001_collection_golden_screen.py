@@ -89,7 +89,7 @@ class UIF001CollectionGoldenScreenTestCase(unittest.TestCase):
         self.assertIn('href="/profil"', html)
         self.assertIn('href="/sammlung" aria-current="page"', html)
         self.assertIn('href="/"', html)
-        self.assertIn('href="/trades"', html)
+        self.assertIn('href="/tauschen"', html)
         self.assertEqual(2, html.count("collection-album-card-shell"))
 
     def test_rendered_values_and_progress_keep_existing_product_semantics(self):

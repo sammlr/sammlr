@@ -113,13 +113,13 @@ class UIF002GlobalAppShellTestCase(unittest.TestCase):
         cases = (
             ("/sammlung", "/sammlung"),
             ("/", "/"),
-            ("/trades", "/trades"),
+            ("/trades", "/tauschen"),
         )
         for route, current_href in cases:
             html = self.get_html(route)
             nav = re.search(r'<nav class="bottom-nav">(.*?)</nav>', html, re.DOTALL).group(1)
             self.assertEqual(3, nav.count('class="bottom-nav-link'))
-            for href in ("/sammlung", "/", "/trades"):
+            for href in ("/sammlung", "/", "/tauschen"):
                 self.assertIn(f'href="{href}"', nav)
             self.assertRegex(
                 nav,
@@ -133,7 +133,7 @@ class UIF002GlobalAppShellTestCase(unittest.TestCase):
             self.assertEqual(3, nav.count('class="bottom-nav-link'))
             self.assertNotIn('bottom-nav-link active', nav, route)
             self.assertNotIn('aria-current="page"', nav, route)
-            for href in ("/sammlung", "/", "/trades"):
+            for href in ("/sammlung", "/", "/tauschen"):
                 self.assertIn(f'href="{href}"', nav, route)
 
         profile_world_nav = webapp.bottom_nav("profil")

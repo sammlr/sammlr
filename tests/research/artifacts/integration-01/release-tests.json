@@ -1,0 +1,25 @@
+{
+  "discovered": 1315,
+  "run": 1303,
+  "failures": [],
+  "errors": [],
+  "skips": 0,
+  "existing_contract_exclusions": [
+    "tests.test_ceoklaue_analog_ui_final_import.CEOKlaueAnalogUIFinalImportTests.test_seven_new_originals_are_byte_exact_archived_and_documented",
+    "tests.test_ceoklaue_analog_ui_final_import.CEOKlaueAnalogUIFinalImportTests.test_import_is_idempotent_and_product_scope_is_locked",
+    "tests.test_ceoklaue_final_mini_reselection.CEOKlaueFinalMiniImportTests.test_only_two_new_originals_are_byte_exact_archived_images",
+    "tests.test_ceoklaue_final_mini_reselection.CEOKlaueFinalMiniImportTests.test_importer_is_idempotent_and_product_assets_are_out_of_scope",
+    "tests.test_ceoklaue_final_reselection.CEOKlaueFinalReselectionImportTests.test_two_new_originals_are_exact_archived_jpegs",
+    "tests.test_ceoklaue_final_reselection.CEOKlaueFinalReselectionImportTests.test_importer_is_idempotent_and_final_master_references_it_without_mutation",
+    "tests.test_ceoklaue_workbench.CEOKlaueFinalControlPageTests.test_button_import_is_idempotent",
+    "tests.test_ceoklaue_sticker_list.CEOKlaueStickerListTests.test_runtime_builder_is_reproducible",
+    "tests.test_s31_ui_foundation.UiFoundationTestCase.test_reference_screen_manifest_is_complete",
+    "tests.test_ceoklaue_analog_ui_final_import.CEOKlaueAnalogUIFinalImportTests.test_database_is_unchanged_and_final_master_shape_is_preserved",
+    "tests.test_s24_notification_history_navigation.NotificationHistoryNavigationTestCase.test_more_than_twenty_five_paginates_newest_first",
+    "tests.test_s38_release_candidate.ReleaseCandidateGateTestCase.test_realistic_v0007_copy_is_backed_up_then_upgraded_to_latest"
+  ],
+  "separate_process_modules": [
+    "test_pax_preview",
+    "test_trade_v2_preview"
+  ]
+}

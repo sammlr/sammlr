@@ -1,0 +1,22 @@
+/* Layout only: cards and stacks inherit the production wall CSS unchanged. */
+.trade-shell .trade-proposal { min-width:0; padding-top:18px; }
+.trade-shell .trade-proposal h2 { font-size:16px; overflow-wrap:anywhere; }
+.trade-shell .trade-proposal p { font-size:14px; overflow-wrap:anywhere; }
+.trade-shell .trade-links, .trade-shell .trade-actions { display:flex; flex-wrap:wrap; gap:16px; margin:24px 0; }
+.trade-shell .trade-links a, .trade-shell .trade-action { display:inline-block; min-height:44px; padding:12px; box-sizing:border-box; }
+.trade-shell .trade-partners { list-style:none; padding:0; margin:0; }
+.trade-shell .trade-partners li + li { margin-top:24px; }
+.trade-shell .trade-group { margin-top:24px; }
+.trade-shell summary { cursor:pointer; padding:12px 0; min-height:44px; }
+.trade-shell summary .wall { padding-top:24px; }
+.trade-shell details[open] summary .wall { display:none; }
+.trade-shell .trade-fan { padding-top:24px; }
+.trade-shell button { min-height:44px; max-width:100%; white-space:normal; }
+.trade-shell button:disabled { cursor:not-allowed; }
+.trade-shell summary:focus-visible { outline:3px solid currentColor; outline-offset:4px; }
+.trade-shell .trade-proposal:nth-child(2) .sticker-slot-frame { transform:rotate(.3deg) translateY(1px); }
+.trade-shell .trade-proposal:nth-child(3) .sticker-slot-frame { transform:rotate(-.3deg); }
+
+.trade-shell .sticker-wall-card { padding-bottom:24px !important; }
+.trade-shell .sticker-slot-frame { width:var(--trade-card-width,100%); }
+.trade-shell .trade-links a, .trade-shell .trade-proposal a, .trade-shell .trade-partners a { color:var(--color-text-primary); }

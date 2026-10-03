@@ -91,7 +91,7 @@ class BetaPolishTestCase(unittest.TestCase):
     def assert_three_target_navigation(self, html):
         nav = self.navigation(html)
         links = re.findall(r'href="([^"]+)"', nav)
-        self.assertEqual(["/sammlung", "/", "/trades"], links)
+        self.assertEqual(["/sammlung", "/", "/tauschen"], links)
         self.assertNotIn('/profil', nav)
         self.assertNotIn('/notifications', nav)
 
@@ -130,7 +130,7 @@ class BetaPolishTestCase(unittest.TestCase):
             "/album/vfl/liste": 'href="/album/vfl"',
             "/album/vfl/statistik": 'href="/album/vfl"',
             "/sticker/vfl/1": 'href="/album/vfl"',
-            f"/trades/{trade_id}?origin=trade_center": 'href="/trades"',
+            f"/trades/{trade_id}?origin=trades": 'href="/trades?tab=requests"',
             "/profil/name": 'href="/profil"',
             "/profil/datenexport": 'href="/profil"',
         }

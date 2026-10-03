@@ -66,7 +66,7 @@ class UIF005BTradeDetailProductIntegrationTests(unittest.TestCase):
         self.assertIn("VfL Osnabrück", html)
         self.assertIn("Tauschinhalt", html)
         self.assertIn('class="app-header"', html)
-        self.assertIn('class="bottom-nav-link active" href="/trades"', html)
+        self.assertIn('class="bottom-nav-link active" href="/tauschen"', html)
 
     def test_legacy_trade_detail_visual_components_are_not_rendered(self):
         html = self.detail()

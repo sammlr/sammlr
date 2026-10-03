@@ -1,0 +1,35 @@
+START check_trade_01
+PASS: 375/390/430, all journeys, 21 canonical stack cases, no writes/external requests/errors; screenshots: 13
+PASS check_trade_01
+START check_trade_02
+PASS: sender/capacity/idempotency/absolute expiry at 375/390/430/1280; model and corrupt storage; screenshots 16
+PASS check_trade_02
+START check_trade_03
+PASS: 4 widths, exact mirror, accept/decline/expiry, roles, slots, double actions, all 8 direct scenarios; screenshots 36
+PASS check_trade_03
+START check_trade_04
+PASS: 4 widths; all 14 demos; packing model; interaction parity; 17 screenshots
+PASS check_trade_04
+START check_trade_05
+PASS: four widths; actual report/accept/cancel journeys; 205 model assertions; 37 screenshots
+PASS check_trade_05
+START check_trade_06
+PASS: four widths; 259 model assertions; 38 screenshots; address privacy, both directions, slots, V1/V2, races, frozen packing
+PASS check_trade_06
+START check_trade_07
+PASS: 1047 model assertions; 81 screenshots; four complete E2E + problem E2E + Q2 journeys
+PASS check_trade_07
+START check_trade_08
+PASS: 90 adapter assertions; 44 screenshots; four widths
+PASS check_trade_08
+START check_trade_09
+[{"width": 375, "model": {"assertions": 52}, "limit": true, "no_disappearance": true, "two_for_three": true, "bilateral_open": true, "one_sided_rejected": true, "stale_and_empty_rejected": true, "request_reused": true, "complete_manual_e2e": true, "capacity_three_blocked": true, "overflow": false}, {"width": 390, "model": {"assertions": 52}, "limit": true, "no_disappearance": true, "two_for_three": true, "bilateral_open": true, "one_sided_rejected": true, "stale_and_empty_rejected": true, "request_reused": true, "complete_manual_e2e": true, "capacity_three_blocked": true, "overflow": false}, {"width": 430, "model": {"assertions": 52}, "limit": true, "no_disappearance": true, "two_for_three": true, "bilateral_open": true, "one_sided_rejected": true, "stale_and_empty_rejected": true, "request_reused": true, "complete_manual_e2e": true, "capacity_three_blocked": true, "overflow": false}, {"width": 1280, "model": {"assertions": 52}, "limit": true, "no_disappearance": true, "two_for_three": true, "bilateral_open": true, "one_sided_rejected": true, "stale_and_empty_rejected": true, "request_reused": true, "complete_manual_e2e": true, "capacity_three_blocked": true, "overflow": false}]
+PASS check_trade_09
+START check_trade_10
+[{"width": 375, "model": {"assertions": 172}, "groups_links_terminal_q2": "PASS", "touch_mouse_keyboard_reduced_motion": "PASS", "overflow": false}, {"width": 390, "model": {"assertions": 172}, "groups_links_terminal_q2": "PASS", "touch_mouse_keyboard_reduced_motion": "PASS", "overflow": false}, {"width": 430, "model": {"assertions": 172}, "groups_links_terminal_q2": "PASS", "touch_mouse_keyboard_reduced_motion": "PASS", "overflow": false}, {"width": 1280, "model": {"assertions": 172}, "groups_links_terminal_q2": "PASS", "touch_mouse_keyboard_reduced_motion": "PASS", "overflow": false}]
+PASS check_trade_10
+START check_trade_11
+PASS [(375, '103px', '117.406px'), (390, '108px', '123.109px'), (430, '118.656px', '135.266px'), (1280, '96.1719px', '109.625px')]
+PASS check_trade_11
+START canonical numeric stack parity
+PASS: canonical list styles and 28 numeric stack comparisons

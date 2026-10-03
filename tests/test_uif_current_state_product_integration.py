@@ -137,7 +137,7 @@ class UIFCurrentStateProductIntegrationTestCase(unittest.TestCase):
         for route, active_target in (
             ("/", 'href="/" aria-current="page"'),
             ("/sammlung", 'href="/sammlung" aria-current="page"'),
-            ("/trades", 'href="/trades" aria-current="page"'),
+            ("/trades", 'href="/tauschen" aria-current="page"'),
         ):
             with self.subTest(route=route):
                 html = self.html(route)
