@@ -1,0 +1,533 @@
+{
+  "status": "READY_FOR_STAGING",
+  "files": [
+    {
+      "path": "App/Database/migrations/0022_trade_v2_album_preference.down.sql",
+      "status": "A",
+      "group": "INTEGRATION-02A",
+      "reason": "Vorhandene additive Präferenzmigration als Source-Abhängigkeit; keine Ausführung auf geschützten DBs.",
+      "sha256": "4946e244963367d85ec2e861a2f346b5825f24a90d564402d27c8cbf2dd2cc24"
+    },
+    {
+      "path": "App/Database/migrations/0022_trade_v2_album_preference.up.sql",
+      "status": "A",
+      "group": "INTEGRATION-02A",
+      "reason": "Vorhandene additive Präferenzmigration als Source-Abhängigkeit; keine Ausführung auf geschützten DBs.",
+      "sha256": "44dc124b5e6cecc997c36597a759079b1354319171fac6c8929f114bd9edc976"
+    },
+    {
+      "path": "App/profile_trade.py",
+      "status": "A",
+      "group": "PROFILE-TRADE-01/SAP-02",
+      "reason": "Bestehendes Fremdprofil, gemeinsame Partnerprojektion, manuelle Auswahl/Serverprüfung und sticky Post-it.",
+      "sha256": "32c70c4cd04ee715f85762d81a196b4db233c3f589d400d007728fa34dc7fee9"
+    },
+    {
+      "path": "App/services/_smartdeal_flow.py",
+      "status": "M",
+      "group": "INTEGRATION-02A",
+      "reason": "Gemeinsame Trade-v2-Präferenzen, Balance-/Matching-/Solver- und Schema-Kompatibilitätsgrundlage; keine neue Domainentscheidung.",
+      "sha256": "46d385aad094a1b81b2fb64414cfd075039ea91cd619c1928b4ed38d0e85eadd"
+    },
+    {
+      "path": "App/services/_trade_v2_flow.py",
+      "status": "A",
+      "group": "INTEGRATION-02A",
+      "reason": "Gemeinsame Trade-v2-Präferenzen, Balance-/Matching-/Solver- und Schema-Kompatibilitätsgrundlage; keine neue Domainentscheidung.",
+      "sha256": "e7d60fe49d1f44ee084af735c12a24ee21416135afbcd8c5762d3556f9b4debc"
+    },
+    {
+      "path": "App/services/partner_trade.py",
+      "status": "A",
+      "group": "PROFILE-TRADE-01/SAP-02",
+      "reason": "Bestehendes Fremdprofil, gemeinsame Partnerprojektion, manuelle Auswahl/Serverprüfung und sticky Post-it.",
+      "sha256": "da47b43edc9aea47335140637b9dfbe53af4dc9800c36ae4f4708631a20b5128"
+    },
+    {
+      "path": "App/services/runtime_operations.py",
+      "status": "M",
+      "group": "INTEGRATION-02A",
+      "reason": "Gemeinsame Trade-v2-Präferenzen, Balance-/Matching-/Solver- und Schema-Kompatibilitätsgrundlage; keine neue Domainentscheidung.",
+      "sha256": "c55dac364ef20b8b1d30b90751ecec4c0ab8310f28cebbf0e39d11e549060e16"
+    },
+    {
+      "path": "App/services/smartdeal_optimizer.py",
+      "status": "M",
+      "group": "INTEGRATION-02A",
+      "reason": "Gemeinsame Trade-v2-Präferenzen, Balance-/Matching-/Solver- und Schema-Kompatibilitätsgrundlage; keine neue Domainentscheidung.",
+      "sha256": "1949d5e0881b21b1c1ef52eea525c587ec6e8653642a9581654e1b4e19bfb553"
+    },
+    {
+      "path": "App/services/smartdeal_pairwise.py",
+      "status": "M",
+      "group": "INTEGRATION-02A",
+      "reason": "Gemeinsame Trade-v2-Präferenzen, Balance-/Matching-/Solver- und Schema-Kompatibilitätsgrundlage; keine neue Domainentscheidung.",
+      "sha256": "55aed712c3f5ebd3e5cf9b7968e49aa5387abe8b90ef64c3fabbdc5342662d2e"
+    },
+    {
+      "path": "App/services/trade_planning_compat.py",
+      "status": "A",
+      "group": "INTEGRATION-02A",
+      "reason": "Gemeinsame Trade-v2-Präferenzen, Balance-/Matching-/Solver- und Schema-Kompatibilitätsgrundlage; keine neue Domainentscheidung.",
+      "sha256": "914e34d622fe3879a48ebe61aee7a1d0813ed0b6606ebabae36dd155910e247c"
+    },
+    {
+      "path": "App/services/trade_search.py",
+      "status": "A",
+      "group": "SAP-01A/02",
+      "reason": "Kanonischer SAP-Controller, Parser, Ergebnisprojektion oder bestehende Darstellung/Interaktion.",
+      "sha256": "731a8c421df888b22605a7e45e1e7de5261d768e07fb9fe8297ad39fcf8bc421"
+    },
+    {
+      "path": "App/services/trade_search_intent.py",
+      "status": "A",
+      "group": "SAP-01A/02",
+      "reason": "Kanonischer SAP-Controller, Parser, Ergebnisprojektion oder bestehende Darstellung/Interaktion.",
+      "sha256": "51b6ba95fb29c7bdd201d1c2ba447d0f2c6e61701509dd53dd057ab5b1dfe044"
+    },
+    {
+      "path": "App/services/trade_v2_domain.py",
+      "status": "A",
+      "group": "INTEGRATION-02A",
+      "reason": "Gemeinsame Trade-v2-Präferenzen, Balance-/Matching-/Solver- und Schema-Kompatibilitätsgrundlage; keine neue Domainentscheidung.",
+      "sha256": "6d47af49d8c8b8955875d0778a3ba5c25d08e71fc2778a5739e4ae3507774131"
+    },
+    {
+      "path": "App/services/trade_v2_preferences.py",
+      "status": "A",
+      "group": "INTEGRATION-02A",
+      "reason": "Gemeinsame Trade-v2-Präferenzen, Balance-/Matching-/Solver- und Schema-Kompatibilitätsgrundlage; keine neue Domainentscheidung.",
+      "sha256": "c47a516ed70d849a4b10fdc07c33f8cd4733eff83c5b18c4d11507358555fed6"
+    },
+    {
+      "path": "App/services/trade_v2_rules.py",
+      "status": "A",
+      "group": "INTEGRATION-02A",
+      "reason": "Gemeinsame Trade-v2-Präferenzen, Balance-/Matching-/Solver- und Schema-Kompatibilitätsgrundlage; keine neue Domainentscheidung.",
+      "sha256": "49345c04dc33403a172cd67f86ffac316dbd6ddf50e53b842b994412fca94b09"
+    },
+    {
+      "path": "App/static/profile_trade.css",
+      "status": "A",
+      "group": "PROFILE-TRADE-01/SAP-02",
+      "reason": "Bestehendes Fremdprofil, gemeinsame Partnerprojektion, manuelle Auswahl/Serverprüfung und sticky Post-it.",
+      "sha256": "e76138206c51ae624eb8c356b2475da6abe0d77c9a60fbf8035dc84f5ace142e"
+    },
+    {
+      "path": "App/static/trade_manual_live.css",
+      "status": "A",
+      "group": "PROFILE-TRADE-01/SAP-02",
+      "reason": "Bestehendes Fremdprofil, gemeinsame Partnerprojektion, manuelle Auswahl/Serverprüfung und sticky Post-it.",
+      "sha256": "ca079c54a2c609b74cb77f098eb960838b21bcc9f260b38e94224a0a2bc9bd33"
+    },
+    {
+      "path": "App/static/trade_search.css",
+      "status": "A",
+      "group": "SAP-01A/02",
+      "reason": "Kanonischer SAP-Controller, Parser, Ergebnisprojektion oder bestehende Darstellung/Interaktion.",
+      "sha256": "d157be5db4e1b9f4da973d4312c7f1d78016e7322d0ddb4f2cd78d26227ab337"
+    },
+    {
+      "path": "App/static/trade_search.js",
+      "status": "A",
+      "group": "SAP-01A/02",
+      "reason": "Kanonischer SAP-Controller, Parser, Ergebnisprojektion oder bestehende Darstellung/Interaktion.",
+      "sha256": "2b04c2531bc3a536000026813925b9300faecc2e2a7758727f5fc8f19c08a0ab"
+    },
+    {
+      "path": "App/static/trade_shell.css",
+      "status": "M",
+      "group": "BORSE-UI/Trade-Shell",
+      "reason": "Bestehende Deal-/Kartenpräsentation und Deep-Link-Kompatibilität des freigegebenen Flows; kein neuer Top-3-Einstieg.",
+      "sha256": "86b26f5646a8f783049be4280d43e2e35fb5c9c5a2bf0ab3040452fc1bd00927"
+    },
+    {
+      "path": "App/static/trade_shell.js",
+      "status": "M",
+      "group": "BORSE-UI/Trade-Shell",
+      "reason": "Bestehende Deal-/Kartenpräsentation und Deep-Link-Kompatibilität des freigegebenen Flows; kein neuer Top-3-Einstieg.",
+      "sha256": "d011bb0fe006a882835e35edae3e6ae154ecb1cce67d047d511da6ea599f4066"
+    },
+    {
+      "path": "App/static/trade_shell_motion.js",
+      "status": "A",
+      "group": "BORSE-UI/Trade-Shell",
+      "reason": "Bestehende Deal-/Kartenpräsentation und Deep-Link-Kompatibilität des freigegebenen Flows; kein neuer Top-3-Einstieg.",
+      "sha256": "91c521b361d9a14e978a672537b7722ea1ff29bab10547acf99fcd407a7cfeb0"
+    },
+    {
+      "path": "App/templates/profile_trade.html",
+      "status": "A",
+      "group": "PROFILE-TRADE-01/SAP-02",
+      "reason": "Bestehendes Fremdprofil, gemeinsame Partnerprojektion, manuelle Auswahl/Serverprüfung und sticky Post-it.",
+      "sha256": "4c5e2a47a1ee72f65d367ccf98b8bf5df56444f34c2cc07d65165bf352050c44"
+    },
+    {
+      "path": "App/templates/trade_search.html",
+      "status": "A",
+      "group": "SAP-01A/02",
+      "reason": "Kanonischer SAP-Controller, Parser, Ergebnisprojektion oder bestehende Darstellung/Interaktion.",
+      "sha256": "322a648fd12918c980a84f802339a8e54008a7bf2f0581958f149932f8ca964f"
+    },
+    {
+      "path": "App/templates/trade_search_additional.html",
+      "status": "A",
+      "group": "SAP-01A/02",
+      "reason": "Kanonischer SAP-Controller, Parser, Ergebnisprojektion oder bestehende Darstellung/Interaktion.",
+      "sha256": "57892b638bd39bc3689fb258499982ad0b2371f38b0b706ea1aad48ecb42fb58"
+    },
+    {
+      "path": "App/templates/trade_shell.html",
+      "status": "M",
+      "group": "BORSE-UI/Trade-Shell",
+      "reason": "Bestehende Deal-/Kartenpräsentation und Deep-Link-Kompatibilität des freigegebenen Flows; kein neuer Top-3-Einstieg.",
+      "sha256": "f5bb35a3b570e1dbfdf1cadf70b611f29347d00e5e3589353fcf4169dc9b263b"
+    },
+    {
+      "path": "App/trade_search_routes.py",
+      "status": "A",
+      "group": "SAP-01A/02",
+      "reason": "Kanonischer SAP-Controller, Parser, Ergebnisprojektion oder bestehende Darstellung/Interaktion.",
+      "sha256": "164a32be592d16e85f28b03fef15cf9e80352b724943bea557ba633ec7981e91"
+    },
+    {
+      "path": "App/trade_shell.py",
+      "status": "M",
+      "group": "BORSE-UI/Trade-Shell",
+      "reason": "Bestehende Deal-/Kartenpräsentation und Deep-Link-Kompatibilität des freigegebenen Flows; kein neuer Top-3-Einstieg.",
+      "sha256": "9f121ac5f5b6a9f75baac717bc8d3ee40c222fdc34ebba882c22333d4d15bf8c"
+    },
+    {
+      "path": "App/trade_v2/assets/manual_view.js",
+      "status": "M",
+      "group": "PROFILE-TRADE-01/SAP-02",
+      "reason": "Bestehendes Fremdprofil, gemeinsame Partnerprojektion, manuelle Auswahl/Serverprüfung und sticky Post-it.",
+      "sha256": "c23ffbd5e031556940ad3a369d785ffb9ebdb502c9c1f1e0d794b254389f65a5"
+    },
+    {
+      "path": "App/trade_v2/templates/manual.html",
+      "status": "M",
+      "group": "PROFILE-TRADE-01/SAP-02",
+      "reason": "Bestehendes Fremdprofil, gemeinsame Partnerprojektion, manuelle Auswahl/Serverprüfung und sticky Post-it.",
+      "sha256": "8afafe1706953cbf9753f39b0a8c5a66f2ee3dd7db4132db154b6291c4abc7b1"
+    },
+    {
+      "path": "App/webapp.py",
+      "status": "M",
+      "group": "Produktintegration",
+      "reason": "Registrierung des bestehenden Trade-Pfads, Profil-Adapter und vorhandene Schema-Kompatibilität.",
+      "sha256": "ae8b70c493dc4c9a5542228ca86f725195e256268ad55cf35c4b2eb74c8936d9"
+    },
+    {
+      "path": "docs/BORSE_UI_01_AUDIT.md",
+      "status": "A",
+      "group": "Dokumentation",
+      "reason": "Auftragsspezifischer Audit des akzeptierten Flows bzw. seiner unveränderten Voraussetzungen; historische Aussagen bleiben datiert.",
+      "sha256": "1a930459490fa4315ba7ec91216ba7621fcd6b5b7464e6a372958a5c07d1b34e"
+    },
+    {
+      "path": "docs/PROFILE_TRADE_01_AUDIT.md",
+      "status": "A",
+      "group": "Dokumentation",
+      "reason": "Auftragsspezifischer Audit des akzeptierten Flows bzw. seiner unveränderten Voraussetzungen; historische Aussagen bleiben datiert.",
+      "sha256": "bd9107a3daafbcc89ad288ed623d89daf01805947d9321cf74790d14a50c5628"
+    },
+    {
+      "path": "docs/SAP_01A_AUDIT.md",
+      "status": "A",
+      "group": "Dokumentation",
+      "reason": "Auftragsspezifischer Audit des akzeptierten Flows bzw. seiner unveränderten Voraussetzungen; historische Aussagen bleiben datiert.",
+      "sha256": "4cd51e11f524453b76a152a9face8044adb328431c545909ffab109b821158c5"
+    },
+    {
+      "path": "docs/SAP_01_AUDIT.md",
+      "status": "A",
+      "group": "Dokumentation",
+      "reason": "Auftragsspezifischer Audit des akzeptierten Flows bzw. seiner unveränderten Voraussetzungen; historische Aussagen bleiben datiert.",
+      "sha256": "06d58cb826a4808089ef1bd3df5055e1da09c97c2d337fb56cff3a13245030ec"
+    },
+    {
+      "path": "docs/SAP_02_AUDIT.md",
+      "status": "A",
+      "group": "Dokumentation",
+      "reason": "Auftragsspezifischer Audit des akzeptierten Flows bzw. seiner unveränderten Voraussetzungen; historische Aussagen bleiben datiert.",
+      "sha256": "7964d79549d8f0c76ae3b99d1bbe3f92be21075ea1db0fc2cb7cb230d379706c"
+    },
+    {
+      "path": "docs/SAP_SAVEPOINT_01_AUDIT.md",
+      "status": "A",
+      "group": "Savepoint-Audit",
+      "reason": "Scope, Freigabe, Prüfungen und STOP-Befund dieses Auftrags."
+    },
+    {
+      "path": "docs/SAP_SAVEPOINT_01_FILES.json",
+      "status": "A",
+      "group": "Savepoint-Audit",
+      "reason": "Scope, Freigabe, Prüfungen und STOP-Befund dieses Auftrags."
+    },
+    {
+      "path": "docs/TRADE_V2_INTEGRATION_01A_1_AUDIT.md",
+      "status": "A",
+      "group": "Dokumentation",
+      "reason": "Auftragsspezifischer Audit des akzeptierten Flows bzw. seiner unveränderten Voraussetzungen; historische Aussagen bleiben datiert.",
+      "sha256": "277e0dac7a783e5565a7405abfcaa0a3152ec893572ada43ec118a18254525ca"
+    },
+    {
+      "path": "docs/TRADE_V2_INTEGRATION_01A_AUDIT.md",
+      "status": "A",
+      "group": "Dokumentation",
+      "reason": "Auftragsspezifischer Audit des akzeptierten Flows bzw. seiner unveränderten Voraussetzungen; historische Aussagen bleiben datiert.",
+      "sha256": "ac2b9fd5e528797f44f688df2d7129e3e4b0518b150f0249153533705c982ccd"
+    },
+    {
+      "path": "docs/TRADE_V2_INTEGRATION_02A_AUDIT.md",
+      "status": "A",
+      "group": "Dokumentation",
+      "reason": "Auftragsspezifischer Audit des akzeptierten Flows bzw. seiner unveränderten Voraussetzungen; historische Aussagen bleiben datiert.",
+      "sha256": "77a4503f7be4404aad5fee4763fadef8958022060a9faf1bacd95c50549851ea"
+    },
+    {
+      "path": "tests/research/check_borse_ui01.py",
+      "status": "A",
+      "group": "Voraussetzungsnachweis",
+      "reason": "Vorhandener synthetischer Research-Harness der Integrations-/Börsenschritte; alte Top-3-UI-Assertions sind historische Referenz, kein aktueller SAP-Gate.",
+      "sha256": "127ff5207e487b2e52a392a3851a69a0af7619bf1f190a038a42e75a0672845c"
+    },
+    {
+      "path": "tests/research/check_borse_ui01_bubble.py",
+      "status": "A",
+      "group": "Voraussetzungsnachweis",
+      "reason": "Vorhandener synthetischer Research-Harness der Integrations-/Börsenschritte; alte Top-3-UI-Assertions sind historische Referenz, kein aktueller SAP-Gate.",
+      "sha256": "9d32327b0d22692bc1c9f87cc5b67714fb2b242b648738a7214a8eae29aa9921"
+    },
+    {
+      "path": "tests/research/check_integration01a.py",
+      "status": "A",
+      "group": "Voraussetzungsnachweis",
+      "reason": "Vorhandener synthetischer Research-Harness der Integrations-/Börsenschritte; alte Top-3-UI-Assertions sind historische Referenz, kein aktueller SAP-Gate.",
+      "sha256": "ed0e1bd7abfdeaf31380b9af05489ca0dc0ae56075b4687d58791391168e8d9d"
+    },
+    {
+      "path": "tests/research/check_integration01a1.py",
+      "status": "A",
+      "group": "Voraussetzungsnachweis",
+      "reason": "Vorhandener synthetischer Research-Harness der Integrations-/Börsenschritte; alte Top-3-UI-Assertions sind historische Referenz, kein aktueller SAP-Gate.",
+      "sha256": "5cf4ac56a5b7f17ca6a33733a7dee00a1e532fa873fefbff0a99b5ad39dbddee"
+    },
+    {
+      "path": "tests/research/check_integration02a.py",
+      "status": "A",
+      "group": "Voraussetzungsnachweis",
+      "reason": "Vorhandener synthetischer Research-Harness der Integrations-/Börsenschritte; alte Top-3-UI-Assertions sind historische Referenz, kein aktueller SAP-Gate.",
+      "sha256": "58343e475daa3bc9444107e0a46d311d4614d273e4ddc3442dc41f46879f3811"
+    },
+    {
+      "path": "tests/research/check_profile_trade01.py",
+      "status": "A",
+      "group": "Aktive Browsergates",
+      "reason": "Reproduzierbare synthetische SAP-/Profil-/Sticky-/Responsive-Prüfungen.",
+      "sha256": "bb6aecc7563b6445fce7de749dcd77c37b7b74bafe14b8149a0ff14a72226e1c"
+    },
+    {
+      "path": "tests/research/check_sap01.py",
+      "status": "A",
+      "group": "Aktive Browsergates",
+      "reason": "Reproduzierbare synthetische SAP-/Profil-/Sticky-/Responsive-Prüfungen.",
+      "sha256": "a917aaab55cce7fed546341282259247dd5ce91ad13340d3c9fa63229a75aeed"
+    },
+    {
+      "path": "tests/research/check_sap02.py",
+      "status": "A",
+      "group": "Aktive Browsergates",
+      "reason": "Reproduzierbare synthetische SAP-/Profil-/Sticky-/Responsive-Prüfungen.",
+      "sha256": "9654eb00436eab2b668f7e3d9a73dea91e8c41daf77f1ebf40f22081dc6a275e"
+    },
+    {
+      "path": "tests/test_cb006_profile_privacy_gate.py",
+      "status": "M",
+      "group": "PROFILE-TRADE-01 Tests",
+      "reason": "Profil-, Privacy- und Trade-Kontext-Regressionsschutz.",
+      "sha256": "2792ee8354b8478c940f73e41db8bbc7e62764b14824c8d3ec12a0319d1d5a95"
+    },
+    {
+      "path": "tests/test_cb008_notification_catalog.py",
+      "status": "M",
+      "group": "INTEGRATION-02A Tests",
+      "reason": "Präferenz-/Solver-Tests bzw. vorhandene Migrationserwartung auf verfügbare 0022 aktualisiert; keine Testausschlüsse geändert.",
+      "sha256": "0235d97b2c36acf3ef2a051dd35863c972b426550433d1157c643f2f5675bc11"
+    },
+    {
+      "path": "tests/test_cb009_inbox_read_retention.py",
+      "status": "M",
+      "group": "INTEGRATION-02A Tests",
+      "reason": "Präferenz-/Solver-Tests bzw. vorhandene Migrationserwartung auf verfügbare 0022 aktualisiert; keine Testausschlüsse geändert.",
+      "sha256": "30123d5ea4b728d494baf1ba238e7e8d8d278fcb87b93a956faeae5d746a2b18"
+    },
+    {
+      "path": "tests/test_cb011_executable_match_contract.py",
+      "status": "M",
+      "group": "INTEGRATION-02A Tests",
+      "reason": "Präferenz-/Solver-Tests bzw. vorhandene Migrationserwartung auf verfügbare 0022 aktualisiert; keine Testausschlüsse geändert.",
+      "sha256": "07ca5b667dea76a01d7d20bb2c4b1e2ced18f631340c110f7fd04654c1e69c4d"
+    },
+    {
+      "path": "tests/test_cb012_feed_home_cutover.py",
+      "status": "M",
+      "group": "INTEGRATION-02A Tests",
+      "reason": "Präferenz-/Solver-Tests bzw. vorhandene Migrationserwartung auf verfügbare 0022 aktualisiert; keine Testausschlüsse geändert.",
+      "sha256": "6310464c5696ce65b8f32716d15fe5dcd968cc9a634a7ca55c0ff8fdddfeb759"
+    },
+    {
+      "path": "tests/test_cb013_collection_completion_projection.py",
+      "status": "M",
+      "group": "INTEGRATION-02A Tests",
+      "reason": "Präferenz-/Solver-Tests bzw. vorhandene Migrationserwartung auf verfügbare 0022 aktualisiert; keine Testausschlüsse geändert.",
+      "sha256": "1789fe5788d1dd444a82561680104df59fbbe2f4e0f07994b630b649bb40cbf0"
+    },
+    {
+      "path": "tests/test_cb014_profile_account_projection.py",
+      "status": "M",
+      "group": "INTEGRATION-02A Tests",
+      "reason": "Präferenz-/Solver-Tests bzw. vorhandene Migrationserwartung auf verfügbare 0022 aktualisiert; keine Testausschlüsse geändert.",
+      "sha256": "427d09de7760170a6b2e420559a7f4cd6d839da7871739a1ff319e6e35fea5b1"
+    },
+    {
+      "path": "tests/test_cb015_statistics_projection.py",
+      "status": "M",
+      "group": "INTEGRATION-02A Tests",
+      "reason": "Präferenz-/Solver-Tests bzw. vorhandene Migrationserwartung auf verfügbare 0022 aktualisiert; keine Testausschlüsse geändert.",
+      "sha256": "174a0c5081263022751212fc5854bdbbe11f0bfe05cb7de5d157c3bb6b54c8f9"
+    },
+    {
+      "path": "tests/test_cb016_legacy_cutover.py",
+      "status": "M",
+      "group": "INTEGRATION-02A Tests",
+      "reason": "Präferenz-/Solver-Tests bzw. vorhandene Migrationserwartung auf verfügbare 0022 aktualisiert; keine Testausschlüsse geändert.",
+      "sha256": "2a49166a6924042ea52affcba2b62eec9f1340d11814f6c97a1ec5631282ad70"
+    },
+    {
+      "path": "tests/test_integration01_trade_shell.py",
+      "status": "M",
+      "group": "SAP-02 Tests",
+      "reason": "Bestehende Routen-/Read-only-Gates; Home-Assertion auf freigegebenen SAP-Einstieg angepasst.",
+      "sha256": "f57bf210e0eb74efee8c990fbe3f4e35d509ed2307cbd124aef9649e42bfd284"
+    },
+    {
+      "path": "tests/test_integration02a_trade_preferences.py",
+      "status": "A",
+      "group": "INTEGRATION-02A Tests",
+      "reason": "Präferenz-/Solver-Tests bzw. vorhandene Migrationserwartung auf verfügbare 0022 aktualisiert; keine Testausschlüsse geändert.",
+      "sha256": "3765c58268cbbf32ac0f13b67b1e8d6851b9044f4fd5cdd9ba7265b04f219c45"
+    },
+    {
+      "path": "tests/test_profile_trade01.py",
+      "status": "A",
+      "group": "PROFILE-TRADE-01 Tests",
+      "reason": "Profil-, Privacy- und Trade-Kontext-Regressionsschutz.",
+      "sha256": "8309d6b654d0dce4c3d97cd03c48c47341da0a0871406ae2081846f8e6c15a48"
+    },
+    {
+      "path": "tests/test_s26_collector_profiles.py",
+      "status": "M",
+      "group": "INTEGRATION-02A Tests",
+      "reason": "Präferenz-/Solver-Tests bzw. vorhandene Migrationserwartung auf verfügbare 0022 aktualisiert; keine Testausschlüsse geändert.",
+      "sha256": "5fb625efb3b3e5c1477b8d6da7df460681797fd2e9200a90ee71a1b74e3ead86"
+    },
+    {
+      "path": "tests/test_s27_album_privacy_trade_pool.py",
+      "status": "M",
+      "group": "INTEGRATION-02A Tests",
+      "reason": "Präferenz-/Solver-Tests bzw. vorhandene Migrationserwartung auf verfügbare 0022 aktualisiert; keine Testausschlüsse geändert.",
+      "sha256": "da7991862c0c0e0fa742af4ebe79b24f268ff52f4b9ac12648f1ab8658bafae7"
+    },
+    {
+      "path": "tests/test_s28_trade_ratings.py",
+      "status": "M",
+      "group": "INTEGRATION-02A Tests",
+      "reason": "Präferenz-/Solver-Tests bzw. vorhandene Migrationserwartung auf verfügbare 0022 aktualisiert; keine Testausschlüsse geändert.",
+      "sha256": "2e116fe087e30fb6379f653959e93b256d0c5b2304a3e7cd4cf905af716b3898"
+    },
+    {
+      "path": "tests/test_s29_friendships_community.py",
+      "status": "M",
+      "group": "INTEGRATION-02A Tests",
+      "reason": "Präferenz-/Solver-Tests bzw. vorhandene Migrationserwartung auf verfügbare 0022 aktualisiert; keine Testausschlüsse geändert.",
+      "sha256": "9dc589f804c4bda1ac85c0e6fe7f3d1b007c83e3b1d48ff123105766463a1c52"
+    },
+    {
+      "path": "tests/test_s31_ui_foundation.py",
+      "status": "M",
+      "group": "INTEGRATION-02A Tests",
+      "reason": "Präferenz-/Solver-Tests bzw. vorhandene Migrationserwartung auf verfügbare 0022 aktualisiert; keine Testausschlüsse geändert.",
+      "sha256": "114191a97f2fbbb53083bd7aa92140d6267b8a41a6b696676785d091af8b2d6f"
+    },
+    {
+      "path": "tests/test_s32_auth_session_csrf.py",
+      "status": "M",
+      "group": "INTEGRATION-02A Tests",
+      "reason": "Präferenz-/Solver-Tests bzw. vorhandene Migrationserwartung auf verfügbare 0022 aktualisiert; keine Testausschlüsse geändert.",
+      "sha256": "ba13e610eb11a3dc0c1a5920afdd0b454c6d2ce41dc4f4cfa5ffb06b650de0ee"
+    },
+    {
+      "path": "tests/test_s33_http_integrity_hardening.py",
+      "status": "M",
+      "group": "INTEGRATION-02A Tests",
+      "reason": "Präferenz-/Solver-Tests bzw. vorhandene Migrationserwartung auf verfügbare 0022 aktualisiert; keine Testausschlüsse geändert.",
+      "sha256": "523b0d1e6fb87a556ea468f0cc070dc43af2696a2bb903d1a8c728257cefa469"
+    },
+    {
+      "path": "tests/test_s35_account_lifecycle_privacy_performance.py",
+      "status": "M",
+      "group": "INTEGRATION-02A Tests",
+      "reason": "Präferenz-/Solver-Tests bzw. vorhandene Migrationserwartung auf verfügbare 0022 aktualisiert; keine Testausschlüsse geändert.",
+      "sha256": "3f9af6ee2c35b8f61c45c13ff894066db190fd72ffe55409be022c908a0c5d77"
+    },
+    {
+      "path": "tests/test_s38_release_candidate.py",
+      "status": "M",
+      "group": "INTEGRATION-02A Tests",
+      "reason": "Präferenz-/Solver-Tests bzw. vorhandene Migrationserwartung auf verfügbare 0022 aktualisiert; keine Testausschlüsse geändert.",
+      "sha256": "a718258a00af3eef4efe807726b45ac55e1f6777e5c206cc6c60eff631bb1847"
+    },
+    {
+      "path": "tests/test_sap01_search.py",
+      "status": "A",
+      "group": "SAP-01A/02 Tests",
+      "reason": "Suche, Ranking, Albumidentität, Reservierungen, Stale-Prüfung und aktuelle SAP-Einstiegsansicht.",
+      "sha256": "ea8066abd504450b1b779f0e5d2df5c43cec2081fd982eea927666f8dea1cf56"
+    },
+    {
+      "path": "tests/test_sap02_search.py",
+      "status": "A",
+      "group": "SAP-01A/02 Tests",
+      "reason": "Suche, Ranking, Albumidentität, Reservierungen, Stale-Prüfung und aktuelle SAP-Einstiegsansicht.",
+      "sha256": "0d16b7614cf8f7f3100a2f060f91678d46176f98d82c15ccaa3ef9727aede507"
+    },
+    {
+      "path": "tests/test_sd_t1_contract_foundation.py",
+      "status": "M",
+      "group": "INTEGRATION-02A Tests",
+      "reason": "Präferenz-/Solver-Tests bzw. vorhandene Migrationserwartung auf verfügbare 0022 aktualisiert; keine Testausschlüsse geändert.",
+      "sha256": "cd05040dd1606cc29e2877bca001d6c22ed40e3ac231b4be6e8899a4add1622d"
+    }
+  ],
+  "planned_counts": {
+    "M": 31,
+    "A": 42
+  },
+  "excluded_categories": [
+    "private DBs/Backups/.env/Runtime",
+    "screenshots/research artifacts",
+    "design/branding/social-media exports",
+    "historical source copies",
+    "local caches/venv"
+  ],
+  "blocker": null,
+  "authorized_whitespace_correction": {
+    "path": "App/services/trade_planning_compat.py",
+    "before": "c59828c86562a4499010e15b191b8e8e8f7eb0d51b3c64479fe62af080c8c949",
+    "after": "914e34d622fe3879a48ebe61aee7a1d0813ed0b6606ebabae36dd155910e247c",
+    "removed_bytes": 2,
+    "ast_identical": true
+  }
+}

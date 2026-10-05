@@ -171,7 +171,7 @@ class CB016LegacyCutoverTestCase(unittest.TestCase):
             self.assertEqual(target, response.headers["Location"])
 
     def test_cutover_adds_no_schema_migration(self):
-        self.assertEqual(21, max(item.version for item in load_migrations()))
+        self.assertEqual(22, max(item.version for item in load_migrations()))
 
 
 if __name__ == "__main__":

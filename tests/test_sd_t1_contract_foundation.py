@@ -171,7 +171,7 @@ class ContractFoundationTests(unittest.TestCase):
             connection.executescript((ROOT / "App/Database/base_schema.sql").read_text())
             connection.executescript((ROOT / "App/Database/catalog_seed.sql").read_text())
             connection.execute("PRAGMA foreign_keys=ON")
-            self.assertEqual(tuple(range(1, 22)), migrate(connection))
+            self.assertEqual(tuple(range(1, 22)), migrate(connection, 21))
             self.assertEqual([("ok",)], connection.execute("PRAGMA integrity_check").fetchall())
             self.assertEqual([], connection.execute("PRAGMA foreign_key_check").fetchall())
 

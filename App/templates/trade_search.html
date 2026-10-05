@@ -1,0 +1,23 @@
+<!doctype html>
+<html lang="de"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Tauschen · Sammlr</title>{{ head }}
+<link rel="stylesheet" href="/static/trade_search.css">
+<script src="/static/trade_search.js" defer></script></head>
+<body class="s31-product-page s30-album-page"><main class="container sap-search">
+{{ header }}<h1>Tauschen</h1>
+<form method="get" action="/tauschen" class="sap-filters">
+<input type="hidden" name="filtered" value="1">
+<details class="sap-album-picker"><summary><span>Tauschalben</span><span class="sap-album-status">{% if not selected %}Keine ausgewählt{% elif selected|length == albums|length %}Alle {{ selected|length }} ausgewählt{% else %}{{ selected|length }} von {{ albums|length }} ausgewählt{% endif %}</span></summary>
+<fieldset><legend class="sap-visually-hidden">Tauschalben auswählen</legend>
+<div class="sap-albums">{% for id,name in albums %}<label><input type="checkbox" name="album" value="{{ id }}" {% if id in selected %}checked{% endif %}>{{ name }}</label>{% else %}<p>Du hast noch kein Album für die Tauschbörse freigegeben.</p>{% endfor %}</div>
+<div class="sap-selection"><button type="button" data-albums="all" hidden>Alle</button><button type="button" data-albums="none" hidden>Keine</button></div>
+</fieldset></details>
+<label for="sap-query" class="sap-visually-hidden">Sticker, Album oder Sammlr suchen</label>
+<div class="sap-query-row"><input id="sap-query" type="search" name="q" value="{{ query.text }}" maxlength="240" placeholder="Sticker, Album oder Sammlr suchen …"><button type="submit">Suchen</button></div>
+</form>
+{% if ambiguous %}<p class="sap-search-context">{% for code,n in ambiguous %}{{ code }} · {{ n }} Alben{% if not loop.last %}; {% endif %}{% endfor %}</p>{% endif %}
+<section aria-label="Passende Sammlr"><p class="sap-result-count" role="status">{{ total }} {{ 'Ergebnis' if total == 1 else 'Ergebnisse' }}</p>
+<ul class="sap-results">{% for p in rows %}<li><a href="{{ p.profile_url }}"><span class="sap-row-content"><strong>{{ p.username }}</strong><span class="sap-row-meta">{% if concrete %}{{ p.hits }}/{{ target_count }} gesucht · {% endif %}<b>{{ p.count }} Sticker</b><span{% if concrete %} hidden{% endif %}> · {{ p.album_count }} {{ 'Album' if p.album_count == 1 else 'Alben' }}</span></span></span><span class="sap-chevron" aria-hidden="true">›</span></a></li>{% else %}<li class="sap-empty">{% if not selected %}Wähle mindestens ein Album aus.{% else %}{% if concrete %}Für {{ query.text }} ist aktuell kein Tausch möglich.{% else %}Keine passenden Sammlr für diese Auswahl.{% endif %}{% endif %}</li>{% endfor %}</ul></section>
+{% if extra %}{% include 'trade_search_additional.html' %}{% endif %}
+{% if more %}<a class="sap-more" href="{{ more }}">Mehr anzeigen</a>{% endif %}
+</main>{{ navigation }}</body></html>

@@ -4,38 +4,12 @@ from dataclasses import replace
 from pathlib import Path
 import sqlite3
 
-from flask import Blueprint, abort, render_template, session
+from flask import Blueprint, abort, render_template, session, request
 from markupsafe import Markup
 
-from services.smartdeal_planning import SmartDealPlanningService
-from services.smartdeal_pairwise import SmartDealPairwiseService
+from services.trade_planning_compat import LegacyPlanningReadAdapter
+from services.trade_v2_domain import TradeV2Domain
 from services.smartdeal_optimizer import SmartDealOptimizer
-
-
-class LegacyPlanningReadAdapter:
-    """Project the existing pre-V21 legacy defaults, without changing SQL storage.
-
-    Only the three SELECT expressions absent on V20 are adapted. All eligibility,
-    availability, reservation and incoming rules stay in the canonical reader.
-    """
-    def __init__(self, connection):
-        self.connection = connection
-        columns = {r['name'] for r in connection.execute('PRAGMA table_info(trade_requests)')}
-        fields = {'contract_type', 'binding_created_at', 'accepted_at'}
-        present = fields & columns
-        if present and present != fields:
-            raise ValueError('Incomplete request contract schema')
-        self.legacy = not present
-
-    def __getattr__(self, name):
-        return getattr(self.connection, name)
-
-    def execute(self, sql, parameters=()):
-        if self.legacy and 'q.contract_type' in sql:
-            sql = sql.replace('q.contract_type', "'legacy' AS contract_type")
-            sql = sql.replace('q.binding_created_at', 'NULL AS binding_created_at')
-            sql = sql.replace('q.accepted_at', 'NULL AS accepted_at')
-        return self.connection.execute(sql, parameters)
 
 
 @contextmanager
@@ -60,15 +34,16 @@ def read_connection(database):
 
 
 def discovery(connection, actor):
-    inputs = SmartDealPlanningService(LegacyPlanningReadAdapter(connection)).build_pairwise_inputs(actor)
-    opportunities = SmartDealPairwiseService.from_planning_inputs(inputs)
+    market = TradeV2Domain(connection).market(actor)
+    inputs = market.inputs
+    opportunities = market.opportunities
     plan = SmartDealOptimizer.optimize(inputs.subject, opportunities)
     users = {r['id']: r['username'] for r in connection.execute('SELECT id,username FROM users')}
     albums = {r['id']: r['name'] for r in connection.execute('SELECT id,name FROM albums')}
     return inputs, opportunities, plan, users, albums
 
 
-def register_trade_shell(app, *, database_path, global_head, header, navigation, render_slot):
+def register_trade_shell(app, *, database_path, global_head, header, navigation, render_slot, csrf_token):
     shell = Blueprint('trade_shell', __name__, template_folder='templates')
 
     def actor():
@@ -86,7 +61,7 @@ def register_trade_shell(app, *, database_path, global_head, header, navigation,
     def slot(piece, count=1, href=None):
         return Markup(render_slot(piece.album_id, piece.sticker_code,
                                  {piece.sticker_code: {'quantity': count}}, None,
-                                 'owned', '', can_edit_inventory=False,
+                                 'duplicate' if count > 1 else 'owned', '', can_edit_inventory=False,
                                  detail_href=href or '#', max_visible_layers=10))
 
     def decorated(deal, users, albums):
@@ -95,7 +70,7 @@ def register_trade_shell(app, *, database_path, global_head, header, navigation,
                 'card': slot(deal.incoming_pieces[0], deal.piece_count,
                              f'/tauschen/vorschlag/{deal.partner_id}')}
 
-    def deal_page(deal, users, albums):
+    def deal_page(deal, users, albums, notice=""):
         groups = []
         for side, pieces in [('Du bekommst', deal.incoming_pieces), ('Du gibst ab', deal.outgoing_pieces)]:
             for album_id in sorted({p.album_id for p in pieces}):
@@ -107,24 +82,11 @@ def register_trade_shell(app, *, database_path, global_head, header, navigation,
                 groups.append({'side': side, 'album': albums[album_id], 'count': len(group),
                                'stack': Markup(stack), 'cards': cards})
         return page('deal', f'Tausch mit {users[deal.partner_id]}',
-                    deal=decorated(deal, users, albums), groups=groups)
+                    deal=decorated(deal, users, albums), groups=groups, notice=notice)
 
-    @shell.get('/tauschen')
-    def home():
-        with read_connection(database_path()) as db:
-            _, _, plan, users, albums = discovery(db, actor())
-            deals = [decorated(d, users, albums) for d in plan.deals[:3]]
-        return page('home', 'Tauschen', deals=deals)
-
-    @shell.get('/tauschen/sammlr')
-    def partners():
-        with read_connection(database_path()) as db:
-            _, opportunities, _, users, albums = discovery(db, actor())
-            rows = [{'id': p.partner_id, 'username': users[p.partner_id],
-                     'count': p.max_equal_piece_count,
-                     'albums': [albums[a] for a in p.involved_albums]}
-                    for p in sorted(opportunities, key=lambda p: (-p.max_equal_piece_count, p.partner_id))]
-        return page('partners', 'Alle Sammlr', partners=rows)
+    from trade_search_routes import register_search
+    register_search(shell, database_path=database_path, read_connection=read_connection,
+                    actor=actor, global_head=global_head, header=header, navigation=navigation)
 
     @shell.get('/tauschen/sammlr/<int:partner_id>')
     def partner(partner_id):
@@ -152,17 +114,19 @@ def register_trade_shell(app, *, database_path, global_head, header, navigation,
     @shell.get('/tauschen/sammlr/<int:partner_id>/smartdeal')
     def partner_deal(partner_id):
         with read_connection(database_path()) as db:
-            inputs, opportunities, _, users, albums = discovery(db, actor())
-            opportunity = next((p for p in opportunities if p.partner_id == partner_id), None)
-            if opportunity is None or opportunity.max_equal_piece_count < 5:
+            from services.partner_trade import partner_deal as project_deal, selected_albums, change_notice
+            market=TradeV2Domain(db).market(actor(), selected_albums(request.args))
+            opportunity=next((p for p in market.pairs if p.partner_id==partner_id),None)
+            deal=project_deal(market,opportunity)
+            current=opportunity.max_equal_piece_count if opportunity else 0
+            notice=change_notice(request.args,current)
+            if deal is None:
+                if notice:
+                    return page('changed','Tausch aktualisiert',notice=notice)
                 abort(404)
-            # Run the unchanged optimizer on the exact selected eligible pair.
-            state = replace(inputs.subject, eligible_partners=tuple(
-                p for p in inputs.subject.eligible_partners if p.user_id == partner_id))
-            plan = SmartDealOptimizer.optimize(state, (opportunity,))
-            if not plan.deals:
-                abort(404)
-            return deal_page(plan.deals[0], users, albums)
+            users={r['id']:r['username'] for r in db.execute('SELECT id,username FROM users')}
+            albums={r['id']:r['name'] for r in db.execute('SELECT id,name FROM albums')}
+            return deal_page(deal, users, albums, notice)
 
     @shell.get('/tauschen/laufend')
     def active():
@@ -177,4 +141,6 @@ def register_trade_shell(app, *, database_path, global_head, header, navigation,
             ''', (user, user, user))]
         return page('active', 'Laufende Tausche', trades=rows)
 
+    from profile_trade import register_manual
+    register_manual(shell, database_path, actor, csrf_token)
     app.register_blueprint(shell)

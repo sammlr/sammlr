@@ -6,6 +6,7 @@ Integer lower-bound circulation, exhaustive subsets and all size permutations.
 from collections import deque
 from dataclasses import dataclass
 from itertools import combinations, permutations
+from services.trade_v2_rules import maximum_equal
 
 
 @dataclass(frozen=True)
@@ -13,6 +14,13 @@ class PartnerEdges:
     partner_id: int
     outgoing: tuple[tuple[str, str], ...]
     incoming: tuple[tuple[str, str], ...]
+    balance_groups: tuple[tuple[str, ...], ...] | None = None
+
+    @property
+    def maximum(self):
+        if self.balance_groups is None:
+            return min(len(self.outgoing), len(self.incoming))
+        return maximum_equal((k[0] for k in self.outgoing), (k[0] for k in self.incoming), self.balance_groups)
 
 
 @dataclass(frozen=True)
@@ -22,7 +30,7 @@ class Allocation:
     outgoing: tuple[tuple[str, str], ...]
 
 
-def _has_circulation(vertex_count, edges):
+def _has_circulation(vertex_count, edges, *, return_flows=False):
     """Integral lower-bound reduction with Dinic blocking flows."""
     source, sink = vertex_count, vertex_count + 1
     graph = [[] for _ in range(vertex_count + 2)]
@@ -32,9 +40,11 @@ def _has_circulation(vertex_count, edges):
         graph[u].append([v, capacity, len(graph[v])])
         graph[v].append([u, 0, len(graph[u]) - 1])
 
+    references = []
     for u, v, low, high in edges:
         if low < 0 or high < low:
-            return False
+            return None if return_flows else False
+        references.append((u, len(graph[u]), low, high))
         add(u, v, high - low)
         balance[u] -= low
         balance[v] += low
@@ -57,7 +67,7 @@ def _has_circulation(vertex_count, edges):
                     level[v] = level[u] + 1
                     queue.append(v)
         if level[sink] < 0:
-            return False
+            return None if return_flows else False
         cursor = [0] * len(graph)
 
         def augment(u, amount):
@@ -80,6 +90,8 @@ def _has_circulation(vertex_count, edges):
             if not pushed:
                 break
             sent += pushed
+    if return_flows:
+        return [high - graph[u][i][1] for u, i, low, high in references]
     return True
 
 
@@ -103,7 +115,7 @@ class _SubsetNetwork:
             left, right = next_node, next_node + 1
             next_node += 2
             self.size_indices[p.partner_id] = len(self.edges)
-            self.edges.append((left, right, 5, min(len(p.outgoing), len(p.incoming))))
+            self.edges.append((left, right, 5, p.maximum))
             for direction, keys in (('out', p.outgoing), ('in', p.incoming)):
                 for k in keys:
                     self.piece_indices[(direction, p.partner_id, k)] = len(self.edges)
@@ -156,7 +168,7 @@ def _search_subsets(partners, supply, global_upper):
     O(partners + five partners' keys); no materialized combination frontier.
     """
     limit = min(5, len(partners), global_upper // 5)
-    maxima = {p.partner_id: min(len(p.outgoing), len(p.incoming)) for p in partners}
+    maxima = {p.partner_id: p.maximum for p in partners}
     top = sorted(maxima.values(), reverse=True)
     bounds = [(min(global_upper, sum(top[:n])) - 2*n,
                min(global_upper, sum(top[:n])), n) for n in range(1, limit + 1)]
@@ -186,7 +198,7 @@ def allocate(supply, partners):
     All inputs have been validated by SmartDealOptimizer. No resource/time cutoff
     and no heuristic fallback; every returned result has completed the search.
     """
-    partners = tuple(sorted((p for p in partners if min(len(p.outgoing), len(p.incoming)) >= 5),
+    partners = tuple(sorted((p for p in partners if p.maximum >= 5),
                             key=lambda p: p.partner_id))
     counters = {'subsets': 0, 'pruned': 0, 'flow_checks': 0, 'cache_hits': 0, 'orders': 0}
     winner = None
@@ -194,7 +206,7 @@ def allocate(supply, partners):
     global_upper = min(sum(supply.values()), len({k for p in partners for k in p.incoming}))
     for count, subset in _search_subsets(partners, supply, global_upper):
         counters['subsets'] += 1
-        maxima = {p.partner_id: min(len(p.outgoing), len(p.incoming)) for p in subset}
+        maxima = {p.partner_id: p.maximum for p in subset}
         upper = min(sum(maxima.values()),
                     sum(supply[k] for k in {k for p in subset for k in p.outgoing}),
                     len({k for p in subset for k in p.incoming}))
@@ -204,7 +216,11 @@ def allocate(supply, partners):
         if upper < 5 * count or optimistic >= winner_key:
             counters['pruned'] += 1
             continue
-        network = _SubsetNetwork(subset, supply, counters)
+        if any(p.balance_groups is not None and len(p.balance_groups) > 1 for p in subset):
+            from services._trade_v2_flow import ScopedSubsetNetwork
+            network = ScopedSubsetNetwork(subset, supply, counters)
+        else:
+            network = _SubsetNetwork(subset, supply, counters)
         sizes = {p: (5, maximum) for p, maximum in maxima.items()}
         if not network.feasible(sizes, (0, upper)):
             continue

@@ -264,7 +264,7 @@ class CB009InboxReadRetentionTestCase(unittest.TestCase):
 
         self.assertEqual(before, after)
         self.assertEqual(tuple(range(1, 19)), versions)
-        self.assertEqual(21, max(migration.version for migration in load_migrations()))
+        self.assertEqual(22, max(migration.version for migration in load_migrations()))
         self.assertEqual(FROZEN_CB008_TYPES, set(NOTIFICATION_TYPES))
 
 

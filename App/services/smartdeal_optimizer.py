@@ -10,6 +10,7 @@ from dataclasses import dataclass
 from services._smartdeal_flow import PartnerEdges, allocate
 from services.smartdeal_pairwise import PairwiseOpportunity
 from services.smartdeal_planning import PlanningState
+from services.trade_v2_rules import maximum_equal, valid_balance
 
 
 class SmartDealOptimizationError(ValueError):
@@ -143,12 +144,19 @@ def _inputs(state, opportunities):
             sides.append(tuple(sorted(keys)))
         out, inc = sides
         expected_albums = {k[0] for k in out + inc}
+        groups = opportunity.balance_groups
+        if groups is not None:
+            if {a for group in groups for a in group} - eligible[pid]:
+                raise SmartDealOptimizationError('Balance group outside permitted albums')
+            expected_maximum = maximum_equal((k[0] for k in out), (k[0] for k in inc), groups)
+        else:
+            expected_maximum = min(len(out), len(inc))
         if (not out or not inc or type(opportunity.max_equal_piece_count) is not int
-                or opportunity.max_equal_piece_count != min(len(out), len(inc))
+                or opportunity.max_equal_piece_count != expected_maximum
                 or len(set(opportunity.involved_albums)) != len(opportunity.involved_albums)
                 or set(opportunity.involved_albums) != expected_albums):
             raise SmartDealOptimizationError('Pairwise maximum or album projection is inconsistent')
-        result.append(PartnerEdges(pid, out, inc))
+        result.append(PartnerEdges(pid, out, inc, groups))
     return {k: p.quantity for k, p in supply.items()}, tuple(result)
 
 
@@ -170,6 +178,10 @@ def _validated_plan(supply, partners, allocations, counters):
         for selected, candidates in ((allocation.incoming, partner.incoming), (allocation.outgoing, partner.outgoing)):
             if len(set(selected)) != len(selected) or not set(selected) <= set(candidates):
                 raise SmartDealOptimizationError('Optimizer used an invalid candidate')
+        if partner.balance_groups is not None and not valid_balance(
+                (k[0] for k in allocation.outgoing), (k[0] for k in allocation.incoming),
+                partner.balance_groups, equal=True):
+            raise SmartDealOptimizationError('Optimizer crossed a restricted balance group')
         used_out.update(allocation.outgoing)
         used_in.update(allocation.incoming)
         deals.append(SmartDealCandidate(

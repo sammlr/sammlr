@@ -18,9 +18,9 @@ import unittest
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
 REFERENCE_FIXTURE = PROJECT_ROOT / "App" / "Database" / "sammlr_reference_s00.db"
 LOCAL_DATABASE = PROJECT_ROOT / "App" / "Database" / "sammlr.db"
-# Production/bootstrap remain V20; the available migration baseline is V21.
+# Bootstrap remains V20; the additive Trade-v2 preference migration is V22.
 LATEST_VERSION = 20
-LATEST_MIGRATION_VERSION = 21
+LATEST_MIGRATION_VERSION = 22
 
 
 sys.path.insert(0, str(PROJECT_ROOT))

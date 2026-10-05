@@ -74,7 +74,7 @@ class Integration01Tests(unittest.TestCase):
             self.webapp.DB = str(path)
             response = self.client.get('/tauschen')
             self.assertEqual(200, response.status_code)
-            self.assertEqual(count, response.text.count('class="trade-proposal"'))
+            self.assertEqual(count, response.text.count('class="sap-row-content"'))
             self.assertNotIn('Fatima', response.text)
 
     def test_v20_projection_equals_v21_legacy_reader(self):

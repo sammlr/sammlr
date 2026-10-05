@@ -1,0 +1,8 @@
+/* Keep the existing selection post-it visible in the productive manual flow. */
+.trade-manual-live .sticker-list-tradebar {
+    position:fixed !important; top:auto !important; left:auto !important;
+    right:max(16px, calc((100vw - 760px)/2)) !important;
+    bottom:16px !important; margin:0 !important; z-index:30 !important;
+}
+.trade-manual-live .sticker-list-shell { padding-bottom:280px !important; }
+.trade-manual-live .manual-change-notice { font:16px/1.5 sans-serif; margin:16px; }

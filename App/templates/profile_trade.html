@@ -1,0 +1,12 @@
+<link rel="stylesheet" href="/static/profile_trade.css">
+<section class="profile-trade" aria-labelledby="profile-trade-title">
+{% if notice %}<p role="status">{{ notice }}</p>{% endif %}
+<h2 id="profile-trade-title">Mit {{ username }} tauschen</h2>
+{% if count %}<p class="profile-trade-potential">Bis zu <strong>{{ count }} Sticker</strong> · {{ album_count }} {{ 'Album' if album_count == 1 else 'Alben' }}</p>{% else %}<p>Aktuell kein Tausch möglich.</p>{% endif %}
+{% if collection_hidden and count %}<p>Die Sammlungsansicht zeigt nur sichtbare Alben. Tauschfreigaben gelten separat.</p>{% endif %}
+<details><summary>Tauschalben: {{ selected|length }} {{ 'Album' if selected|length == 1 else 'Alben' }}{% if restricted %} ausgewählt{% endif %} · ändern</summary>
+<form method="get" action="{{ profile_path }}"><input type="hidden" name="trade_context" value="1">
+{% for id,name in available %}<label><input type="checkbox" name="trade_album" value="{{ id }}" {% if id in selected %}checked{% endif %}>{{ name }}</label>{% endfor %}
+<button type="submit">Auswahl übernehmen</button><a href="{{ profile_path }}">Alle Tauschalben</a></form></details>
+{% if count %}<div class="profile-trade-actions">{% if count >= 5 %}<a href="{{ auto_url }}">Besten Tausch zusammenstellen</a>{% else %}<p>Automatische Vorschläge sind ab 5 Stickern möglich.</p>{% endif %}<a href="{{ manual_url }}">Selbst zusammenstellen</a></div>{% endif %}
+</section>

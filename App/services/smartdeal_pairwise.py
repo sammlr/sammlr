@@ -21,6 +21,7 @@ class PairwiseOpportunity:
     incoming_candidates: tuple[PairwiseCandidate, ...]
     max_equal_piece_count: int
     involved_albums: tuple[str, ...]
+    balance_groups: tuple[tuple[str, ...], ...] | None = None
 
 
 def _candidates(supply, needs, albums):

@@ -1,7 +1,7 @@
 import {stickerListWriteCeoklaue as ink,listItem,bracket} from './manual_ink.js';
 import {allowedAlbum,items,emptyDraft,readDraft,saveDraft,toggle,selectionBlock,validate} from './manual_rules.js';
-import {readState} from './requests.js';
 const data=JSON.parse(document.getElementById('trade-data').textContent),slug=data.partner.slug,$=id=>document.getElementById(id),url=new URL(location.href);
+const readState=data.live?()=>({requests:{}}):(await import('./requests.js')).readState;
 let draft,context;
 const node=(tag,text,cls)=>{const n=document.createElement(tag);if(text)ink(n,text,'manual-'+text);if(cls)n.className=cls;return n;};
 ink($('manual-title'),`Tausch mit ${data.partner.display_name}`,'manual-title');ink($('manual-note-title'),'Aktueller Tausch','manual-note');bracket($('manual-review'),'Auswahl prüfen');
@@ -33,7 +33,20 @@ try{
     const result=validate(context,draft);$('manual-review').disabled=!result.ok||Boolean(existing);$('manual-status').textContent=message||(result.ok?'':result.message);
   }
   $('manual-clear').addEventListener('click',()=>{try{draft=emptyDraft(draft.scenario);saveDraft(sessionStorage,slug,draft);update();}catch(_){$('manual-status').textContent='Die Auswahl konnte nicht geleert werden.';}});
-  $('manual-review').addEventListener('click',()=>{try{draft=readDraft(sessionStorage,slug,data.contexts);if(validate(data.contexts[draft.scenario],draft).ok&&!readState(sessionStorage).requests['manual-'+slug])location.assign(`/trade-v2/partners/${slug}/manual/review`);else update();}catch(_){$('manual-status').textContent='Bitte prüfe deine Auswahl erneut.';}});
+  $('manual-review').addEventListener('click',async()=>{
+    try{
+      draft=readDraft(sessionStorage,slug,data.contexts);
+      if(!validate(data.contexts[draft.scenario],draft).ok){update();return;}
+      if(data.live){
+        $('manual-review').disabled=true;
+        const response=await fetch(data.validation_url,{method:'POST',headers:{'Content-Type':'application/json','X-CSRF-Token':data.csrf},
+          body:JSON.stringify({receive:draft.receive,give:draft.give,fingerprint:data.fingerprint})});
+        const result=await response.json();
+        $('manual-status').textContent=result.message||'Bitte lade die Auswahl neu.';
+        $('manual-review').disabled=!result.ok;
+      }else if(!readState(sessionStorage).requests['manual-'+slug])location.assign(`/trade-v2/partners/${slug}/manual/review`);
+    }catch(_){$('manual-status').textContent='Bitte prüfe deine Auswahl erneut.';}
+  });
   update();
 }catch(_){$('manual-status').textContent='Die lokale Auswahl ist nicht verfügbar. Öffne einen manuellen Demo-Einstieg für eine neue Auswahl.';$('manual-review').disabled=true;}
 document.body.dataset.ready='true';

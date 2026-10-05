@@ -2,26 +2,30 @@
 <html lang="de"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>{{ title }} · Sammlr</title>{{ head }}
 <link rel="stylesheet" href="/static/trade_shell.css">
-<script src="/static/trade_shell.js" defer></script></head>
+<script src="/static/trade_shell.js" type="module"></script></head>
 <body class="s31-product-page s30-album-page trade-shell"><main class="container">
 {{ header }}
+<div class="trade-wall-measure" aria-hidden="true"><div class="card sticker-wall-card"><div class="wall"><div></div></div></div></div>
 <h1>{{ title }}</h1>
 {% if screen != 'home' %}<a class="sammlr-back-link" href="/tauschen">← Tauschen</a>{% endif %}
 {% if screen == 'home' %}
-<p>3 vielversprechende Tauschvorschläge für dich.</p>
-<section class="card sticker-wall-card" aria-label="Tauschvorschläge">
-{% if deals %}<div class="wall trade-top">
-{% for d in deals %}<article class="trade-proposal">{{ d.card }}<h2><a href="/tauschen/vorschlag/{{ d.partner_id }}">{{ d.username }}</a></h2><p>{{ d.count }} ↔ {{ d.count }}</p><p>{{ d.albums|join(' · ') }}</p></article>{% endfor %}
-</div>{% else %}<p>Im Moment gibt es keine passenden Tauschvorschläge.</p>{% endif %}
+{% if deals|length == 1 %}<p>1 vielversprechender Tauschvorschlag für dich.</p>
+{% elif deals %}<p>{{ deals|length }} vielversprechende Tauschvorschläge für dich.</p>{% endif %}
+<section class="trade-stage" aria-label="Tauschvorschläge">
+{% if deals %}<div class="trade-top">
+{% for d in deals %}<article class="trade-proposal">{{ d.card }}<h2><a href="/tauschen/sammlr/{{ d.partner_id }}">{{ d.username }}</a></h2><p>{{ d.count }} {{ 'Sticker' }} · {{ d.albums|length }} {{ 'Album' if d.albums|length == 1 else 'Alben' }}</p></article>{% endfor %}
+</div><div class="trade-explorer" hidden></div><p class="trade-explorer-status" role="status"></p>{% else %}<p>Im Moment gibt es keine passenden Tauschvorschläge.</p>{% endif %}
 </section>
-<nav class="trade-links" aria-label="Tauschbereiche"><a href="/tauschen/sammlr">Alle Sammlr</a><a href="/tauschen/laufend">Laufende Tausche</a></nav>
+<nav class="trade-links" aria-label="Tauschbereiche"><a href="/tauschen/sammlr">Alle Sammlr</a><button type="button" disabled>Meine Anfragen</button></nav>
 {% elif screen == 'partners' %}
 <section class="card"><ul class="trade-partners">{% for p in partners %}<li><a href="/tauschen/sammlr/{{ p.id }}">{{ p.username }}</a><p>Bis zu {{ p.count }} ↔ {{ p.count }} Sticker</p><p>{{ p.albums|join(' · ') }}</p></li>{% else %}<li>Im Moment gibt es keine passenden Sammlr.</li>{% endfor %}</ul></section>
 {% elif screen == 'partner' %}
 <section class="card"><p>{{ partner.receive }} passende Sticker für dich · {{ partner.give }} für {{ partner.username }}</p><p>{{ partner.albums|join(' · ') }}</p>
 {% if partner.count >= 5 %}<a class="trade-action" href="/tauschen/sammlr/{{ partner.id }}/smartdeal">SmartDeal ansehen</a>{% else %}<p>Für einen SmartDeal sind mindestens fünf Sticker je Richtung nötig.</p>{% endif %}
 <button type="button" disabled>Selbst auswählen – noch nicht verfügbar</button></section>
+{% elif screen == 'changed' %}<p role="status">{{ notice }}</p><a href="/tauschen">Tauschmöglichkeiten ansehen</a>
 {% elif screen == 'deal' %}
+{% if notice %}<p role="status">{{ notice }}</p>{% endif %}
 <p>{{ deal.count }} ↔ {{ deal.count }} Sticker · {{ deal.albums|join(' · ') }}</p>
 <div class="trade-actions"><button type="button" data-open-groups>Alle anzeigen</button><button type="button" data-close-groups>Zusammenlegen ↑</button></div>
 {% for group in groups %}

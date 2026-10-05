@@ -10,6 +10,7 @@ from typing import Mapping
 
 
 EXPECTED_SCHEMA_VERSION = 20
+TRADE_V2_COMPATIBLE_SCHEMA_VERSIONS = (20, 21, 22)
 PRODUCTION_DATABASE_PATH = Path("/var/data/sammlr.db")
 
 
@@ -45,6 +46,7 @@ def validate_database(
     *,
     expected_version: int = EXPECTED_SCHEMA_VERSION,
     full_integrity: bool = False,
+    compatible_versions: tuple[int, ...] | None = None,
 ) -> DatabaseValidation:
     database_path = Path(path).expanduser().resolve()
     if not database_path.is_file():
@@ -53,7 +55,7 @@ def validate_database(
         with open_read_only(database_path) as connection:
             connection.execute("SELECT 1").fetchone()
             version = schema_version(connection)
-            if version != expected_version:
+            if version not in (compatible_versions or (expected_version,)):
                 raise RuntimeConfigurationError("database migration level is invalid")
             if full_integrity:
                 integrity = connection.execute("PRAGMA integrity_check").fetchall()

@@ -1,4 +1,5 @@
 import hashlib
+import re
 import os
 from pathlib import Path
 import shutil
@@ -163,6 +164,11 @@ class ProfilePrivacyGateTestCase(unittest.TestCase):
         return response.get_data(as_text=True)
 
     def assert_collector_world_hidden(self, html):
+        # PROFILE-TRADE-01 adds the viewer's own pool-filter form. Its album
+        # labels are not foreign collection disclosures; keep checking all
+        # other content, including the trade result and the full profile.
+        html = re.sub(r'(<section class="profile-trade".*?)(<form.*?</form>)',
+                      r'\1', html, count=1, flags=re.S)
         self.assertIn("@owner", html)
         self.assertIn("Dieses Profil ist privat.", html)
         for secret in (

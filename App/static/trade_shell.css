@@ -1,7 +1,7 @@
-/* Layout only: cards and stacks inherit the production wall CSS unchanged. */
+/* Trade-only presentation; production wall styles and stack transforms stay unchanged. */
 .trade-shell .trade-proposal { min-width:0; padding-top:18px; }
-.trade-shell .trade-proposal h2 { font-size:16px; overflow-wrap:anywhere; }
-.trade-shell .trade-proposal p { font-size:14px; overflow-wrap:anywhere; }
+.trade-shell .trade-proposal h2 { font-size:13px; overflow-wrap:anywhere; }
+.trade-shell .trade-proposal p { font-size:12px; overflow-wrap:anywhere; }
 .trade-shell .trade-links, .trade-shell .trade-actions { display:flex; flex-wrap:wrap; gap:16px; margin:24px 0; }
 .trade-shell .trade-links a, .trade-shell .trade-action { display:inline-block; min-height:44px; padding:12px; box-sizing:border-box; }
 .trade-shell .trade-partners { list-style:none; padding:0; margin:0; }
@@ -14,9 +14,44 @@
 .trade-shell button { min-height:44px; max-width:100%; white-space:normal; }
 .trade-shell button:disabled { cursor:not-allowed; }
 .trade-shell summary:focus-visible { outline:3px solid currentColor; outline-offset:4px; }
-.trade-shell .trade-proposal:nth-child(2) .sticker-slot-frame { transform:rotate(.3deg) translateY(1px); }
-.trade-shell .trade-proposal:nth-child(3) .sticker-slot-frame { transform:rotate(-.3deg); }
+/* Calm, deterministic placement; canonical layers themselves are untouched. */
+.trade-shell .trade-proposal:nth-child(1) .sticker-slot-frame { transform:rotate(-.15deg); }
+.trade-shell .trade-proposal:nth-child(2) .sticker-slot-frame { transform:rotate(0deg); }
+.trade-shell .trade-proposal:nth-child(3) .sticker-slot-frame { transform:rotate(.15deg); }
 
 .trade-shell .sticker-wall-card { padding-bottom:24px !important; }
-.trade-shell .sticker-slot-frame { width:var(--trade-card-width,100%); }
+.trade-shell .sticker-slot-frame { width:var(--trade-card-width); }
 .trade-shell .trade-links a, .trade-shell .trade-proposal a, .trade-shell .trade-partners a { color:var(--color-text-primary); }
+
+/* Quiet shell surface; no per-partner cards or themed background. */
+.trade-shell .trade-stage {
+    box-sizing:border-box;
+    width:calc(100% + 20px);
+    margin:24px -10px;
+    padding:36px 2px 28px;
+    border:0;
+    border-radius:20px;
+    background:rgba(255,255,255,.3);
+    box-shadow:none;
+    backdrop-filter:blur(18px) saturate(1.25);
+    -webkit-backdrop-filter:blur(18px) saturate(1.25);
+}
+.trade-shell .trade-top { width:max-content; margin-inline:auto; display:flex; justify-content:center; gap:20px; transform:translateX(var(--trade-center-offset,0px)); }
+.trade-shell .trade-proposal { flex:0 0 var(--trade-card-width); width:var(--trade-card-width); padding-top:0; text-align:center; }
+.trade-shell .trade-proposal h2 { margin:16px 0 8px; }
+.trade-shell .trade-proposal p { margin:8px 0; }
+
+
+
+.trade-shell .trade-wall-measure { position:relative; height:0; visibility:hidden; pointer-events:none; }
+.trade-shell .trade-wall-measure > .card { position:absolute; left:0; right:0; }
+.trade-shell .trade-group .wall { grid-template-columns:repeat(auto-fit,var(--trade-card-width)) !important; justify-content:center; gap:28px 24px !important; }
+.trade-shell .trade-top[hidden], .trade-shell .trade-explorer[hidden] { display:none; }
+.trade-shell .trade-explorer { padding:0 22px; }
+.trade-shell .trade-explorer .trade-group { background:transparent !important; border:0 !important; box-shadow:none !important; }
+.trade-shell .trade-explorer .trade-group h2 { font-size:16px; }
+.trade-shell .trade-explorer-actions { display:flex; justify-content:space-between; gap:20px; align-items:center; margin-top:28px; }
+.trade-shell .trade-explorer-actions a, .trade-shell .trade-return { font:inherit; font-size:14px; color:var(--color-text-primary); background:transparent; border:0; padding:10px 0; min-height:44px; text-decoration:underline; }
+.trade-shell .trade-explorer-status:empty { display:none; }
+.trade-shell .trade-flight-layer { position:fixed; inset:0; pointer-events:none; z-index:800; }
+.trade-shell .trade-flight-layer .sticker-slot-frame { position:absolute; margin:0; }

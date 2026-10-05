@@ -137,6 +137,7 @@ from services.observability import (
 )
 from services.runtime_operations import (
     EXPECTED_SCHEMA_VERSION,
+    TRADE_V2_COMPATIBLE_SCHEMA_VERSIONS,
     RuntimeConfigurationError,
     validate_database,
     validate_production_environment,
@@ -333,7 +334,8 @@ SEED_DB = os.path.join(BASE_DIR, "Database", "sammlr.db")
 if app.config["SAMMLR_ENV"] == "production":
     try:
         production_database = validate_production_environment(os.environ)
-        validate_database(production_database, expected_version=EXPECTED_SCHEMA_VERSION)
+        validate_database(production_database, expected_version=EXPECTED_SCHEMA_VERSION,
+                          compatible_versions=TRADE_V2_COMPATIBLE_SCHEMA_VERSIONS)
     except Exception as startup_error:
         app.config["ERROR_TRACKER"].capture_exception(
             startup_error,
@@ -2605,7 +2607,8 @@ def controlled_forbidden_response(error):
 @app.route("/healthz")
 def healthz():
     try:
-        validate_database(DB, expected_version=EXPECTED_SCHEMA_VERSION)
+        validate_database(DB, expected_version=EXPECTED_SCHEMA_VERSION,
+                          compatible_versions=TRADE_V2_COMPATIBLE_SCHEMA_VERSIONS)
     except RuntimeConfigurationError:
         return jsonify({"status": "unavailable"}), 503
     return jsonify({"status": "ok"})
@@ -12405,17 +12408,21 @@ def render_collector_profile(
             </section>
         """
 
+    from profile_trade import profile_trade_html
+    trade_html = profile_trade_html(DB, current_user_id(), profile) if not is_own else ""
+
     collector_world_html = f"""
         <section class="collector-showcase-section" aria-labelledby="active-albums-title">
             <h2 id="active-albums-title">Sammelt gerade</h2>
             <div class="collector-showcase-album-grid">{active_content}</div>
         </section>
+        {trade_html}
         {completion_html}
     """ if profile.collector_world_visible else """
         <p class="collector-showcase-private" role="status">
             Dieses Profil ist privat.
         </p>
-    """
+    """ + trade_html
     return f"""
     <html><head>{style()}
     <link rel="stylesheet" href="/static/profile_sticker.css">
@@ -13213,6 +13220,7 @@ from trade_shell import register_trade_shell
 register_trade_shell(
     app, database_path=lambda: DB, global_head=style, header=app_header,
     navigation=bottom_nav, render_slot=sticker_wall_slot_html,
+    csrf_token=ensure_csrf_token,
 )
 
 
