@@ -214,7 +214,7 @@ class AlbumPrivacyTradePoolTestCase(unittest.TestCase):
             ).fetchone()[0])
             self.assertEqual((7,), migrate(connection, 7))
         # S27 remains on V0007; S28 subsequently added V0008.
-        self.assertEqual(22, load_migrations()[-1].version)
+        self.assertEqual(23, load_migrations()[-1].version)
 
     def test_service_visibility_matrix_friend_double_and_immutable_dto(self):
         with self.connection() as connection:

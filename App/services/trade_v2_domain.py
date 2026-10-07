@@ -102,3 +102,15 @@ class TradeV2Domain:
         if not valid_balance(outgoing, incoming, pair.balance_groups, equal=balanced):
             raise ValueError('Receive exceeds permitted Give balance')
         return True
+
+    def lifecycle_availability(self, actor, album_id, code):
+        """Explicit foundation-only read; does not switch existing market policy."""
+        from services.trade_lifecycle_foundation import lifecycle_availability
+        own_transaction = not self.db.in_transaction
+        if own_transaction:
+            self.db.execute('BEGIN')
+        try:
+            return lifecycle_availability(self.db, actor, album_id, code)
+        finally:
+            if own_transaction:
+                self.db.rollback()

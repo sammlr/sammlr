@@ -314,7 +314,7 @@ class CB013CollectionCompletionProjectionTestCase(unittest.TestCase):
         self.assertEqual(before, sha256(self.db_path))
         with self.assertRaises(FrozenInstanceError):
             projection.historical_completions[0].name = "Changed"
-        self.assertEqual(22, max(item.version for item in load_migrations()))
+        self.assertEqual(23, max(item.version for item in load_migrations()))
 
 
 if __name__ == "__main__":

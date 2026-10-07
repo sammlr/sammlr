@@ -297,7 +297,7 @@ print(client.get('/debug-seed-now').status_code)
         self.assertEqual(before, database_dump(self.db_path))
 
     def test_v0011_forward_repeat_and_data_preserving_backout(self):
-        self.assertEqual(22, load_migrations()[-1].version)
+        self.assertEqual(23, load_migrations()[-1].version)
         with self.connection() as connection:
             self.assertEqual(11, current_version(connection))
             core_before = tuple(connection.execute(
