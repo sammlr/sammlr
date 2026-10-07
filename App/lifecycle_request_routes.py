@@ -79,7 +79,8 @@ def register_requests(shell,database_path,actor,page,csrf_token):
         viewer = actor()
         with connection(database_path()) as db:
             try:
-                rows = LifecycleRequests(db).view(viewer,trade_id)
+                from lifecycle_acceptance_routes import decorate
+                rows = decorate(db,LifecycleRequests(db).view(viewer,trade_id),viewer)
             except ValueError:
                 abort(404)
         return page('request','Tauschanfrage',lifecycle=rows,viewer=viewer,csrf=csrf_token())

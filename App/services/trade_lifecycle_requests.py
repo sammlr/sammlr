@@ -33,11 +33,11 @@ class LifecycleRequests:
 
     def _row(self, trade_id):
         require_trade_operation(self.db, trade_id, 'request')
-        row = self.db.execute('''SELECT q.*,t.partner_user_id,c.accepted_revision_id
+        row = self.db.execute('''SELECT q.*,CASE WHEN q.sender_user_id=t.requester_user_id THEN t.partner_user_id ELSE t.requester_user_id END AS partner_user_id,c.accepted_revision_id,c.origin
             FROM lifecycle_requests q JOIN trades t ON t.id=q.trade_id
-            JOIN lifecycle_contracts c ON c.trade_id=q.trade_id WHERE q.trade_id=?''', (trade_id,)).fetchone()
-        if row is None or row['accepted_revision_id'] is not None:
-            raise ValueError('Unaccepted request required')
+            JOIN lifecycle_contracts c ON c.trade_id=q.trade_id WHERE q.trade_id=? AND q.revision_id=c.current_revision_id''', (trade_id,)).fetchone()
+        if row is None:
+            raise ValueError('Current request required')
         return row
 
     def _event(self, trade, revision, event, actor, now):
@@ -48,12 +48,13 @@ class LifecycleRequests:
         if row['status'] != 'open':
             return row['status']
         self.store.release_pending_quantities(row['revision_id'])
-        self.db.execute('UPDATE lifecycle_requests SET status=?,ended_at=? WHERE trade_id=?',
-                        (status,now.isoformat(),row['trade_id']))
+        self.db.execute('UPDATE lifecycle_requests SET status=?,ended_at=? WHERE revision_id=?',
+                        (status,now.isoformat(),row['revision_id']))
         self.db.execute("UPDATE lifecycle_contracts SET state='ended' WHERE trade_id=?", (row['trade_id'],))
         self.db.execute('UPDATE trades SET lifecycle_state=?,updated_at=? WHERE id=?',
                         (status,now.isoformat(),row['trade_id']))
-        self._event(row['trade_id'],row['revision_id'],'Offer'+status.title(),actor,now)
+        kind=self.db.execute('SELECT kind FROM lifecycle_revisions WHERE id=?',(row['revision_id'],)).fetchone()[0]
+        self._event(row['trade_id'],row['revision_id'],('Counter' if kind=='counter' else 'Offer')+status.title(),actor,now)
         return status
 
     def _expire(self, now):
@@ -119,6 +120,8 @@ class LifecycleRequests:
         with self.store.transaction():
             self._actor(actor)
             row = self._row(trade_id)
+            if row['accepted_revision_id'] is not None:
+                raise ValueError('Accepted contracts cannot use request releases')
             owner = row['sender_user_id'] if action=='withdrawn' else row['partner_user_id']
             if actor != owner:
                 raise ValueError('Request role does not authorize this action')
@@ -136,10 +139,12 @@ class LifecycleRequests:
                 if actor not in (row['sender_user_id'],row['partner_user_id']):
                     raise ValueError('Request is private to its participants')
             self._expire(instant(self.clock()))
-            rows = self.db.execute('''SELECT q.*,t.partner_user_id,s.username AS sender,p.username AS recipient
+            rows = self.db.execute('''SELECT q.*,CASE WHEN q.sender_user_id=t.requester_user_id THEN t.partner_user_id ELSE t.requester_user_id END AS partner_user_id,s.username AS sender,p.username AS recipient,r.kind
                 FROM lifecycle_requests q JOIN trades t ON t.id=q.trade_id
-                JOIN users s ON s.id=q.sender_user_id JOIN users p ON p.id=t.partner_user_id
-                WHERE (q.sender_user_id=? OR t.partner_user_id=?) AND (? IS NULL OR q.trade_id=?)
+                JOIN lifecycle_contracts c ON c.trade_id=q.trade_id AND c.current_revision_id=q.revision_id
+                JOIN lifecycle_revisions r ON r.id=q.revision_id
+                JOIN users s ON s.id=q.sender_user_id JOIN users p ON p.id=CASE WHEN q.sender_user_id=t.requester_user_id THEN t.partner_user_id ELSE t.requester_user_id END
+                WHERE (t.requester_user_id=? OR t.partner_user_id=?) AND (? IS NULL OR q.trade_id=?)
                 ORDER BY q.created_at DESC,q.trade_id DESC''',(actor,actor,trade_id,trade_id)).fetchall()
             result = []
             for row in rows:

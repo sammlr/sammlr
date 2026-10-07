@@ -1,12 +1,19 @@
+{% if notice %}<p role="alert">{{ notice }}</p>{% endif %}
 {% for q in lifecycle %}
 <section class="card lifecycle-request" data-status="{{ q.status }}">
 <h2>{{ 'Anfrage an ' ~ q.recipient if viewer == q.sender_user_id else 'Anfrage von ' ~ q.sender }}</h2>
-<p role="status">{{ {'open':'Anfrage offen', 'withdrawn':'Anfrage zurückgezogen', 'rejected':'Anfrage abgelehnt', 'expired':'Anfrage abgelaufen'}[q.status] }}</p>
-<p>Gesendet: <time datetime="{{ q.created_at }}">{{ q.created_at }}</time><br>Ablauf: <time datetime="{{ q.expires_at }}">{{ q.expires_at }}</time> (72 Stunden)</p>
+<p role="status">{{ {'open':'Anfrage offen', 'withdrawn':'Anfrage zurückgezogen', 'rejected':'Anfrage abgelehnt', 'expired':'Anfrage abgelaufen', 'accepted':'Tausch angenommen', 'invalidated':'Verhandlung beendet – das Gegenangebot ist nicht mehr vollständig möglich'}[q.status] }}</p>
+{% if q.kind == 'counter' %}<p>Gegenangebot von {{ q.sender }}. Das ursprüngliche Angebot wurde ersetzt.</p>{% endif %}
+{% if q.status == 'accepted' %}<p>Als Nächstes: Sticker vorbereiten.</p>{% elif q.status == 'invalidated' %}<p>Keine weitere Neuberechnung möglich. Du kannst einen neuen Tausch starten.</p>{% endif %}
+<p>Gesendet: <time datetime="{{ q.created_at }}">{{ q.created_at }}</time>{% if q.status != 'accepted' %}<br>Ablauf: <time datetime="{{ q.expires_at }}">{{ q.expires_at }}</time> (72 Stunden){% endif %}</p>
 {% for side,label in [('receive','Du bekommst'),('give','Du gibst ab')] %}
 <h3>{{ label }}</h3><ul>{% for p in q.positions if (side == 'give' and p.from_user_id == viewer) or (side == 'receive' and p.to_user_id == viewer) %}<li>{{ p.album }} · {{ p.sticker_code }} × {{ p.quantity }}</li>{% endfor %}</ul>
 {% endfor %}
 {% if q.status == 'open' %}
+{% if q.acceptance_enabled and viewer == q.partner_user_id %}
+<form method="post" action="/tauschen/anfragen/{{ q.trade_id }}/accept"><input type="hidden" name="_csrf_token" value="{{ csrf }}"><input type="hidden" name="token" value="{{ q.accept_token }}"><button type="submit">Annehmen</button></form>
+{% if q.kind == 'original' %}<form method="post" action="/tauschen/anfragen/{{ q.trade_id }}/counter-preview"><input type="hidden" name="_csrf_token" value="{{ csrf }}"><input type="hidden" name="revision" value="{{ q.revision_id }}"><button type="submit">Tausch neu berechnen</button></form>{% endif %}
+{% endif %}
 <form method="post" action="/tauschen/anfragen/{{ q.trade_id }}/{{ 'withdrawn' if viewer == q.sender_user_id else 'rejected' }}"><input type="hidden" name="_csrf_token" value="{{ csrf }}"><button type="submit">{{ 'Anfrage zurückziehen' if viewer == q.sender_user_id else 'Anfrage ablehnen' }}</button></form>
 {% endif %}
 <a href="/tauschen/anfragen/{{ q.trade_id }}">Anfrage Nr. {{ q.trade_id }}</a>

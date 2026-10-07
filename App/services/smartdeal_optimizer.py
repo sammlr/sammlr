@@ -164,7 +164,7 @@ def _inputs(state, opportunities, quantities=False):
     return {k: p.quantity for k, p in supply.items()}, tuple(result), {k:p.quantity for k,p in needs.items()}
 
 
-def _validated_plan(supply, partners, allocations, counters, needs=None):
+def _validated_plan(supply, partners, allocations, counters, needs=None, minimum=5):
     """Independent postcondition check before publishing any domain result."""
     roster = {p.partner_id: p for p in partners}
     used_out, used_in = Counter(), Counter()
@@ -175,7 +175,7 @@ def _validated_plan(supply, partners, allocations, counters, needs=None):
     for allocation in allocations:
         pid = allocation.partner_id
         size = len(allocation.incoming)
-        if pid in seen or pid not in roster or size < 5 or size != len(allocation.outgoing):
+        if pid in seen or pid not in roster or size < minimum or size != len(allocation.outgoing):
             raise SmartDealOptimizationError('Optimizer violated eligibility or 1:1/minimum')
         seen.add(pid)
         partner = roster[pid]
@@ -207,13 +207,15 @@ def _validated_plan(supply, partners, allocations, counters, needs=None):
 
 class SmartDealOptimizer:
     @staticmethod
-    def optimize(state: PlanningState, opportunities: tuple[PairwiseOpportunity, ...], *, quantities=False) -> SmartDealPlan:
+    def optimize(state: PlanningState, opportunities: tuple[PairwiseOpportunity, ...], *, quantities=False, minimum=5) -> SmartDealPlan:
         """Consume one trusted complete T2a/T2b snapshot, with zero SQL/writes.
 
         Returns only after exact proof completion. No top-partner preselection,
         time-dependent diagnostics, persistent identity, timeout or fallback.
         Exceptions leave caller inputs and database state untouched.
         """
+        if type(minimum) is not int or minimum not in (1,5):
+            raise ValueError('Unsupported offer minimum')
         supply, partners, needs = _inputs(state, opportunities, quantities)
-        allocations, counters = allocate(supply, partners, needs)
-        return _validated_plan(supply, partners, allocations, counters, needs)
+        allocations, counters = allocate(supply, partners, needs, minimum=minimum)
+        return _validated_plan(supply, partners, allocations, counters, needs, minimum)

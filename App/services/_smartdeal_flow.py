@@ -166,13 +166,13 @@ def _largest(low, high, predicate):
     return low
 
 
-def _search_subsets(partners, supply, global_upper, needs):
+def _search_subsets(partners, supply, global_upper, needs, minimum=5):
     """Try one algebraically ideal group, then exhaust the original search.
 
     The probe only changes traversal: it never excludes a subset. Memory stays
     O(partners + five partners' keys); no materialized combination frontier.
     """
-    limit = min(5, len(partners), global_upper // 5)
+    limit = min(5, len(partners), global_upper // minimum)
     maxima = {p.partner_id: p.maximum for p in partners}
     top = sorted(maxima.values(), reverse=True)
     bounds = [(min(global_upper, sum(top[:n])) - 2*n,
@@ -197,20 +197,22 @@ def _search_subsets(partners, supply, global_upper, needs):
             yield count, subset
 
 
-def allocate(supply, partners, needs=None):
+def allocate(supply, partners, needs=None, *, minimum=5):
     """Return the proven optimum and deterministic diagnostics, or raise.
 
     All inputs have been validated by SmartDealOptimizer. No resource/time cutoff
     and no heuristic fallback; every returned result has completed the search.
     """
     needs = needs or {}
-    partners = tuple(sorted((p for p in partners if p.maximum >= 5),
+    partners = tuple(sorted((p for p in partners if p.maximum >= minimum),
                             key=lambda p: p.partner_id))
     counters = {'subsets': 0, 'pruned': 0, 'flow_checks': 0, 'cache_hits': 0, 'orders': 0}
     winner = None
-    winner_key = (0, 0, (), ())
+    winner_key = (0, 0, (), ()) if minimum == 5 else (float("inf"), 0, (), ())
     global_upper = min(sum(supply.values()), sum(needs.get(k,1) for k in {k for p in partners for k in p.incoming}))
-    for count, subset in _search_subsets(partners, supply, global_upper, needs):
+    subsets = (_search_subsets(partners,supply,global_upper,needs) if minimum==5 else
+               _search_subsets(partners,supply,global_upper,needs,minimum))
+    for count, subset in subsets:
         counters['subsets'] += 1
         maxima = {p.partner_id: p.maximum for p in subset}
         upper = min(sum(maxima.values()),
@@ -219,7 +221,7 @@ def allocate(supply, partners, needs=None):
         optimistic = (-(upper - 2 * count), -upper,
                       tuple(-v for v in sorted(maxima.values(), reverse=True)),
                       tuple(p.partner_id for p in subset))
-        if upper < 5 * count or optimistic >= winner_key:
+        if upper < minimum * count or optimistic >= winner_key:
             counters['pruned'] += 1
             continue
         if any(p.balance_groups is not None and len(p.balance_groups) > 1 for p in subset):
@@ -227,10 +229,10 @@ def allocate(supply, partners, needs=None):
             network = ScopedSubsetNetwork(subset, supply, counters, needs)
         else:
             network = _SubsetNetwork(subset, supply, counters, needs)
-        sizes = {p: (5, maximum) for p, maximum in maxima.items()}
+        sizes = {p: (minimum, maximum) for p, maximum in maxima.items()}
         if not network.feasible(sizes, (0, upper)):
             continue
-        gain = _largest(5 * count, upper, lambda g: network.feasible(sizes, (g, upper)))
+        gain = _largest(minimum * count, upper, lambda g: network.feasible(sizes, (g, upper)))
         if (-(gain - 2 * count), -gain) > winner_key[:2]:
             continue
         for order in permutations(subset):
@@ -241,8 +243,8 @@ def allocate(supply, partners, needs=None):
                 pid = p.partner_id
                 # Remaining active partners each need at least five; this
                 # is an algebraic upper bound, not a size heuristic.
-                high = min(maxima[pid], remaining_gain - 5 * (count - index - 1))
-                low = max(5, remaining_gain - sum(maxima[q.partner_id] for q in order[index+1:]))
+                high = min(maxima[pid], remaining_gain - minimum * (count - index - 1))
+                low = max(minimum, remaining_gain - sum(maxima[q.partner_id] for q in order[index+1:]))
                 size = _largest(low, high, lambda d: network.feasible(
                     {**exact, pid: (d, maxima[pid])}, (gain, gain)))
                 exact[pid] = (size, size)

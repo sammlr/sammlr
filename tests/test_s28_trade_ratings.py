@@ -217,7 +217,7 @@ class TradeRatingsTestCase(unittest.TestCase):
             self.assertEqual(1, connection.execute(
                 "SELECT COUNT(*) FROM trade_ratings"
             ).fetchone()[0])
-        self.assertEqual(24, load_migrations()[-1].version)
+        self.assertEqual(25, load_migrations()[-1].version)
 
     def test_completed_is_rateable_open_and_legacy_without_lifecycle_are_not(self):
         completed, _ = self.create_trade()

@@ -5,7 +5,7 @@ from services.smartdeal_planning import PlanningPiece
 from services.trade_lifecycle_foundation import lifecycle_availability
 
 
-def project(db, inputs):
+def project(db, inputs, exclude_revision=None):
     if not db.execute("SELECT 1 FROM sqlite_master WHERE name='lifecycle_requests'").fetchone():
         return inputs
     # Only touched quantities need overlay; ordinary catalogs retain canonical reads.
@@ -28,6 +28,13 @@ def project(db, inputs):
         if now >= instant(deadline):
             key = (user,album,code)
             expired_holds[key] = expired_holds.get(key,0)+quantity
+    credits = {}
+    if exclude_revision is not None:
+        for user,album,code,quantity in db.execute("""SELECT h.user_id,h.album_id,h.sticker_code,h.quantity
+            FROM lifecycle_supply_bindings b JOIN trade_reservations h ON h.id=b.reservation_id
+            JOIN lifecycle_revision_positions p ON p.id=b.revision_position_id
+            WHERE p.revision_id=? AND b.is_current=1 AND h.state='active'""",(exclude_revision,)):
+            credits[(user,album,code)] = quantity
     contexts = {a.album_id:a for a in inputs.subject.album_context}
     memberships = {(r[0],r[1]):r[2] for r in db.execute('SELECT user_id,album_id,id FROM user_albums')}
     def overlay(state):
@@ -38,11 +45,11 @@ def project(db, inputs):
             membership = memberships.get((state.user_id,album))
             if not context or code not in context.catalog_codes or membership is None:
                 continue
-            a = lifecycle_availability(db,state.user_id,album,code,now=now)
+            a = lifecycle_availability(db,state.user_id,album,code,now=now,exclude_revision=exclude_revision)
             # Preserve the legacy reader's effective-hold policy. Add back only
             # this contract's expired holds; never reinterpret old reservations.
             original = supply.get((album,code))
-            free_supply = (original.quantity if original else 0)+expired_holds.get((state.user_id,album,code),0)
+            free_supply = (original.quantity if original else 0)+expired_holds.get((state.user_id,album,code),0)+credits.get((state.user_id,album,code),0)
             for mapping,quantity in ((needs,a.free_need),(supply,free_supply)):
                 mapping.pop((album,code),None)
                 if quantity:

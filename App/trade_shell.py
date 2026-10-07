@@ -150,11 +150,14 @@ def register_trade_shell(app, *, database_path, global_head, header, navigation,
         lifecycle = []
         if enabled:
             with connection(database_path()) as db:
-                lifecycle = LifecycleRequests(db).view(user)
+                from lifecycle_acceptance_routes import decorate
+                lifecycle = decorate(db,LifecycleRequests(db).view(user),user)
         return page('active', 'Laufende Tausche', trades=rows, lifecycle=lifecycle,viewer=user,csrf=csrf_token())
 
     from profile_trade import register_manual
     register_manual(shell, database_path, actor, csrf_token)
     from lifecycle_request_routes import register_requests
     register_requests(shell,database_path,actor,page,csrf_token)
+    from lifecycle_acceptance_routes import register_acceptance
+    register_acceptance(shell,database_path,actor,page,csrf_token)
     app.register_blueprint(shell)

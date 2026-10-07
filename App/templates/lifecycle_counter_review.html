@@ -1,0 +1,5 @@
+<section class="card"><h2>Dein Gegenangebot an {{ username }}</h2>
+<p>Die ursprüngliche Anfrage wurde nicht angenommen. Erst mit „Gegenangebot senden“ wird sie durch dieses genaue Angebot ersetzt. Danach kann {{ username }} annehmen oder ablehnen. Ein weiteres Gegenangebot ist nicht möglich.</p>
+{% for side,label in [('receive','Du bekommst'),('give','Du gibst ab')] %}<h3>{{ label }}</h3><ul>{% for album,code,quantity in proposal[side] %}<li>{{ album }} · {{ code }} × {{ quantity }}</li>{% endfor %}</ul>{% endfor %}
+<p>Das gesendete Gegenangebot gilt für eigene 72 Stunden.</p>
+<form method="post" action="/tauschen/anfragen/{{ trade }}/counter"><input type="hidden" name="_csrf_token" value="{{ csrf }}"><input type="hidden" name="token" value="{{ token }}"><button type="submit">Gegenangebot senden</button></form><a href="/tauschen/anfragen/{{ trade }}">Zurück zur unveränderten Anfrage</a></section>

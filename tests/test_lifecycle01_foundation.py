@@ -57,7 +57,7 @@ class LifecycleFoundationTests(unittest.TestCase):
         with sqlite3.connect(':memory:') as db:
             db.execute('PRAGMA foreign_keys=ON')
             db.executescript((ROOT/'App/Database/base_schema.sql').read_text())
-            self.assertEqual(tuple(range(1,25)),migrate(db))
+            self.assertEqual(tuple(range(1,26)),migrate(db))
             self.assertEqual((),migrate(db))
             self.assertEqual([],db.execute('PRAGMA foreign_key_check').fetchall())
 

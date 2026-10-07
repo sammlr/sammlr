@@ -249,31 +249,42 @@ class LifecycleFoundation:
                 raise ValueError('Insufficient free supply or need')
         for position, giver, receiver, album, code, quantity in rows:
             if giver == sender:
-                existing = self.db.execute("""SELECT p.id,h.id,h.state FROM trade_positions p
-                    LEFT JOIN trade_reservations h ON h.trade_position_id=p.id
-                    WHERE p.trade_id=? AND p.from_user_id=? AND p.to_user_id=? AND p.album_id=? AND p.sticker_code=?""",
-                    (trade_id,giver,receiver,album,code)).fetchone()
-                if existing is None:
-                    stored = self.db.execute("""INSERT INTO trade_positions
-                        (trade_id,from_user_id,to_user_id,album_id,sticker_code,quantity) VALUES (?,?,?,?,?,?)""",
-                        (trade_id,giver,receiver,album,code,quantity)).lastrowid
-                    reservation = self.db.execute("""INSERT INTO trade_reservations
-                        (trade_id,trade_position_id,user_id,album_id,sticker_code,quantity) VALUES (?,?,?,?,?,?)""",
-                        (trade_id,stored,giver,album,code,quantity)).lastrowid
-                else:
-                    stored,reservation,state = existing
-                    if reservation is None or state != 'released':
-                        raise ValueError('Physical projection must be released before rebind')
-                    self.db.execute('UPDATE lifecycle_supply_bindings SET is_current=0 WHERE reservation_id=? AND is_current=1', (reservation,))
-                    self.db.execute('UPDATE trade_positions SET quantity=? WHERE id=?', (quantity,stored))
-                    self.db.execute("""UPDATE trade_reservations SET quantity=?,state='active',released_at=NULL,release_reason=NULL
-                        WHERE id=?""", (quantity,reservation))
-                self.db.execute('INSERT INTO lifecycle_supply_bindings(reservation_id,revision_position_id) VALUES (?,?)',
-                                (reservation,position))
+                self.bind_supply_position(position)
             else:
                 self.db.execute('''INSERT INTO lifecycle_need_claims
                     (revision_position_id,state,quantity,created_at) VALUES (?,'pending',?,?)''',
                     (position,quantity,_stamp()))
+
+    def bind_supply_position(self, position):
+        """Materialize one exact revision position in the shared hold source."""
+        row = self.db.execute("""SELECT p.revision_id,r.trade_id,p.from_user_id,p.to_user_id,
+            p.album_id,p.sticker_code,p.quantity FROM lifecycle_revision_positions p
+            JOIN lifecycle_revisions r ON r.id=p.revision_id WHERE p.id=?""", (position,)).fetchone()
+        if row is None:
+            raise ValueError('Unknown revision position')
+        revision,trade_id,giver,receiver,album,code,quantity = row
+        self._write(trade_id)
+        existing = self.db.execute("""SELECT p.id,h.id,h.state FROM trade_positions p
+            LEFT JOIN trade_reservations h ON h.trade_position_id=p.id
+            WHERE p.trade_id=? AND p.from_user_id=? AND p.to_user_id=? AND p.album_id=? AND p.sticker_code=?""",
+            (trade_id,giver,receiver,album,code)).fetchone()
+        if existing is None:
+            stored = self.db.execute("""INSERT INTO trade_positions
+                (trade_id,from_user_id,to_user_id,album_id,sticker_code,quantity) VALUES (?,?,?,?,?,?)""",
+                (trade_id,giver,receiver,album,code,quantity)).lastrowid
+            reservation = self.db.execute("""INSERT INTO trade_reservations
+                (trade_id,trade_position_id,user_id,album_id,sticker_code,quantity) VALUES (?,?,?,?,?,?)""",
+                (trade_id,stored,giver,album,code,quantity)).lastrowid
+        else:
+            stored,reservation,state = existing
+            if reservation is None or state != 'released':
+                raise ValueError('Physical projection must be released before rebind')
+            self.db.execute('UPDATE lifecycle_supply_bindings SET is_current=0 WHERE reservation_id=? AND is_current=1', (reservation,))
+            self.db.execute('UPDATE trade_positions SET quantity=? WHERE id=?', (quantity,stored))
+            self.db.execute("""UPDATE trade_reservations SET quantity=?,state='active',released_at=NULL,release_reason=NULL
+                WHERE id=?""", (quantity,reservation))
+        self.db.execute('INSERT INTO lifecycle_supply_bindings(reservation_id,revision_position_id) VALUES (?,?)',
+                        (reservation,position))
 
     def release_pending_quantities(self, revision):
         row = self.db.execute('SELECT trade_id FROM lifecycle_revisions WHERE id=?', (revision,)).fetchone()

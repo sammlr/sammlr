@@ -23,14 +23,14 @@ class TradeV2Domain:
     def __init__(self, connection):
         self.db = connection
 
-    def market(self, actor, selected_albums=None):
+    def market(self, actor, selected_albums=None, *, exclude_revision=None):
         own_transaction = not self.db.in_transaction
         if own_transaction:
             self.db.execute('BEGIN')
         try:
             inputs = SmartDealPlanningService(LegacyPlanningReadAdapter(self.db)).build_pairwise_inputs(actor)
             from services.lifecycle_planning import project
-            inputs = project(self.db, inputs)
+            inputs = project(self.db, inputs, exclude_revision)
             allowed = {a.album_id for a in inputs.subject.album_context}
             if selected_albums is not None:
                 allowed &= set(selected_albums)
