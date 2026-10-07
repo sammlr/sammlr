@@ -1,0 +1,6 @@
+<section class="card"><h2>Dein Deal mit {{ username }}</h2>
+{% for side,label in [('receive','Du bekommst'),('give','Du gibst ab')] %}
+<h3>{{ label }}</h3><ul>{% for album,code,quantity in draft[side] %}<li>{{ album }} · {{ code }} × {{ quantity }}</li>{% endfor %}</ul>
+{% endfor %}
+<p>72 Stunden offen. Nur deine abzugebenden Mengen und dein eigener angefragter Bedarf werden gebunden.</p>
+<form method="post" action="/tauschen/anfragen"><input type="hidden" name="token" value="{{ token }}"><input type="hidden" name="_csrf_token" value="{{ csrf }}"><button type="submit">Tausch anfragen</button></form></section>

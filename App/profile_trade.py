@@ -101,13 +101,18 @@ def register_manual(blueprint,database_path,actor,csrf_token):
                 def pieces(side):
                     values=payload[side]
                     if not isinstance(values,list) or len(values)>2000:raise ValueError()
-                    result=[]
-                    for value in values:
-                        if not isinstance(value,str) or '::' not in value:raise ValueError()
-                        album,code=value.split('::',1)
-                        result.append(SmartDealPiece(album,code,1))
-                    return tuple(result)
+                    from collections import Counter
+                    available={p['key']:(a['id'],p['code']) for a in current['albums'] for p in a[side]}
+                    if len(set(values))!=len(values) or any(v not in available for v in values):raise ValueError()
+                    counts=Counter(available[v] for v in values)
+                    return tuple(SmartDealPiece(album,code,n) for (album,code),n in sorted(counts.items()))
                 TradeV2Domain.validate_deal(market,partner_id,pieces('give'),pieces('receive'))
             except (KeyError,ValueError,TypeError):
                 return jsonify(ok=False,message='Diese Auswahl ist nicht zulässig. Bitte prüfe die Sticker und Mengen.'),400
+            from services.trade_lifecycle_requests import ready
+            if ready(db):
+                from lifecycle_request_routes import draft_token
+                from urllib.parse import urlencode
+                token=draft_token(viewer,partner_id,pieces('give'),pieces('receive'),'MANUAL')
+                return jsonify(ok=True,message='Auswahl gültig.',review_url='/tauschen/anfragen/entwurf?'+urlencode({'token':token}))
         return jsonify(ok=True,message='Auswahl gültig. Es wurde noch keine Tauschanfrage erstellt.')

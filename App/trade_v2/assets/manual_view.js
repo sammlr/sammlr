@@ -42,6 +42,7 @@ try{
         const response=await fetch(data.validation_url,{method:'POST',headers:{'Content-Type':'application/json','X-CSRF-Token':data.csrf},
           body:JSON.stringify({receive:draft.receive,give:draft.give,fingerprint:data.fingerprint})});
         const result=await response.json();
+        if(result.ok&&result.review_url){location.assign(result.review_url);return;}
         $('manual-status').textContent=result.message||'Bitte lade die Auswahl neu.';
         $('manual-review').disabled=!result.ok;
       }else if(!readState(sessionStorage).requests['manual-'+slug])location.assign(`/trade-v2/partners/${slug}/manual/review`);

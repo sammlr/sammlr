@@ -396,7 +396,7 @@ class CB012FeedHomeCutoverTestCase(unittest.TestCase):
         self.assertNotIn('class="card', html)
 
     def test_no_migration_or_parallel_reconstruction_is_added(self):
-        self.assertEqual(23, max(item.version for item in load_migrations()))
+        self.assertEqual(24, max(item.version for item in load_migrations()))
         source = (APP_DIR / "webapp.py").read_text(encoding="utf-8")
         home_source = source[source.index("def startseite():"):source.index(
             '@app.route("/home")'

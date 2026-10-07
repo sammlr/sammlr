@@ -121,7 +121,7 @@ class AuthSessionCsrfTestCase(unittest.TestCase):
             ).fetchone())
 
     def test_v0010_forward_repeat_and_fail_closed_backout(self):
-        self.assertEqual(23, load_migrations()[-1].version)
+        self.assertEqual(24, load_migrations()[-1].version)
         with sqlite3.connect(self.db_path) as connection:
             self.assertEqual(10, current_version(connection))
             self.assertEqual((), migrate(connection, 10))

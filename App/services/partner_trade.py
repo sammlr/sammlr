@@ -26,7 +26,7 @@ def partner_deal(market, pair):
         return None
     state=replace(market.inputs.subject,eligible_partners=tuple(
         p for p in market.inputs.subject.eligible_partners if p.user_id == pair.partner_id))
-    deals=SmartDealOptimizer.optimize(state,(pair,)).deals
+    deals=SmartDealOptimizer.optimize(state,(pair,),quantities=True).deals
     return deals[0] if deals else None
 
 
@@ -40,8 +40,8 @@ def participating_album_count(market, pair):
     for group in pair.balance_groups:
         give=[p for p in pair.outgoing_candidates if p.album_id in group]
         receive=[p for p in pair.incoming_candidates if p.album_id in group]
-        size=min(len(give),len(receive))
-        albums.update(p.album_id for p in give[:size]+receive[:size])
+        size=min(sum(p.quantity for p in give),sum(p.quantity for p in receive))
+        albums.update(a for pieces in (give,receive) for a in [p.album_id for p in pieces for _ in range(p.quantity)][:size])
     return len(albums)
 
 
@@ -52,9 +52,9 @@ def manual_context(market,pair,names,username):
     for album in sorted({a for g in live_groups for a in g}):
         cross=any(album in g and len(g)>1 for g in live_groups)
         def pieces(sequence):
-            return [dict(key=p.album_id+'::'+p.sticker_code,code=p.sticker_code,
-                         instance=1,supply=p.available_quantity,need=p.quantity)
-                    for p in sequence if p.album_id==album]
+            return [dict(key=p.album_id+'::'+p.sticker_code+('::'+str(i) if i>1 else ''),code=p.sticker_code,
+                         instance=i,supply=p.available_quantity,need=p.quantity)
+                    for p in sequence if p.album_id==album for i in range(1,p.quantity+1)]
         albums.append(dict(id=album,title=names[album],me=dict(tradeEnabled=True,crossAlbum=cross),
                            partner=dict(tradeEnabled=True,crossAlbum=cross),
                            receive=pieces(feasible),give=pieces(pair.outgoing_candidates)))

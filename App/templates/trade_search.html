@@ -5,6 +5,7 @@
 <script src="/static/trade_search.js" defer></script></head>
 <body class="s31-product-page s30-album-page"><main class="container sap-search">
 {{ header }}<h1>Tauschen</h1>
+<a href="/tauschen/laufend">Meine Anfragen</a>
 <form method="get" action="/tauschen" class="sap-filters">
 <input type="hidden" name="filtered" value="1">
 <details class="sap-album-picker"><summary><span>Tauschalben</span><span class="sap-album-status">{% if not selected %}Keine ausgewählt{% elif selected|length == albums|length %}Alle {{ selected|length }} ausgewählt{% else %}{{ selected|length }} von {{ albums|length }} ausgewählt{% endif %}</span></summary>

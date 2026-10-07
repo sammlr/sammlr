@@ -2,7 +2,7 @@
 from dataclasses import dataclass, replace
 
 from services.smartdeal_planning import SmartDealPlanningService, PairwisePlanningInputs
-from services.smartdeal_pairwise import PairwiseOpportunity, _candidates
+from services.smartdeal_pairwise import PairwiseOpportunity, PairwiseCandidate
 from services.smartdeal_optimizer import SmartDealOptimizer
 from services.trade_planning_compat import LegacyPlanningReadAdapter
 from services.trade_v2_preferences import TradeV2Preferences
@@ -29,6 +29,8 @@ class TradeV2Domain:
             self.db.execute('BEGIN')
         try:
             inputs = SmartDealPlanningService(LegacyPlanningReadAdapter(self.db)).build_pairwise_inputs(actor)
+            from services.lifecycle_planning import project
+            inputs = project(self.db, inputs)
             allowed = {a.album_id for a in inputs.subject.album_context}
             if selected_albums is not None:
                 allowed &= set(selected_albums)
@@ -53,15 +55,23 @@ class TradeV2Domain:
                     {a: preferences.get((actor, a)) for a in partner.album_ids},
                     {a: preferences.get((partner.user_id, a)) for a in partner.album_ids})
                 inventory = by_id[partner.user_id]
-                outgoing = _candidates(subject.outgoing_supply, inventory.needs, partner.album_ids)
-                incoming = _candidates(inventory.outgoing_supply, subject.needs, partner.album_ids)
-                maximum = maximum_equal((p.album_id for p in outgoing), (p.album_id for p in incoming), groups)
+                outgoing = self._candidates(subject.outgoing_supply, inventory.needs, partner.album_ids)
+                incoming = self._candidates(inventory.outgoing_supply, subject.needs, partner.album_ids)
+                maximum = maximum_equal((p.album_id for p in outgoing for _ in range(p.quantity)), (p.album_id for p in incoming for _ in range(p.quantity)), groups)
                 pairs.append(PairwiseOpportunity(partner.user_id, outgoing, incoming, maximum,
                     tuple(sorted({p.album_id for p in outgoing + incoming})), groups))
             return TradeV2Market(inputs, tuple(pairs))
         finally:
             if own_transaction:
                 self.db.rollback()
+
+    @staticmethod
+    def _candidates(supply, needs, albums):
+        demand = {(p.album_id,p.sticker_code):p for p in needs}
+        return tuple(sorted((PairwiseCandidate(p.album_id,p.sticker_code,min(p.quantity,n.quantity),
+            p.quantity,p.user_album_id,n.user_album_id) for p in supply
+            if p.album_id in albums and (n := demand.get((p.album_id,p.sticker_code))) is not None),
+            key=lambda p:(p.album_id,p.sticker_code)))
 
     @staticmethod
     def receivable_candidates(pair):
@@ -74,7 +84,7 @@ class TradeV2Domain:
 
     @staticmethod
     def smartdeals(market):
-        return SmartDealOptimizer.optimize(market.inputs.subject, market.opportunities)
+        return SmartDealOptimizer.optimize(market.inputs.subject, market.opportunities, quantities=True)
 
     @staticmethod
     def validate_deal(market, partner_id, give, receive, *, balanced=False):
@@ -104,7 +114,7 @@ class TradeV2Domain:
         return True
 
     def lifecycle_availability(self, actor, album_id, code):
-        """Explicit foundation-only read; does not switch existing market policy."""
+        """Read quantity availability through the shared lifecycle foundation."""
         from services.trade_lifecycle_foundation import lifecycle_availability
         own_transaction = not self.db.in_transaction
         if own_transaction:

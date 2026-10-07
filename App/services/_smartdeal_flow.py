@@ -16,11 +16,16 @@ class PartnerEdges:
     incoming: tuple[tuple[str, str], ...]
     balance_groups: tuple[tuple[str, ...], ...] | None = None
 
+    capacities: dict | None = None
+
+    def capacity(self, direction, key):
+        return self.capacities.get((direction,key),1) if self.capacities is not None else 1
+
     @property
     def maximum(self):
         if self.balance_groups is None:
-            return min(len(self.outgoing), len(self.incoming))
-        return maximum_equal((k[0] for k in self.outgoing), (k[0] for k in self.incoming), self.balance_groups)
+            return min(sum(self.capacity("out",k) for k in self.outgoing), sum(self.capacity("in",k) for k in self.incoming))
+        return maximum_equal((k[0] for k in self.outgoing for _ in range(self.capacity("out",k))), (k[0] for k in self.incoming for _ in range(self.capacity("in",k))), self.balance_groups)
 
 
 @dataclass(frozen=True)
@@ -97,7 +102,7 @@ def _has_circulation(vertex_count, edges, *, return_flows=False):
 
 class _SubsetNetwork:
     """Immutable integer topology, fresh residual state per feasibility check."""
-    def __init__(self, subset, supply, counters):
+    def __init__(self, subset, supply, counters, needs=None):
         self.subset = subset
         self.counters = counters
         self.cache = {}
@@ -110,7 +115,7 @@ class _SubsetNetwork:
         in_nodes = {k: i + 2 + len(outgoing) for i, k in enumerate(incoming)}
         next_node = 2 + len(outgoing) + len(incoming)
         self.edges.extend((0, out_nodes[k], 0, supply[k]) for k in outgoing)
-        self.edges.extend((in_nodes[k], 1, 0, 1) for k in incoming)
+        self.edges.extend((in_nodes[k], 1, 0, (needs or {}).get(k,1)) for k in incoming)
         for p in subset:
             left, right = next_node, next_node + 1
             next_node += 2
@@ -120,7 +125,7 @@ class _SubsetNetwork:
                 for k in keys:
                     self.piece_indices[(direction, p.partner_id, k)] = len(self.edges)
                     u, v = (out_nodes[k], left) if direction == 'out' else (right, in_nodes[k])
-                    self.edges.append((u, v, 0, 1))
+                    self.edges.append((u, v, 0, p.capacity(direction,k)))
         self.return_index = len(self.edges)
         self.edges.append((1, 0, 0, 0))
         self.vertex_count = next_node
@@ -161,7 +166,7 @@ def _largest(low, high, predicate):
     return low
 
 
-def _search_subsets(partners, supply, global_upper):
+def _search_subsets(partners, supply, global_upper, needs):
     """Try one algebraically ideal group, then exhaust the original search.
 
     The probe only changes traversal: it never excludes a subset. Memory stays
@@ -180,7 +185,7 @@ def _search_subsets(partners, supply, global_upper):
             for subset in combinations(partners, count):
                 if sum(maxima[p.partner_id] for p in subset) != target:
                     continue
-                if len({k for p in subset for k in p.incoming}) < target:
+                if sum(needs.get(k,1) for k in {k for p in subset for k in p.incoming}) < target:
                     continue
                 if sum(supply[k] for k in {k for p in subset for k in p.outgoing}) < target:
                     continue
@@ -192,24 +197,25 @@ def _search_subsets(partners, supply, global_upper):
             yield count, subset
 
 
-def allocate(supply, partners):
+def allocate(supply, partners, needs=None):
     """Return the proven optimum and deterministic diagnostics, or raise.
 
     All inputs have been validated by SmartDealOptimizer. No resource/time cutoff
     and no heuristic fallback; every returned result has completed the search.
     """
+    needs = needs or {}
     partners = tuple(sorted((p for p in partners if p.maximum >= 5),
                             key=lambda p: p.partner_id))
     counters = {'subsets': 0, 'pruned': 0, 'flow_checks': 0, 'cache_hits': 0, 'orders': 0}
     winner = None
     winner_key = (0, 0, (), ())
-    global_upper = min(sum(supply.values()), len({k for p in partners for k in p.incoming}))
-    for count, subset in _search_subsets(partners, supply, global_upper):
+    global_upper = min(sum(supply.values()), sum(needs.get(k,1) for k in {k for p in partners for k in p.incoming}))
+    for count, subset in _search_subsets(partners, supply, global_upper, needs):
         counters['subsets'] += 1
         maxima = {p.partner_id: p.maximum for p in subset}
         upper = min(sum(maxima.values()),
                     sum(supply[k] for k in {k for p in subset for k in p.outgoing}),
-                    len({k for p in subset for k in p.incoming}))
+                    sum(needs.get(k,1) for k in {k for p in subset for k in p.incoming}))
         optimistic = (-(upper - 2 * count), -upper,
                       tuple(-v for v in sorted(maxima.values(), reverse=True)),
                       tuple(p.partner_id for p in subset))
@@ -218,9 +224,9 @@ def allocate(supply, partners):
             continue
         if any(p.balance_groups is not None and len(p.balance_groups) > 1 for p in subset):
             from services._trade_v2_flow import ScopedSubsetNetwork
-            network = ScopedSubsetNetwork(subset, supply, counters)
+            network = ScopedSubsetNetwork(subset, supply, counters, needs)
         else:
-            network = _SubsetNetwork(subset, supply, counters)
+            network = _SubsetNetwork(subset, supply, counters, needs)
         sizes = {p: (5, maximum) for p, maximum in maxima.items()}
         if not network.feasible(sizes, (0, upper)):
             continue
@@ -261,6 +267,12 @@ def allocate(supply, partners):
                 needed = sizes[pid][0] - len(selected[direction])
                 if needed == 0:
                     fixed[piece] = (0, 0)
+                    continue
+                cap = min(needed,by_id[pid].capacity(direction,k))
+                if cap > 1 or any(by_id[pid].capacity(direction,q)>1 for q in keys):
+                    amount = _largest(0,cap,lambda n:network.feasible(sizes,(gain,gain),{**fixed,piece:(n,cap)}))
+                    fixed[piece] = (amount,amount)
+                    selected[direction].extend([k]*amount)
                     continue
                 fixed[piece] = (1, 1)
                 if needed == len(keys) - index or network.feasible(sizes, (gain, gain), fixed):

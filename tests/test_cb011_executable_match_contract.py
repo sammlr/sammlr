@@ -333,7 +333,7 @@ class CB011ExecutableMatchContractTestCase(unittest.TestCase):
         )
 
     def test_no_migration_and_cb008_to_cb010_sources_untouched(self):
-        self.assertEqual(23, max(item.version for item in load_migrations()))
+        self.assertEqual(24, max(item.version for item in load_migrations()))
         with self.connection() as connection:
             versions = tuple(row[0] for row in connection.execute(
                 "SELECT version FROM schema_migrations ORDER BY version"

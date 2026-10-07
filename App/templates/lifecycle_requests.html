@@ -1,0 +1,15 @@
+{% for q in lifecycle %}
+<section class="card lifecycle-request" data-status="{{ q.status }}">
+<h2>{{ 'Anfrage an ' ~ q.recipient if viewer == q.sender_user_id else 'Anfrage von ' ~ q.sender }}</h2>
+<p role="status">{{ {'open':'Anfrage offen', 'withdrawn':'Anfrage zurückgezogen', 'rejected':'Anfrage abgelehnt', 'expired':'Anfrage abgelaufen'}[q.status] }}</p>
+<p>Gesendet: <time datetime="{{ q.created_at }}">{{ q.created_at }}</time><br>Ablauf: <time datetime="{{ q.expires_at }}">{{ q.expires_at }}</time> (72 Stunden)</p>
+{% for side,label in [('receive','Du bekommst'),('give','Du gibst ab')] %}
+<h3>{{ label }}</h3><ul>{% for p in q.positions if (side == 'give' and p.from_user_id == viewer) or (side == 'receive' and p.to_user_id == viewer) %}<li>{{ p.album }} · {{ p.sticker_code }} × {{ p.quantity }}</li>{% endfor %}</ul>
+{% endfor %}
+{% if q.status == 'open' %}
+<form method="post" action="/tauschen/anfragen/{{ q.trade_id }}/{{ 'withdrawn' if viewer == q.sender_user_id else 'rejected' }}"><input type="hidden" name="_csrf_token" value="{{ csrf }}"><button type="submit">{{ 'Anfrage zurückziehen' if viewer == q.sender_user_id else 'Anfrage ablehnen' }}</button></form>
+{% endif %}
+<a href="/tauschen/anfragen/{{ q.trade_id }}">Anfrage Nr. {{ q.trade_id }}</a>
+</section>
+{% endfor %}
+<a href="/tauschen/laufend">Meine Anfragen</a>

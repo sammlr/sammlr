@@ -33,8 +33,13 @@
 <details><summary><span>{{ group.count }} Sticker · auf-/zuklappen</span><div class="wall"><div>{{ group.stack }}</div></div></summary>
 <div class="wall trade-fan">{% for card in group.cards %}<div>{{ card }}</div>{% endfor %}</div></details></section>
 {% endfor %}
-<section class="card"><button type="button" disabled>Tausch anfragen – noch nicht verfügbar</button><p>Du kannst den Vorschlag ansehen. Es werden noch keine Sticker reserviert.</p></section>
+{% if token %}<section class="card"><form method="post" action="/tauschen/anfragen"><input type="hidden" name="token" value="{{ token }}"><input type="hidden" name="_csrf_token" value="{{ csrf }}"><button type="submit">Tausch anfragen</button></form><p>72 Stunden offen. Deine abzugebenden Sticker und dein angefragter Bedarf werden bis zum Ende der Anfrage gebunden.</p></section>{% else %}<section class="card"><button type="button" disabled>Tausch anfragen – noch nicht verfügbar</button><p>Du kannst den Vorschlag ansehen. Es werden noch keine Sticker reserviert.</p></section>{% endif %}
+{% elif screen == 'request_review' %}
+{% include 'lifecycle_request_review.html' %}
+{% elif screen == 'request' %}
+{% include 'lifecycle_requests.html' %}
 {% elif screen == 'active' %}
+{% include 'lifecycle_requests.html' %}
 <section class="card"><ul class="trade-partners">{% for t in trades %}<li><strong>{{ t.username }}</strong><p>{{ 'Anfrage offen' if t.status == 'open' else 'Tausch angenommen' }} · Nr. {{ t.id }}</p><a href="/trades/{{ t.id }}">Bestehenden Tausch öffnen</a></li>{% else %}<li>Du hast aktuell keine offenen Anfragen oder angenommenen Tausche.</li>{% endfor %}</ul></section>
 {% endif %}
 </main>{{ navigation }}</body></html>

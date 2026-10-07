@@ -57,12 +57,12 @@ def trade_contract_type(connection, trade_id):
 
 
 def require_trade_operation(connection, trade_id, operation):
-    """Fail closed. New operational commands are deliberately not enabled yet."""
+    """Fail closed. Foundation and pre-acceptance requests have explicit owners."""
     kind = trade_contract_type(connection, trade_id)
     allowed = {
         LEGACY_CONTRACT: frozenset({'legacy'}),
         SMARTDEAL_V1_CONTRACT: frozenset({'smartdeal_request'}),
-        TRADE_LIFECYCLE_V1_CONTRACT: frozenset({'foundation'}),
+        TRADE_LIFECYCLE_V1_CONTRACT: frozenset({'foundation', 'request'}),
     }
     if operation not in allowed[kind]:
         raise ValueError('Operation does not belong to this trade contract')

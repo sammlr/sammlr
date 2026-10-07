@@ -8,7 +8,7 @@ from services._smartdeal_flow import _has_circulation
 
 
 class ScopedSubsetNetwork:
-    def __init__(self, subset, supply, counters):
+    def __init__(self, subset, supply, counters, needs=None):
         self.subset, self.counters, self.cache = subset, counters, {}
         self.edges, self.size_indices, self.piece_indices = [], {}, {}
         outgoing = sorted({k for p in subset for k in p.outgoing})
@@ -17,7 +17,7 @@ class ScopedSubsetNetwork:
         in_nodes = {k:i+2+len(outgoing) for i,k in enumerate(incoming)}
         node = 2+len(outgoing)+len(incoming)
         self.edges.extend((0,out_nodes[k],0,supply[k]) for k in outgoing)
-        self.edges.extend((in_nodes[k],1,0,1) for k in incoming)
+        self.edges.extend((in_nodes[k],1,0,(needs or {}).get(k,1)) for k in incoming)
         for p in subset:
             groups = p.balance_groups or (tuple(sorted({k[0] for k in p.outgoing+p.incoming})),)
             indices = []
@@ -27,12 +27,12 @@ class ScopedSubsetNetwork:
                 left,right = node,node+1
                 node += 2
                 indices.append(len(self.edges))
-                self.edges.append((left,right,0,min(len(out),len(inc))))
+                self.edges.append((left,right,0,min(sum(p.capacity("out",k) for k in out),sum(p.capacity("in",k) for k in inc))))
                 for direction,keys in (('out',out),('in',inc)):
                     for k in keys:
                         self.piece_indices[(direction,p.partner_id,k)] = len(self.edges)
                         u,v = (out_nodes[k],left) if direction=='out' else (right,in_nodes[k])
-                        self.edges.append((u,v,0,1))
+                        self.edges.append((u,v,0,p.capacity(direction,k)))
             self.size_indices[p.partner_id] = tuple(indices)
         self.return_index = len(self.edges)
         self.edges.append((1,0,0,0))

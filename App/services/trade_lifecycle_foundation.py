@@ -97,12 +97,13 @@ class LifecycleAvailability:
     free_need: int
 
 
-def lifecycle_availability(db, user_id, album_id, code, *, exclude_revision=None):
+def lifecycle_availability(db, user_id, album_id, code, *, exclude_revision=None, now=None):
     """Canonical physical supply plus quantity-based new-contract Need view.
 
     Read-only; callers needing atomic admission must use the write unit of work.
-    Existing SAP/Legacy behavior is not switched to the new projection in L01.
+    Trade-v2 consumes this projection; legacy planners retain their own policy.
     """
+    now = now or datetime.now(timezone.utc)
     inventory = InventoryReadService(db).snapshot(user_id, album_id, (code,)).sticker(code)
     if not inventory.balance_is_valid:
         raise ValueError('Inconsistent physical reservation balance')
@@ -111,7 +112,7 @@ def lifecycle_availability(db, user_id, album_id, code, *, exclude_revision=None
     target = row[0] if row else 1
     reader = SmartDealPlanningService(LegacyPlanningReadAdapter(db))
     rows = reader._binding_rows((user_id,))
-    bindings = reader._project_bindings(user_id, datetime.now(timezone.utc), rows)
+    bindings = reader._project_bindings(user_id, now, rows)
     by_id = {r['position_id']: r for r in rows}
     committed = sum(max(b.quantity - by_id[b.position_id]['received_quantity'], 0)
                     for b in bindings if b.album_id == album_id and b.sticker_code == code
@@ -123,8 +124,26 @@ def lifecycle_availability(db, user_id, album_id, code, *, exclude_revision=None
               AND (? IS NULL OR p.revision_id<>?) GROUP BY c.state''',
             (user_id, album_id, code, exclude_revision, exclude_revision)):
         quantities[state] += quantity
+    supply = inventory.available
+    # Read-only deadline projection. Commands physically release through _expire.
+    if db.execute("SELECT 1 FROM sqlite_master WHERE name='lifecycle_requests'").fetchone():
+        from services.trade_lifecycle_requests import instant
+        for revision, deadline in db.execute("SELECT revision_id,expires_at FROM lifecycle_requests WHERE status='open'"):
+            if now < instant(deadline):
+                continue
+            pending = db.execute("""SELECT COALESCE(SUM(c.quantity),0) FROM lifecycle_need_claims c
+                JOIN lifecycle_revision_positions p ON p.id=c.revision_position_id
+                WHERE p.revision_id=? AND p.to_user_id=? AND p.album_id=? AND p.sticker_code=?
+                  AND c.state='pending' AND (? IS NULL OR p.revision_id<>?)""",
+                (revision,user_id,album_id,code,exclude_revision,exclude_revision)).fetchone()[0]
+            quantities['pending'] -= pending
+            supply += db.execute("""SELECT COALESCE(SUM(h.quantity),0) FROM trade_reservations h
+                JOIN lifecycle_supply_bindings b ON b.reservation_id=h.id AND b.is_current=1
+                JOIN lifecycle_revision_positions p ON p.id=b.revision_position_id
+                WHERE p.revision_id=? AND h.user_id=? AND h.album_id=? AND h.sticker_code=? AND h.state='active'""",
+                (revision,user_id,album_id,code)).fetchone()[0]
     free = max(target - inventory.physical - quantities['committed'] - quantities['pending'], 0)
-    return LifecycleAvailability(inventory.available, inventory.physical, target,
+    return LifecycleAvailability(supply, inventory.physical, target,
                                  quantities['committed'], quantities['pending'], free)
 
 

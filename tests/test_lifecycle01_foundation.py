@@ -57,7 +57,7 @@ class LifecycleFoundationTests(unittest.TestCase):
         with sqlite3.connect(':memory:') as db:
             db.execute('PRAGMA foreign_keys=ON')
             db.executescript((ROOT/'App/Database/base_schema.sql').read_text())
-            self.assertEqual(tuple(range(1,24)),migrate(db))
+            self.assertEqual(tuple(range(1,25)),migrate(db))
             self.assertEqual((),migrate(db))
             self.assertEqual([],db.execute('PRAGMA foreign_key_check').fetchall())
 
@@ -70,7 +70,7 @@ class LifecycleFoundationTests(unittest.TestCase):
         self.db.commit()
         tables=('trade_requests','trades','trade_positions','trade_reservations','stickers')
         before={t:[tuple(r) for r in self.db.execute('SELECT * FROM '+t)] for t in tables}
-        self.assertEqual((23,),migrate(self.db))
+        self.assertEqual((23,),migrate(self.db,23))
         self.assertEqual(before,{t:[tuple(r) for r in self.db.execute('SELECT * FROM '+t)] for t in tables})
         self.assertEqual('legacy',trade_contract_type(self.db,trade))
         self.assertEqual(0,self.db.execute('SELECT COUNT(*) FROM lifecycle_need_claims').fetchone()[0])

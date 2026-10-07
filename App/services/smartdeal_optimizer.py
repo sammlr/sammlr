@@ -75,7 +75,7 @@ def _positive(value):
     return type(value) is int and value > 0
 
 
-def _inputs(state, opportunities):
+def _inputs(state, opportunities, quantities=False):
     if not isinstance(state, PlanningState) or not _positive(state.user_id):
         raise SmartDealOptimizationError('Canonical PlanningState required')
     albums = {a.album_id: a for a in state.album_context}
@@ -97,10 +97,10 @@ def _inputs(state, opportunities):
         return result
 
     supply = pieces(state.outgoing_supply)
-    needs = pieces(state.needs, binary=True)
+    needs = pieces(state.needs, binary=not quantities)
     missing = pieces(state.missing, binary=True)
     committed = pieces(state.incoming_committed_needs, binary=True)
-    if (supply.keys() & missing.keys() or needs.keys() & committed.keys()
+    if not quantities and (supply.keys() & missing.keys() or needs.keys() & committed.keys()
             or missing.keys() != needs.keys() | committed.keys()):
         raise SmartDealOptimizationError('Inconsistent physical/free/committed planning resources')
     eligible = {}
@@ -120,6 +120,7 @@ def _inputs(state, opportunities):
         seen.add(pid)
         sides = []
         memberships = {}
+        capacities = {}
         for outgoing, candidates in ((True, opportunity.outgoing_candidates),
                                      (False, opportunity.incoming_candidates)):
             keys = []
@@ -128,8 +129,10 @@ def _inputs(state, opportunities):
                 own = (supply if outgoing else needs).get(k)
                 own_membership = candidate.giver_user_album_id if outgoing else candidate.receiver_user_album_id
                 other_membership = candidate.receiver_user_album_id if outgoing else candidate.giver_user_album_id
-                if (type(candidate.quantity) is not int or candidate.quantity != 1
+                if (not _positive(candidate.quantity) or (not quantities and candidate.quantity != 1)
                         or not _positive(candidate.available_quantity) or own is None
+                        or candidate.quantity > candidate.available_quantity
+                        or (own is not None and candidate.quantity > own.quantity)
                         or candidate.album_id not in eligible[pid]
                         or own_membership != own.user_album_id or not _positive(own_membership)
                         or not _positive(other_membership) or other_membership == own_membership
@@ -139,6 +142,7 @@ def _inputs(state, opportunities):
                 if old != other_membership:
                     raise SmartDealOptimizationError('Inconsistent partner membership identity')
                 keys.append(k)
+                capacities[("out" if outgoing else "in",k)] = candidate.quantity
             if len(set(keys)) != len(keys):
                 raise SmartDealOptimizationError('Duplicate binary candidate need')
             sides.append(tuple(sorted(keys)))
@@ -148,19 +152,19 @@ def _inputs(state, opportunities):
         if groups is not None:
             if {a for group in groups for a in group} - eligible[pid]:
                 raise SmartDealOptimizationError('Balance group outside permitted albums')
-            expected_maximum = maximum_equal((k[0] for k in out), (k[0] for k in inc), groups)
+            expected_maximum = maximum_equal((k[0] for k in out for _ in range(capacities[("out",k)])), (k[0] for k in inc for _ in range(capacities[("in",k)])), groups)
         else:
-            expected_maximum = min(len(out), len(inc))
+            expected_maximum = min(sum(capacities[("out",k)] for k in out), sum(capacities[("in",k)] for k in inc))
         if (not out or not inc or type(opportunity.max_equal_piece_count) is not int
                 or opportunity.max_equal_piece_count != expected_maximum
                 or len(set(opportunity.involved_albums)) != len(opportunity.involved_albums)
                 or set(opportunity.involved_albums) != expected_albums):
             raise SmartDealOptimizationError('Pairwise maximum or album projection is inconsistent')
-        result.append(PartnerEdges(pid, out, inc, groups))
-    return {k: p.quantity for k, p in supply.items()}, tuple(result)
+        result.append(PartnerEdges(pid, out, inc, groups, capacities))
+    return {k: p.quantity for k, p in supply.items()}, tuple(result), {k:p.quantity for k,p in needs.items()}
 
 
-def _validated_plan(supply, partners, allocations, counters):
+def _validated_plan(supply, partners, allocations, counters, needs=None):
     """Independent postcondition check before publishing any domain result."""
     roster = {p.partner_id: p for p in partners}
     used_out, used_in = Counter(), Counter()
@@ -175,8 +179,8 @@ def _validated_plan(supply, partners, allocations, counters):
             raise SmartDealOptimizationError('Optimizer violated eligibility or 1:1/minimum')
         seen.add(pid)
         partner = roster[pid]
-        for selected, candidates in ((allocation.incoming, partner.incoming), (allocation.outgoing, partner.outgoing)):
-            if len(set(selected)) != len(selected) or not set(selected) <= set(candidates):
+        for direction, selected, candidates in (("in", allocation.incoming, partner.incoming), ("out", allocation.outgoing, partner.outgoing)):
+            if not set(selected) <= set(candidates) or any(n > partner.capacity(direction,k) for k,n in Counter(selected).items()):
                 raise SmartDealOptimizationError('Optimizer used an invalid candidate')
         if partner.balance_groups is not None and not valid_balance(
                 (k[0] for k in allocation.outgoing), (k[0] for k in allocation.incoming),
@@ -185,31 +189,31 @@ def _validated_plan(supply, partners, allocations, counters):
         used_out.update(allocation.outgoing)
         used_in.update(allocation.incoming)
         deals.append(SmartDealCandidate(
-            pid, tuple(SmartDealPiece(*k) for k in sorted(allocation.outgoing)),
-            tuple(SmartDealPiece(*k) for k in sorted(allocation.incoming)), size,
+            pid, tuple(SmartDealPiece(*k,n) for k,n in sorted(Counter(allocation.outgoing).items())),
+            tuple(SmartDealPiece(*k,n) for k,n in sorted(Counter(allocation.incoming).items())), size,
             tuple(sorted({k[0] for k in allocation.outgoing + allocation.incoming})),
         ))
-    if any(n > supply.get(k, 0) for k, n in used_out.items()) or any(n > 1 for n in used_in.values()):
+    if any(n > supply.get(k, 0) for k, n in used_out.items()) or any(n > (needs or {}).get(k,1) for k,n in used_in.items()):
         raise SmartDealOptimizationError('Optimizer double-allocated a resource or need')
     deals = tuple(sorted(deals, key=lambda d: (-d.piece_count, d.partner_id)))
     gain = sum(d.piece_count for d in deals)
     objective = SmartDealObjective(
         gain - 2 * len(deals), gain, len(deals), tuple(d.piece_count for d in deals),
         tuple(d.partner_id for d in deals),
-        tuple((p.album_id, p.sticker_code) for d in deals for side in (d.incoming_pieces, d.outgoing_pieces) for p in side),
+        tuple((p.album_id, p.sticker_code) for d in deals for side in (d.incoming_pieces, d.outgoing_pieces) for p in side for _ in range(p.quantity)),
     )
     return SmartDealPlan(deals, objective, SmartDealDiagnostics(**counters))
 
 
 class SmartDealOptimizer:
     @staticmethod
-    def optimize(state: PlanningState, opportunities: tuple[PairwiseOpportunity, ...]) -> SmartDealPlan:
+    def optimize(state: PlanningState, opportunities: tuple[PairwiseOpportunity, ...], *, quantities=False) -> SmartDealPlan:
         """Consume one trusted complete T2a/T2b snapshot, with zero SQL/writes.
 
         Returns only after exact proof completion. No top-partner preselection,
         time-dependent diagnostics, persistent identity, timeout or fallback.
         Exceptions leave caller inputs and database state untouched.
         """
-        supply, partners = _inputs(state, opportunities)
-        allocations, counters = allocate(supply, partners)
-        return _validated_plan(supply, partners, allocations, counters)
+        supply, partners, needs = _inputs(state, opportunities, quantities)
+        allocations, counters = allocate(supply, partners, needs)
+        return _validated_plan(supply, partners, allocations, counters, needs)

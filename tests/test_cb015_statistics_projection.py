@@ -292,7 +292,7 @@ class CB015StatisticsProjectionTestCase(unittest.TestCase):
         self.assertEqual(before_hash, sha256(self.db_path))
         with self.assertRaises(FrozenInstanceError):
             first.career.completed_album_count = 99
-        self.assertEqual(23, max(migration.version for migration in load_migrations()))
+        self.assertEqual(24, max(migration.version for migration in load_migrations()))
 
     def test_projection_query_count_is_bounded_for_closed_beta_album_set(self):
         with self.connection() as connection:

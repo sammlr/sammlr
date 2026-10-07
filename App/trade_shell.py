@@ -1,4 +1,4 @@
-"""Authenticated read-only Trade shell; no preview state or lifecycle commands."""
+"""Authenticated Trade shell with explicit, schema-gated request commands."""
 from contextlib import contextmanager
 from dataclasses import replace
 from pathlib import Path
@@ -37,7 +37,7 @@ def discovery(connection, actor):
     market = TradeV2Domain(connection).market(actor)
     inputs = market.inputs
     opportunities = market.opportunities
-    plan = SmartDealOptimizer.optimize(inputs.subject, opportunities)
+    plan = TradeV2Domain.smartdeals(market)
     users = {r['id']: r['username'] for r in connection.execute('SELECT id,username FROM users')}
     albums = {r['id']: r['name'] for r in connection.execute('SELECT id,name FROM albums')}
     return inputs, opportunities, plan, users, albums
@@ -71,6 +71,10 @@ def register_trade_shell(app, *, database_path, global_head, header, navigation,
                              f'/tauschen/vorschlag/{deal.partner_id}')}
 
     def deal_page(deal, users, albums, notice=""):
+        from services.trade_lifecycle_requests import ready
+        from lifecycle_request_routes import draft_token
+        with read_connection(database_path()) as db:
+            token = draft_token(actor(),deal.partner_id,deal.outgoing_pieces,deal.incoming_pieces,"SMARTDEAL") if ready(db) else None
         groups = []
         for side, pieces in [('Du bekommst', deal.incoming_pieces), ('Du gibst ab', deal.outgoing_pieces)]:
             for album_id in sorted({p.album_id for p in pieces}):
@@ -78,11 +82,11 @@ def register_trade_shell(app, *, database_path, global_head, header, navigation,
                 # Native details/summary is the interactive control, not a nested link.
                 stack = str(slot(group[0], sum(p.quantity for p in group)))
                 stack = stack.replace('<a class="slot ', '<span class="slot ').replace('</a>', '</span>').replace('href="#"', '')
-                cards = [Markup(str(slot(p)).replace('<a class="slot ', '<span class="slot ').replace('</a>', '</span>').replace('href="#"', '')) for p in group]
-                groups.append({'side': side, 'album': albums[album_id], 'count': len(group),
+                cards = [Markup(str(slot(p,p.quantity)).replace('<a class="slot ', '<span class="slot ').replace('</a>', '</span>').replace('href="#"', '')) for p in group]
+                groups.append({'side': side, 'album': albums[album_id], 'count': sum(p.quantity for p in group),
                                'stack': Markup(stack), 'cards': cards})
         return page('deal', f'Tausch mit {users[deal.partner_id]}',
-                    deal=decorated(deal, users, albums), groups=groups, notice=notice)
+                    deal=decorated(deal, users, albums), groups=groups, notice=notice, token=token, csrf=csrf_token())
 
     from trade_search_routes import register_search
     register_search(shell, database_path=database_path, read_connection=read_connection,
@@ -139,8 +143,18 @@ def register_trade_shell(app, *, database_path, global_head, header, navigation,
                 WHERE (q.from_user_id=? OR q.to_user_id=?) AND q.status IN ('open','accepted')
                 ORDER BY q.id DESC
             ''', (user, user, user))]
-        return page('active', 'Laufende Tausche', trades=rows)
+        from services.trade_lifecycle_requests import ready, LifecycleRequests
+        from lifecycle_request_routes import connection
+        with read_connection(database_path()) as db:
+            enabled = ready(db)
+        lifecycle = []
+        if enabled:
+            with connection(database_path()) as db:
+                lifecycle = LifecycleRequests(db).view(user)
+        return page('active', 'Laufende Tausche', trades=rows, lifecycle=lifecycle,viewer=user,csrf=csrf_token())
 
     from profile_trade import register_manual
     register_manual(shell, database_path, actor, csrf_token)
+    from lifecycle_request_routes import register_requests
+    register_requests(shell,database_path,actor,page,csrf_token)
     app.register_blueprint(shell)

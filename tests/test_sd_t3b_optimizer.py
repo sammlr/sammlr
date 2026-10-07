@@ -241,12 +241,12 @@ class BranchOrderAcceptanceTests(unittest.TestCase):
         from services import _smartdeal_flow as engine
         from tests.research.benchmark_smartdeal_runtime import workloads
 
-        def original(partners, supply, upper):
+        def original(partners, supply, upper, needs):
             for count in range(1, min(5, len(partners), upper // 5) + 1):
                 for subset in combinations(partners, count):
                     yield count, subset
 
-        def reverse(partners, supply, upper):
+        def reverse(partners, supply, upper, needs):
             for count in range(min(5, len(partners), upper // 5), 0, -1):
                 for subset in combinations(tuple(reversed(partners)), count):
                     # Subset identity stays canonical; only traversal reverses.
