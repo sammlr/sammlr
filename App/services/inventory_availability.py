@@ -11,6 +11,8 @@ class AvailabilityDTO:
     reason_code: str
     explanation: str
 
+    physical_missing: int = 0
+
     @property
     def is_available(self):
         return self.available > 0
@@ -30,7 +32,7 @@ class AvailabilityDTO:
             and self.available >= 0
             and self.incoming_transit >= 0
             and self.physical
-            == self.assigned + self.reserved + self.available
+            == self.assigned + self.reserved + self.physical_missing + self.available
         )
 
 
@@ -38,12 +40,13 @@ class LegacyAvailabilityCalculator:
     """S08 compatibility projection for today's quantity-only model."""
 
     @staticmethod
-    def from_quantity(quantity, reserved=0, incoming_transit=0):
+    def from_quantity(quantity, reserved=0, incoming_transit=0, physical_missing=0):
         physical = max(quantity, 0)
         assigned = min(physical, 1)
         reserved = max(reserved, 0)
         incoming_transit = max(incoming_transit, 0)
-        available = max(physical - assigned - reserved, 0)
+        physical_missing = max(physical_missing, 0)
+        available = max(physical - assigned - reserved - physical_missing, 0)
 
         if physical == 0 and incoming_transit > 0:
             reason_code = "incoming_transit"
@@ -81,8 +84,12 @@ class LegacyAvailabilityCalculator:
                 "im heutigen Modell weder zugeordnet noch reserviert."
             )
 
+        if physical_missing:
+            reason_code = "physical_missing_hold"
+            explanation = f"{physical_missing} physisch fehlende Kopie(n) sind für neue Tausche gesperrt."
         return AvailabilityDTO(
             physical=physical,
+            physical_missing=physical_missing,
             assigned=assigned,
             reserved=reserved,
             available=available,

@@ -86,7 +86,8 @@ class ActiveReservationBindings:
             """,
             (user_id, album_id, sticker_code),
         ).fetchone()
-        reserved = int(row[0])
+        from services.physical_missing import extras
+        reserved = int(row[0]) + extras(self._connection).get((user_id,album_id,sticker_code),0)
         if reserved == 0:
             return 0
 

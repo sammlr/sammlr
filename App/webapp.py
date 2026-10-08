@@ -2420,6 +2420,11 @@ def establish_request_observability():
 
 @app.before_request
 def security_and_login_guard():
+    # Only private V1 control-photo uploads need a larger binary body. Keep all
+    # other endpoints' existing 1 MB limit and CSRF/authentication unchanged.
+    if request.endpoint == "trade_shell.preparation_command" and (request.view_args or {}).get("action") == "upload":
+        from services.lifecycle_photos import MAX_BYTES
+        request.max_content_length = MAX_BYTES + 64 * 1024
     if len(request.query_string) > MAX_QUERY_STRING_LENGTH:
         abort(414)
     if request.method == "POST" and app.config.get("CSRF_ENABLED", True):

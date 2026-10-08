@@ -199,7 +199,7 @@ class CB008NotificationCatalogTestCase(unittest.TestCase):
     def test_catalog_is_exact_and_no_cb008_migration_exists(self):
         self.assertEqual(EXPECTED_TYPES, set(NOTIFICATION_TYPES))
         self.assertEqual(18, current_version(self.connection()))
-        self.assertEqual(25, load_migrations()[-1].version)
+        self.assertEqual(26, load_migrations()[-1].version)
         with self.connection() as connection:
             for rejected in (
                 "trade_accepted", "trade_received", "trade_completed",

@@ -4,6 +4,7 @@ from dataclasses import dataclass
 from types import MappingProxyType
 from typing import Iterable, Mapping
 
+from services.physical_missing import extras as missing_extras
 from services.inventory_availability import AvailabilityDTO, LegacyAvailabilityCalculator
 
 
@@ -52,9 +53,11 @@ def _availability_snapshot_for(
     reserved=0,
     incoming_transit=0,
     outgoing_transit=0,
+    physical_missing=0,
 ):
     availability = LegacyAvailabilityCalculator.from_quantity(
         quantity,
+        physical_missing=physical_missing,
         reserved=reserved,
         incoming_transit=incoming_transit,
     )
@@ -333,6 +336,7 @@ class InventoryReadService:
         }
 
     def album(self, user_id, album_id, catalog_codes=()):
+        quarantined = missing_extras(self._connection)
         reserved_by_code = self._reserved_by_code(user_id, album_id)
         incoming_by_code = self._transit_by_code(user_id, album_id, "incoming")
         outgoing_by_code = self._transit_by_code(user_id, album_id, "outgoing")
@@ -362,6 +366,7 @@ class InventoryReadService:
             snapshots[code] = _availability_snapshot_for(
                 code,
                 quantity=row["quantity"] if row else 0,
+                physical_missing=quarantined.get((user_id,album_id,code),0),
                 reserved=reserved_by_code.get(code, 0),
                 incoming_transit=incoming_by_code.get(code, 0),
                 outgoing_transit=outgoing_by_code.get(code, 0),
@@ -456,6 +461,9 @@ class InventoryReadService:
                 if row["sticker_code"] in codes
             }
 
+        for (user, album, code), quantity in missing_extras(self._connection).items():
+            if album == album_id and user in users:
+                reserved[(user,code)] = reserved.get((user,code),0) + quantity
         states = {}
         for user_id in users:
             physical_codes = {
@@ -515,6 +523,9 @@ class InventoryReadService:
                 ).fetchall()
             }
 
+        for (user, album, code), quantity in missing_extras(self._connection).items():
+            if album == album_id and user in others:
+                reserved[(user,code)] = reserved.get((user,code),0) + quantity
         get_codes = {user_id: set() for user_id in others}
         for row in self._connection.execute(
             f"""
@@ -605,6 +616,9 @@ class InventoryReadService:
                 ).fetchall()
             }
 
+        for (owner, album, code), quantity in missing_extras(self._connection).items():
+            if owner == user:
+                reserved[(album,code)] = reserved.get((album,code),0) + quantity
         summaries = {}
         for album_id, codes in catalogs.items():
             physical = {

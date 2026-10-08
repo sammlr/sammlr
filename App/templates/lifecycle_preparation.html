@@ -1,0 +1,50 @@
+{% macro form_start(action) -%}
+<form method="post" action="/tauschen/vorbereitung/{{ model.trade }}/{{ action }}" {% if action=='upload' %}enctype="multipart/form-data"{% endif %}>
+<input type="hidden" name="_csrf_token" value="{{ csrf }}"><input type="hidden" name="token" value="{{ token(action) }}">
+{%- endmacro %}
+<section class="card" data-preparation-state="{{ model.state }}">
+<h2>Tausch angenommen</h2>
+<p>Eigene Vorbereitung bis <time datetime="{{ model.deadline }}">{{ model.deadline_label }}</time> (72 Stunden ab Annahme). Die anschließende gegenseitige Fotoprüfung hat keine automatische Abbruchfrist.</p>
+{% if model.state=='ready_for_address_release' %}<p role="status">Bereit für Adressfreigabe. Es wird noch keine Adresse angezeigt.</p>{% endif %}
+{% if model.state=='reduction_rejected' %}<p role="alert">Die Reduktion wurde abgelehnt. Der bisherige Vertrag bleibt offen und unverändert. Klärt eine neue zulässige Reduktion; es erfolgt keine automatische Beendigung.</p>{% endif %}
+<h3>Diese Sticker musst du verschicken.</h3>
+<ul>{% for p in model.positions if p.from_user_id==model.actor %}<li>{{ p.album_name }} · {{ p.sticker_code }} × {{ p.quantity }}</li>{% endfor %}</ul>
+{% for c in model.cycles %}
+{% if c.owner_id==model.actor %}
+<h3>Deine Kontrollfotos</h3>
+{% if c.overdue %}<p role="status">Vorbereitung überfällig. Der vereinbarte Tausch bleibt bestehen.</p>{% endif %}
+{% if not c.completed_at and not model.pending %}
+<p>Lege alle Sticker aus deiner Packliste aus und fotografiere sie gut erkennbar. Verwende bei großen Deals mehrere Fotos (JPEG/PNG, jeweils höchstens 12 MB).</p>
+{{ form_start('upload') }}<label>Foto aus Galerie oder Dateien <input type="file" name="photo" accept="image/jpeg,image/png" required></label><button>Foto hochladen</button></form>
+{{ form_start('upload') }}<label>Kamera <input type="file" name="photo" accept="image/jpeg,image/png" capture="environment" required></label><button>Kamerafoto hochladen</button></form>
+{{ form_start('complete') }}<button>Vorbereitung abschließen</button></form>
+{% elif c.completed_at %}<p>Deine Vorbereitung ist abgeschlossen. {% if c.revealed_at %}Dein Fotopaket ist für die Gegenseite sichtbar.{% else %}Wir zeigen euch die Fotos, sobald beide fertig sind.{% endif %}</p>
+{% if not model.pending %}{{ form_start('correct') }}<button>Fotokorrektur beginnen</button></form>{% endif %}
+{% endif %}
+{% else %}<h3>Kontrollfotos der Gegenseite</h3>
+{% if not c.revealed_at %}<p>Fotos bleiben verborgen, bis beide fertig sind.</p>{% endif %}
+{% if c.revealed_at and c.completed_at and c.review_state=='pending' and not model.pending and model.state!='preparation' %}
+{{ form_start('approve') }}<button>Alles passt</button></form>
+{{ form_start('problem') }}<label>Problem <select name="reason"><option value="MISSING_STICKER">Sticker fehlt</option><option value="WRONG_STICKER">Falscher Sticker</option><option value="CONDITION_PROBLEM">Zustand problematisch</option><option value="NOT_RECOGNIZABLE">Sticker/Fotos nicht ausreichend erkennbar</option></select></label><button>Problem melden</button></form>
+{% endif %}
+{% endif %}
+{% for problem in c.problems %}<p role="alert">{{ {'MISSING_STICKER':'Sticker fehlt','WRONG_STICKER':'Falscher Sticker','CONDITION_PROBLEM':'Zustand problematisch','NOT_RECOGNIZABLE':'Sticker/Fotos nicht ausreichend erkennbar'}[problem.reason] }}</p>{% endfor %}
+{% for photo in c.photos %}<figure><img style="max-width:100%;height:auto" src="/tauschen/vorbereitung/{{ model.trade }}/fotos/{{ photo.id }}" alt="Kontrollfoto {{ loop.index }}"></figure>
+{% if c.owner_id==model.actor and not c.completed_at and not model.pending %}{{ form_start('remove_photo') }}<input type="hidden" name="photo" value="{{ photo.id }}"><button>Entwurf entfernen</button></form>{% endif %}
+{% endfor %}
+{% endfor %}
+<h3>Physisch fehlende Give-Menge melden</h3><p>Eine verbindliche Meldung sperrt genau diese Menge für neue Tausche. Der aktuelle Vertrag bleibt bestehen.</p>
+{{ form_start('missing') }}<select name="position">{% for p in model.positions if p.from_user_id==model.actor %}<option value="{{ p.id }}">{{ p.album_name }} · {{ p.sticker_code }} ({{ p.quantity }})</option>{% endfor %}</select><input type="number" name="quantity" min="1" value="1" required><button>Fehlmenge verbindlich melden</button></form>
+<h3>Deal reduzieren</h3>
+{% if model.pending %}
+<p>Bis zur Zustimmung bleibt der bisherige Deal verbindlich.</p>
+<ul>{% for p in model.positions %}{% set proposed=model.proposal|selectattr('from_user_id','equalto',p.from_user_id)|selectattr('album_id','equalto',p.album_id)|selectattr('sticker_code','equalto',p.sticker_code)|list %}<li>{{ 'Du gibst' if p.from_user_id==model.actor else 'Du erhältst' }}: {{ p.album_name }} · {{ p.sticker_code }}: {{ p.quantity }} → {{ proposed[0].quantity if proposed else 0 }}</li>{% endfor %}</ul>
+{% if model.pending.proposer_id!=model.actor %}
+{% for action,label in [('reduction_approve','Reduktion zustimmen'),('reduction_reject','Reduktion ablehnen')] %}{{ form_start(action) }}<input type="hidden" name="proposal" value="{{ model.pending.revision_id }}"><button>{{ label }}</button></form>{% endfor %}
+{% else %}<p>Wartet auf Zustimmung der Gegenseite.</p>{% endif %}
+{% else %}
+<p>Wähle die verbleibenden Mengen beider Seiten. Nur eine regelkonforme Verkleinerung ist möglich. Mit dem Vorschlag stimmst du diesem genauen Paket zu; die Gegenseite muss ebenfalls zustimmen.</p>
+{{ form_start('reduction_propose') }}{% for p in model.positions %}<label style="display:block">{{ 'Du gibst' if p.from_user_id==model.actor else 'Du erhältst' }}: {{ p.album_name }} · {{ p.sticker_code }} <input style="width:5em" type="number" name="quantity_{{ p.id }}" min="0" max="{{ p.quantity }}" value="{{ p.quantity }}" required></label>{% endfor %}<button>Reduzierten Deal vorschlagen</button></form>
+{% endif %}
+</section>
+<a href="/tauschen/laufend">Laufende Tausche</a>

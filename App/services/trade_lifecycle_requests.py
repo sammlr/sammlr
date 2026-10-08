@@ -35,7 +35,7 @@ class LifecycleRequests:
         require_trade_operation(self.db, trade_id, 'request')
         row = self.db.execute('''SELECT q.*,CASE WHEN q.sender_user_id=t.requester_user_id THEN t.partner_user_id ELSE t.requester_user_id END AS partner_user_id,c.accepted_revision_id,c.origin
             FROM lifecycle_requests q JOIN trades t ON t.id=q.trade_id
-            JOIN lifecycle_contracts c ON c.trade_id=q.trade_id WHERE q.trade_id=? AND q.revision_id=c.current_revision_id''', (trade_id,)).fetchone()
+            JOIN lifecycle_contracts c ON c.trade_id=q.trade_id WHERE q.trade_id=? AND (q.revision_id=c.current_revision_id OR (q.status='accepted' AND c.state='accepted'))''', (trade_id,)).fetchone()
         if row is None:
             raise ValueError('Current request required')
         return row
@@ -139,9 +139,9 @@ class LifecycleRequests:
                 if actor not in (row['sender_user_id'],row['partner_user_id']):
                     raise ValueError('Request is private to its participants')
             self._expire(instant(self.clock()))
-            rows = self.db.execute('''SELECT q.*,CASE WHEN q.sender_user_id=t.requester_user_id THEN t.partner_user_id ELSE t.requester_user_id END AS partner_user_id,s.username AS sender,p.username AS recipient,r.kind
+            rows = self.db.execute('''SELECT q.*,CASE WHEN q.sender_user_id=t.requester_user_id THEN t.partner_user_id ELSE t.requester_user_id END AS partner_user_id,s.username AS sender,p.username AS recipient,r.kind,c.accepted_revision_id AS binding_revision
                 FROM lifecycle_requests q JOIN trades t ON t.id=q.trade_id
-                JOIN lifecycle_contracts c ON c.trade_id=q.trade_id AND c.current_revision_id=q.revision_id
+                JOIN lifecycle_contracts c ON c.trade_id=q.trade_id AND (c.current_revision_id=q.revision_id OR (q.status='accepted' AND c.state='accepted'))
                 JOIN lifecycle_revisions r ON r.id=q.revision_id
                 JOIN users s ON s.id=q.sender_user_id JOIN users p ON p.id=CASE WHEN q.sender_user_id=t.requester_user_id THEN t.partner_user_id ELSE t.requester_user_id END
                 WHERE (t.requester_user_id=? OR t.partner_user_id=?) AND (? IS NULL OR q.trade_id=?)
@@ -151,6 +151,6 @@ class LifecycleRequests:
                 item = dict(row)
                 item['positions'] = [dict(p) for p in self.db.execute('''SELECT p.*,a.name AS album
                     FROM lifecycle_revision_positions p JOIN albums a ON a.id=p.album_id
-                    WHERE revision_id=? ORDER BY from_user_id,album_id,sticker_code''',(row['revision_id'],))]
+                    WHERE revision_id=? ORDER BY from_user_id,album_id,sticker_code''',(row['binding_revision'] if row['status']=='accepted' else row['revision_id'],))]
                 result.append(item)
             return result

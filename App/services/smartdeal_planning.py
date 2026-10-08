@@ -110,9 +110,11 @@ class SmartDealPlanningService:
 
     def _build(self, user_id, now):
         db = self._connection
-        owner = db.execute("SELECT account_state FROM users WHERE id=?", (user_id,)).fetchone()
+        owner = db.execute("SELECT account_state,EXISTS(SELECT 1 FROM sqlite_master WHERE name='physical_missing_holds') FROM users WHERE id=?", (user_id,)).fetchone()
         if owner is None or owner[0] != "active":
             raise ValueError("Planning requires an active existing user")
+        from services.physical_missing import extras
+        self._missing_quantities = extras(db, enabled=bool(owner[1]))
         memberships = db.execute(
             "SELECT ua.id,ua.album_id FROM user_albums ua "
             "JOIN albums a ON a.id=ua.album_id WHERE ua.user_id=? ORDER BY ua.album_id",
@@ -141,6 +143,9 @@ class SmartDealPlanningService:
                 "GROUP BY album_id,sticker_code", (user_id,)
             )
         })
+        for (owner,album,code),quantity in self._missing_quantities.items():
+            if owner == user_id:
+                reserved[(album,code)] += quantity
         missing, needs, supply, incoming = self._pieces(albums, quantities, bindings, reserved)
         return PlanningState(user_id, missing, needs, supply, incoming,
                              partners, albums, tuple(b for b in bindings if b.album_id in album_ids))
@@ -292,6 +297,9 @@ class SmartDealPlanningService:
                 "GROUP BY user_id,album_id,sticker_code", ids
             ):
                 reserved[row['user_id']][(row['album_id'],row['sticker_code'])] = row['quantity']
+            for (owner,album,code),quantity in self._missing_quantities.items():
+                if owner in ids:
+                    reserved[owner][(album,code)] += quantity
             binding_rows = defaultdict(list)
             allowed_ids = set(ids)
             for row in self._binding_rows(ids):

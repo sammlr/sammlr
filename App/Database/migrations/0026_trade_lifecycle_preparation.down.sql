@@ -1,0 +1,18 @@
+CREATE TEMP TABLE lifecycle_preparation_down_guard (n INTEGER CHECK(n=0));
+INSERT INTO lifecycle_preparation_down_guard SELECT COUNT(*) FROM lifecycle_preparation_cycles;
+INSERT INTO lifecycle_preparation_down_guard SELECT COUNT(*) FROM physical_missing_holds;
+INSERT INTO lifecycle_preparation_down_guard SELECT COUNT(*) FROM lifecycle_reductions;
+DROP TABLE lifecycle_preparation_down_guard;
+DROP TRIGGER physical_missing_reservation_insert;
+DROP TRIGGER physical_missing_reservation_rebind;
+DROP TRIGGER lifecycle_photo_frozen;
+DROP TRIGGER lifecycle_preparation_owner;
+DROP TRIGGER physical_missing_release_overlap;
+DROP TRIGGER physical_missing_delete;
+DROP TRIGGER physical_missing_identity;
+DROP TRIGGER physical_missing_owner;
+DROP TABLE lifecycle_photo_problems;
+DROP TABLE lifecycle_control_photos;
+DROP TABLE lifecycle_preparation_cycles;
+DROP TABLE lifecycle_reductions;
+DROP TABLE physical_missing_holds;

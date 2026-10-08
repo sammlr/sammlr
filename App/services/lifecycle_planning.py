@@ -30,11 +30,12 @@ def project(db, inputs, exclude_revision=None):
             expired_holds[key] = expired_holds.get(key,0)+quantity
     credits = {}
     if exclude_revision is not None:
-        for user,album,code,quantity in db.execute("""SELECT h.user_id,h.album_id,h.sticker_code,h.quantity
+        for user,album,code,quantity,reservation in db.execute("""SELECT h.user_id,h.album_id,h.sticker_code,h.quantity,h.id
             FROM lifecycle_supply_bindings b JOIN trade_reservations h ON h.id=b.reservation_id
             JOIN lifecycle_revision_positions p ON p.id=b.revision_position_id
             WHERE p.revision_id=? AND b.is_current=1 AND h.state='active'""",(exclude_revision,)):
-            credits[(user,album,code)] = quantity
+            from services.physical_missing import overlap
+            credits[(user,album,code)] = quantity-overlap(db,reservation)
     contexts = {a.album_id:a for a in inputs.subject.album_context}
     memberships = {(r[0],r[1]):r[2] for r in db.execute('SELECT user_id,album_id,id FROM user_albums')}
     def overlay(state):

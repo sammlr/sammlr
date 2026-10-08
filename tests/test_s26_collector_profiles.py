@@ -369,7 +369,7 @@ class CollectorProfilesTestCase(unittest.TestCase):
 
     def test_s26_adds_no_migration(self):
         # S26 remains on V0006; later S27/S28 added V0007/V0008.
-        self.assertEqual(25, load_migrations()[-1].version)
+        self.assertEqual(26, load_migrations()[-1].version)
         with self.connection() as connection:
             self.assertEqual(6, current_version(connection))
 

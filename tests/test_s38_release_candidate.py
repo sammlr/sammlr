@@ -18,9 +18,9 @@ import unittest
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
 REFERENCE_FIXTURE = PROJECT_ROOT / "App" / "Database" / "sammlr_reference_s00.db"
 LOCAL_DATABASE = PROJECT_ROOT / "App" / "Database" / "sammlr.db"
-# Bootstrap remains V20; the additive lifecycle acceptance migration is V25.
+# Bootstrap remains V20; the additive lifecycle preparation migration is V26.
 LATEST_VERSION = 20
-LATEST_MIGRATION_VERSION = 25
+LATEST_MIGRATION_VERSION = 26
 
 
 sys.path.insert(0, str(PROJECT_ROOT))
