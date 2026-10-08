@@ -1,7 +1,7 @@
 {% macro address(a) %}<address>{{ a.first_name }} {{ a.last_name }}<br>{{ a.street }} {{ a.house_number }}<br>{{ a.postal_code }} {{ a.city }}<br>{{ a.country }}</address>{% endmacro %}
 <section class="card" data-address-state="{{ model.state }}">
 {% if model.state=='ready_to_ship' %}
-<h2>Versandbereit</h2><h3>Versandadresse der Gegenpartei</h3>{{ address(model.other) }}
+<h2>Versandadressen freigegeben</h2>{% if model.shipping_enabled %}<a href="/tauschen/versand/{{ model.trade }}">Versandstatus und Versandbestätigung</a>{% else %}<p>Versandbereit</p>{% endif %}<h3>Versandadresse der Gegenpartei</h3>{{ address(model.other) }}
 <h3>Deine bestätigte Adresse für diesen Tausch</h3>{{ address(model.own) }}
 <p>Diese Adressen sind für den Tausch festgelegt. Änderungen im persönlichen Adressbuch ändern diesen Tausch nicht.</p>
 {% else %}

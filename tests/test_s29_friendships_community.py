@@ -146,7 +146,7 @@ class FriendshipsCommunityTestCase(unittest.TestCase):
             with self.assertRaises(sqlite3.IntegrityError):
                 rollback(connection, 8)
             self.assertEqual(9, current_version(connection))
-        self.assertEqual(27, load_migrations()[-1].version)
+        self.assertEqual(28, load_migrations()[-1].version)
 
     def test_request_notifies_recipient_but_accept_does_not_notify(self):
         with self.connection() as connection:

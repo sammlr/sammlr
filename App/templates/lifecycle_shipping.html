@@ -1,0 +1,18 @@
+{% set own=model.directions|selectattr('sender','equalto',model.actor)|first %}
+<section class="card" data-shipping-state="{{ model.shipping_state }}" data-own-state="{{ own.state }}">
+{% if confirm %}
+<h2>Hast du den Brief wirklich abgeschickt?</h2><p>Nach der Bestätigung werden die enthaltenen Sticker aus deiner Sammlung ausgebucht.</p>
+<a href="/tauschen/versand/{{ model.trade }}">Noch nicht</a>
+<form method="post" action="/tauschen/versand/{{ model.trade }}/confirm"><input type="hidden" name="_csrf_token" value="{{ csrf }}"><input type="hidden" name="token" value="{{ token }}"><button>Ja, versendet</button></form>
+{% else %}
+{% if own.state=='sent' %}<h2>Versendet</h2><p>Erfasst am <time datetime="{{ own.sent_at }}">{{ own.sent_at }}</time>.</p>{% else %}
+<h2>{{ 'Versand überfällig' if own.state=='overdue' else 'Versandbereit' }}</h2>
+<p>Versand bis {{ model.due_label }} (72 Stunden ab gemeinsamer Adressfreigabe).</p>
+{% if own.state!='overdue' %}<p>Noch {{ model.remaining_seconds // 3600 }} Stunden und {{ (model.remaining_seconds % 3600) // 60 }} Minuten.</p>{% endif %}
+<form method="post" action="/tauschen/versand/{{ model.trade }}/review"><input type="hidden" name="_csrf_token" value="{{ csrf }}"><input type="hidden" name="token" value="{{ token }}"><button>Versendet</button></form>
+{% endif %}
+{% if model.shipping_state=='in_transit' %}<p>Beide Sendungen sind unterwegs. Der Tausch wartet auf Empfang.</p>{% else %}{% for d in model.directions if d.sender!=model.actor %}<p>{{ 'Dein Tauschpartner hat versendet.' if d.state=='sent' else 'Dein Tauschpartner bereitet den Versand vor.' }}</p>{% endfor %}{% endif %}
+<h3>Versandadresse der Gegenpartei</h3><address>{{ model.other.first_name }} {{ model.other.last_name }}<br>{{ model.other.street }} {{ model.other.house_number }}<br>{{ model.other.postal_code }} {{ model.other.city }}<br>{{ model.other.country }}</address>
+<h3>Deine Sendung</h3><ul>{% for p in model.positions %}<li>{{ p.album_id }} · {{ p.sticker_code }} × {{ p.quantity }}</li>{% endfor %}</ul>
+{% endif %}
+</section><a href="/tauschen/laufend">Laufende Tausche</a>

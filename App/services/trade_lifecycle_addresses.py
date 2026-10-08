@@ -92,6 +92,7 @@ class LifecycleAddresses(LifecyclePreparation):
             result=dict(trade=trade,revision=row['accepted_revision_id'],basis=basis,generation=choice['generation'] if choice else 0,
                 own=self._safe(choice) if current else None,other=None,
                 state='ready_to_ship' if released else 'address_waiting' if current else 'address_selection',
+                shipping_enabled=bool(self.db.execute("SELECT 1 FROM sqlite_master WHERE name='lifecycle_shipping'").fetchone()),
                 addresses=self.book(actor),released_at=released['released_at'] if released else None)
             if released:
                 ids=(released['requester_snapshot_id'],released['partner_snapshot_id'])

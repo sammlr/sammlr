@@ -36,6 +36,8 @@
 {% if token %}<section class="card"><form method="post" action="/tauschen/anfragen"><input type="hidden" name="token" value="{{ token }}"><input type="hidden" name="_csrf_token" value="{{ csrf }}"><button type="submit">Tausch anfragen</button></form><p>72 Stunden offen. Deine abzugebenden Sticker und dein angefragter Bedarf werden bis zum Ende der Anfrage gebunden.</p></section>{% else %}<section class="card"><button type="button" disabled>Tausch anfragen – noch nicht verfügbar</button><p>Du kannst den Vorschlag ansehen. Es werden noch keine Sticker reserviert.</p></section>{% endif %}
 {% elif screen == 'address_book' %}
 {% include 'lifecycle_address_book.html' %}
+{% elif screen == 'shipping' %}
+{% include 'lifecycle_shipping.html' %}
 {% elif screen == 'addresses' %}
 {% include 'lifecycle_addresses.html' %}
 {% elif screen == 'preparation' %}

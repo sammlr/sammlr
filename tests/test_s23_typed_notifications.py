@@ -438,7 +438,7 @@ class TypedNotificationsTestCase(unittest.TestCase):
             "trade_rating_available", "friend_request",
             "trade_request_unfulfillable", "trade_problem_action_required",
             "trade_problem_terminal",
-            "lifecycle_addresses_released",
+            "lifecycle_addresses_released", "lifecycle_direction_sent",
         }, set(NOTIFICATION_TYPES))
         with self.connection() as connection:
             for rejected_type in (

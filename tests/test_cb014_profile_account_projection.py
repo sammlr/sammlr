@@ -420,7 +420,7 @@ class CB014ProfileAccountProjectionTestCase(unittest.TestCase):
                 "(SELECT COUNT(*) FROM feed_events)"
             ).fetchone())
         self.assertEqual(before, after)
-        self.assertEqual(27, max(item.version for item in load_migrations()))
+        self.assertEqual(28, max(item.version for item in load_migrations()))
 
 
 if __name__ == "__main__":
