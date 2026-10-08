@@ -249,7 +249,7 @@ class UiFoundationTestCase(unittest.TestCase):
         self.assertEqual(before, after)
 
     def test_s31_adds_no_migration_and_reuses_existing_icons(self):
-        self.assertEqual(26, load_migrations()[-1].version)
+        self.assertEqual(27, load_migrations()[-1].version)
         nav_source = self.source.split("def bottom_nav", 1)[1].split("@app.route", 1)[0]
         self.assertIn('/static/Stickeralbum.svg', nav_source)
         self.assertIn('bottom-nav-icon-sammlr', nav_source)

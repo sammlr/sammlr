@@ -1,0 +1,13 @@
+{% set labels={'first_name':'Vorname','last_name':'Nachname','street':'Straße','house_number':'Hausnummer','postal_code':'Postleitzahl','city':'Ort','country':'Land (zweistelliger Code, z. B. DE, GB oder JP)'} %}
+{% macro inputs(entry) %}
+<label style="display:block">Privater Anzeigename (optional)<input name="label" maxlength="80" value="{{ entry.label if entry else '' }}"></label>
+{% for field in fields %}<label style="display:block">{{ labels[field] }}<input name="{{ field }}" maxlength="{{ 2 if field=='country' else 160 }}" value="{{ entry[field] if entry else '' }}" required {% if field=='country' %}pattern="[A-Za-z]{2}"{% endif %}></label>{% endfor %}
+{% endmacro %}
+<section class="card"><h2>Neue Versandadresse</h2><p>Dein Adressbuch ist privat. Speichern allein gibt keine Adresse an einen Tauschpartner frei.</p>
+<form method="post" action="/tauschen/adressbuch/create"><input type="hidden" name="_csrf_token" value="{{ csrf }}"><input type="hidden" name="token" value="{{ command('create') }}">{{ inputs(none) }}<button>Adresse speichern</button></form></section>
+{% for entry in entries %}<section class="card" data-address-id="{{ entry.id }}"><h2>{{ entry.label or 'Versandadresse' }}{% if entry.is_default %} · Bevorzugt{% endif %}</h2>
+<form method="post" action="/tauschen/adressbuch/edit"><input type="hidden" name="_csrf_token" value="{{ csrf }}"><input type="hidden" name="token" value="{{ command('edit',entry) }}">{{ inputs(entry) }}<button>Änderungen speichern</button></form>
+{% for op,label in [('default','Als bevorzugte Adresse setzen'),('delete','Aus Adressbuch löschen')] %}<form method="post" action="/tauschen/adressbuch/{{ op }}"><input type="hidden" name="_csrf_token" value="{{ csrf }}"><input type="hidden" name="token" value="{{ command(op,entry) }}"><button>{{ label }}</button></form>{% endfor %}
+<p>Bereits bestätigte Trade-Adressen bleiben von Änderungen oder Löschen unberührt.</p></section>{% endfor %}
+{% if back %}<a href="/tauschen/adressen/{{ back }}">Zur Adressauswahl dieses Tauschs</a>{% endif %}
+<a href="/tauschen/laufend">Zurück zu deinen Tauschen</a>

@@ -712,7 +712,7 @@ class Phase8RealisticSimulationTestCase(unittest.TestCase):
                     (self.operational_notification_floor,),
                 ).fetchall()
             }
-            self.assertEqual(EXPECTED_NOTIFICATION_TYPES, NOTIFICATION_TYPES)
+            self.assertEqual(EXPECTED_NOTIFICATION_TYPES | {"lifecycle_addresses_released"}, NOTIFICATION_TYPES)
             self.assertEqual(EXPECTED_NOTIFICATION_TYPES, produced_types)
             self.assertEqual(0, connection.execute(
                 "SELECT COUNT(*) FROM feed_events WHERE event_type NOT IN ('album_started','album_completed','trophy_unlocked','sammlr_news')"

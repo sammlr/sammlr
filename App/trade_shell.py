@@ -162,4 +162,6 @@ def register_trade_shell(app, *, database_path, global_head, header, navigation,
     register_acceptance(shell,database_path,actor,page,csrf_token)
     from lifecycle_preparation_routes import register_preparation
     register_preparation(shell,database_path,actor,page,csrf_token)
+    from lifecycle_address_routes import register_addresses
+    register_addresses(shell,database_path,actor,page,csrf_token)
     app.register_blueprint(shell)

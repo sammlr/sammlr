@@ -1,0 +1,17 @@
+{% macro address(a) %}<address>{{ a.first_name }} {{ a.last_name }}<br>{{ a.street }} {{ a.house_number }}<br>{{ a.postal_code }} {{ a.city }}<br>{{ a.country }}</address>{% endmacro %}
+<section class="card" data-address-state="{{ model.state }}">
+{% if model.state=='ready_to_ship' %}
+<h2>Versandbereit</h2><h3>Versandadresse der Gegenpartei</h3>{{ address(model.other) }}
+<h3>Deine bestätigte Adresse für diesen Tausch</h3>{{ address(model.own) }}
+<p>Diese Adressen sind für den Tausch festgelegt. Änderungen im persönlichen Adressbuch ändern diesen Tausch nicht.</p>
+{% else %}
+<h2>Wohin soll dein Tauschpartner deine Sticker schicken?</h2>
+{% if model.own %}<p role="status">Deine Versandadresse ist bestätigt.</p>{{ address(model.own) }}<p>Wir zeigen euch die Adressen, sobald ihr beide eine Adresse bestätigt habt.</p>{% endif %}
+<p>Sobald ihr beide eine Versandadresse bestätigt habt, wird eure jeweilige Adresse der anderen Person für diesen Tausch angezeigt.</p>
+{% for entry in model.addresses %}
+<section><h3>{{ entry.label or 'Versandadresse' }}{% if entry.is_default %} · Bevorzugt{% endif %}</h3>{{ address(entry) }}
+<form method="post" action="/tauschen/adressen/{{ model.trade }}/confirm"><input type="hidden" name="_csrf_token" value="{{ csrf }}"><input type="hidden" name="token" value="{{ confirm(entry) }}"><button>Diese Adresse verbindlich bestätigen</button></form></section>
+{% else %}<p>Du hast noch keine Versandadresse gespeichert.</p>{% endfor %}
+<p><a href="/tauschen/adressbuch?trade={{ model.trade }}">Adresse hinzufügen oder bearbeiten</a> · <a href="/tauschen/adressen/{{ model.trade }}">Auswahl aktualisieren</a></p>
+{% endif %}
+</section><a href="/tauschen/laufend">Laufende Tausche</a>

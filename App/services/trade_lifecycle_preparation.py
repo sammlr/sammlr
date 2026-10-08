@@ -33,6 +33,9 @@ class LifecyclePreparation(LifecycleAcceptance):
         return row
 
     def _unmoved(self,trade):
+        from services.trade_lifecycle_addresses import ready as address_ready
+        if address_ready(self.db) and self.db.execute('SELECT 1 FROM lifecycle_address_releases WHERE trade_id=?',(trade,)).fetchone():
+            raise ValueError('Released address basis requires a separate post-release correction path')
         if self.db.execute('''SELECT 1 FROM lifecycle_directions WHERE trade_id=?
             AND (shipping_state<>'not_sent' OR receipt_state<>'expected')''',(trade,)).fetchone() or self.db.execute(
                 'SELECT 1 FROM lifecycle_movements WHERE trade_id=?',(trade,)).fetchone():
@@ -61,6 +64,8 @@ class LifecyclePreparation(LifecycleAcceptance):
                     self._event_data(row,'PackingOverdue',None,now,cycle=cycle['id'],owner=cycle['owner_id'],event_key=eventkey)
 
     def _state(self,row,cycles):
+        from services.trade_lifecycle_addresses import ready as address_ready
+        if address_ready(self.db) and self.db.execute('SELECT 1 FROM lifecycle_address_releases WHERE trade_id=?',(row['trade_id'],)).fetchone():return 'ready_to_ship'
         if self._pending(row['trade_id']):return 'reduction_pending'
         if self.db.execute('''SELECT 1 FROM physical_missing_holds m JOIN trade_reservations h ON h.id=m.reservation_id
             WHERE h.trade_id=? AND m.resolved_at IS NULL AND m.overlap_quantity>0''',(row['trade_id'],)).fetchone():return 'physical_missing'
@@ -77,6 +82,7 @@ class LifecyclePreparation(LifecycleAcceptance):
             pending=self._pending(trade)
             result=dict(trade=trade,revision=row['accepted_revision_id'],actor=actor,
                 deadline=(instant(row['accepted_at'])+timedelta(hours=72)).isoformat(),state=self._state(row,cycles),
+                address_enabled=bool(self.db.execute("SELECT 1 FROM sqlite_master WHERE name='lifecycle_address_releases'").fetchone()),
                 basis=[c['id'] for c in cycles],positions=[dict(p) for p in self._positions(row['accepted_revision_id'])],cycles=[],
                 pending=dict(pending) if pending else None)
             result['deadline_label']=instant(result['deadline']).astimezone(ZoneInfo('Europe/Berlin')).strftime('%d.%m.%Y, %H:%M %Z')
@@ -86,7 +92,7 @@ class LifecyclePreparation(LifecycleAcceptance):
                 result['proposal']=[dict(p) for p in self._positions(pending['revision_id'])]
             for c in cycles:
                 item=dict(c)
-                item['photos']=[dict(p) for p in self.db.execute('SELECT id,mime FROM lifecycle_control_photos WHERE cycle_id=? AND removed_at IS NULL',(c['id'],))] if c['owner_id']==actor or c['revealed_at'] else []
+                item['photos']=[dict(p) for p in self.db.execute('SELECT id,mime FROM lifecycle_control_photos WHERE cycle_id=? AND removed_at IS NULL',(c['id'],))] if result['state']!='ready_to_ship' and (c['owner_id']==actor or c['revealed_at']) else []
                 item['problems']=[dict(p) for p in self.db.execute('SELECT reason,position_id,quantity FROM lifecycle_photo_problems WHERE cycle_id=? AND resolved_at IS NULL',(c['id'],))]
                 item['overdue']=now>=instant(result['deadline']) and (not c['completed_at'] or instant(c['completed_at'])>instant(result['deadline']))
                 result['cycles'].append(item)
@@ -287,6 +293,9 @@ class LifecyclePreparation(LifecycleAcceptance):
 
     def photo(self,trade,actor,photo):
         self._binding(trade,actor)
+        from services.trade_lifecycle_addresses import ready as address_ready
+        if address_ready(self.db) and self.db.execute('SELECT 1 FROM lifecycle_address_releases WHERE trade_id=?',(trade,)).fetchone():
+            raise ValueError('Control package no longer in normal gallery after address release')
         p=self.db.execute('''SELECT p.* ,c.owner_id,c.revealed_at FROM lifecycle_control_photos p
             JOIN lifecycle_preparation_cycles c ON c.id=p.cycle_id
             JOIN lifecycle_contracts t ON t.trade_id=c.trade_id

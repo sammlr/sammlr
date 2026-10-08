@@ -2,10 +2,13 @@
 <form method="post" action="/tauschen/vorbereitung/{{ model.trade }}/{{ action }}" {% if action=='upload' %}enctype="multipart/form-data"{% endif %}>
 <input type="hidden" name="_csrf_token" value="{{ csrf }}"><input type="hidden" name="token" value="{{ token(action) }}">
 {%- endmacro %}
+{% if model.state=='ready_to_ship' %}
+<section class="card"><h2>Versandbereit</h2><p>Die Versandadressen sind für diesen Tausch freigegeben.</p><a href="/tauschen/adressen/{{ model.trade }}">Versandadressen anzeigen</a></section>
+{% else %}
 <section class="card" data-preparation-state="{{ model.state }}">
 <h2>Tausch angenommen</h2>
 <p>Eigene Vorbereitung bis <time datetime="{{ model.deadline }}">{{ model.deadline_label }}</time> (72 Stunden ab Annahme). Die anschließende gegenseitige Fotoprüfung hat keine automatische Abbruchfrist.</p>
-{% if model.state=='ready_for_address_release' %}<p role="status">Bereit für Adressfreigabe. Es wird noch keine Adresse angezeigt.</p>{% endif %}
+{% if model.state=='ready_for_address_release' %}<p role="status">Bereit für Adressfreigabe. Es wird noch keine Adresse angezeigt.</p>{% if model.address_enabled %}<a href="/tauschen/adressen/{{ model.trade }}">Versandadresse auswählen</a>{% endif %}{% endif %}
 {% if model.state=='reduction_rejected' %}<p role="alert">Die Reduktion wurde abgelehnt. Der bisherige Vertrag bleibt offen und unverändert. Klärt eine neue zulässige Reduktion; es erfolgt keine automatische Beendigung.</p>{% endif %}
 <h3>Diese Sticker musst du verschicken.</h3>
 <ul>{% for p in model.positions if p.from_user_id==model.actor %}<li>{{ p.album_name }} · {{ p.sticker_code }} × {{ p.quantity }}</li>{% endfor %}</ul>
@@ -47,4 +50,5 @@
 {{ form_start('reduction_propose') }}{% for p in model.positions %}<label style="display:block">{{ 'Du gibst' if p.from_user_id==model.actor else 'Du erhältst' }}: {{ p.album_name }} · {{ p.sticker_code }} <input style="width:5em" type="number" name="quantity_{{ p.id }}" min="0" max="{{ p.quantity }}" value="{{ p.quantity }}" required></label>{% endfor %}<button>Reduzierten Deal vorschlagen</button></form>
 {% endif %}
 </section>
+{% endif %}
 <a href="/tauschen/laufend">Laufende Tausche</a>
