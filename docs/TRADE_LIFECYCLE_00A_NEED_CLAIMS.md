@@ -1,5 +1,8 @@
 # LIFECYCLE-00A — Need-Claims und Mischbetrieb
 
+> Historischer Entscheidungsstand. Fortschreibung vom 11.10.2026: Für LIFECYCLE-07 ersetzt der aktuelle [Fachvertrag §11](TRADE_LIFECYCLE_V1_CONTRACT.md#11-tatsächlicher-empfang-ohne-versandklick) die frühere A/D02-Regel zu nur belegten Teilabgängen und frühem Empfang. Verbindliche Buchung erst nach beidseitiger Vorbereitung, Fotoprüfung und gegenseitiger Adressfreigabe; ohne manual_sent vollständige bindende Give-Menge abbuchen, ausschließlich akzeptierte Receive-Mengen gutschreiben. Die folgenden historischen Aussagen bleiben zur Nachvollziehbarkeit erhalten.
+
+
 Stand 2026-10-06; geprüfter Source-HEAD `e20a8c4e84f2adb83b2f4f3f870846267713a4c1`. Reiner Source-/Schemaaudit, keine Abfrage privater DB-Inhalte. Tabellenbefunde stammen aus versionierten SQL-Dateien, nicht aus einer behaupteten Migration der lokalen DB. „Neuer V1“ bedeutet Lifecycle V1, ausdrücklich nicht den vorhandenen `smartdeal_v1`.
 
 ## 1. Was heute tatsächlich existiert

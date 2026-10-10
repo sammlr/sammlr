@@ -1,0 +1,33 @@
+{% macro hidden(token) %}<input type="hidden" name="_csrf_token" value="{{ csrf }}"><input type="hidden" name="token" value="{{ token }}">{% endmacro %}
+{% set labels={'correct':'Korrekt angekommen','missing':'Fehlt','wrong':'Falscher Sticker erhalten','damaged_accepted':'Beschädigt — trotzdem akzeptieren','damaged_rejected':'Beschädigt — nicht akzeptieren'} %}
+{% if step=='inspect' %}
+<section class="card"><h2>Problem mit Lieferung</h2><p>Ordne jede erwartete Einheit genau einer Kategorie zu. Beschädigte Sticker werden nur gutgeschrieben, wenn du sie ausdrücklich akzeptierst.</p>
+<form method="post" action="/tauschen/empfang/{{ model.trade }}/review">{{ hidden(token) }}<input type="hidden" name="mode" value="structured">
+{% for p in positions %}<fieldset style="min-width:0; margin-bottom:1rem"><legend>{{ p.album_id }} · {{ p.sticker_code }} — Erwartet: {{ p.quantity }}</legend>
+{% for k,label in labels.items() %}<label style="display:block;margin:0.5rem 0">{{ label }} <input style="width:5rem;max-width:100%" type="number" min="0" max="{{ p.quantity }}" step="1" required name="{{ k }}_{{ p.id }}" value="0"></label>{% endfor %}
+<label>Tatsächlich erhaltener falscher Code (optional, gleiches Album)<input style="display:block;width:100%;max-width:18rem;box-sizing:border-box" name="wrong_code_{{ p.id }}" value="" maxlength="100"></label>
+</fieldset>{% endfor %}<button>Zusammenfassung prüfen</button></form></section>
+{% elif step=='confirm' %}
+<section class="card"><h2>Empfang verbindlich bestätigen</h2><p>Diese Buchung kann nicht zurückgenommen werden. Gutgeschrieben werden nur die folgenden akzeptierten Mengen.</p>
+{% for p in positions %}{% set i=inspection[loop.index0] %}<section><h3>{{ p.album_id }} · {{ p.sticker_code }}</h3><p>Erwartet: {{ p.quantity }} · Gutschrift: {{ i.correct+i.damaged_accepted }} · Keine Gutschrift: {{ p.quantity-i.correct-i.damaged_accepted }}</p>
+<ul>{% for k,label in labels.items() %}{% if i[k] %}<li>{{ label }}: {{ i[k] }}</li>{% endif %}{% endfor %}{% if i.wrong_code %}<li>Gemeldeter falscher Code: {{ i.wrong_code }} (keine Gutschrift)</li>{% endif %}</ul></section>{% endfor %}
+<p>Fehlende, falsche und beschädigte Sticker werden als Lieferproblem dokumentiert. Die akzeptierten Mengen werden sofort gebucht.</p>
+<form method="post" action="/tauschen/empfang/{{ model.trade }}/confirm">{{ hidden(token) }}<button>Empfang verbindlich buchen</button></form></section>
+{% else %}
+{% if not model.receipt_enabled %}<p>Empfang ist nach beidseitiger Vorbereitung, Fotoprüfung und gegenseitiger Adressfreigabe möglich.</p><a href="/tauschen/vorbereitung/{{ model.trade }}">Vorbereitung öffnen</a>{% endif %}
+{% for d in model.directions %}<section class="card" data-receipt-state="{{ d.receipt_state }}" data-sender="{{ d.from_user_id }}">
+<h2>{{ 'Dein Empfang' if d.to_user_id==model.actor else 'Empfang deiner Sendung' }}</h2>
+{% if d.receipt %}<p>{{ 'Vollständig empfangen' if d.receipt_state=='received_complete' else 'Empfangen mit offenem Lieferproblem' }}</p><p>Verbindlich gebucht am {{ d.receipt.received_at }}.</p>
+{% for p in d.positions %}{% set i=d.inspection[loop.index0] %}<h3>{{ p.album_id }} · {{ p.sticker_code }}</h3><p>Erwartet: {{ p.quantity }} · Gutgeschrieben: {{ i.correct+i.damaged_accepted }}</p><ul>{% for k,label in labels.items() %}{% if i[k] %}<li>{{ label }}: {{ i[k] }}</li>{% endif %}{% endfor %}{% if i.wrong_code %}<li>Falscher Code: {{ i.wrong_code }} — nicht gebucht</li>{% endif %}</ul>{% endfor %}
+{% elif d.receipt_state=='non_arrival_reported' %}<p>Brief als nicht angekommen gemeldet.</p>
+{% elif d.sent %}<p>Sendung unterwegs</p>{% else %}<p>Noch keine Versandbestätigung. Einen tatsächlich erhaltenen Brief kannst du bereits prüfen.</p>{% endif %}
+{% for p in d.problems %}<section><h3>{{ 'Nichtankunft' if p.kind=='non_arrival' else 'Lieferproblem' }}{{ ' — später angekommen' if p.superseded else ' — offen' }}</h3><p>Gemeldet am {{ p.reported_at }}.</p>
+{% if p.response %}<p>Absenderreaktion: {{ 'Problem anerkannt' if p.response=='acknowledge' else 'Ich habe vollständig und korrekt verschickt' }}.</p>
+{% elif d.from_user_id==model.actor and not p.superseded %}<p>Du kannst einmal reagieren. Deine Reaktion entscheidet den Problemfall nicht.</p><form method="post" action="/tauschen/empfang/{{ model.trade }}/response">{{ hidden(p.token) }}<button name="response" value="acknowledge">Problem anerkennen</button><button name="response" value="sent_correctly">Ich habe vollständig und korrekt verschickt</button></form>{% endif %}</section>{% endfor %}
+{% if d.to_user_id==model.actor and not d.receipt and model.receipt_enabled %}
+{% if d.receipt_state=='non_arrival_reported' %}<details><summary>Doch angekommen</summary><p>Prüfe jetzt den tatsächlichen Inhalt.</p>{% endif %}
+<form method="post" action="/tauschen/empfang/{{ model.trade }}/review">{{ hidden(d.token) }}<button name="mode" value="complete">Alles angekommen</button><button name="mode" value="problem">Problem mit Lieferung</button></form>
+{% if d.receipt_state=='non_arrival_reported' %}</details>{% elif d.can_non_arrival %}<form method="post" action="/tauschen/empfang/{{ model.trade }}/non-arrival">{{ hidden(d.non_arrival_token) }}<button>Brief nicht angekommen</button></form>{% endif %}
+{% endif %}</section>{% endfor %}
+{% endif %}
+<a href="/tauschen/empfang/{{ model.trade }}">Zur Empfangsübersicht</a> · <a href="/tauschen/laufend">Laufende Tausche</a>

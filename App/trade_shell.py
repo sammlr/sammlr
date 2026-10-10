@@ -166,4 +166,6 @@ def register_trade_shell(app, *, database_path, global_head, header, navigation,
     register_addresses(shell,database_path,actor,page,csrf_token)
     from lifecycle_shipping_routes import register_shipping
     register_shipping(shell,database_path,actor,page,csrf_token)
+    from lifecycle_receipt_routes import register_receipts
+    register_receipts(shell,database_path,actor,page,csrf_token)
     app.register_blueprint(shell)

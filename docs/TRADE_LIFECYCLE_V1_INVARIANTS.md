@@ -15,7 +15,7 @@ Schlüssel `k = (album_id, canonical_sticker_code)`, immer im Kontext eines Nutz
 - `C(d,k)`: kumulativ gebuchter akzeptierter physischer Zugang beim Empfänger.
 - `M(d,k)`: belegte tatsächlich physisch bewegte Menge, einschließlich nicht akzeptierter Ware; bei fehlender Evidenz unbekannt statt erfundener Vollmenge.
 
-Bei normalem bestätigtem Versand gilt `D=E`; bei geprüftem korrektem Vollerhalt `C=E`. Bei 30 gesendet/29 akzeptiert gilt `D=30`, `C=29`, nicht D=29. Bei Empfang ohne Versandklick gilt der durch 00A entschiedene D02-Pfad: tatsächliche Abgangsmengen und akzeptierte Zugangsmengen atomar, offene Restdifferenz separat. Zugang und Abgang sind verschiedene Fakten; Warenverlust/Schaden darf `D>C` hinterlassen. Weltweite Bestandskonstanz durch automatische Ersatzgutschriften wäre falsch.
+Bei normalem bestätigtem Versand gilt `D=E`; bei geprüftem korrektem Vollerhalt `C=E`. Bei 30 gesendet/29 akzeptiert gilt `D=30`, `C=29`, nicht D=29. Nach der verbindlichen L07-Entscheidung vom 11.10.2026 gilt auch ohne Versandklick D=E; akzeptierte Zugangsmengen werden atomar gebucht, die offene Restdifferenz bleibt separat. Eintritt nur nach beidseitiger Vorbereitung, Fotoprüfung und aktueller gegenseitiger Adressfreigabe. Zugang und Abgang sind verschiedene Fakten; Warenverlust/Schaden darf `D>C` hinterlassen. Weltweite Bestandskonstanz durch automatische Ersatzgutschriften wäre falsch.
 
 Der aktuelle Reader projiziert binären Bedarf; das ist ein Ist-Befund, keine V1-Zielgrenze. 00B setzt mengenbasierte Claims: freier Bedarf = max(Gesamtbedarf − deckender Bestand − verbindliche Resteingänge − eigene aktive Pending-Claims, 0). Bedarf 2 minus Claim 1 lässt Bedarf 1.
 
@@ -67,7 +67,7 @@ Der aktuelle Reader projiziert binären Bedarf; das ist ein Ist-Befund, keine V1
 | Eigener Versand | eigene Holds in Abgang überführen | −Deltamenge | unverändert |
 | Tatsächlicher Eingang, Abgang schon gebucht | bereits verbrauchte Holds nicht wiederverwenden | unverändert | nur +akzeptiertes Delta |
 | Vollerhalt ohne vorherigen Abgang | gleiche Abgangsidentität genau einmal nutzen | −fehlender voller Abgang | +fehlender akzeptierter Zugang |
-| Teil-/Falsch-/Schadenseingang ohne Versandklick | D02 entschieden / Reconciliation; unbelegte Restmengen nicht freigeben | nur fachlich belegter und autorisierter Abgang, keine erfundene Vollmenge | nur tatsächlich akzeptierte Menge; bei fehlender sicherer atomarer Bilanz explizit ausstehend statt falscher Erfolg |
+| Teil-/Falsch-/Schadenseingang ohne Versandklick | Aktuelle beidseitige Vorbereitung, Fotoprüfung und Adressfreigabe; Restclaims nicht freigeben | vollständige bindende Give-Menge genau einmal (L07-Entscheidung 11.10.2026) | nur tatsächlich akzeptierte Menge; bei fehlender sicherer atomarer Bilanz explizit ausstehend statt falscher Erfolg |
 | Nichtankunft / Überziehung | keine stillen Releases | kein Restore | kein Zugang |
 | Tatsächliche spätere Restlieferung | gemäß bestehender Richtung/Problemauflösung | kein zweiter Abgang derselben bereits versendeten Ware | nur noch fehlendes echtes Delta |
 | Administrativer Abschluss | Restmengendisposition nach D09 | kein automatischer Restore | kein automatischer Vollzugang |
@@ -131,3 +131,7 @@ TRADE-LIFECYCLE-V1 ist fachlich geschlossen; keine Startblockade von L01. Späte
 - NQ6: Legacy und neuer Vertrag respektieren dieselbe physische Supply. Alte Need-Regeln werden nicht rückwirkend verschärft; keine neue Parallelbuchung oder negativer Bestand.
 
 Diese Fälle sind spätere Testanforderungen, keine in 00B ausgeführten Runtime-Tests.
+
+## Fortschreibung LIFECYCLE-07, 11.10.2026
+
+Die frühere D02-Formulierung zum belegten Teilabgang ist historisch durch [Vertrag §11](TRADE_LIFECYCLE_V1_CONTRACT.md#11-tatsächlicher-empfang-ohne-versandklick) ersetzt; kein alternativer Debitpfad. Die L04-/L06-Bewegungssperre bleibt unverändert. L08 muss bei endgültiger Problemauflösung unerfüllte Restclaims freigeben oder fachlich abschließen; L07 hält sie auditierbar offen.

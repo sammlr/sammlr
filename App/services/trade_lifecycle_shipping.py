@@ -43,8 +43,9 @@ class LifecycleShipping(LifecycleAddresses):
             directions=[]
             for sender in (row['requester_user_id'],row['partner_user_id']):
                 sent=self._sent(trade,sender)
+                receipt_state=self.db.execute('SELECT receipt_state FROM lifecycle_directions WHERE trade_id=? AND from_user_id=?',(trade,sender)).fetchone()[0]
                 directions.append(dict(sender=sender,state='sent' if sent else 'overdue' if now>=due else 'ready_to_ship',
-                    sent_at=sent['sent_at'] if sent else None,source=sent['source'] if sent else None))
+                    sent_at=sent['sent_at'] if sent else None,source=sent['source'] if sent else None,receipt_state=receipt_state))
             model.update(actor=actor,directions=directions,shipping_state='in_transit' if all(d['state']=='sent' for d in directions) else 'partially_sent' if any(d['state']=='sent' for d in directions) else 'ready_to_ship',
                 due_at=due.isoformat(),due_label=due.astimezone(ZoneInfo('Europe/Berlin')).strftime('%d.%m.%Y, %H:%M %Z'),
                 remaining_seconds=max(0,int((due-now).total_seconds())),
@@ -54,10 +55,10 @@ class LifecycleShipping(LifecycleAddresses):
     def finalize_direction_sent(self,trade,sender,revision,*,actor,source='SENDER_CONFIRMATION'):
         """Trusted domain primitive inside this service's IMMEDIATE unit of work.
 
-        RECEIPT_EVIDENCE is an internal future full-package evidence caller, never
-        a public HTTP option. sent_at records observation, not an invented past
-        dispatch. A future partial receipt must debit only evidenced positions
-        through the same movement ledger; no receipt is implemented here.
+        RECEIPT_EVIDENCE is the internal L07 receipt caller, never a public HTTP
+        option. The L07 contract requires the exact binding Give quantities even
+        for partial inspection; accepted credits are handled by that caller.
+        sent_at records observation, not an invented past dispatch.
         A savepoint rolls back this entire primitive even if its caller catches.
         """
         self.store._write(trade);self._shipping_schema()

@@ -5,6 +5,7 @@ import json
 
 
 NOTIFICATION_TYPES = frozenset({
+    "lifecycle_receipt_update",
     "lifecycle_addresses_released",
     "lifecycle_direction_sent",
     "trade_request_created",
@@ -191,6 +192,11 @@ class TypedNotificationService:
                 (target.target_id, actor_user_id, actor_user_id),
             ).fetchone()
             return f"/trades/{row['id']}" if row else None
+        if target.target_type == "trade" and notification.notification_type == "lifecycle_receipt_update":
+            row = self._connection.execute('''SELECT 1 FROM lifecycle_contracts c JOIN trades t ON t.id=c.trade_id
+                WHERE t.id=? AND c.state='accepted' AND ? IN(t.requester_user_id,t.partner_user_id)''',
+                (target.target_id,actor_user_id)).fetchone()
+            return f"/tauschen/empfang/{target.target_id}" if row else None
         if target.target_type == "trade" and notification.notification_type in ("lifecycle_addresses_released", "lifecycle_direction_sent"):
             from services.trade_lifecycle_addresses import ready
             if not ready(self._connection):

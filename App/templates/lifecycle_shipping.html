@@ -5,14 +5,14 @@
 <a href="/tauschen/versand/{{ model.trade }}">Noch nicht</a>
 <form method="post" action="/tauschen/versand/{{ model.trade }}/confirm"><input type="hidden" name="_csrf_token" value="{{ csrf }}"><input type="hidden" name="token" value="{{ token }}"><button>Ja, versendet</button></form>
 {% else %}
-{% if own.state=='sent' %}<h2>Versendet</h2><p>Erfasst am <time datetime="{{ own.sent_at }}">{{ own.sent_at }}</time>.</p>{% else %}
+{% if own.state=='sent' %}<h2>Versendet</h2><p>{{ 'Durch Empfang nachgewiesen; tatsächlicher Versandzeitpunkt unbekannt. Systemisch erfasst am' if own.source=='RECEIPT_EVIDENCE' else 'Versand bestätigt am' }} <time datetime="{{ own.sent_at }}">{{ own.sent_at }}</time>.</p>{% else %}
 <h2>{{ 'Versand überfällig' if own.state=='overdue' else 'Versandbereit' }}</h2>
 <p>Versand bis {{ model.due_label }} (72 Stunden ab gemeinsamer Adressfreigabe).</p>
 {% if own.state!='overdue' %}<p>Noch {{ model.remaining_seconds // 3600 }} Stunden und {{ (model.remaining_seconds % 3600) // 60 }} Minuten.</p>{% endif %}
 <form method="post" action="/tauschen/versand/{{ model.trade }}/review"><input type="hidden" name="_csrf_token" value="{{ csrf }}"><input type="hidden" name="token" value="{{ token }}"><button>Versendet</button></form>
 {% endif %}
-{% if model.shipping_state=='in_transit' %}<p>Beide Sendungen sind unterwegs. Der Tausch wartet auf Empfang.</p>{% else %}{% for d in model.directions if d.sender!=model.actor %}<p>{{ 'Dein Tauschpartner hat versendet.' if d.state=='sent' else 'Dein Tauschpartner bereitet den Versand vor.' }}</p>{% endfor %}{% endif %}
+{% for d in model.directions %}<p>{{ 'Deine Sendung' if d.sender==model.actor else 'Sendung der Gegenpartei' }}: {{ 'vollständig empfangen' if d.receipt_state=='received_complete' else 'empfangen mit offenem Problem' if d.receipt_state=='received_with_problem' else 'als nicht angekommen gemeldet' if d.receipt_state=='non_arrival_reported' else 'unterwegs' if d.state=='sent' else 'Versand noch nicht bestätigt' }}.</p>{% endfor %}
 <h3>Versandadresse der Gegenpartei</h3><address>{{ model.other.first_name }} {{ model.other.last_name }}<br>{{ model.other.street }} {{ model.other.house_number }}<br>{{ model.other.postal_code }} {{ model.other.city }}<br>{{ model.other.country }}</address>
 <h3>Deine Sendung</h3><ul>{% for p in model.positions %}<li>{{ p.album_id }} · {{ p.sticker_code }} × {{ p.quantity }}</li>{% endfor %}</ul>
 {% endif %}
-</section><a href="/tauschen/laufend">Laufende Tausche</a>
+</section><a href="/tauschen/empfang/{{ model.trade }}">Empfang prüfen</a> · <a href="/tauschen/laufend">Laufende Tausche</a>

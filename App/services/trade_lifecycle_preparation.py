@@ -48,6 +48,10 @@ class LifecyclePreparation(LifecycleAcceptance):
                     VALUES (?,?,?,?)''',(row['trade_id'],row['accepted_revision_id'],user,now.isoformat()))
         return self.db.execute('SELECT * FROM lifecycle_preparation_cycles WHERE trade_id=? AND is_current=1 ORDER BY owner_id',(row['trade_id'],)).fetchall()
 
+    def _received_package(self, trade, sender):
+        return bool(self.db.execute("""SELECT 1 FROM lifecycle_directions WHERE trade_id=? AND from_user_id=?
+            AND receipt_state IN ('received_complete','received_with_problem')""", (trade,sender)).fetchone())
+
     def _pending(self,trade):
         return self.db.execute("SELECT * FROM lifecycle_reductions WHERE trade_id=? AND state='proposed'",(trade,)).fetchone()
 
@@ -92,7 +96,7 @@ class LifecyclePreparation(LifecycleAcceptance):
                 result['proposal']=[dict(p) for p in self._positions(pending['revision_id'])]
             for c in cycles:
                 item=dict(c)
-                item['photos']=[dict(p) for p in self.db.execute('SELECT id,mime FROM lifecycle_control_photos WHERE cycle_id=? AND removed_at IS NULL',(c['id'],))] if result['state']!='ready_to_ship' and (c['owner_id']==actor or c['revealed_at']) else []
+                item['photos']=[dict(p) for p in self.db.execute('SELECT id,mime FROM lifecycle_control_photos WHERE cycle_id=? AND removed_at IS NULL',(c['id'],))] if result['state']!='ready_to_ship' and not self._received_package(trade,c['owner_id']) and (c['owner_id']==actor or c['revealed_at']) else []
                 item['problems']=[dict(p) for p in self.db.execute('SELECT reason,position_id,quantity FROM lifecycle_photo_problems WHERE cycle_id=? AND resolved_at IS NULL',(c['id'],))]
                 item['overdue']=now>=instant(result['deadline']) and (not c['completed_at'] or instant(c['completed_at'])>instant(result['deadline']))
                 result['cycles'].append(item)
@@ -301,4 +305,5 @@ class LifecyclePreparation(LifecycleAcceptance):
             JOIN lifecycle_contracts t ON t.trade_id=c.trade_id
             WHERE p.id=? AND c.trade_id=? AND c.is_current=1 AND c.revision_id=t.accepted_revision_id AND p.removed_at IS NULL''',(photo,trade)).fetchone()
         if p is None or (p['owner_id']!=actor and not p['revealed_at']):raise ValueError('Photo is private')
+        if self._received_package(trade,p['owner_id']):raise ValueError('Received control package no longer in normal gallery')
         return dict(p)

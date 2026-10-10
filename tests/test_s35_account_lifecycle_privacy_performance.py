@@ -97,7 +97,7 @@ class AccountLifecyclePrivacyPerformanceTestCase(unittest.TestCase):
         connection.commit()
 
     def test_v0012_forward_repeat_and_fail_closed_backout(self):
-        self.assertEqual(28, load_migrations()[-1].version)
+        self.assertEqual(29, load_migrations()[-1].version)
         with self.connect() as connection:
             self.assertEqual(18, current_version(connection))
             self.assertEqual((), migrate(connection, 18))
