@@ -113,7 +113,7 @@ class ThreeAreaNavigationTestCase(unittest.TestCase):
         self.assertEqual(200, response.status_code, route)
         entries = self.nav_entries(response.get_data(as_text=True))
         self.assertEqual(
-            ["/sammlung", "/", "/tauschen"],
+            ["/sammlung", "/zentrale", "/tauschen"],
             [entry["href"] for entry in entries],
         )
         self.assertEqual(
@@ -131,7 +131,7 @@ class ThreeAreaNavigationTestCase(unittest.TestCase):
 
         self.assertEqual(3, len(entries))
         self.assertEqual(
-            ["/sammlung", "/", "/tauschen"],
+            ["/sammlung", "/zentrale", "/tauschen"],
             [entry["href"] for entry in entries],
         )
         self.assertEqual(
@@ -140,7 +140,7 @@ class ThreeAreaNavigationTestCase(unittest.TestCase):
         )
 
     def test_home_has_only_home_active(self):
-        self.assert_navigation("/", "/")
+        self.assert_navigation("/", "/zentrale")
 
     def test_collection_has_only_collection_active(self):
         self.assert_navigation("/sammlung", "/sammlung")

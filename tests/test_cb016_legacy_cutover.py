@@ -162,13 +162,18 @@ class CB016LegacyCutoverTestCase(unittest.TestCase):
     def test_safe_legacy_deep_links_only_redirect_to_canonical_routes(self):
         expectations = {
             "/home": "/",
-            "/zentrale": "/sammlung",
-            "/sammlr-zentrale": "/sammlung",
+            "/sammlr-zentrale": "/zentrale",
         }
         for path, target in expectations.items():
             response = self.client.get(path, follow_redirects=False)
             self.assertEqual(302, response.status_code)
             self.assertEqual(target, response.headers["Location"])
+
+    def test_lifecycle_center_owns_its_former_alias(self):
+        self.assertEqual("/sammlung",self.client.get("/zentrale").location)
+        from contextlib import closing
+        with closing(self.connection()) as connection:migrate(connection,30)
+        self.assertEqual(200,self.client.get("/zentrale").status_code)
 
     def test_cutover_adds_no_schema_migration(self):
         self.assertEqual(30, max(item.version for item in load_migrations()))

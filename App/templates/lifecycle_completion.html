@@ -27,4 +27,4 @@
 {% for r in model.ratings.visible %}<section data-visible-rating="{{ r.rater }}"><h3>{{ 'Deine veröffentlichte Bewertung' if r.rater==model.actor else 'Bewertung der Gegenpartei' }}</h3><p>{{ r.stars }} von 5 Sternen</p><ul>{% for tag in r.tags %}<li>{{ model.ratings.tags[tag] }}</li>{% endfor %}</ul></section>{% endfor %}
 </section>
 {% endif %}
-<a href="/tauschen/laufend">Meine Tausche</a>
+<a href="/zentrale">Zur Zentrale</a>

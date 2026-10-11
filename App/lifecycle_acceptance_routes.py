@@ -38,7 +38,10 @@ def register_acceptance(shell,database_path,actor,page,csrf_token):
             except ValueError:abort(403)
             if result['status']=='not_possible':
                 return current(db,viewer,trade,'Dieser Tausch ist so nicht mehr vollständig möglich. Das ursprüngliche Angebot bleibt unverändert.'),409
-        return redirect(f'/tauschen/anfragen/{trade}',code=303)
+        from services.trade_lifecycle_completion import ready as completion_ready
+        with connection(database_path()) as db:
+            target=f'/tauschen/vorbereitung/{trade}' if completion_ready(db) and result['status'] in ('accepted','already_accepted') else f'/tauschen/anfragen/{trade}'
+        return redirect(target,code=303)
 
     @shell.post('/tauschen/anfragen/<int:trade>/counter-preview')
     def counter_preview(trade):

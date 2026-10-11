@@ -130,15 +130,15 @@ class UiFoundationTestCase(unittest.TestCase):
         self.assertIn("--sammlr-header-compact-height:var(--sammlr-space-16)", self.s31_css)
 
     def test_three_target_navigation_has_central_home_and_correct_active_states(self):
-        expected = ["/sammlung", "/", "/tauschen"]
+        expected = ["/sammlung", "/zentrale", "/tauschen"]
         for route, active in (
-            ("/", "/"), ("/sammlung", "/sammlung"),
+            ("/", "/zentrale"), ("/sammlung", "/sammlung"),
             ("/trades", "/tauschen"),
         ):
             nav = self.navigation(self.client.get(route).get_data(as_text=True))
             entries = re.findall(r'<a class="([^"]+)" href="([^"]+)"[^>]*>', nav)
             self.assertEqual(expected, [href for _classes, href in entries])
-            self.assertEqual(1, expected.index("/"))
+            self.assertEqual(1, expected.index("/zentrale"))
             self.assertEqual(
                 [active],
                 [href for classes, href in entries if "active" in classes.split()],
@@ -188,7 +188,7 @@ class UiFoundationTestCase(unittest.TestCase):
         for html in (trade_html, list_html):
             nav = self.navigation(html)
             self.assertEqual(1, nav.count('href="/sammlung"'))
-            self.assertEqual(1, nav.count('href="/"'))
+            self.assertEqual(1, nav.count('href="/zentrale"'))
             self.assertEqual(1, nav.count('href="/tauschen"'))
             self.assertNotIn('href="/profil"', nav)
             self.assertNotIn('href="/notifications"', nav)

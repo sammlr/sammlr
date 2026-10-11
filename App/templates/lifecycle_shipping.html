@@ -15,4 +15,4 @@
 <h3>Versandadresse der Gegenpartei</h3><address>{{ model.other.first_name }} {{ model.other.last_name }}<br>{{ model.other.street }} {{ model.other.house_number }}<br>{{ model.other.postal_code }} {{ model.other.city }}<br>{{ model.other.country }}</address>
 <h3>Deine Sendung</h3><ul>{% for p in model.positions %}<li>{{ p.album_id }} · {{ p.sticker_code }} × {{ p.quantity }}</li>{% endfor %}</ul>
 {% endif %}
-</section><a href="/tauschen/empfang/{{ model.trade }}">Empfang prüfen</a> · <a href="/tauschen/laufend">Laufende Tausche</a>
+</section><a href="/tauschen/empfang/{{ model.trade }}">Empfang prüfen</a> · <a href="/zentrale">Zur Zentrale</a>

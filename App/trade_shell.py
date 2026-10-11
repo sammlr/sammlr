@@ -56,7 +56,7 @@ def register_trade_shell(app, *, database_path, global_head, header, navigation,
     def page(screen, title, **data):
         return render_template('trade_shell.html', screen=screen, title=title,
                                head=Markup(global_head()), header=Markup(header()),
-                               navigation=Markup(navigation('tauschen')), **data)
+                               navigation=Markup(navigation('sammlr' if data.get('center_navigation') or screen in ('preparation','addresses','shipping','receipts','completion') else 'tauschen')), **data)
 
     def slot(piece, count=1, href=None):
         return Markup(render_slot(piece.album_id, piece.sticker_code,
@@ -151,7 +151,10 @@ def register_trade_shell(app, *, database_path, global_head, header, navigation,
         if enabled:
             with connection(database_path()) as db:
                 from lifecycle_acceptance_routes import decorate
-                lifecycle = decorate(db,LifecycleRequests(db).view(user),user)
+                from services.trade_lifecycle_completion import ready as center_ready
+                center_enabled = center_ready(db)
+                lifecycle = decorate(db,[q for q in LifecycleRequests(db).view(user)
+                    if q['status']!='accepted' or not center_enabled],user)
         return page('active', 'Laufende Tausche', trades=rows, lifecycle=lifecycle,viewer=user,csrf=csrf_token())
 
     from profile_trade import register_manual
@@ -170,4 +173,6 @@ def register_trade_shell(app, *, database_path, global_head, header, navigation,
     register_receipts(shell,database_path,actor,page,csrf_token)
     from lifecycle_completion_routes import register_completion
     register_completion(shell,database_path,actor,page,csrf_token)
+    from lifecycle_center_routes import register_center
+    register_center(shell,database_path,actor,page)
     app.register_blueprint(shell)

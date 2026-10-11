@@ -136,7 +136,7 @@ class HomeCollectionRoutesTestCase(unittest.TestCase):
         cases = (
             ("/home", "/"),
             ("/zentrale", "/sammlung"),
-            ("/sammlr-zentrale", "/sammlung"),
+            ("/sammlr-zentrale", "/zentrale"),
         )
 
         for route, target in cases:

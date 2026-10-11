@@ -2,13 +2,16 @@
 <html lang="de"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>{{ title }} · Sammlr</title>{{ head }}
 <link rel="stylesheet" href="/static/trade_shell.css">
+{% if screen=='center' %}<link rel="stylesheet" href="/static/lifecycle_center.css">{% endif %}
 <script src="/static/trade_shell.js" type="module"></script></head>
 <body class="s31-product-page s30-album-page trade-shell"><main class="container">
 {{ header }}
 <div class="trade-wall-measure" aria-hidden="true"><div class="card sticker-wall-card"><div class="wall"><div></div></div></div></div>
 <h1>{{ title }}</h1>
-{% if screen != 'home' %}<a class="sammlr-back-link" href="/tauschen">← Tauschen</a>{% endif %}
-{% if screen == 'home' %}
+{% if screen in ('preparation','addresses','shipping','receipts','completion') %}<a class="sammlr-back-link" href="/zentrale">← Zentrale</a>{% elif screen not in ('home','center') %}<a class="sammlr-back-link" href="/tauschen">← Tauschen</a>{% endif %}
+{% if screen == 'center' %}
+{% include 'lifecycle_center.html' %}
+{% elif screen == 'home' %}
 {% if deals|length == 1 %}<p>1 vielversprechender Tauschvorschlag für dich.</p>
 {% elif deals %}<p>{{ deals|length }} vielversprechende Tauschvorschläge für dich.</p>{% endif %}
 <section class="trade-stage" aria-label="Tauschvorschläge">

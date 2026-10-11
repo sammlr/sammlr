@@ -91,7 +91,7 @@ class BetaPolishTestCase(unittest.TestCase):
     def assert_three_target_navigation(self, html):
         nav = self.navigation(html)
         links = re.findall(r'href="([^"]+)"', nav)
-        self.assertEqual(["/sammlung", "/", "/tauschen"], links)
+        self.assertEqual(["/sammlung", "/zentrale", "/tauschen"], links)
         self.assertNotIn('/profil', nav)
         self.assertNotIn('/notifications', nav)
 

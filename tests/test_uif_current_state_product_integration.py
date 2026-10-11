@@ -135,7 +135,7 @@ class UIFCurrentStateProductIntegrationTestCase(unittest.TestCase):
     def test_regular_routes_keep_global_shell_navigation_and_read_only_gets(self):
         before = sha256(self.db_path)
         for route, active_target in (
-            ("/", 'href="/" aria-current="page"'),
+            ("/", 'href="/zentrale" aria-current="page"'),
             ("/sammlung", 'href="/sammlung" aria-current="page"'),
             ("/trades", 'href="/tauschen" aria-current="page"'),
         ):

@@ -30,6 +30,6 @@
 {% if d.receipt_state=='non_arrival_reported' %}</details>{% elif d.can_non_arrival %}<form method="post" action="/tauschen/empfang/{{ model.trade }}/non-arrival">{{ hidden(d.non_arrival_token) }}<button>Brief nicht angekommen</button></form>{% endif %}
 {% endif %}</section>{% endfor %}
 {% endif %}
-<a href="/tauschen/empfang/{{ model.trade }}">Zur Empfangsübersicht</a> · <a href="/tauschen/laufend">Laufende Tausche</a>
+<a href="/tauschen/empfang/{{ model.trade }}">Zur Empfangsübersicht</a> · <a href="/zentrale">Zur Zentrale</a>
 
 {% if model.completion_enabled %}<a href="/tauschen/abschluss/{{ model.trade }}">Abschluss und Bewertung</a>{% endif %}

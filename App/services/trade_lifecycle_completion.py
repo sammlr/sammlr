@@ -65,6 +65,33 @@ def settle_receipts(service, row, now):
 
 
 class LifecycleCompletion(LifecycleReceipts):
+    def refresh_for_actor(self, actor):
+        """Catch up only outstanding L08 evidence for an authorized portfolio.
+
+        Ordinary reads do not load each trade's detail model. No receipt, claim
+        or inventory command is called; settlement/reveal use the existing L08
+        primitives under their original transaction boundary.
+        """
+        self._actor(actor)
+        if not ready(self.db):
+            return
+        with self.store.transaction():
+            now = instant(self.clock())
+            rows = self.db.execute('''SELECT c.*,t.requester_user_id,t.partner_user_id
+                FROM lifecycle_contracts c JOIN trades t ON t.id=c.trade_id
+                WHERE ? IN(t.requester_user_id,t.partner_user_id) AND c.accepted_revision_id IS NOT NULL
+                AND (EXISTS(SELECT 1 FROM lifecycle_receipts r WHERE r.trade_id=c.trade_id
+                    AND (NOT EXISTS(SELECT 1 FROM lifecycle_rating_eligibility e WHERE e.trade_id=r.trade_id AND e.user_id=r.receiver_id)
+                    OR (r.has_problem=0 AND NOT EXISTS(SELECT 1 FROM lifecycle_direction_resolutions d WHERE d.trade_id=r.trade_id AND d.from_user_id=r.from_user_id))))
+                OR EXISTS(SELECT 1 FROM trade_ratings r WHERE r.trade_id=c.trade_id
+                    AND NOT EXISTS(SELECT 1 FROM lifecycle_rating_publications p WHERE p.rating_id=r.id)
+                    AND (EXISTS(SELECT 1 FROM trade_ratings other WHERE other.trade_id=r.trade_id AND other.rater_user_id=r.rated_user_id)
+                    OR EXISTS(SELECT 1 FROM lifecycle_rating_eligibility e WHERE e.trade_id=r.trade_id AND e.user_id=r.rated_user_id
+                        AND julianday(e.eligible_at)+14<=julianday(?)))))''', (actor, now.isoformat())).fetchall()
+            for row in rows:
+                settle_receipts(self, row, now)
+                self._publish_ratings(row, now)
+
     def _completion_binding(self, trade, actor, revision=None):
         self._actor(actor)
         if not ready(self.db):

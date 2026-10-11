@@ -5502,10 +5502,9 @@ def home_compatibility_redirect():
     return redirect("/")
 
 
-@app.route("/zentrale")
 @app.route("/sammlr-zentrale")
 def collection_compatibility_redirect():
-    return redirect("/sammlung")
+    return redirect("/zentrale")
 
 
 @app.route("/sammlung")
@@ -5939,7 +5938,7 @@ def bottom_nav(active="sammlr"):
     }
     items = [
         ("sammlung", "/sammlung", "Sammlung"),
-        ("sammlr", "/", "sammlr"),
+        ("sammlr", "/zentrale", "sammlr"),
         ("tauschen", "/tauschen", "Tauschen"),
     ]
 

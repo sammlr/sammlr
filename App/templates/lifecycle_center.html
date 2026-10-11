@@ -1,0 +1,28 @@
+{% macro card(c, kind) %}
+<article class="center-trade" data-trade="{{ c.trade }}">
+<h3>{{ c.partner }}</h3><small>Tausch {{ c.trade }}</small><p class="center-albums">{{ c.albums|join(' · ') }}</p>
+{% if kind=='sendungen' %}<p>{{ c.give }} Sticker · {{ c.outgoing_status }}</p>
+{% elif kind=='eingaenge' %}<p>{{ c.receive }} Sticker · {{ c.incoming_status }}</p>
+{% else %}<p>{{ c.give }} abgeben · {{ c.receive }} erhalten</p><p>{{ c.status }}</p>{% endif %}
+{% if c.archived %}<p>Abgeschlossen: <time datetime="{{ c.completed_at }}">{{ c.completion_label }}</time></p><p>Bestätigt: {{ c.received }} erhalten · {{ c.partner_received }} bei der Gegenpartei angekommen.</p>{% if c.problem_count %}<p>{{ c.problem_count }} dokumentierte Lieferprobleme · Verlauf im Abschluss.</p>{% endif %}{% endif %}
+{% if c.problem_wait_until %}<p>Einseitiger Problemabschluss frühestens {{ c.problem_wait_until }}.</p>{% endif %}
+{% set shown=c.actions if kind in ('todos','archiv') else (c.actions|selectattr('code','in',['prepare','correct','missing','reduction','reduction_retry','ship','respond','address'])|list)[:1] if kind=='sendungen' else (c.actions|selectattr('code','in',['review','receive','accept_problem','close_problem','nonarrival','rate'])|list)[:1] %}
+{% if shown %}<ul class="center-actions">{% for a in shown %}<li><a href="{{ a.href }}" data-action="{{ a.code }}">{{ a.label }}</a>{% if a.deadline %}<small>{{ 'Überfällig · ' if a.overdue else 'Frist · ' }}<time datetime="{{ a.deadline }}">{{ a.deadline_label }}</time></small>{% endif %}</li>{% endfor %}</ul>
+{% elif c.waiting %}<p class="center-wait">{{ c.waiting }}</p>{% endif %}
+<a class="center-detail" href="{{ c.href }}">{{ 'Abschluss, Empfang und Bewertung ansehen' if c.archived else 'Tauschstatus ansehen' }}</a>
+</article>
+{% endmacro %}
+<nav class="center-links" aria-label="Zentralebereiche"><a href="/zentrale">Übersicht</a><a href="/zentrale/archiv">Abgeschlossene Tausche</a></nav>
+{% if not model.enabled %}<section class="card"><p>Die Tauschabwicklung ist hier noch nicht verfügbar.</p><a href="/tauschen/laufend">Meine Anfragen</a></section>
+{% elif not model.section %}
+<p class="center-intro">Deine nächsten Schritte, verschickten Sticker und erwarteten Sendungen.</p>
+<div class="center-board">{% for s in model.sections %}<section class="center-note center-{{ s.key }}" aria-labelledby="center-{{ s.key }}">
+<header><h2 id="center-{{ s.key }}">{{ s.title }}</h2><span class="center-count">{{ s.total }}</span></header>
+{% for c in s["items"] %}{{ card(c,s.key) }}{% else %}<p>{{ s.empty }}</p>{% endfor %}
+<a class="center-all" href="/zentrale/{{ s.key }}">Alle anzeigen<span class="sr-only">: {{ s.title }}</span></a></section>{% endfor %}</div>
+{% else %}<section class="center-note center-{{ model.section }}">
+<p>{{ model.total }} {{ 'Tausch' if model.total==1 else 'Tausche' }}</p>
+{% for c in model["items"] %}{{ card(c,model.section) }}{% else %}<p>{{ empty[model.section] if model.total==0 else 'Auf dieser Seite gibt es keine Einträge.' }}</p>{% endfor %}
+</section>
+{% if model.pages>1 %}<nav class="center-pagination" aria-label="Seitennavigation">{% if model.page>1 %}<a href="?page={{ model.page-1 }}">Zurück</a>{% endif %}<span>Seite {{ model.page }} von {{ model.pages }}</span>{% if model.page<model.pages %}<a href="?page={{ model.page+1 }}">Weiter</a>{% endif %}</nav>{% endif %}
+{% endif %}
