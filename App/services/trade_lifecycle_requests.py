@@ -35,7 +35,7 @@ class LifecycleRequests:
         require_trade_operation(self.db, trade_id, 'request')
         row = self.db.execute('''SELECT q.*,CASE WHEN q.sender_user_id=t.requester_user_id THEN t.partner_user_id ELSE t.requester_user_id END AS partner_user_id,c.accepted_revision_id,c.origin
             FROM lifecycle_requests q JOIN trades t ON t.id=q.trade_id
-            JOIN lifecycle_contracts c ON c.trade_id=q.trade_id WHERE q.trade_id=? AND (q.revision_id=c.current_revision_id OR (q.status='accepted' AND c.state='accepted'))''', (trade_id,)).fetchone()
+            JOIN lifecycle_contracts c ON c.trade_id=q.trade_id WHERE q.trade_id=? AND (q.revision_id=c.current_revision_id OR (q.status='accepted' AND c.accepted_revision_id IS NOT NULL))''', (trade_id,)).fetchone()
         if row is None:
             raise ValueError('Current request required')
         return row
@@ -141,7 +141,7 @@ class LifecycleRequests:
             self._expire(instant(self.clock()))
             rows = self.db.execute('''SELECT q.*,CASE WHEN q.sender_user_id=t.requester_user_id THEN t.partner_user_id ELSE t.requester_user_id END AS partner_user_id,s.username AS sender,p.username AS recipient,r.kind,c.accepted_revision_id AS binding_revision
                 FROM lifecycle_requests q JOIN trades t ON t.id=q.trade_id
-                JOIN lifecycle_contracts c ON c.trade_id=q.trade_id AND (c.current_revision_id=q.revision_id OR (q.status='accepted' AND c.state='accepted'))
+                JOIN lifecycle_contracts c ON c.trade_id=q.trade_id AND (c.current_revision_id=q.revision_id OR (q.status='accepted' AND c.accepted_revision_id IS NOT NULL))
                 JOIN lifecycle_revisions r ON r.id=q.revision_id
                 JOIN users s ON s.id=q.sender_user_id JOIN users p ON p.id=CASE WHEN q.sender_user_id=t.requester_user_id THEN t.partner_user_id ELSE t.requester_user_id END
                 WHERE (t.requester_user_id=? OR t.partner_user_id=?) AND (? IS NULL OR q.trade_id=?)

@@ -32,6 +32,11 @@ def register_receipts(shell, database_path, actor, page, csrf_token):
         viewer = actor()
         try:
             with connection(database_path()) as db:
+                from services.trade_lifecycle_completion import ready as completion_ready
+                if completion_ready(db) and db.execute('SELECT 1 FROM lifecycle_completions WHERE trade_id=?', (trade,)).fetchone():
+                    from services.trade_lifecycle_completion import LifecycleCompletion
+                    LifecycleCompletion(db)._completion_binding(trade, viewer)
+                    return redirect(f'/tauschen/abschluss/{trade}', 303)
                 model = service(db).receipt_view(trade, viewer)
         except ValueError:
             abort(404)

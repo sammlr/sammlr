@@ -14,6 +14,9 @@ def decorate(db,rows,actor):
         q['preparation_enabled']=preparation_ready(db)
         from services.trade_lifecycle_receipts import ready as receipt_ready
         q['receipt_enabled']=receipt_ready(db)
+        from services.trade_lifecycle_completion import ready as completion_ready
+        q['completion_enabled']=completion_ready(db)
+        q['completion']=dict(db.execute('SELECT * FROM lifecycle_completions WHERE trade_id=?',(q['trade_id'],)).fetchone() or {}) if q['completion_enabled'] else None
         if enabled and q['status']=='open' and actor==q['partner_user_id']:
             q['accept_token']=serializer().dumps(dict(actor=actor,trade=q['trade_id'],revision=q['revision_id'],
                 key=uuid.uuid4().hex,operation='accept'))

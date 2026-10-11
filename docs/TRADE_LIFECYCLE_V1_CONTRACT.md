@@ -1,5 +1,18 @@
 # Trade Lifecycle V1 — Fachvertrag für neue Trade-v2-Vorgänge
 
+## Verbindliche Fortschreibung LIFECYCLE-08 — 11.10.2026
+
+Der autorisierte L08-Auftrag konkretisiert §§12–14 und die früheren Detailgates D07/D09: Beide Richtungen müssen endgültig aufgelöst sein. Vollständiger sauberer Empfang löst die eigene Richtung auf; der letzte Richtungsabschluss beendet den Trade atomar ohne weitere Bestätigung. Ein dokumentiertes Lieferproblem bleibt auch nach späterem vollständigem Empfang als `closed_with_problem` erkennbar; ohne Problemhistorie gilt `completed`.
+
+Nur der tatsächliche Empfänger darf einen verbindlichen Problemempfang sofort freiwillig akzeptieren oder ein offenes Problem ab exakt `reported_at + 14×24h` endgültig schließen. Non-Arrival kann ausschließlich nach dieser Problemfrist geschlossen werden. Senderreaktion und ursprüngliche Fakten bleiben erhalten; kein administrativer Entscheid, keine Schuldzuweisung, Sanktion oder automatische Bewertung. Nach finalem Abschluss kein später Receipt auf derselben Richtung; Korrektur-/Nachbuchungsprozess bleibt ausdrücklich zukünftiger gesonderter Umfang.
+
+Die zentrale Claim-Logik gibt ausschließlich unerfüllte Restmengen der gebundenen Revision und Empfangsrichtung frei. Bereits akzeptierte Mengen und andere Trades bleiben unverändert; kein Inventory-Write oder Sender-Restore. Eine Claimzeile behält Erwartungs- und Erfüllungsmenge; ihr released-Status nimmt ausschließlich den noch unerfüllten Anteil aus der offenen Bedarfsbindung.
+
+Eigene Bewertungsberechtigung beginnt beim verbindlichen vollständigen **oder strukturierten Problemempfang**, bei Non-Arrival erst beim endgültigen Abschluss. Ab diesem Zeitpunkt gilt unabhängig von der Gegenrichtung `[eligible_at, eligible_at + 14×24h)`. Einmalig 1–5 ganze Sterne und optional bekannte positive Tags, kein Freitext und keine Bearbeitung. Identische Wiederholungen ändern nichts. Sichtbar wird jede Bewertung erst, wenn beide abgegeben haben oder das tatsächlich gestartete Fenster der jeweils anderen Person abgelaufen ist. Eine nie begonnene Gegenfrist ist nicht abgelaufen. Dieselbe Regel gilt für Profile, Exporte und UI; allgemeine History/Notifications enthalten keine Sterne oder Tags.
+
+Diese Regeln ersetzen die entgegenstehenden historischen Detailgates für L08. Administrative Streitentscheidung, Ersatzlieferung, nachträglicher physischer Zugang, öffentliche Zuverlässigkeit und Lifecycle-09 bleiben außerhalb des Auftrags. Technischer Nachweis: [LIFECYCLE_08_AUDIT.md](LIFECYCLE_08_AUDIT.md).
+
+
 Stand: 2026-10-06. Technische Ausgangsbasis: `e20a8c4e84f2adb83b2f4f3f870846267713a4c1`.
 „Lifecycle V1“ bezeichnet die erste Fassung dieses neuen physischen Trade-v2-Vertrags, **nicht** `smartdeal_v1`.
 

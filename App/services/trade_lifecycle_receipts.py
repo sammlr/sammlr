@@ -52,6 +52,9 @@ class LifecycleReceipts(LifecycleShipping):
                                     (trade, sender)).fetchone()
         if type(sender) is not int or direction is None or actor != direction['to_user_id' if receiving else 'from_user_id']:
             raise ValueError('Direction ownership required')
+        from services.trade_lifecycle_completion import resolved
+        if resolved(self.db, trade, sender):
+            raise ValueError('Direction is finally resolved')
         return row, direction
 
     def _receipt(self, trade, sender):
@@ -117,11 +120,12 @@ class LifecycleReceipts(LifecycleShipping):
     def confirm_receipt(self, trade, actor, sender, revision, key, inspection=None):
         payload = dict(sender=sender, revision=revision, inspection=inspection)
         with self.store.transaction():
-            row, direction = self._receipt_binding(trade, actor, sender, revision)
-            self._require_receipt_entry(row)
+            self._actor(actor)
             old_command = self._command(trade, actor, key, 'receipt', payload)
             if old_command is not None:
                 return old_command
+            row, direction = self._receipt_binding(trade, actor, sender, revision)
+            self._require_receipt_entry(row)
             positions, classified = self._inspection(row, sender, inspection)
             serialized = _json(classified)
             old = self._receipt(trade, sender)
@@ -166,6 +170,8 @@ class LifecycleReceipts(LifecycleShipping):
             if problem:
                 problem_id = self._problem(row, sender, 'inspection', now)
                 self._notify_receipt(row, actor, sender, 'ReceiptProblemReported', now, sender=sender, problem=problem_id)
+            from services.trade_lifecycle_completion import settle_receipts
+            settle_receipts(self, row, now)
             result = dict(self._receipt(trade, sender))
             return self.store.record_command(trade, actor, key, 'receipt', payload, result)
 
@@ -226,6 +232,8 @@ class LifecycleReceipts(LifecycleShipping):
             directions = []
             for d in self.db.execute('SELECT * FROM lifecycle_directions WHERE trade_id=? ORDER BY from_user_id', (trade,)):
                 item = dict(d)
+                from services.trade_lifecycle_completion import resolved
+                item['resolved'] = resolved(self.db, trade, d['from_user_id'])
                 sent = self._sent(trade, d['from_user_id'])
                 receipt = self._receipt(trade, d['from_user_id'])
                 item.update(sent=dict(sent) if sent else None, receipt=dict(receipt) if receipt else None,
@@ -236,5 +244,6 @@ class LifecycleReceipts(LifecycleShipping):
                 for p in self.db.execute('SELECT p.*,r.response,r.responded_at FROM lifecycle_delivery_problems p LEFT JOIN lifecycle_delivery_responses r ON r.problem_id=p.id WHERE p.trade_id=? AND p.from_user_id=? ORDER BY p.id', (trade, d['from_user_id'])):
                     item['problems'].append(dict(p, superseded=bool(p['kind'] == 'non_arrival' and receipt)))
                 directions.append(item)
+            from services.trade_lifecycle_completion import ready as completion_ready
             return dict(trade=trade, revision=row['accepted_revision_id'], actor=actor, directions=directions,
-                        receipt_enabled=self._receipt_entry_ready(row))
+                        receipt_enabled=self._receipt_entry_ready(row), completion_enabled=completion_ready(self.db))

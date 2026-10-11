@@ -23,11 +23,13 @@
 {% elif d.sent %}<p>Sendung unterwegs</p>{% else %}<p>Noch keine Versandbestätigung. Einen tatsächlich erhaltenen Brief kannst du bereits prüfen.</p>{% endif %}
 {% for p in d.problems %}<section><h3>{{ 'Nichtankunft' if p.kind=='non_arrival' else 'Lieferproblem' }}{{ ' — später angekommen' if p.superseded else ' — offen' }}</h3><p>Gemeldet am {{ p.reported_at }}.</p>
 {% if p.response %}<p>Absenderreaktion: {{ 'Problem anerkannt' if p.response=='acknowledge' else 'Ich habe vollständig und korrekt verschickt' }}.</p>
-{% elif d.from_user_id==model.actor and not p.superseded %}<p>Du kannst einmal reagieren. Deine Reaktion entscheidet den Problemfall nicht.</p><form method="post" action="/tauschen/empfang/{{ model.trade }}/response">{{ hidden(p.token) }}<button name="response" value="acknowledge">Problem anerkennen</button><button name="response" value="sent_correctly">Ich habe vollständig und korrekt verschickt</button></form>{% endif %}</section>{% endfor %}
-{% if d.to_user_id==model.actor and not d.receipt and model.receipt_enabled %}
+{% elif d.from_user_id==model.actor and not p.superseded and not d.resolved %}<p>Du kannst einmal reagieren. Deine Reaktion entscheidet den Problemfall nicht.</p><form method="post" action="/tauschen/empfang/{{ model.trade }}/response">{{ hidden(p.token) }}<button name="response" value="acknowledge">Problem anerkennen</button><button name="response" value="sent_correctly">Ich habe vollständig und korrekt verschickt</button></form>{% endif %}</section>{% endfor %}
+{% if d.to_user_id==model.actor and not d.receipt and model.receipt_enabled and not d.resolved %}
 {% if d.receipt_state=='non_arrival_reported' %}<details><summary>Doch angekommen</summary><p>Prüfe jetzt den tatsächlichen Inhalt.</p>{% endif %}
 <form method="post" action="/tauschen/empfang/{{ model.trade }}/review">{{ hidden(d.token) }}<button name="mode" value="complete">Alles angekommen</button><button name="mode" value="problem">Problem mit Lieferung</button></form>
 {% if d.receipt_state=='non_arrival_reported' %}</details>{% elif d.can_non_arrival %}<form method="post" action="/tauschen/empfang/{{ model.trade }}/non-arrival">{{ hidden(d.non_arrival_token) }}<button>Brief nicht angekommen</button></form>{% endif %}
 {% endif %}</section>{% endfor %}
 {% endif %}
 <a href="/tauschen/empfang/{{ model.trade }}">Zur Empfangsübersicht</a> · <a href="/tauschen/laufend">Laufende Tausche</a>
+
+{% if model.completion_enabled %}<a href="/tauschen/abschluss/{{ model.trade }}">Abschluss und Bewertung</a>{% endif %}

@@ -1,5 +1,21 @@
 # Trade Lifecycle V1 — Zustandsmaschine und Übergänge
 
+## Fortschreibung LIFECYCLE-08 — 11.10.2026
+
+Die folgenden Übergänge konkretisieren den historischen Stand unten und D07/D09. Der unveränderliche L07-Receiptzustand bleibt erhalten; `lifecycle_direction_resolutions` bildet den separaten endgültigen Richtungsabschluss ab.
+
+| Auslöser | Guard | Atomares Ergebnis |
+|---|---|---|
+| Vollständiger sauberer Receipt | bestehende L07-Eintritts- und Buchungsregeln | `complete`, eigene Ratingeligibility am Receiptzeitpunkt |
+| Problem freiwillig akzeptieren | tatsächlicher Empfänger, verbindliche Probleminspektion, ungelöste Richtung | `problem_accepted`, unerfüllte eigene Restclaims freigegeben |
+| Problem endgültig schließen | tatsächlicher Empfänger, ungelöst, Serverzeit ≥ Problemzeit +14 Tage; Non-Arrival noch ohne Receipt | `after_wait`, Restclaims frei; bei Non-Arrival erstmals Ratingeligibility |
+| Zweite Richtung aufgelöst | beide Richtungen endgültig | Vertrag `ended`, kanonischer Tradezustand `completed` ohne Problemhistorie, sonst `closed_with_problem`; genau ein Abschlussevent |
+| Rating | eigene Eligibility ≤ Serverzeit < Eligibility +14 Tage | shared `trade_ratings`, unveränderliche Sterne/positive Tags; keine Inventoryänderung |
+| Reveal | beide Ratings oder echte Gegenfrist abgelaufen | Sichtbarkeit in allen Projektionen, einmaliges Reveal-Ereignis |
+
+Keine normale Weiterverarbeitung nach finalem Abschluss; nur sichere identische Retries und zulässige Ratingcommands. Später physisch ankommende Sendung nach finalem Non-Arrival benötigt einen zukünftigen gesonderten Korrekturprozess. T28 (administrative Entscheidung) bleibt nicht implementiert. Ein offenes Problem oder eine Senderreaktion allein schließen nichts ab.
+
+
 Stand 2026-10-06; nur Fachmodell. Maßgeblich: [Vertrag](TRADE_LIFECYCLE_V1_CONTRACT.md). Zustandsnamen sind fachliche Bezeichner, keine beschlossenen SQL-Enums. Offene Entscheidung Dxx bedeutet ausdrücklich **kein freigegebener Implementierungsdefault**.
 
 ## 1. Orthogonaler Zustand statt monolithischer Statusspalte

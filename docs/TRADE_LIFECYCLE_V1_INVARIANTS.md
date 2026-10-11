@@ -1,5 +1,17 @@
 # Trade Lifecycle V1 — Invarianten, Buchungen und Nebenläufigkeit
 
+## Fortschreibung LIFECYCLE-08 — 11.10.2026
+
+Diese Konkretisierung ersetzt entgegenstehende historische Aussagen N/D07/D09 unten:
+
+- Ein Gesamtabschluss existiert genau einmal und nur mit zwei endgültigen Richtungsauflösungen. Receipt, Claimfreigabe, letzter Gesamtabschluss, History, Notifications und Commandresult bilden jeweils eine IMMEDIATE-Transaktion.
+- Problemakzeptanz und Fristabschluss sind Empfängerentscheidungen, keine administrative Schuldentscheidung. Nichtankunft kann erst ab Problemzeit +14 Tage final geschlossen werden; danach kein Zugang über denselben Trade.
+- Restclaimfreigabe verändert keinen physischen Bestand, keine erfüllte Menge und kein anderes Tradebinding. 3 erwartet/2 akzeptiert/1 fehlt ergibt danach exakt freie Needmenge 1.
+- Berechtigung entsteht beim eigenen verbindlichen Voll-/Problemempfang oder final geschlossenem Non-Arrival. Exakt am individuellen 14-Tage-Ende keine neue Bewertung. Identische Retry-Ergebnisse bleiben gültig.
+- Vor beiden Ratings bzw. tatsächlichem Ablauf der Gegenfrist keine fremden Sterne/Tags in UI, Profilen, Exporten, History oder Notifications. Nie gestartete Gegenfrist bleibt offen. Eigene Bewertung bleibt für den Autor sichtbar.
+- Finale Fakten sind unveränderlich. Positive Tags sind kataloggebunden, Sterne ganzzahlig 1–5, keine automatische negative Bewertung, Sanktion oder öffentliche Rangliste. Legacy-Verträge behalten ihren eigenen Bewertungsprozess.
+
+
 Verbindlicher Kontext: [Fachvertrag](TRADE_LIFECYCLE_V1_CONTRACT.md), [Transitions-IDs](TRADE_LIFECYCLE_V1_STATE_MACHINE.md). Ausschließlich Spezifikation, keine ausführbaren DB-Commands.
 
 ## 1. Mengenbegriffe

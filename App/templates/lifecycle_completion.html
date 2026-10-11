@@ -1,0 +1,30 @@
+{% macro hidden(token) %}<input type="hidden" name="_csrf_token" value="{{ csrf }}"><input type="hidden" name="token" value="{{ token }}">{% endmacro %}
+{% set labels={'correct':'Korrekt angekommen','missing':'Fehlt','wrong':'Falscher Sticker','damaged_accepted':'Beschädigt, akzeptiert','damaged_rejected':'Beschädigt, nicht akzeptiert'} %}
+{% if step=='confirm' %}
+<section class="card"><h2>Empfang endgültig abschließen</h2>
+<p>Akzeptierte Sticker bleiben in deiner Sammlung. Fehlende oder abgelehnte Mengen werden nicht gutgeschrieben. Der offene Bedarf wird für weitere Tausche wieder frei. Beim Absender wird nichts zurückgebucht.</p>
+<p>Diese Entscheidung ist endgültig und weist niemandem Schuld zu. Ein später auftauchender Brief kann in diesem Tausch nicht mehr eingebucht werden; dafür wäre ein gesonderter zukünftiger Korrekturvorgang nötig.</p>
+<form method="post" action="/tauschen/abschluss/{{ model.trade }}/confirm">{{ hidden(token) }}<button>Ja, endgültig abschließen</button></form><a href="/tauschen/abschluss/{{ model.trade }}">Abbrechen</a></section>
+{% else %}
+{% if model.completion %}<section class="card" data-completion="{{ model.completion.outcome }}"><h2>{{ 'Tausch erfolgreich abgeschlossen' if model.completion.outcome=='completed' else 'Tausch mit Lieferproblem abgeschlossen' }}</h2><p>Abgeschlossen am {{ model.completion.completed_at }}.</p><p>Die dokumentierten Fakten bleiben erhalten. Ein Problemabschluss entscheidet keinen Streit.</p></section>{% else %}<p>Der Tausch endet automatisch, sobald beide Empfangsrichtungen aufgelöst sind.</p>{% endif %}
+{% for d in model.directions %}<section class="card" data-sender="{{ d.from_user_id }}">
+<h2>{{ 'Dein Empfang' if d.to_user_id==model.actor else 'Empfang deiner Sendung' }}</h2>
+{% if d.resolution %}<p>{{ 'Vollständig empfangen' if d.resolution.kind=='complete' else 'Problem akzeptiert und Empfang abgeschlossen' if d.resolution.kind=='problem_accepted' else 'Problem nach Frist endgültig abgeschlossen' }}</p>{% elif d.receipt %}<p>Empfang geprüft – Lieferproblem offen</p>{% else %}<p>Empfang noch nicht bestätigt</p>{% endif %}
+{% for p in d.positions %}<h3>{{ p.album_id }} · {{ p.sticker_code }}</h3><p>Erwartet: {{ p.quantity }}{% if d.receipt %}{% set i=d.inspection[loop.index0] %} · Gutgeschrieben: {{ i.correct+i.damaged_accepted }}</p><ul>{% for k,label in labels.items() %}{% if i[k] %}<li>{{ label }}: {{ i[k] }}</li>{% endif %}{% endfor %}</ul>{% else %} · Gutgeschrieben: 0</p>{% endif %}{% endfor %}
+{% for p in d.problems %}<section><h3>{{ 'Nichtankunft' if p.kind=='non_arrival' else 'Lieferproblem' }}{{ ' – später angekommen' if p.superseded else ' – abgeschlossen' if d.resolution else ' – offen' }}</h3>
+<p>Gemeldet: {{ p.reported_at }}<br>Einseitiger Abschluss frühestens: {{ p.deadline }}</p>
+{% if p.response %}<p>Absenderreaktion: {{ 'Problem anerkannt' if p.response=='acknowledge' else 'Ich habe vollständig und korrekt verschickt' }}.</p>{% endif %}
+{% if p.can_accept or p.can_close %}<form method="post" action="/tauschen/abschluss/{{ model.trade }}/review">{{ hidden(p.token) }}{% if p.can_accept %}<button name="mode" value="problem_accepted">Problem akzeptieren und Empfang abschließen</button>{% endif %}{% if p.can_close %}<button name="mode" value="after_wait">Problem endgültig abschließen</button>{% endif %}</form>{% endif %}</section>{% endfor %}
+{% if not d.resolution and not model.completion %}<a href="/tauschen/empfang/{{ model.trade }}">Empfang und Senderreaktion prüfen</a>{% endif %}
+</section>{% endfor %}
+<section class="card"><h2>Bewertung</h2>
+{% if model.ratings.own %}<p>Bewertung abgegeben</p><p>Deine Bewertung: {{ model.ratings.own.stars }} von 5 Sternen.</p>
+{% elif model.ratings.can_rate %}<p>Du kannst bis {{ model.ratings.deadline }} freiwillig bewerten. Deine Bewertung ist endgültig.</p>
+<form method="post" action="/tauschen/abschluss/{{ model.trade }}/rating">{{ hidden(rating_token) }}<label>Sterne <select name="stars" required><option value="">Bitte wählen</option>{% for n in range(1,6) %}<option value="{{ n }}">{{ n }} von 5</option>{% endfor %}</select></label>
+<fieldset style="min-width:0"><legend>Positive Tags (freiwillig)</legend>{% for key,label in model.ratings.tags.items() %}<label style="display:block"><input type="checkbox" name="tags" value="{{ key }}"> {{ label }}</label>{% endfor %}</fieldset><button>Bewertung verbindlich abgeben</button></form>
+{% elif model.ratings.eligible_at %}<p>Dein Bewertungsfenster ist abgelaufen.</p>{% else %}<p>Du kannst nach deiner verbindlichen Empfangskontrolle oder einem endgültigen Nichtankunftsabschluss bewerten.</p>{% endif %}
+<p>Bewertungen bleiben verdeckt, bis beide bewertet haben oder das Bewertungsfenster der jeweils anderen Person abgelaufen ist.</p>
+{% for r in model.ratings.visible %}<section data-visible-rating="{{ r.rater }}"><h3>{{ 'Deine veröffentlichte Bewertung' if r.rater==model.actor else 'Bewertung der Gegenpartei' }}</h3><p>{{ r.stars }} von 5 Sternen</p><ul>{% for tag in r.tags %}<li>{{ model.ratings.tags[tag] }}</li>{% endfor %}</ul></section>{% endfor %}
+</section>
+{% endif %}
+<a href="/tauschen/laufend">Meine Tausche</a>

@@ -191,6 +191,11 @@ class UserDataExportService:
             )) if self._table_exists("trade_ratings") else [],
         }
 
+        # Received ratings share the profile's blind-reveal predicate.
+        from services.trade_ratings import TradeRatingService
+        visible_rating_ids = {r['id'] for r in TradeRatingService(self.connection).public_rows(subject_id)}
+        ratings['received'] = [r for r in ratings['received'] if r['id'] in visible_rating_ids]
+
         notifications = self._rows(
             """
             SELECT id, title, body, is_read, created_at, notification_type,

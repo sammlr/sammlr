@@ -299,6 +299,26 @@ class LifecycleFoundation:
         self.db.execute("UPDATE trade_reservations SET state='released',released_at=?,release_reason='foundation_release' WHERE id IN (SELECT b.reservation_id FROM lifecycle_supply_bindings b JOIN lifecycle_revision_positions p ON p.id=b.revision_position_id WHERE p.revision_id=? AND b.is_current=1) AND state='active'",
                         (_stamp(),revision))
 
+    def release_received_remainder(self, trade, sender, revision, occurred_at):
+        """Release only this resolved direction's unfulfilled committed claims."""
+        self._write(trade)
+        resolution = self.db.execute('''SELECT 1 FROM lifecycle_direction_resolutions
+            WHERE trade_id=? AND from_user_id=? AND revision_id=? AND kind<>'complete' ''',
+            (trade, sender, revision)).fetchone()
+        if not resolution:
+            raise ValueError('Final problem resolution required')
+        claims = self.db.execute('''SELECT c.* FROM lifecycle_revision_positions p
+            JOIN lifecycle_need_claims c ON c.revision_position_id=p.id
+            JOIN lifecycle_revisions r ON r.id=p.revision_id
+            WHERE r.trade_id=? AND p.revision_id=? AND p.from_user_id=?''',
+            (trade, revision, sender)).fetchall()
+        for claim in claims:
+            if claim['state'] == 'pending':
+                raise ValueError('Accepted claim required')
+            if claim['state'] == 'committed' and claim['received_quantity'] < claim['quantity']:
+                self.db.execute("UPDATE lifecycle_need_claims SET state='released',released_at=? WHERE id=?",
+                                (occurred_at, claim['id']))
+
     def record_command(self, trade_id, actor, key, operation, payload, result):
         self._write(trade_id)
         digest = hashlib.sha256(_json(payload).encode()).hexdigest()

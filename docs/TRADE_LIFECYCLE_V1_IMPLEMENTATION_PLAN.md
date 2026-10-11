@@ -1,5 +1,10 @@
 # Trade Lifecycle V1 — Kleine sichere Folgepakete
 
+## Umsetzungsstand LIFECYCLE-08 — 11.10.2026
+
+L08 ist durch den gesonderten aktuellen Auftrag autorisiert: automatischer bilateraler Abschluss, freiwillige Problemakzeptanz, endgültiger Empfängerabschluss nach 14 Tagen einschließlich Non-Arrival, gezielte zentrale Restclaimfreigabe sowie endgültige unabhängige blinde Sterne-/Tagbewertungen. D07 und der hierfür erforderliche Teil von D09 sind im [fortgeschriebenen Vertrag](TRADE_LIFECYCLE_V1_CONTRACT.md) konkretisiert. Shared Ratings und bestehende UI-/Notification-/Claim-Dienste werden erweitert; additive Migration0030, unveränderte0022–0029. Abnahme und Grenzen stehen im [L08-Audit](LIFECYCLE_08_AUDIT.md). Keine administrative Streitentscheidung, reale Migration oder Deploy; L09 nicht begonnen. Die frühere Planung unten bleibt als historische Begründung erhalten.
+
+
 Ausschließlich Planung. Kein Paket ist durch dieses Dokument zur Runtime-Ausführung freigegeben. Ausgangsstand `e20a8c4e84f2adb83b2f4f3f870846267713a4c1`; [Vertrag](TRADE_LIFECYCLE_V1_CONTRACT.md), [Auditlücken](TRADE_LIFECYCLE_V1_GAP_ANALYSIS.md).
 
 ## 1. Gate vor LIFECYCLE-01
